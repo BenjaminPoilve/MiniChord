@@ -1,0 +1,421 @@
+* {
+    margin: 0;
+    padding: 0;
+    align-items: baseline;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+*:last-child {
+  margin-bottom: 0 !important;
+}
+body{
+    margin-left: 5vw;
+    margin-right: 5vw;
+    font-family: sans-serif;
+
+}
+.line {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-flow: row wrap;
+  flex-flow: row wrap;
+  width: 100%;
+}
+
+.imageInside {
+ align-self: stretch;
+ overflow: hidden;
+}
+.pimageInside {
+ overflow: hidden;
+ height: 100%;
+}
+.bloc {
+    flex: 1 ;
+    padding-top:10px;
+    padding-bottom:10px;
+    width:100%;
+}
+
+
+
+.img_normal {
+    max-width: 100%;
+}
+img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+    width: 100%;
+
+}
+img:hover, img:active {
+    background-color:white;
+}
+
+
+p{
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    font-size: .65em;
+    line-height: 1em;
+}
+
+@media all and (min-width: 1000px) {
+    .B0 {
+      display: none;
+    }
+    .B1 {
+      flex: 1 ;
+    }
+    .B2 {
+      flex: 2 ;
+    }
+    .B3 {
+      flex: 3 ;
+    }
+    .B4 {
+      flex: 4 ;
+    }
+    .B5 {
+      flex: 5 ;
+    }
+    .B6 {
+      flex: 6 ;
+    }
+    .B7 {
+      flex: 7 ;
+    }
+    .B8 {
+      flex: 8 ;
+    }
+    .B9 {
+      flex: 1 100%;
+    }
+}
+
+@media all and (min-width: 600px) and (max-width: 1000px) {
+    .M0 {
+      display: none;
+    }
+    .M1 {
+      flex: 1 ;
+    }
+    .M2 {
+      flex: 2 ;
+    }
+    .M3 {
+      flex: 3 ;
+    }
+    .M4 {
+      flex: 4 ;
+    }
+    .M5 {
+      flex: 5 ;
+    }
+    .M6 {
+      flex: 6 ;
+    }
+    .M7 {
+      flex: 7 ;
+    }
+    .M8 {
+      flex: 8 ;
+    }
+    .M9 {
+      flex: 1 100%;
+    }
+    .M9 >h1,.M9 >h2,.M9 >h3,.M9 >h4,.M9 >h5 {
+        text-align: center!important;
+    }
+}
+
+@media all and (max-width: 600px) {
+    .S0 {
+      display: none;
+    }
+    .S1 {
+      flex: 1 ;
+    }
+    .S2 {
+      flex: 2 ;
+    }
+    .S3 {
+      flex: 3 ;
+    }
+    .S4 {
+      flex: 4 ;
+    }
+    .S5 {
+      flex: 5 ;
+    }
+    .S6 {
+      flex: 6 ;
+    }
+    .S7 {
+      flex: 7 ;
+    }
+    .S8 {
+      flex: 8 ;
+    }
+    .S9 {
+        flex: 1 100%;
+    }
+    .S9 > h1,.S9 > h2,.S9 > h3,.S9 > h4,.S9 > h5 {
+        text-align: center!important;
+    }
+}
+
+
+
+/*///////////////USER CENTRIX ZONE/////////////*/
+
+
+/*LINKS*/
+a {
+    text-decoration: none;
+   cursor: pointer;
+   -webkit-transition: background-color 0.2s ease-in-out;
+   -moz-transition: background-color 0.2s ease-in-out;
+   -o-transition: background-color 0.2s ease-in-out;
+   transition: background-color 0.2s ease-in-out;
+   font-weight: 400;
+}
+a:active,
+a:hover {
+    background-color: #1bb572;
+  font-weight: 400;
+}
+
+
+
+/*TYPOGRAPHY*/
+
+body{
+    font: normal normal 400;
+	  line-height: 1.25em;
+    font-size:1.4em
+}
+
+pre{
+ padding: 16px;
+ overflow: auto;
+ line-height: 1.45;
+ background-color: #f6f8fa;
+ border-radius: 3px;
+}
+ hr {
+ height: 0.65em;
+ width: 100%;
+ border: none;
+}
+strong {
+  font-weight: 600;
+}
+em {
+  font-style: italic;
+}
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 200;
+    font-family: sans-serif;
+    margin-top: 35px;
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.parameter_group .bloc{
+    padding:0px;
+}
+
+
+
+
+div:focus {
+    background-color: lightcoral;
+}
+
+.inactive{
+    opacity: 0.5;
+    accent-color: grey!important;
+}
+#control{
+    position: sticky;
+    top: 0;
+    background-color: white;
+    margin:0;
+    padding: 0;
+    z-index: 2;
+    transition: height 1s;
+}
+
+.control_full #action_zone{
+    color:lightgray;
+}
+
+#instruction_zone{
+    height: 0%;
+    transition: height 1s;
+    visibility: hidden;
+
+
+}
+#information_zone{
+    height: 3em;
+    transition: height 1s;
+
+
+}
+
+.control_full #instruction_zone{
+    height: 100%;
+    visibility: visible;
+}
+
+#action_zone{
+    position: fixed;
+    top: 20;
+    right: 20;
+}
+body{
+    overscroll-behavior-y: none;
+}
+.control_full{
+    overflow-y: hidden;
+}
+
+
+.title h1{
+    font-family: sans-serif;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.title{
+  line-height: 0.8em;
+}
+
+.slider{
+    outline: none; /* Remove outline */
+}
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  margin-top: -5px;
+  cursor: pointer;
+  border-radius: 50%;
+  background-color: var(--slider_color);
+
+}
+
+.slider::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  margin-top: -5px;
+  cursor: pointer;
+  border-radius: 50%;
+  background-color: var(--slider_color);
+
+}
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 1px;
+  outline: none;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+  background: black;
+}
+.parameter_section{
+    margin:20px;
+    max-width: 1000px;
+
+}
+.parameter_group{
+    margin: 0 10px 0 10px;
+    flex-basis: 100%;
+    flex-grow: 0;
+}
+
+.parameter_section h2{
+    text-align:left !important;
+    font-family: sans-serif;
+    font-weight: bold;
+
+}
+
+.parameter_section .bloc{
+    padding: 0;
+}
+.value_zone{
+    text-align: right;
+    line-height: 0.4;
+
+}
+.parameter_group h4{
+    margin:15px 0 0 0 !important;
+    line-height: 1em;
+    font-family: sans-serif;
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+    text-transform: lowercase;
+
+
+
+}
+
+dfn {
+    font-style: normal;
+    font-size: 0.65em;
+    cursor:help;
+}
+.value_zone{
+  font-size: 0.65em;
+}
+h4{
+  font-weight: bold;
+}
+.data_line{
+  line-height: 0.65em;
+  color:black !important;
+
+}
+.data_line>.bloc{
+  padding: 0;
+}
+.data_line p{
+  margin:0;
+
+}
+
+.array_content{
+  padding: 1em 1em 0em 1em;
+  max-width: 720px;
+  margin-left: auto;
+}
+
+.right_aligned{
+  text-align: right;
+}
+
+span{
+  font-size: 0.65em;
+}
+.row_title{
+  font-weight: bold;
+}
