@@ -4,12 +4,34 @@
 
 :root{
     --font-stack:sans-serif;
-    --global-font-size:1em !important;
+    --global-font-size:0.85em !important;
     --code-bg-color: whitesmoke;
     --global-line-height: 1.3em;
     --page-width: 60em;
     --font-color:black;
     overscroll-behavior-y: none;
+
+}
+
+code{
+    font-size: 0.6em !important;
+    line-height: 70%;
+}
+
+.terminal-logo {
+    margin-bottom: 0em;
+}
+@media (min-width: 700px) {
+    :root{
+    --global-font-size:1em !important;
+    }
+    code{
+        font-size: 0.8em !important;
+        line-height: 80%;
+    }
+    .terminal-logo {
+        margin-bottom: 2em;
+    }
 
 }
 body {
@@ -18,12 +40,14 @@ body {
 code{
     font-family: monospace !important;
     overflow: hidden;
-
+    min-width: 250px !important;
+    overflow-x: scroll !important;
 }
 
 pre{
     background-color: var(--code-bg-color);
     border:none !important;
+    /*word-break: keep-all !important;*/
 }
 
 
@@ -71,9 +95,6 @@ h3>strong{
     font-size: 1.8em !important;
 }
 
-.terminal-logo{
-    margin-bottom: 2em;
-}
 .logo>a{
     text-decoration: none;
 
@@ -132,10 +153,7 @@ img{
     width: 40%;
 }
 
-code{
-    font-size: 0.8em !important;
-    line-height: 80%;
-}
+
 a {
     cursor: pointer;
     color: black !important;
@@ -186,4 +204,16 @@ a:hover{
 table tbody td:first-child {
     font-weight: normal;
     color: var(--font-color);
+  }
+
+  table{
+    table-layout:fixed;
+
+  }
+
+
+
+  #mkdocs-terminal-content{
+    max-width: 100%;
+    margin:auto;
   }

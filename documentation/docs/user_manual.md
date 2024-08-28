@@ -180,8 +180,8 @@ On the below table, we show the way chord are commonly written in chord chart an
 
 | Full chord name   |    Common notations      |  Chord button selection |
 |----------|:-------------:|:------:|
-| Major chord |    A, A major   |   ![Alt text](./ressources/pot.png "a title")  |
-| Minor chord | Am, Aminor, Ami, A_ | ![Alt text](./ressources/pot.png "a title") |
+| Major chord |    A, A major   |   |
+| Minor chord | Am, Aminor, Ami, A_ |  |
 | Dominant 7th chord | A7, A Seven, Adom |    $1 |
 | Major 7th chord | Amaj7, AΔ, AΔ7, AM7, Ama7|    $1 |
 | Minor 7th chord | Am7, A_7, Ami7, Amin7 |    $1 |
