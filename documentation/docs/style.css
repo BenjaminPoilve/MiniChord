@@ -4,7 +4,7 @@
 
 :root{
     --font-stack:sans-serif;
-    --global-font-size:0.85em !important;
+    --global-font-size:0.90em !important;
     --code-bg-color: whitesmoke;
     --global-line-height: 1.3em;
     --page-width: 60em;
@@ -140,7 +140,7 @@ li{
     padding-left: 0;
     display: list-item;
 }
- .terminal blockquote, .terminal-menu ul,.terminal h3 {
+ .terminal blockquote, .terminal-menu ul,.terminal h3, .terminal strong {
     font-size: inherit !important;
 }
 
