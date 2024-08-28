@@ -225,16 +225,16 @@ On the below table, we show the way chord are commonly written in chord chart an
 Making custom presets is a lot more involved, so it is to be reserved to more advanced users.
 However, if there is an issue, you can always restore the default presets, so feel free to experiments. 
 
-Presets are designed with an interface called [MiniControl](./mini_control). In addition to designing your own presets, it allows you to manage the presets loaded into the 12 memory slots of your MiniChord, which includes loading presets shared by other users.
+Presets are designed with an interface called [MiniControl](/mini_control). In addition to designing your own presets, it allows you to manage the presets loaded into the 12 memory slots of your MiniChord, which includes loading presets shared by other users.
 
 ## MiniControl user manual 
 
->Please note that [MiniControl](./mini_control) is a fully offline program, if you wish to access it when you don't have an internet connection, simply use the "save page as" option of the browser (CMD+S) to save it locally.  
+>Please note that [MiniControl](/mini_control) is a fully offline program, if you wish to access it when you don't have an internet connection, simply use the "save page as" option of the browser (CMD+S) to save it locally.  
 
 
 **First you need to connect your MiniChord to MiniControl**.
 
-To do that, first open [MiniControl](./mini_control) in a compatible web browser. We recommend using Google Chrome on desktop, because of its support of WebMidi sysex commands.
+To do that, first open [MiniControl](/mini_control) in a compatible web browser. We recommend using Google Chrome on desktop, because of its support of WebMidi sysex commands.
 
 Then connect your MiniChord to the computer with a USB mini cable. Please make sure that the cable used is not "charge-only" and supports data. 
 
@@ -258,7 +258,7 @@ You can start experimenting by modifying settings and seeing how it impact the s
 
 **You can then use the command buttons to modify the presets loaded on your MiniChord**
 
-[MiniControl](./mini_control) offers the following control buttons: 
+[MiniControl](/mini_control) offers the following control buttons: 
 
   * **"Save current settings to selected bank"**: by using the dropdown to choose a bank number, you can save the current parameters to the selected bank slot. This can be used to copy presets from one bank to another;
   * **"Reset seleted bank"**: by using the dropdown to choose a bank number, you can reset the parameters of the selected bank slot to factory settings
