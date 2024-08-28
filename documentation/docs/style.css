@@ -91,7 +91,7 @@ blockquote > p {
     margin: 2ch !important;
 }
 
-h3>strong{
+.terminal h3>strong{
     font-size: 1.8em !important;
 }
 

@@ -37,9 +37,9 @@ By following the row and the column of each button, we can identify the specific
 
 |   **G**   |   **B**   |   **A**   |   **F**   |   **D**   |   **E**   |   **C**   |       |
 |:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:------:|
-|G major|B major|A major|F major|D major|E major|C major|    **Maj**|
-|G minor|B minor|A minor|F minor|D minor|E minor|C minor|    **Min**|
-| G 7th |B 7th  |A 7th  |F 7th  |D 7th  |E 7th  |C 7th  |    **7th**|
+|G maj|B maj|A maj|F maj|D maj|E maj|C maj|    **Maj**|
+|G min|B min|A min|F min|D min|E min|C min|    **Min**|
+| G7 |B7  |A7  |F7  |D7  |E7  |C7  |    **7th**|
 
 
 
@@ -167,9 +167,13 @@ They usually look like this:
 
         And just because I call you up,
 
-        G#m7           G#7      C#m                            C#m7
+        G#m7           G#7     
 
-        Don't get me wrong, don't think you've got it made.
+        Don't get me wrong, 
+
+        C#m                            C#m7
+
+        Don't think you've got it made.
         
 *Extract from the chord chart of "I'm not in love" by 10cc*
 
