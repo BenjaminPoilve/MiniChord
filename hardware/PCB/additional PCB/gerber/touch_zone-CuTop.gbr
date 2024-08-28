@@ -1,0 +1,106 @@
+%TF.GenerationSoftware,KiCad,Pcbnew,(6.0.10-0)*%
+%TF.CreationDate,2024-08-14T11:11:09+02:00*%
+%TF.ProjectId,touch_zone,746f7563-685f-47a6-9f6e-652e6b696361,rev?*%
+%TF.SameCoordinates,Original*%
+%TF.FileFunction,Copper,L1,Top*%
+%TF.FilePolarity,Positive*%
+%FSLAX46Y46*%
+G04 Gerber Fmt 4.6, Leading zero omitted, Abs format (unit mm)*
+G04 Created by KiCad (PCBNEW (6.0.10-0)) date 2024-08-14 11:11:09*
+%MOMM*%
+%LPD*%
+G01*
+G04 APERTURE LIST*
+G04 Aperture macros list*
+%AMOutline4P*
+0 Free polygon, 4 corners , with rotation*
+0 The origin of the aperture is its center*
+0 number of corners: always 4*
+0 $1 to $8 corner X, Y*
+0 $9 Rotation angle, in degrees counterclockwise*
+0 create outline with 4 corners*
+4,1,4,$1,$2,$3,$4,$5,$6,$7,$8,$1,$2,$9*%
+G04 Aperture macros list end*
+%TA.AperFunction,SMDPad,CuDef*%
+%ADD10Outline4P,-6.000000X-2.250000X6.000000X-0.750000X6.000000X0.750000X-6.000000X2.250000X0.000000*%
+%TD*%
+%TA.AperFunction,ViaPad*%
+%ADD11C,0.500000*%
+%TD*%
+G04 APERTURE END LIST*
+D10*
+%TO.P,T8,1,Pin_1*%
+%TO.N,Net-(J2-Pad4)*%
+X76500000Y-58500000D03*
+%TD*%
+%TO.P,T5,1,Pin_1*%
+%TO.N,Net-(J1-Pad3)*%
+X76500000Y-43500000D03*
+%TD*%
+%TO.P,T4,1,Pin_1*%
+%TO.N,Net-(J1-Pad5)*%
+X76500000Y-38500000D03*
+%TD*%
+%TO.P,T10,1,Pin_1*%
+%TO.N,Net-(J2-Pad5)*%
+X76500000Y-68500000D03*
+%TD*%
+%TO.P,T2,1,Pin_1*%
+%TO.N,Net-(J1-Pad4)*%
+X76500000Y-28500000D03*
+%TD*%
+%TO.P,T9,1,Pin_1*%
+%TO.N,Net-(J2-Pad2)*%
+X76500000Y-63500000D03*
+%TD*%
+%TO.P,T11,1,Pin_1*%
+%TO.N,Net-(J2-Pad3)*%
+X76500000Y-73500000D03*
+%TD*%
+%TO.P,T3,1,Pin_1*%
+%TO.N,Net-(J1-Pad2)*%
+X76500000Y-33500000D03*
+%TD*%
+%TO.P,T6,1,Pin_1*%
+%TO.N,Net-(J1-Pad6)*%
+X76500000Y-48500000D03*
+%TD*%
+%TO.P,T1,1,Pin_1*%
+%TO.N,Net-(J1-Pad1)*%
+X76500000Y-23500000D03*
+%TD*%
+%TO.P,T7,1,Pin_1*%
+%TO.N,Net-(J2-Pad1)*%
+X76500000Y-53500000D03*
+%TD*%
+%TO.P,T12,1,Pin_1*%
+%TO.N,Net-(J2-Pad6)*%
+X76500000Y-78500000D03*
+%TD*%
+D11*
+%TO.N,Net-(J1-Pad1)*%
+X75500000Y-23500000D03*
+%TO.N,Net-(J1-Pad2)*%
+X75500000Y-33500000D03*
+%TO.N,Net-(J1-Pad3)*%
+X75500000Y-43500000D03*
+%TO.N,Net-(J2-Pad1)*%
+X75500000Y-53500000D03*
+%TO.N,Net-(J2-Pad2)*%
+X75500000Y-63500000D03*
+%TO.N,Net-(J2-Pad3)*%
+X75500000Y-73500000D03*
+%TO.N,Net-(J2-Pad4)*%
+X75500000Y-58500000D03*
+%TO.N,Net-(J2-Pad5)*%
+X75500000Y-68500000D03*
+%TO.N,Net-(J2-Pad6)*%
+X75500000Y-78500000D03*
+%TO.N,Net-(J1-Pad4)*%
+X75500000Y-28500000D03*
+%TO.N,Net-(J1-Pad5)*%
+X75500000Y-38500000D03*
+%TO.N,Net-(J1-Pad6)*%
+X75500000Y-48500000D03*
+%TD*%
+M02*

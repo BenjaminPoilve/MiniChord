@@ -1,0 +1,18 @@
+site_name: Minichord Documentation
+nav:
+  - User manual: user_manual.md
+  - Assembly: assembly.md
+  - Source: source.md
+theme: 
+  name: terminal
+  palette: sans
+  features:
+    - navigation.top.cursor_animation.hide
+    - navigation.top.search_button.hide
+extra_css:
+  - style.css
+
+markdown_extensions:
+  - toc:
+      baselevel: "3"
+      toc_depth: "3"

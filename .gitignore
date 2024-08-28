@@ -1,0 +1,46 @@
+### OSX ###
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+# Thumbnails
+._*
+# Local Backups
+backups/
+
+### PlatformIO ###
+.pioenvs
+.piolibdeps
+.clang_complete
+.gcc-flags.json
+.pio
+.vscode
+
+### venv ###
+# Virtualenv
+# http://iamzed.com/2009/05/07/a-primer-on-virtualenv/
+.Python
+[Bb]in
+[Ii]nclude
+[Ll]ib64
+[Ll]ocal
+[Ss]cripts
+pyvenv.cfg
+.venv
+venv/
+pip-selfcheck.json
+
+# Hardware local folder
+hardware/3D/backups/
+hardware/3D/render_script.sh
+hardware/3D/render_script.sh
+hardware/3D/render_v9_bottom.scad
+hardware/3D/render_v9_top1_5.scad
+hardware/PCB/additional PCB/*
+!hardware/PCB/additional PCB/gerber
+hardware/PCB/miniChord_main_PCB/*
+!hardware/PCB/miniChord_main_PCB/gerber
+
+#Useless things for the docc
+documentation/site/js
+documentation/site/search

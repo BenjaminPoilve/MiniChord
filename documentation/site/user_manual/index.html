@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="generator" content="mkdocs-1.6.0, mkdocs-terminal-4.4.0">
+     
+     
+    <link rel="icon" type="image/png" sizes="192x192" href="../img/android-chrome-192x192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="../img/android-chrome-512x512.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="../img/apple-touch-icon.png" />
+<link rel="shortcut icon" type="image/png" sizes="48x48" href="../img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="../img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png" />
+
+
+    
+ 
+<title>User manual - Minichord Documentation</title>
+
+
+<link href="../css/fontawesome/css/fontawesome.min.css" rel="stylesheet">
+<link href="../css/fontawesome/css/solid.min.css" rel="stylesheet">
+<link href="../css/normalize.css" rel="stylesheet">
+<link href="../css/terminal.css" rel="stylesheet">
+<link href="../css/theme.css" rel="stylesheet">
+<link href="../css/theme.tile_grid.css" rel="stylesheet">
+<link href="../css/theme.footer.css" rel="stylesheet">
+<!-- sans color palette -->
+<link href="../css/palettes/sans.css" rel="stylesheet">
+
+<!-- page layout -->
+<style>
+/* initially set page layout to a one column grid */
+.terminal-mkdocs-main-grid {
+    display: grid;
+    grid-column-gap: 1.4em;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+}
+
+/*  
+*   when side navigation is not hidden, use a two column grid.  
+*   if the screen is too narrow, fall back to the initial one column grid layout.
+*   in this case the main content will be placed under the navigation panel. 
+*/
+@media only screen and (min-width: 70em) {
+    .terminal-mkdocs-main-grid {
+        grid-template-columns: 4fr 9fr;
+    }
+}</style>
+
+<!-- cursor_animation override -->
+<style>
+  #mkdocs-terminal-site-name.terminal-prompt::after {
+      display: none;
+  }
+</style>
+
+    
+    <link href="../style.css" rel="stylesheet">  
+    
+    
+
+    
+    <!-- search css support -->
+<link href="../css/search/bootstrap-modal.css" rel="stylesheet">
+<!-- search scripts -->
+<script>
+    var base_url = "..",
+    shortcuts = "{}";
+</script>
+<script src="../js/jquery/jquery-1.10.1.min.js" defer></script>
+<script src="../js/bootstrap/bootstrap.min.js" defer></script>
+<script src="../js/mkdocs/base.js" defer></script>
+    
+    
+    
+    
+    <script src="../search/main.js"></script>
+    
+
+    
+</head>
+
+<body class="terminal"><div class="container">
+    <div class="terminal-nav">
+        <header class="terminal-logo">
+            <div id="mkdocs-terminal-site-name" class="logo terminal-prompt"><a href="/" class="no-style">Minichord Documentation</a></div>
+        </header>
+        
+        <nav class="terminal-menu">
+            
+            <ul vocab="https://schema.org/" typeof="BreadcrumbList">
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="./" class="menu-item active" property="item" typeof="WebPage">
+                        <span property="name">User manual</span>
+                    </a>
+                    <meta property="position" content="0">
+                </li>
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="../assembly/" class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Assembly</span>
+                    </a>
+                    <meta property="position" content="1">
+                </li>
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="../source/" class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Source</span>
+                    </a>
+                    <meta property="position" content="2">
+                </li>
+                
+                    
+                    
+                    
+            </ul>
+            
+        </nav>
+    </div>
+</div>
+        
+    <div class="container">
+        <div class="terminal-mkdocs-main-grid"><aside id="terminal-mkdocs-side-panel"><nav>
+  
+    <ul class="terminal-mkdocs-side-nav-items">
+        
+          
+
+
+
+<li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        <span class="
+
+    terminal-mkdocs-side-nav-item--active">User manual</span>
+    
+    
+    
+  </li>
+        
+          
+
+
+
+<li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="
+
+    terminal-mkdocs-side-nav-item" href="../assembly/">Assembly</a>
+        
+    
+    
+    
+  </li>
+        
+          
+
+
+
+<li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="
+
+    terminal-mkdocs-side-nav-item" href="../source/">Source</a>
+        
+    
+    
+    
+  </li>
+        
+    </ul>
+  
+</nav><hr>
+<nav>
+    <ul>
+        <li><a href="#getting-started">Getting started</a></li>
+        <li><a href="#basic-usage">Basic usage</a></li>
+        <li><a href="#advanced-usage">Advanced usage</a></li>
+        <li><a href="#following-chord-charts">Following chord charts</a></li>
+        <li><a href="#default-presets">Default presets</a></li>
+        <li><a href="#custom-presets">Custom presets</a></li>
+        
+    </ul>
+</nav>
+</aside>
+            <main id="terminal-mkdocs-main-content">
+<section id="mkdocs-terminal-content">
+    <h3 id="getting-started"><strong>Getting started</strong></h3>
+<blockquote>
+<p>If you have a kit version of the MiniChord, or wish to fully build one yourself, please refer to the <a href="">"Assembly" section</a></p>
+</blockquote>
+<p><strong>To turn it on, simply plug the headphone jack in ①. The main led ② will shine.</strong> If it does not turn on, then its battery is empty, charge it on any USB wallwart with a mini USB cable <strong>③</strong>. </p>
+<p><strong>Once it is started, push one the square buttons ④. You should hear a chord being played.</strong> If you do not hear a sound, check that the potentiometer with the indication "Chord" is not fully turned left <strong>⑤</strong>. The chord will vary depending on which button you press. </p>
+<p><strong>No drag your finger across the black vertical bar ⑥. You should hear the sound of multiple notes being played sequentially, like a harp.</strong>  If you do not hear that, check that the potentiometer with the indication "Harp" is not fully turned left <strong>⑦</strong>. Those notes depend on the selected chord. Push different square buttons and test the way the harp reacts.</p>
+<p>That's it, you got started! </p>
+<p><strong>To switch the Minichord off, simply remove the headphone jack ⑧</strong>. Don't forget it plugged in or it will empty its battery!</p>
+<h3 id="basic-usage"><strong>Basic usage</strong></h3>
+<h4 id="1-chord-selector-buttons">① Chord selector buttons</h4>
+<p>The Minichord has :</p>
+<ul>
+<li><strong>21 main chord buttons</strong>, divided in 7 column of 3 buttons;</li>
+<li><strong>1 "sharp" button (indicated by #)</strong>.</li>
+</ul>
+<p><strong>Each column of the main chord buttons is associated to a note of the C Major scale</strong>. It is indicated by the letter at the top of the column. </p>
+<p><strong>Each row of the main chord button is associated to a chord type</strong>. It is indicated by a marking at the end of the row:</p>
+<ul>
+<li><em>Maj</em> indicates that the chord will be a major one;</li>
+<li><em>Min</em> indicated that the chord will be a minor one;</li>
+<li><em>7th</em> indicates that the chord will be a dominant 7th one. </li>
+</ul>
+<p>By following the row and the column of each button, we can identify the specific chord associated. <strong>Here is the full table of the chord available by the push of a single button</strong>:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;"><strong>G</strong></th>
+<th style="text-align: center;"><strong>B</strong></th>
+<th style="text-align: center;"><strong>A</strong></th>
+<th style="text-align: center;"><strong>F</strong></th>
+<th style="text-align: center;"><strong>D</strong></th>
+<th style="text-align: center;"><strong>E</strong></th>
+<th style="text-align: center;"><strong>C</strong></th>
+<th style="text-align: center;"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">G major</td>
+<td style="text-align: center;">B major</td>
+<td style="text-align: center;">A major</td>
+<td style="text-align: center;">F major</td>
+<td style="text-align: center;">D major</td>
+<td style="text-align: center;">E major</td>
+<td style="text-align: center;">C major</td>
+<td style="text-align: center;"><strong>Maj</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;">G minor</td>
+<td style="text-align: center;">B minor</td>
+<td style="text-align: center;">A minor</td>
+<td style="text-align: center;">F minor</td>
+<td style="text-align: center;">D minor</td>
+<td style="text-align: center;">E minor</td>
+<td style="text-align: center;">C minor</td>
+<td style="text-align: center;"><strong>Min</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;">G 7th</td>
+<td style="text-align: center;">B 7th</td>
+<td style="text-align: center;">A 7th</td>
+<td style="text-align: center;">F 7th</td>
+<td style="text-align: center;">D 7th</td>
+<td style="text-align: center;">E 7th</td>
+<td style="text-align: center;">C 7th</td>
+<td style="text-align: center;"><strong>7th</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>The "sharp" modifier button will add a semitone to each note of the chord, and can be added to any combinaison of the main chord buttons.</strong></p>
+<blockquote>
+<p>⚠ In the basic usage only one chord button is pushed at a time to trigger a new chord. However it is possible to combine buttons to construct more complex chords. This is explained in the <a href="">"Advanced usage" section</a>.</p>
+</blockquote>
+<h4 id="2-harp-touch-zone">② Harp touch zone</h4>
+<p>The harp touch zone is divided <strong>in 12 different section</strong>, stacked vertically. Touching each section will trigger a note. Notes can be held by keeping the contact with the section. </p>
+<p>This touch zone can be "strummed" by sweeping the finger across all sections, or individual notes can be triggered. </p>
+<h4 id="3-preset-selection-buttons-and-indicator">③ Preset selection buttons and indicator</h4>
+<p>The preset selection buttons can be used to switch between preset. <strong>The MiniChord has 12 internal preset</strong> (see <a href="#default-presets">"Default presets"</a>), that can be replaced by custom presets (see <a href="#custom-presets">"Making custom presets"</a>). Going up after the 12th preset will circle back to the first, same as going down before the first will circle back to the 12th. </p>
+<p>The main led will shine with a different color for each preset to help you identify the current selected one. </p>
+<h4 id="4-potentiometers">④ Potentiometers</h4>
+<p><img alt="Alt text" src="../ressources/pot.png" title="a title" /></p>
+<p>Each of the three potentiometer has one main function, designated by the marking on the enclosure :</p>
+<ul>
+<li><strong>The "Chord" potentiometer</strong> sets up the volume of the chord section;</li>
+<li><strong>The "Harp" potentiometer</strong> sets up the volume of the harp section;</li>
+<li><strong>The "Mod" potentiometer</strong> is assigned to a different function for each preset, depending on what is usefull for it. </li>
+</ul>
+<blockquote>
+<p>⚠ Each of the potentiometer has a secondary function, which is explained in the <a href="#advanced-usage">"Advanced usage" section</a>. </p>
+</blockquote>
+<h4 id="5-rythm-mode-button-and-indicator">⑤ Rythm mode button and indicator</h4>
+<p>The rythm mode button has two basic mode:</p>
+<ul>
+<li><strong>discrete</strong>: the chord only stays on for as long as you keep the relevant button pushed. In that mode, the indicator led will be off.</li>
+<li><strong>continuous</strong>: the chord will keep playing until you push a new button, and seamlessly switch to the next chord. In that mode, the indicator led will be on. </li>
+</ul>
+<p>Simply push the rythm mode button to switch from one mode to the other. That button may also be used to switch to the arpegiator mode with a long push, but that subject is handled in the <a href="#advanced-usage"> "Advanced usage" section</a>. </p>
+<h4 id="6-charging">⑥ Charging</h4>
+<p>Charging is done through the mini USB jack available on the buttom right of the MiniChord. Connection to any USB outlet will do, and it will draw 500ma of current. </p>
+<p><strong>When charging, the top right led will shine red</strong>. </p>
+<p>Full charge should be below 3 hours, and <strong>the top right led will shine green once the full charge is attained</strong>. 
+Once fully charged, the MiniChord will play for around 7 hours. </p>
+<p><strong>When the battery is getting low, the main led will pulse</strong>. Once the pulsing start, the MiniChord can play for around 15 minutes more. You can play the MiniChord while plugged in. </p>
+<h3 id="advanced-usage"><strong>Advanced usage</strong></h3>
+<h4 id="advanced-chord-selections">Advanced chord selections</h4>
+<p>There is two ways to access additional chords on the MiniChord:</p>
+<p><strong>By combining buttons within the same column</strong>. </p>
+<p>It is possible to push more than one button within the same column to access more complicated chords. <strong>The possible combination are the following</strong>:</p>
+<ul>
+<li>The <em>7th</em> button can be combined with either the <em>Maj</em> or the <em>Min</em> button of the same column to obtain a<em> Major 7</em> and <em>Minor 7</em> chord of the same note;</li>
+<li>The <em>Maj</em> and the <em>Min</em> button can be combined to obtain an <em>augmented</em> chord;</li>
+<li>The three button together (<em>Maj</em>, <em>Min</em>, and <em>7th</em>) can be combined to obtain an <em>diminished</em> chord.</li>
+</ul>
+<blockquote>
+<p>⚠ Please note that chord change always happen when a button is pushed. Simply releasing buttons will not change the chord. This is because properly timing a release is difficult with pushbuttons and it would lead to unwanted chord change when switching from a complex chord position. For example.. </p>
+</blockquote>
+<p><strong>By combining buttons across different column</strong></p>
+<p>When a chord is selected within a colum (even a complex one), <strong>it is possible to replace one of the note with the fundamental from another column</strong>. </p>
+<p>To do that simply <strong>push any button from the column of the note you wish to borrow the fundamental from</strong>. </p>
+<p>Usually the replaced note is the fundamental of the chord and the substitution is kown as a "slash chord", written for example Am/E for a A minor chord with E as the fundamental. However this is not the case for all presets. That setting is indicated per preset in the <a href="./#default-presets">Default presets</a> section.</p>
+<blockquote>
+<p>⚠ Due to the way the "sharp" button works, some slash chords are impossible to do on the MiniChord. For example, Am/G is possible, Am#/G# is possible (by holding the "sharp" modifier button), but Am#/G is not. </p>
+</blockquote>
+<h4 id="secondary-potentiometer-functions">Secondary potentiometer functions</h4>
+<p>Each of the potentiometer allows you to access a secondary function. The specific secondary function will depend on the selected preset, and is indicated per preset in the <a href="./#default-presets">Default presets</a> section.</p>
+<p><strong>To access the secondary function, you need to hold the "sharp button" while turning the potentiometer.</strong></p>
+<blockquote>
+<p>⚠ Please note that you secondary parameter value selected will be memorized by the MiniChord, but only if you switch between presets (to avoid having to write to memory the selected value with every parameter change). </p>
+</blockquote>
+<h4 id="arpeggiator">Arpeggiator</h4>
+<p>The Minichord has a very basic apreggiator function, allowing to play 16 steps pattern on the four voices of the chord section. <strong>To activate the arpeggiator, do a long (more than 1 second) press on the "rythm" button</strong>. The led will flash rythmically and the arpeggiator will start. </p>
+<p><strong>While the arpeggiator is playing, you can move from chord to chord by using the chord buttons as usual.</strong> </p>
+<blockquote>
+<p>⚠ Depending on the currently playing pattern, that change may not be immediatly applied and might wait until the next "strong beat". Strong beat are indicated by the rythm led flashing a brighter than the normal flash.</p>
+</blockquote>
+<p><strong>While in arpeggiator mode, the rythm button will function as a "tap tempo"</strong>. By tapping it rythmically, you can change the current tempo of the arpeggiator. </p>
+<p>To exit the arpeggiator mode, do once again a long press on the "rythm" button. </p>
+<h3 id="following-chord-charts"><strong>Following chord charts</strong></h3>
+<p>A good way to use the MiniChord, especially if you want to cover some popular songs, is to use readily available chord charts.</p>
+<p><strong>Chord charts are a simplified kind of tablature that only includes the lyrics and the chord of the song</strong>. Usually the chords are written on top of the lyrics, at the moment where they are supposed to happen in the song. </p>
+<p><strong>Chord charts are very easy to find</strong>, usually all it takes is to google the name of the song followed by "chords".</p>
+<p>They usually look like this:</p>
+<pre><code>    A              Am
+
+    I'm not in love, so don't forget it,
+
+    G#m7        G#7             C#m            C#m7
+
+    It's just a silly phase I'm going through.
+
+    A                Am
+
+    And just because I call you up,
+
+    G#m7           G#7      C#m                            C#m7
+
+    Don't get me wrong, don't think you've got it made.
+</code></pre>
+<p><em>Extract from the chord chart of "I'm not in love" by 10cc</em></p>
+<p>As we see, to be able to play such a chord chart, <strong>we need to have a basic understanding of the way chords are commonly written</strong>. Since there is not widely accepted standard, it may vary slightly vary between chord charts.</p>
+<p>On the below table, we show the way chord are commonly written in chord chart and how to play them on the MiniChord, with A for our fundamental:</p>
+<table>
+<thead>
+<tr>
+<th>Full chord name</th>
+<th style="text-align: center;">Common notations</th>
+<th style="text-align: center;">Chord button selection</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Major chord</td>
+<td style="text-align: center;">A, A major</td>
+<td style="text-align: center;"><img alt="Alt text" src="../ressources/pot.png" title="a title" /></td>
+</tr>
+<tr>
+<td>Minor chord</td>
+<td style="text-align: center;">Am, Aminor, Ami, A_</td>
+<td style="text-align: center;"><img alt="Alt text" src="../ressources/pot.png" title="a title" /></td>
+</tr>
+<tr>
+<td>Dominant 7th chord</td>
+<td style="text-align: center;">A7, A Seven, Adom</td>
+<td style="text-align: center;">$1</td>
+</tr>
+<tr>
+<td>Major 7th chord</td>
+<td style="text-align: center;">Amaj7, AΔ, AΔ7, AM7, Ama7</td>
+<td style="text-align: center;">$1</td>
+</tr>
+<tr>
+<td>Minor 7th chord</td>
+<td style="text-align: center;">Am7, A_7, Ami7, Amin7</td>
+<td style="text-align: center;">$1</td>
+</tr>
+<tr>
+<td>Augmented chord</td>
+<td style="text-align: center;">Aaug, A+</td>
+<td style="text-align: center;">$1</td>
+</tr>
+<tr>
+<td>Diminished chord</td>
+<td style="text-align: center;">Adim, A°</td>
+<td style="text-align: center;">$1</td>
+</tr>
+<tr>
+<td>Slash chord</td>
+<td style="text-align: center;">A/G (for G substitution )</td>
+<td style="text-align: center;">$1</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Most of the time, the chords are easily playable on the MiniChord</strong>. If not, it is almost always possible to find acceptable substitutions, but that might require a bit more theoritical knowledge for the player (for example to calculate which slash chord might be an acceptable ersatz for an augmented chord). </p>
+<h3 id="default-presets"><strong>Default presets</strong></h3>
+<p><strong>The following section presents the 12 default presets</strong>, in order.</p>
+<h4 id="preset-1-twin-synth">Preset 1 - Twin synth</h4>
+<ul>
+<li>The color of the indicator led; </li>
+<li>A quick description of the preset;</li>
+<li>The configuration of the harp zone (the notes included and the order);</li>
+<li>The level within the chord which will be modified when combining button in a "slash chord" maneer; </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Chord secondary control</th>
+<th style="text-align: center;">Harp secondary control</th>
+<th style="text-align: center;">Mod primary control</th>
+<th style="text-align: center;">Mod  secondary control</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">chord filter frequency</td>
+<td style="text-align: center;">A7</td>
+<td style="text-align: center;">$1</td>
+<td style="text-align: center;">$1</td>
+</tr>
+</tbody>
+</table>
+<h4 id="preset-1-twin-synth_1">Preset 1 - Twin synth</h4>
+<ul>
+<li>The color of the indicator led; </li>
+<li>A quick description of the preset;</li>
+<li>The configuration of the harp zone (the notes included and the order);</li>
+<li>The level within the chord which will be modified when combining button in a "slash chord" maneer; </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Mod  control</th>
+<th style="text-align: center;">Chord secondary control</th>
+<th style="text-align: center;">Harp secondary control</th>
+<th style="text-align: center;">Mod  secondary control</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Slash chord</td>
+<td style="text-align: center;">A7</td>
+<td style="text-align: center;">$1</td>
+<td style="text-align: center;">$1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="custom-presets"><strong>Custom presets</strong></h3>
+<p>Making custom presets is a lot more involved, so it is to be reserved to more advanced users.
+However, if there is an issue, you can always restore the default presets, so feel free to experiments. </p>
+<p>Presets are designed with an interface called <a href="./minicontrol">MiniControl</a>. In addition to designing your own presets, it allows you to manage the presets loaded into the 12 memory slots of your MiniChord, which includes loading presets shared by other users.</p>
+<h4 id="minicontrol-user-manual">MiniControl user manual</h4>
+<blockquote>
+<p>Please note that <a href="./minicontrol">MiniControl</a> is a fully offline program, if you wish to access it when you don't have an internet connection, simply use the "save page as" option of the browser (CMD+S) to save it locally.  </p>
+</blockquote>
+<p><strong>First you need to connect your MiniChord to MiniControl</strong>.</p>
+<p>To do that, first open <a href="./minicontrol">MiniControl</a> in a compatible web browser. We recommend using Google Chrome on desktop, because of its support of WebMidi sysex commands.</p>
+<p>Then connect your MiniChord to the computer with a USB mini cable. Please make sure that the cable used is not "charge-only" and supports data. </p>
+<p>Reload the webpage. You should be shown a prompt asking you to "Control and reprogramme youy Midi Devices". Allow it. This is necessary to send Midi sysex commands that are used to programm the MiniChord. </p>
+<p>The MiniChord should then be connected. If not, a red warning should give you instruction to allow you to identify which step failed. </p>
+<p><strong>You can then circle around the presets on your MiniChord using the preset selection buttons on the MiniChord</strong>. </p>
+<p>The associated internal parameters will be displayed on the screen. </p>
+<p>Those parameters are grouped in three categories :</p>
+<ul>
+<li><strong>"Gobal parameters"</strong>: general parameters that impact the general functionning of the preset. It includes the reverb settings that is applied to both the chord and the harp, and the potentiometer function settings;</li>
+<li><strong>"Harp parameters"</strong>: parameters related to the sound synthesis of the harp part of the MiniChord;</li>
+<li><strong>"Chord parameters"</strong>: parameters related to the sound synthesis of the chord part of the MiniChord.</li>
+</ul>
+<p>By hovering on each parameter name (a question mark will appear), a short description of its function will be displayed on your screen. </p>
+<p>You can start experimenting by modifying settings and seeing how it impact the sound of your preset. Note that by default, changes made are not loaded into the MiniChord. Simply using the preset selection buttons to go one preset up then one preset down will reset the current preset. </p>
+<p><strong>You can then use the command buttons to modify the presets loaded on your MiniChord</strong></p>
+<p><a href="./minicontrol">MiniControl</a> offers the following control buttons: </p>
+<ul>
+<li><strong>"Save current settings to selected bank"</strong>: by using the dropdown to choose a bank number, you can save the current parameters to the selected bank slot. This can be used to copy presets from one bank to another;</li>
+<li><strong>"Reset seleted bank"</strong>: by using the dropdown to choose a bank number, you can reset the parameters of the selected bank slot to factory settings</li>
+<li><strong>"Reset all banks"</strong>: this buttons simply put the MiniChord to factory settings by resetting all bank slots</li>
+</ul>
+<p>It also allows you to share your presets and to load presets made by other users, with two additional buttons:</p>
+<ul>
+<li><strong>"Share setting"</strong>: this buttons will copy in your clipboard a parameter string. This parameter string fully describes the current setting playing on the MiniChord. </li>
+<li><strong>"Load setting"</strong>: this button will prompt a text entry. By pasting a parameter string it will be loaded on your MiniChord for you to test it. Please note that if you wish to save it into a bank slot of your MiniChord, you will need to use the "Save current setting to selected bank" button. </li>
+</ul>
+<blockquote>
+<p>If you have a preset that you wish to share with all MiniChord users, please send the preset string with a short description and the name of your preset to <a href="mailto:presets@minichord.com">presets@minichord.com</a>.</p>
+</blockquote>
+<h4 id="synthesis-schematic">Synthesis schematic</h4>
+<p>To be able to better understand the synthesis parameters, please find below the synthesis schematics for the harp and chord section :</p>
+<pre><code>                                                                                             x12
+ Harp section                         ┌ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─
+                                     ┌────────────────────────────────────────────────────────┐│
+                                    ┌┴───────────────────────────────────────────────────────┐│
+┌─────────┐                         │┌────────────────┐                                      │││
+│DC signal├────────────────────────▶││filter enveloppe│──────────┐          ┌───────────────┐││
+└─────────┘                         │└────────────────┘          └─────────▶│low-pass filter│││├───┐
+┌───────────┐   ┌────────────────┐  │┌─────────────────────┐  ┌────────┐ ┌─▶│               │││    │
+│vibrato OSC├──▶│vibrato envelope├─▶││modulated string OSC ├─▶│envelope├─┘  └───────────────┘││┘   │
+└───────────┘   └────────────────┘  │└─────────────────────┘  └────────┘                     ├┘    │
+                                    └────────────────────────────────────────────────────────┘     │
+                                                                                                   │
+┌──────────────────────────────────────────────────────────────────────────────────────────────────┘
+│  ┌──────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────┐  ┌────────────┐      ┌──────────┐
+├─▶│waveshaper├─▶│ waveshaper  ├┬▶│  delay mix  ├─▶│delay├─▶│filter delay├─┬───▶│effect mix├───────┐
+│  └──────────┘  │     mix     ││ │             │  └─────┘  └────────────┘ │ ┌─▶│          │       │
+└───────────────▶│             ││ │             │                          │ │  └──────────┘       │
+                 └─────────────┘│ └─────────────┘                          │ │                     │
+                                │        ▲                                 │ │                     │
+                                │        └─────────────────────────────────┘ │                     │
+                                └────────────────────────────────────────────┘                     │
+┌──────────────────────────────────────────────────────────────────────────────────────────────────┘
+│              ┌──────────┐              ┌─────────────┐  ┌──────┐  ┌──────────┐
+└─────────────▶│multiplier├─────────────▶│output filter├┬▶│reverb├─▶│reverb mix├─▶ output
+┌───────────┐  │          │┌──────────┐  │             ││ └──────┘  │          │
+│tremolo OSC├─▶│          ││filter OSC├─▶│             │└──────────▶│          │
+└───────────┘  └──────────┘└──────────┘  └─────────────┘            └──────────┘
+
+
+
+
+
+
+ Chord section     ┌──────────────────────────────────────────────────────────────────────┐
+                  ┌┴─────────────────────────────────────────────────────────────────────┐│ x4
+                 ┌┴─────────────────────────────────────────────────────────────────────┐││
+                ┌┴─────────────────────────────────────────────────────────────────────┐│││
+┌───────────┐   │┌────────────────┐  ┌───────────────┐  ┌─────┐  ┌──────┐  ┌──────────┐││││
+│vibrato OSC├─▶ ││vibrato envelope├┬▶│modulated OSC 1├─▶│ mix ├─▶│filter├─▶│multiplier│││││
+└───────────┘   │└────────────────┘│ ├───────────────┤  │     │  └──────┘  └──────────┘││││
+                │                  ├▶│modulated OSC 2├─▶│     │     ▲           ▲      ││││
+                │                  │ ├───────────────┤  │     │     │           │      ││││────────┐
+                │                  └▶│modulated OSC 3├─▶│     │     │           │      ││││        │
+                │                    └─────────┬─────┤  │     │     │           │      ││││        │
+                │                              │noise├─▶│     │     │           │      ││││        │
+┌──────────┐    │┌───────────────┐             └─────┘  └─────┘     │           │      ││││        │
+│filter OSC├──▶ ││filter envelope├──────────────────────────────────┘           │      ││││        │
+└──────────┘    │└───────────────┘                                              │      ││││        │
+┌───────────┐   │┌────────────────┐                                             │      ││├┘        │
+│tremolo OSC├─▶ ││tremolo envelope├─────────────────────────────────────────────┘      │├┘         │
+└───────────┘   │└────────────────┘                                                    ├┘          │
+                └──────────────────────────────────────────────────────────────────────┘           │
+                                                                                                   │
+┌──────────────────────────────────────────────────────────────────────────────────────────────────┘
+│  ┌──────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────┐  ┌────────────┐      ┌──────────┐
+├─▶│waveshaper├─▶│ waveshaper  ├┬▶│  delay mix  ├─▶│delay├─▶│filter delay├─┬───▶│effect mix├───────┐
+│  └──────────┘  │     mix     ││ │             │  └─────┘  └────────────┘ │ ┌─▶│          │       │
+└───────────────▶│             ││ │             │                          │ │  └──────────┘       │
+                 └─────────────┘│ └─────────────┘                          │ │                     │
+                                │        ▲                                 │ │                     │
+                                │        └─────────────────────────────────┘ │                     │
+                                └────────────────────────────────────────────┘                     │
+┌──────────────────────────────────────────────────────────────────────────────────────────────────┘
+│  ┌─────────────┐  ┌──────┐  ┌──────────┐
+└─▶│output filter├┬▶│reverb├─▶│reverb mix├─▶ output
+   │             ││ └──────┘  │          │
+   │             │└──────────▶│          │
+   └─────────────┘            └──────────┘
+</code></pre>
+</section>
+
+            </main>
+        </div>
+        <hr><footer>
+    <div class="terminal-mkdocs-footer-grid">
+        <div id="terminal-mkdocs-footer-copyright-info">
+             Site built with <a href="http://www.mkdocs.org">MkDocs</a> and <a href="https://github.com/ntno/mkdocs-terminal">Terminal for MkDocs</a>.
+        </div>
+    </div>
+</footer>
+    </div>
+
+    
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="alertdialog" aria-modal="true" aria-labelledby="searchModalLabel">
+    <div class="modal-dialog modal-lg" role="search">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="searchModalLabel">Search</h5>
+                <button type="button" class="close btn btn-default btn-ghost" data-dismiss="modal"><span aria-hidden="true">x</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p id="searchInputLabel">Type to start searching</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" aria-labelledby="searchInputLabel" placeholder="" id="mkdocs-search-query" title="Please enter search terms here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No document matches found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+</body>
+
+</html>

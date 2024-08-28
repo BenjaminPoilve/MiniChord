@@ -1,0 +1,28 @@
+#+TITLE: AT42QT
+#+AUTHOR: Peter Polidoro
+#+EMAIL: peter@polidoro.io
+
+* Library Information
+  - Name :: AT42QT
+  - Version :: 0.6.0
+  - License :: BSD
+  - URL :: https://github.com/janelia-arduino/AT42QT
+  - Author :: Peter Polidoro
+  - Email :: peter@polidoro.io
+
+		Arduino library for the Microchip AT42QTxxxx family of capacitive touch controllers.
+
+	This library works with AT42QT1060, AT42QT1070, AT42QT2120, and AT42QT2160.
+
+** Functionality
+
+	| Device     | Key Count Max | Completeness | Compiles | Tested on Hardware |
+	|------------+---------------+--------------+----------+--------------------|
+	| AT42QT1060 |             6 | Partial      | Yes      | No                 |
+	| AT42QT1070 |             7 | Partial      | Yes      | No                 |
+	| AT42QT2120 |            12 | Complete     | Yes      | Yes                |
+	| AT42WT2160 |   16 (Matrix) | Partial      | Yes      | No                 |
+
+* Library Examples
+
+  [[./examples]]

@@ -1,0 +1,63 @@
+/*! Terminal for MkDocs | MIT License | github.com/ntno/mkdocs-terminal */
+/*! terminal.css 0.7.2  | MIT License | github.com/Gioni06/terminal.css */
+
+body {
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+/* underline links in main content (except header anchor links) */
+#terminal-mkdocs-main-content a:not(.headerlink){
+    text-decoration: underline;
+}
+
+/* do not underline button links */
+a.btn {
+    text-decoration: none !important;
+}
+
+.terminal-mkdocs-side-nav-item--active {
+    font-style: italic;
+}
+
+.terminal-mkdocs-side-nav-section-no-index {
+    color: var(--secondary-color);
+}
+
+.terminal-mkdocs-pad-to-match-side-nav {
+    padding-top: calc(var(--global-space) * 2);
+}
+
+.terminal-mkdocs-thin-border {
+    border: solid !important;
+    border-color: var(--secondary-color) !important;
+    border-width: thin !important;
+}
+
+.terminal-mkdocs-macro-error-banner {
+    border-style: solid;
+    border-width: 1px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: .65em 2em;
+    border-color: var(--error-color);
+    color: var(--error-color);
+}
+/* ***************************************************************** */
+/* Terminal.css Overrides */
+/* ***************************************************************** */
+
+/* don't display backticks on `code` items, just highlight */
+code::after,
+code::before {
+    content: "" !important;
+    display: inline;
+}
+
+/*! terminal.css | MIT License |  https://github.com/Gioni06/terminal.css/pull/36 */
+blockquote > *:last-child {
+    margin-bottom: 0;
+}
+  
+  

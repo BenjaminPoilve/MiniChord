@@ -1,0 +1,21 @@
+#+TITLE: MPR121
+#+AUTHOR: Peter Polidoro
+#+EMAIL: peter@polidoro.io
+
+* Library Information
+  - Name :: MPR121
+  - Version :: 1.3.0
+  - License :: BSD
+  - URL :: https://github.com/janelia-arduino/MPR121
+  - Author :: Peter Polidoro
+  - Email :: peter@polidoro.io
+
+  Proximity capacitive touch sensor controller Arduino library.
+
+* Library Examples
+
+  [[./examples]]
+
+* Library Dependencies
+
+  [[https://github.com/janelia-arduino/arduino-libraries][arduino-libraries]]
