@@ -1,16 +1,12 @@
-# Getting started
+# **Hardware**
+
+## 3D files
+
+## 2D files 
+
+## Electronics
+
+
+# **Software** 
 
 bla bal bal
-
-# Basic usage
-
-bla bal bal
-
-# Advanced usage
-
-bla bal balAdvance
-
-
-# Making custom presets
-
-bla bal balAdvance
