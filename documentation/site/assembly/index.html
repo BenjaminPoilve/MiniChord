@@ -193,23 +193,444 @@
 </nav><hr>
 <nav>
     <ul>
-        <li><a href="#this-is-user-manual">This is user manual</a></li>
+        <li><a href="#assembly-notes">Assembly notes</a></li>
+        <li><a href="#pcb-manufacturing">PCB Manufacturing</a></li>
+        <li><a href="#smd-soldering">SMD Soldering</a></li>
+        <li><a href="#through-hole-soldering">Through-hole soldering</a></li>
+        <li><a href="#enclosure-manufacturing">Enclosure manufacturing</a></li>
+        <li><a href="#final-assembly">Final assembly</a></li>
         
     </ul>
 </nav>
 </aside>
             <main id="terminal-mkdocs-main-content">
 <section id="mkdocs-terminal-content">
-    <h3 id="this-is-user-manual">This is user manual</h3>
-<p>For full documentation visit <a href="https://www.mkdocs.org">mkdocs.org</a>.</p>
-<h4 id="1">1</h4>
+    <h3 id="assembly-notes"><strong>Assembly notes</strong></h3>
+<p>Please note that depending on the kit version, you may not have to follow all the steps:</p>
 <ul>
-<li><code>mkdocs new [dir-name]</code> - Create a new project.</li>
-<li><code>mkdocs serve</code> - Start the live-reloading docs server.</li>
-<li><code>mkdocs build</code> - Build the documentation site.</li>
-<li><code>mkdocs -h</code> - Print help message and exit.</li>
+<li>If you are building a MiniChord from scratch, start at <a href="#pcb-manufacturing">"PCB Manufacturing"</a></li>
+<li>If you have the "PCB kit" or the "electronics kit", start at <a href="#through-hole-soldering">"Through-hole soldering "</a></li>
+<li>If you have the "full kit" start at <a href="#final-assembly">"Final assembly"</a></li>
 </ul>
-<h4 id="enclosure-manufacturing">Enclosure manufacturing</h4>
+<p>In any case, bill of material (BOM) and necessary tools are listed at the beginning of each section.</p>
+<h3 id="pcb-manufacturing"><strong>PCB Manufacturing</strong></h3>
+<p>Manufacturing files for the PCB are available in the <a href="./source">Source section</a> in Gerber format. </p>
+<p><img alt="Alt text" src="../ressources/both_pcb.jpg" title="a title" /></p>
+<p>A MiniChord is composed of two PCB:</p>
+<ul>
+<li>The main PCB that is a four layer 1.6mm board;</li>
+<li>The touch zone PCB that is a two layer 1.6mm board (please remember that this PCB will be visible, so choose color accordingly and remove any marking that the fab house would like to add). </li>
+</ul>
+<p>Any good fab house should accept those files for manufacture.</p>
+<h3 id="smd-soldering"><strong>SMD Soldering</strong></h3>
+<details>
+    <summary> <b>BOM</b> </summary>
+<table class="table table-striped table-hover">
+<thead>
+<tr>
+<th><strong>ID</strong></th>
+<th><strong>Value</strong></th>
+<th><strong>Footprint</strong></th>
+<th><strong>Quantity</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>&gt;&nbsp; C1, C2</strong></td>
+<td>10uf</td>
+<td>1608Metric</td>
+<td>2</td>
+</tr>
+<tr>
+<td><strong>&gt;&nbsp; C4, C9, C10</strong></td>
+<td>2.2uf</td>
+<td>2012Metric</td>
+<td>3</td>
+</tr>
+<tr>
+<td><strong>C5</strong></td>
+<td>100uf</td>
+<td>Elec_6.3x5.7</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>C6</strong></td>
+<td>100uf</td>
+<td>3216Metric</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>&gt;&nbsp; C3, C7, C8, C11-C14, C19</strong></td>
+<td>100n</td>
+<td>1608Metric</td>
+<td>8</td>
+</tr>
+<tr>
+<td><strong>C15</strong></td>
+<td>10uf</td>
+<td>Elec_4x5.4</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>&gt;&nbsp; C16, C17</strong></td>
+<td>2.2nf</td>
+<td>1608Metric</td>
+<td>2</td>
+</tr>
+<tr>
+<td><strong>C18</strong></td>
+<td>4.7uf</td>
+<td>2012Metric</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>D3</strong></td>
+<td>LED_Dual_AAKK</td>
+<td>side led</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>L1</strong></td>
+<td>6.8uH</td>
+<td>SWPA60xxS</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>R1</strong></td>
+<td>1k</td>
+<td>2012Metric</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>R3</strong></td>
+<td>330k</td>
+<td>1608Metric</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>R4</strong></td>
+<td>680</td>
+<td>2012Metric</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>&gt;&nbsp; R2, R5</strong></td>
+<td>1.8M</td>
+<td>1608Metric</td>
+<td>2</td>
+</tr>
+<tr>
+<td><strong>R6</strong></td>
+<td>220k</td>
+<td>1608Metric</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>R7</strong></td>
+<td>1M</td>
+<td>1608Metric</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>R8</strong></td>
+<td>2k</td>
+<td>2012Metric</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>&gt;&nbsp; R9, R10</strong></td>
+<td>2k2</td>
+<td>2012Metric</td>
+<td>2</td>
+</tr>
+<tr>
+<td><strong>&gt;&nbsp; R11-R14, R16, R38-R40</strong></td>
+<td>10k</td>
+<td>2012Metric</td>
+<td>8</td>
+</tr>
+<tr>
+<td><strong>R15</strong></td>
+<td>75k</td>
+<td>1608Metric</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>&gt;&nbsp; R27-R30</strong></td>
+<td>22</td>
+<td>1608Metric</td>
+<td>4</td>
+</tr>
+<tr>
+<td><strong>R34</strong></td>
+<td>560</td>
+<td>1608Metric</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>R35</strong></td>
+<td>100</td>
+<td>1608Metric</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>R36</strong></td>
+<td>200</td>
+<td>1608Metric</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>&gt;&nbsp; R31, R32, R37</strong></td>
+<td>470</td>
+<td>1608Metric</td>
+<td>3</td>
+</tr>
+<tr>
+<td><strong>U2</strong></td>
+<td>TPS61090</td>
+<td>PVQFN-N16_EP2.7x2.7mm</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>U3</strong></td>
+<td>MCP73831-2-OT</td>
+<td>SOT-23-5</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>U4</strong></td>
+<td>74HC595</td>
+<td>SOIC-16_3.9x9.9mm_P1.27mm</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>U5</strong></td>
+<td>PCM5102</td>
+<td>TSSOP-20_4.4x6.5mm_P0.65mm</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>U6</strong></td>
+<td>MPR121QR2</td>
+<td>UQFN-20_3x3mm_P0.4mm</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+</details>
+<p><br>
+The main PCB requires some SMD components. If you are experimented with SDM soldering it is possible to do that step yourself. However it requires quite advanced capabilities to properly solder the IC packages used. The "PCB kit" contains the PCB with the SMD components pre-soldered. </p>
+<p>For the placement of the component, please refer to <a href="../ressources/smd_assembly/g66188.png">this document</a>.</p>
+<p>Once all the component are soldered, your PCB should look like this:</p>
+<p><img alt="Alt text" src="../ressources/smd.jpg" title="a title" /></p>
+<h3 id="through-hole-soldering"><strong>Through-hole soldering</strong></h3>
+<details>
+    <summary> <b>BOM</b> </summary>
+<table class="table table-striped table-hover">
+<thead>
+<tr>
+<th><strong>ID</strong></th>
+<th><strong>Part</strong></th>
+<th><strong>Link</strong></th>
+<th><strong>Included in “PCB kit”</strong></th>
+<th><strong>Quantity</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>D1</strong></td>
+<td>Red LED</td>
+<td><a href="https://www.mouser.fr/ProductDetail/604-WP169XID">Mouser</a></td>
+<td>No</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>D2</strong></td>
+<td>5mm RKGB LED</td>
+<td>-</td>
+<td>Yes</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>J2</strong></td>
+<td>Switched Audio Jack&nbsp;</td>
+<td><a href="https://www.mouser.fr/ProductDetail/490-SJ-3566AN">Mouser</a></td>
+<td>No</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>J3</strong></td>
+<td>JST PH 2mm 2pin male angled</td>
+<td>-</td>
+<td>Yes</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>N/A</strong></td>
+<td>503450 1000mAh battery</td>
+<td>-</td>
+<td>Yes</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>&gt;&nbsp; RV1-RV3</strong></td>
+<td>Potentiometer</td>
+<td><a href="https://www.mouser.fr/ProductDetail/317-2090F-100K">Mouser</a></td>
+<td>No</td>
+<td>3</td>
+</tr>
+<tr>
+<td><strong>&gt;&nbsp; SW22, SW24, SW25, SW26</strong></td>
+<td>Tactile switch 6x6mm</td>
+<td><a href="https://www.mouser.fr/ProductDetail/653-B3F-1050">Mouser</a></td>
+<td>No</td>
+<td>2</td>
+</tr>
+<tr>
+<td><strong>&gt;&nbsp; SW1-SW21</strong></td>
+<td>Tactile switch 12x12mm</td>
+<td><a href="https://www.mouser.fr/ProductDetail/653-B3F-4050">Mouser</a></td>
+<td>No</td>
+<td>21</td>
+</tr>
+<tr>
+<td><strong>&gt;&nbsp; J1, J4</strong></td>
+<td>Touch header female</td>
+<td><a href="https://www.mouser.fr/ProductDetail/855-M20-7810345R">Mouser</a></td>
+<td>No</td>
+<td>2</td>
+</tr>
+<tr>
+<td><strong>N/A</strong></td>
+<td>Touch header male</td>
+<td><a href="https://www.mouser.fr/ProductDetail/855-M20-8760346">Mouser</a></td>
+<td>No</td>
+<td>2</td>
+</tr>
+<tr>
+<td><strong>U1</strong></td>
+<td>Teensy 4.0</td>
+<td>PJRC</td>
+<td>No</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>N/A</strong></td>
+<td>Teensy headers</td>
+<td><a href="https://www.mouser.fr/ProductDetail/200-TSW13220TS">Mouser</a></td>
+<td>No</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+
+<p>Note: </p>
+<ul>
+<li>If you have the "PCB kit", purchase the additional components from Mouser, and the Teensy from PJRC or any other reseller;</li>
+<li>If you have the "electronics kit", all component both from Mouser and the "PCB kit" are included. Just purchase the Teensy from PJRC or any other reseller.</li>
+</ul>
+<p>To facilitate ordering, here is a <a href="https://www.mouser.fr/api/CrossDomain/GetContext?syncDomains=www&amp;returnUrl=https%3a%2f%2fwww.mouser.com%2fProjectManager%2fProjectDetail.aspx%3fAccessID%3d8661b1e86b&amp;async=False&amp;setPrefSub=False&amp;clearPrefSub=False">prefilled basket</a>. </p>
+</details>
+
+<details>
+    <summary> <b>Tools</b> </summary>
+    <ul>
+<br>
+<li>Soldering iron and solder wire; </li>
+<li>X-acto knife (or another precise cutter);</li>
+<li>Diagonal cutting pliers (the Knipex "Super Knips" are worth the price);</li>
+<li>[Optional] Multimeter.</li>
+</ul>
+</details>
+<hr>
+
+<p>Before starting the soldering, it might be usefull to identify the position of each component and do a dry assembly. This will ensure you properly identify the position of each part and, in consequence, that you indeed have all the components of the BOM. </p>
+<h4 id="parts-preparation">Parts preparation</h4>
+<p>Some parts require a few modification before starting with the soldering. </p>
+<h5 id="teensy-preparation">Teensy preparation</h5>
+<p>First, some small modifications need to be made to the Teensy 4.0 Board. </p>
+<p><strong>The onboard led needs to be disabled</strong>. This step is purely esthetic so if you don't feel confortable doing that modification it is ok (it will simply give your Minichord a soft orange glow). </p>
+<p>The led is next to the pin 13 of the Teensy. To identify it, simply plug your teensy using a mini-USB cable. The led will blink.</p>
+<p><img alt="Alt text" src="../ressources/teensy_led.png" title="a title" /></p>
+<p>There is a trace on the top side between the led and the reset pushbutton. Cut that trace using the X-acto (the specific position is in red in the image below). Plug the Teensy again, and check that the led is not blinking anymore. </p>
+<p><img alt="Alt text" src="../ressources/teensy_cut.png" title="a title" /></p>
+<p>To make sure that you did not damage the Teensy, you can simply use the Teensyduino program to upload any sketch and check that it is still working normally (while the led is not glowing). </p>
+<p><strong>Then we need to cut the USB power</strong>. This step is not optionnal as it allows battery to function as expected. USB power will then be routed to the battery for charging and the Teensy will only be powered when an audio jack is inserted. </p>
+<p>There is pads on the belly of the Teensy specifically for that reason. It is situated next to the 5V pin. With the X-acto, cut the trace between the two exposed pads. </p>
+<p><img alt="Alt text" src="../ressources/teensy_power_cut.png" title="a title" /></p>
+<p>Once it is done, it's a good idea to check with a multimeter that there is indeed no contact between the two pads. </p>
+<p><img alt="Alt text" src="../ressources/teensy_power_check.png" title="a title" /></p>
+<h5 id="potentiometer-preparation">Potentiometer preparation</h5>
+<p>Because of the low clearance within the MiniChord, it is necessary to slightly modify the potentiometers. On the top of the square enclosure, there is four round green plastic spikes. They need to be cut. </p>
+<p><img alt="Alt text" src="../ressources/pot_cut.png" title="a title" /></p>
+<p>Do that for all three potentiometer, be carefull not to cut yourself. </p>
+<p><img alt="Alt text" src="../ressources/pot_cutted.png" title="a title" /></p>
+<p>We can now start with the soldering! </p>
+<h4 id="pushbuttons-soldering">Pushbuttons soldering</h4>
+<h5 id="12x12mm-pushbuttons">12x12mm pushbuttons</h5>
+<p>Let's start with the 12x12mm pushbuttons. The first step is to insert them all (21) on the PCB. It is a close fit, so to make it easier start with the middle line of buttons. </p>
+<p><img alt="Alt text" src="../ressources/button_insertion.png" title="a title" /></p>
+<p>They need to be pushed firmly onto the PCB to properly latch. Make sure that they are all in place and seating flat before starting the soldering. </p>
+<p><img alt="Alt text" src="../ressources/button_soldering.png" title="a title" /></p>
+<p>Once all buttons are properly soldering, they need to be cut (close to) flush on the bottom side on the PCB. It is important because they are seating on top on the battery and we do not want their metal leads to cut into the pouch. </p>
+<p><img alt="Alt text" src="../ressources/button_cutting.png" title="a title" /></p>
+<p>Once all buttons are cut flush, make sure to clean the cuttings from the PCB, as they could cause unwanted contact. </p>
+<h5 id="6mm-pushbuttons">6mm pushbuttons</h5>
+<p>The process is very similar to the 12x12mm button. First insert all the four pushbuttons, making sure they are fully seated before soldering. Here clipping the leads is optional but recommanded. </p>
+<p>Once done your PCB should look like this:</p>
+<p><img alt="Alt text" src="../ressources/small_soldered.png" title="a title" /></p>
+<h4 id="audio-jack-soldering">Audio jack soldering</h4>
+<p>As before, make sure the jack is fully seated before soldering. </p>
+<p><img alt="Alt text" src="../ressources/jack_solder.png" title="a title" /></p>
+<blockquote>
+<p>Note: in PCB v0.3 and before, it is necessary to:</p>
+<ul>
+<li>cut the top left contact of the Audio jack before soldering (when looking from the top of the PCB, with the jack entry at the bottom);</li>
+<li>add  a 10k pulldown resistor between the enable and ground pin of the jack (both at the center of it).</li>
+</ul>
+</blockquote>
+<h4 id="led-soldering">Led soldering</h4>
+<p>Two leds needs to be soldered. </p>
+<p>First the RGB led. The provided led is a RKGB led. Those letters indicate the order of the pins, with R G and B for the individual colors and K for the common cathode. The K pin is the longest and the position of each pin is indicated on the PCB itself. </p>
+<p>The RGB led needs to be fully seated in place before soldering. Once soldered, cut the lead flush with the diagonal cutter. </p>
+<p><img alt="Alt text" src="../ressources/led_rgb.png" title="a title" /></p>
+<p>The next one is the red led. The longest pin is the +, and the position of each pin is indicated on the PCB itself. </p>
+<p>This led should not be fully seated. the top of the led should be about the level of the top of the pushbutton next to it.</p>
+<p><img alt="Alt text" src="../ressources/led_red.png" title="a title" /></p>
+<p>Once soldered, cut the lead flush with the diagonal cutter. </p>
+<h4 id="header-soldering">Header soldering</h4>
+<p>Now we need to solder the female header that will allow the touch PCB to connect. </p>
+<p>Those headers are really SMD components but they are really easy to solder. Just put them in place, making sure they are flush (they should hold in place) and solder each pin. </p>
+<p><img alt="Alt text" src="../ressources/header.png" title="a title" /></p>
+<h4 id="teensy-soldering">Teensy soldering</h4>
+<p>First prepare the headers using the X-acto knife. You will need:</p>
+<ul>
+<li>Two 14-long header strip for each side of a Teensy;</li>
+<li>A lone header for the out-of-row contact for the VUSB pin. If you are unsure which pin it refers to, take a moment to look at the <a href="https://www.pjrc.com/teensy/card10b_rev2_web.pdf">Teensy pinout card</a> to identify it and on the PCB. <strong>Failure to place correctly that header will keep the battery from charging.</strong></li>
+</ul>
+<p>Now you can place the headers on the board, with the short length on the Teensy's side. Position the Teensy, belly up, and make sure it is correctly seated. You can then solder the two end of each header line to "tack" the header in place. </p>
+<p><img alt="Alt text" src="../ressources/teensy_tacking.png" title="a title" /></p>
+<p>Check that the Teensy is well seated, then do the same on the PCB's side. After a final check that the Teensy is well seated, you can then go over all the contact, both on the Teensy and on the PCB's side and solder them. <strong>Don't forget to solder the VUSB pin</strong>. </p>
+<p><img alt="Alt text" src="../ressources/teensy_soldering.png" title="a title" /></p>
+<p>Next, using the diagonal cutters, cut short the excess headers on the PCB's side. </p>
+<p><img alt="Alt text" src="../ressources/teensy_cutting.png" title="a title" /></p>
+<h4 id="potentiometers">Potentiometers</h4>
+<p>Make sure fully seated !! Push well, this is a low profile trace</p>
+<h4 id="battery-connector">Battery connector</h4>
+<p>check with the battery you have that the polarity is correct before soldering, some have inverted connectors. 
+Putting the battery backward will destroy the circuit; </p>
+<h4 id="circuit-check-and-updloading-of-firmware">Circuit check and updloading of firmware</h4>
+<p>First test the alimentation bu plugging a mini usb;
+Top led should be green then red. If not, you forgot a header on the teensy ! 
+Next do the same witrh the battery plugged in, !!! orientation. If red ok </p>
+<p>Then we can upload the firmware. Use teensyloader, drop hex on it and use header to reboot the teensy. 
+Should be working, and hearing the chord by pushing the buttons. If not check that the potentiometer is not fully turned off. </p>
+<p>First plugin the battery, making sure that the polarity is coherent</p>
+<p>Then connect to a computer with a mini usb cable, and upload the firmware (explain more here)</p>
+<h4 id="soldering-of-touch-zone-pcb">Soldering of touch zone pcb</h4>
+<p>easy, just make sure well aligned</p>
+<p>Should be good to go ! </p>
+<h3 id="enclosure-manufacturing"><strong>Enclosure manufacturing</strong></h3>
 <h5 id="fdm-printing">FDM printing</h5>
 <p>Make sure that you flip the objects to have the falt surface on the bed, no support is required. 
 Fits conformatbly on the 18x18cm bed. 
@@ -219,6 +640,25 @@ docs/
     index.md  # The documentation homepage.
     ...       # Other markdown pages, images and other files.
 </code></pre>
+<h5 id="resin-printing">Resin printing</h5>
+<p>Normal, transparent or tinted (GTK)</p>
+<p>issue with dimension on 6060 9000R le mieux </p>
+<h3 id="final-assembly"><strong>Final assembly</strong></h3>
+<h5 id="marking-transfert">Marking transfert</h5>
+<p>not too easy, be carefull. Not yet fully mastered, best bet is to use a cardboard guide. 
+BOM :</p>
+<ul>
+<li>Top and bottom enclosure</li>
+<li>Assembled main PCB </li>
+<li>Battery </li>
+<li>touch pcb assembled </li>
+<li>buttons top </li>
+<li>m2.3x8 plastic screws X6</li>
+<li>m2.3x4x3</li>
+</ul>
+<p>Tools:
+exacto, screwdriver </p>
+<p>don't overtighten the screws ! its only plastic</p>
 </section>
 
             </main>
