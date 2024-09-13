@@ -832,15 +832,16 @@ void loop() {
     if (value > 1) {
       set_harp_voice_frequency(i, current_harp_notes[i]);
       AudioNoInterrupts();
-      string_enveloppe_filter_array[i]->noteOn();
       envelope_string_vibrato_1.noteOn();
+      string_enveloppe_filter_array[i]->noteOn();
       string_enveloppe_array[i]->noteOn();
       AudioInterrupts();
     }
-    if (value == 1) {
+    value = harp_array[i].read_value(); //weirdly if we use the debouncer some noteOff seems to be ignored
+    if (value == 0) {
       AudioNoInterrupts();
-      string_enveloppe_array[i]->noteOff();
       string_enveloppe_filter_array[i]->noteOff();
+      string_enveloppe_array[i]->noteOff();
       AudioInterrupts();
     }
   }

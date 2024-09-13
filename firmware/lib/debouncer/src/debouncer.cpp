@@ -5,7 +5,7 @@ debouncer::debouncer(){
 
 void debouncer::set(bool set_value){
     if(value!=set_value){
-            flag=!flag;
+            flag=true;
             last_update=0;
             value=set_value;
         }

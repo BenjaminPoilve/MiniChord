@@ -38,8 +38,10 @@ hardware/3D/render_v9_bottom.scad
 hardware/3D/render_v9_top1_5.scad
 hardware/PCB/additional PCB/*
 !hardware/PCB/additional PCB/gerber
+!hardware/PCB/additional PCB/touch_zone.pdf
 hardware/PCB/miniChord_main_PCB/*
 !hardware/PCB/miniChord_main_PCB/gerber
+!hardware/PCB/miniChord_main_PCB/MiniChord.pdf
 
 #Useless things for the docc
 documentation/site/js
