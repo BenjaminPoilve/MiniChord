@@ -3,15 +3,15 @@
 
 Please note that depending on the kit version, you may not have to follow all the steps:
 
-* If you are building a MiniChord from scratch, start at ["PCB Manufacturing"](#pcb-manufacturing)
-* If you have the "PCB kit" or the "electronics kit", start at ["Through-hole soldering "](#through-hole-soldering)
-* If you have the "full kit" start at ["Final assembly"](#final-assembly)
+* If you are building a MiniChord from scratch, start at [PCB Manufacturing](#pcb-manufacturing)
+* If you have the "PCB kit" or the "electronics kit", start at [Through-hole soldering](#through-hole-soldering)
+* If you have the "full kit" start at [Final assembly](#final-assembly)
 
 In any case, bill of material (BOM) and necessary tools are listed at the beginning of each section.
 
 # **PCB Manufacturing**
 
-Manufacturing files for the PCB are available in the [Source section](./source) in Gerber format. 
+Manufacturing files for the PCB are available in the [Source section](/source) in Gerber format. 
 
 
 ![Alt text](./ressources/both_pcb.jpg "a title")
@@ -20,7 +20,7 @@ Manufacturing files for the PCB are available in the [Source section](./source) 
 A MiniChord is composed of two PCB:
 
 * The main PCB that is a four layer 1.6mm board;
-* The touch zone PCB that is a two layer 1.6mm board (please remember that this PCB will be visible, so choose color accordingly and remove any marking that the fab house would like to add). 
+* The touch zone PCB that is a two layer 1.6mm board (please remember that this PCB will be visible, so choose colour accordingly and remove any marking that the fab house would like to add). 
 
 Any good fab house should accept those files for manufacture.
 
@@ -333,12 +333,12 @@ Once all the component are soldered, your PCB should look like this:
 </tbody>
 </table>
 
-<p>Note: </p>
+<p><b>Note: </b></p>
 <ul>
 <li>If you have the "PCB kit", purchase the additional components from Mouser, and the Teensy from PJRC or any other reseller;</li>
 <li>If you have the "electronics kit", all component both from Mouser and the "PCB kit" are included. Just purchase the Teensy from PJRC or any other reseller.</li>
 </ul>
-<p>To facilitate ordering, here is a <a href="https://www.mouser.fr/api/CrossDomain/GetContext?syncDomains=www&amp;returnUrl=https%3a%2f%2fwww.mouser.com%2fProjectManager%2fProjectDetail.aspx%3fAccessID%3d8661b1e86b&amp;async=False&amp;setPrefSub=False&amp;clearPrefSub=False">prefilled basket</a>. </p>
+<p>To facilitate ordering from Mouser, here is a <a href="https://www.mouser.fr/api/CrossDomain/GetContext?syncDomains=www&amp;returnUrl=https%3a%2f%2fwww.mouser.com%2fProjectManager%2fProjectDetail.aspx%3fAccessID%3d8661b1e86b&amp;async=False&amp;setPrefSub=False&amp;clearPrefSub=False">prefilled basket</a>. </p>
 </details>
 
 <details>
@@ -353,7 +353,7 @@ Once all the component are soldered, your PCB should look like this:
 </details>
 <hr>
 
-Before starting the soldering, it might be usefull to identify the position of each component and do a dry assembly. This will ensure you properly identify the position of each part and, in consequence, that you indeed have all the components of the BOM. 
+Before starting the soldering, it might be useful to identify the position of each component and do a dry run assembly. This will ensure you properly identify the position of each part and, in consequence, that you indeed have all the components of the BOM. 
 
 ## Parts preparation
 
@@ -363,20 +363,20 @@ Some parts require a few modification before starting with the soldering.
 
 First, some small modifications need to be made to the Teensy 4.0 Board. 
 
-**The onboard led needs to be disabled**. This step is purely esthetic so if you don't feel confortable doing that modification it is ok (it will simply give your Minichord a soft orange glow). 
+**The onboard led needs to be disabled**. This step is purely aesthetic so if you don't feel confortable doing that modification it is ok (it will simply give your MiniChord a soft orange glow). 
 
-The led is next to the pin 13 of the Teensy. To identify it, simply plug your teensy using a mini-USB cable. The led will blink.
+The led is next to the pin 13 of the Teensy. To identify it, simply plug your teensy using a micro USB cable. The led will blink.
 
 ![Alt text](./ressources/teensy_led.png "a title")
 
-There is a trace on the top side between the led and the reset pushbutton. Cut that trace using the X-acto (the specific position is in red in the image below). Plug the Teensy again, and check that the led is not blinking anymore. 
+There is a trace on the top side between the led and the reset pushbutton. Cut that trace using the X-acto (the specific position is in red in the image below). 
 
 ![Alt text](./ressources/teensy_cut.png "a title")
 
 
-To make sure that you did not damage the Teensy, you can simply use the Teensyduino program to upload any sketch and check that it is still working normally (while the led is not glowing). 
+Plug the Teensy again, and check that the led is not blinking anymore. To make sure that you did not damage the Teensy, you can simply use the Teensyduino program to upload any sketch and check that it is still working normally (while the led is not glowing). 
 
-**Then we need to cut the USB power**. This step is not optionnal as it allows battery to function as expected. USB power will then be routed to the battery for charging and the Teensy will only be powered when an audio jack is inserted. 
+**Then we need to cut the USB power**. This step is not optional as it allows battery to function as expected. USB power will then be routed to the battery for charging and the Teensy will only be powered when an audio jack is inserted. 
 
 There is pads on the belly of the Teensy specifically for that reason. It is situated next to the 5V pin. With the X-acto, cut the trace between the two exposed pads. 
 
@@ -393,7 +393,7 @@ Because of the low clearance within the MiniChord, it is necessary to slightly m
 
 ![Alt text](./ressources/pot_cut.png "a title")
 
-Do that for all three potentiometer, be carefull not to cut yourself. 
+Do that for all three potentiometer, be careful not to cut yourself. 
 
 ![Alt text](./ressources/pot_cutted.png "a title")
 
@@ -413,15 +413,15 @@ They need to be pushed firmly onto the PCB to properly latch. Make sure that the
 
 ![Alt text](./ressources/button_soldering.png "a title")
 
-Once all buttons are properly soldering, they need to be cut (close to) flush on the bottom side on the PCB. It is important because they are seating on top on the battery and we do not want their metal leads to cut into the pouch. 
+Once all buttons are properly soldered, they need to be cut flush on the bottom side on the PCB. It is important because they are seating on top on the battery and we do not want their metal leads to cut into the pouch. 
 
 ![Alt text](./ressources/button_cutting.png "a title")
 
-Once all buttons are cut flush, make sure to clean the cuttings from the PCB, as they could cause unwanted contact. 
+On PCB version 0.4 and above, a white mark shows the precise outline of the battery so you can make sure that nothing protrudes in that zone. Once all buttons are cut flush, make sure to clean the cuttings from the PCB, as they could cause unwanted contact. 
 
-### 6mm pushbuttons
+### 6x6mm pushbuttons
 
-The process is very similar to the 12x12mm button. First insert all the four pushbuttons, making sure they are fully seated before soldering. Here clipping the leads is optional but recommanded. 
+The process is very similar to the 12x12mm button. First insert all the four pushbuttons, making sure they are fully seated before soldering. Here clipping the leads is optional but recommended. 
 
 Once done your PCB should look like this:
 
@@ -442,21 +442,23 @@ As before, make sure the jack is fully seated before soldering.
 
 ## Led soldering 
 
-Two leds needs to be soldered. 
+Two leds need to be soldered. 
 
-First the RGB led. The provided led is a RKGB led. Those letters indicate the order of the pins, with R G and B for the individual colors and K for the common cathode. The K pin is the longest and the position of each pin is indicated on the PCB itself. 
+**First the RGB led**. The provided led is a RKGB led. Those letters indicate the order of the pins, with R, G and B for the individual colours and K for the common cathode. The K pin is the longest and the position of each pin is indicated on the PCB itself. 
 
-The RGB led needs to be fully seated in place before soldering. Once soldered, cut the lead flush with the diagonal cutter. 
+The RGB led needs to be fully seated in place before soldering. 
 
 ![Alt text](./ressources/led_rgb.png "a title")
 
-The next one is the red led. The longest pin is the +, and the position of each pin is indicated on the PCB itself. 
+Once soldered, cut the lead flush with the diagonal cutter. 
+
+**The next one is the red led**. The longest pin is the +, and the position of each pin is indicated on the PCB itself. 
 
 This led should not be fully seated. the top of the led should be about the level of the top of the pushbutton next to it.
 
 ![Alt text](./ressources/led_red.png "a title")
 
-Once soldered, cut the lead flush with the diagonal cutter. 
+Once soldered, cut the leads flush with the diagonal cutter. 
 
 ## Header soldering
 
@@ -471,9 +473,9 @@ Those headers are really SMD components but they are really easy to solder. Just
 First prepare the headers using the X-acto knife. You will need:
 
 * Two 14-long header strip for each side of a Teensy;
-* A lone header for the out-of-row contact for the VUSB pin. If you are unsure which pin it refers to, take a moment to look at the [Teensy pinout card](https://www.pjrc.com/teensy/card10b_rev2_web.pdf) to identify it and on the PCB. **Failure to place correctly that header will keep the battery from charging.**
+* A lone header for the out-of-row contact for the VUSB pin. If you are unsure which pin it refers to, take a moment to look at the [Teensy pinout card](https://www.pjrc.com/teensy/card10b_rev2_web.pdf) to identify it and locate its position on the PCB. **Failure to place correctly that header will keep the battery from charging.**
 
-Now you can place the headers on the board, with the short length on the Teensy's side. Position the Teensy, belly up, and make sure it is correctly seated. You can then solder the two end of each header line to "tack" the header in place. 
+Now you can place the headers on the board, with the short length on the Teensy's side. **Position the Teensy, belly up**, and make sure it is correctly seated. You can then solder the two end of each header line to "tack" the header in place. 
 
 ![Alt text](./ressources/teensy_tacking.png "a title")
 
@@ -488,62 +490,171 @@ Next, using the diagonal cutters, cut short the excess headers on the PCB's side
 
 ## Potentiometers
 
-Make sure fully seated !! Push well, this is a low profile trace
+First place the three potentiometer. 
+
+![Alt text](./ressources/potentiometer_install.png "a title")
+
+Note that a low-profile trace is used, which means that the potentiometer sit deeper than they usually would. Make sure that they are fully seated. 
+
+![Alt text](./ressources/potentiometer_seat.png "a title")
+
+
+They will hold in place while you solder them. 
 
 ## Battery connector
 
-check with the battery you have that the polarity is correct before soldering, some have inverted connectors. 
-Putting the battery backward will destroy the circuit; 
+This component is on the backside of the PCB. The silkscreen show the correct position for the connector, so place it accordingly.
 
-## Circuit check and updloading of firmware
+**If the connector is installed backward and the battery is connected that way, it will destroy the device**. You need to make sure that when the battery will be connected, the polarity will be respected. 
 
-First test the alimentation bu plugging a mini usb;
-Top led should be green then red. If not, you forgot a header on the teensy ! 
-Next do the same witrh the battery plugged in, !!! orientation. If red ok 
+![Alt text](./ressources/connector_batt.png "a title")
 
-Then we can upload the firmware. Use teensyloader, drop hex on it and use header to reboot the teensy. 
-Should be working, and hearing the chord by pushing the buttons. If not check that the potentiometer is not fully turned off. 
+> Note: If you purchased the battery yourself, you need to make sure the connector attached to it is not reversed, as it sometimes happen. In that case choose the orientation of the connector to solder to make sure that the red wire of the battery indeed is connected to the positive side (following the silkscreen marking). 
 
-First plugin the battery, making sure that the polarity is coherent
+## Soldering of touch zone PCB
 
-Then connect to a computer with a mini usb cable, and upload the firmware (explain more here)
+The last bit of soldering needed is the headers on the touch zone PCB. Once again, those are technically SMD components, but easy enough to solder. Just make sure they are well aligned. 
+
+![Alt text](./ressources/solder_touch.png "a title")
 
 
-## Soldering of touch zone pcb
-easy, just make sure well aligned
+# **Firmware uploading**
 
-Should be good to go ! 
+<details>
+    <summary> <b>BOM</b> </summary>
+    <ul>
+<br>
+<li>Fully assembled MiniChord PCB; </li>
+<li>503450 1000mAh battery;</li>
+</ul>
+</details>
+<details>
+    <summary> <b>Tools</b> </summary>
+    <ul>
+<br>
+<li>Micro USB cable (make sure it supports data transfert); </li>
+<li>Computer (whether Windows, OSX or Linux);</li>
+<li>Headphones;</li>
+</ul>
+</details>
+<hr>
+## Testing the board
+
+First it is necessary to make sure the board is properly functioning. 
+
+Without plugging the battery, plug in the micro USB. The power status led should light up green. 
+
+![Alt text](./ressources/ok_led.png "a title").
+
+If it is not green, one the most likely reason is that you forgot to solder the VUSB header. Go back to the [Through-hole soldering](#through-hole_soldering) section and read carefully the part about the Teensy soldering. 
+
+Then plug in the battery. **Make sure that the polarity is respected** (it should be the case if you followed previous instructions). This time the led will be red, indicating that the battery is charging. 
+
+![Alt text](./ressources/ok_led_red.png "a title").
+
+## Installing the Teensy Loader Application
+
+Next you need to install the application that will allow to upload the firmware. It is provided by PJRC and precise instruction for it are available [on their website](https://www.pjrc.com/teensy/loader.html).
+
+Please note that if you have TeensyDuino installed, the Teensy Loader is included with it. 
+
+
+## Uploading the firmware
+
+To upload the firmware, please use the following steps:
+
+* Plug the battery into the MiniChord;
+* Plug in the micro USB cable between the MiniChord and your computer;
+* Plug the headphone into the MiniChord 
+* Open the Teensy Loader; 
+* Download the hex file of the firmware from the [Source section](/source);
+* Drop the hex file on the Teensy loader;
+
+
+Once all those steps are done, use a header to push on the reset button of the Teensy through the PCB hole. 
+
+![Alt text](./ressources/reboot.png "a title")
+
+If you carefully followed those steps, the Teensy Loader will indicate "Download Complete" then "Reboot OK". The main colour led of the PCB should light up. 
+
+![Alt text](./ressources/board_ok.png "a title")
+
+You can test it by putting the headphones to your hears and push one of the 12x12mm buttons. If you don't hear anything, check that the potentiometers are not turned fully counter-clockwise.
 
 # **Enclosure manufacturing**
 
+The enclosure is composed of two part, the top and the bottom shell. The STL file for those parts is available in the [Source section](/source).
+
+Depending on what equipment you have available, **you can choose different alternatives for manufacturing**. 
+
+
+## Printing the parts
+
 ### FDM printing
 
-Make sure that you flip the objects to have the falt surface on the bed, no support is required. 
-Fits conformatbly on the 18x18cm bed. 
-On my prusa Mini+, the top shell takes 2 hour to print on a 0.15mm layer height. 2:16 for the bottom
+If you have a FDM printer, you can use it to make the top and bottom shell. They fit comfortably on a 18x18cm bed. Make sure that you flip the objects to have the flat surface on the bed, no support is required for printing. 
 
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+Indicatively, on my Prusa Mini+:
 
+* the top shell takes 2 hours to print on a 0.15mm layer height;
+* the bottom shell takes 2 hours and 15 minutes to print on a 0.15mm layer height.
 
-### Resin printing 
+The result is satisfactory, though not great. 
 
-Normal, transparent or tinted (GTK)
-
-issue with dimension on 6060 9000R le mieux 
+![Alt text](./ressources/fdm_shells.png "a title")
 
 
 
+#### SLA resin printing 
+
+For better quality part, SLA resin printing is an economical alternative. Though the equipment is costly, multiple vendors offer affordable online printing services. 
+
+It should cost less than 5€ per part for basic resin choices, for very qualitative parts. Currently 9600 resin is my favorite for a low cost and good quality. 
+
+![Alt text](./ressources/6060_resin.png "a title")
+
+It also possible (for a cost around 1.5x to 2x) to print those part with a transparent resin. 
+
+![Alt text](./ressources/transparent.png "a title")
+
+Whether normal or transparent resin, it is possible to use GTC liquid dyes to dye the part, for a very good final result.
+
+![Alt text](./ressources/dyed_shell.png "a title")
+
+
+## Adding the labels
+
+Different techniques are possible to add the labels to the shells. 
+
+### UV DTF transfer
+
+The cheapest way to add the marking is a technique called UV DTF transfer. The idea is to print the marking on a film that will then be peeled to apply on the object you want to mark. The marking are full color and very durable. However (and especially in this use case, for very fine marking), it can be a bit finicky to apply. 
+
+You can find the vector file for the UV DTF transfer in the [Source section](/source). There are many local suppliers, and a print should cost you around 5€ per A4 sheet. 
+
+The main difficulty, especially for such fine marking, is to get the printed part stay on the film while peeling. To make sure of that, you need, before starting to peel, to "push" the sheet where there is some graphic components, to help it adhere properly. 
+
+![Alt text](./ressources/pushing_DTF.png "a title")
+
+Then, when peeling, place the sheet with the backing on the top and carefuly "roll it back". 
+
+![Alt text](./ressources/rolling_DTF.png "a title")
+
+Once your film is properly peeled, the difficulty is to properly place it on the first try as DTF transfer is not repositionnable. To that end, I would advise to make a "frame" out of a catboard cutted to the outline of the top shell. Once the film is on the frame, slowly place it on the top shell. 
+
+![Alt text](./ressources/frame_dtf.png "a title")
+
+You can then once again push the film firmly down to ensure proper adhesion then remove the backing film. 
+
+![Alt text](./ressources/removing_DTF.png "a title")
+
+As said beforen, doing it perfectly is not too easy. Still this technique is cheap, doable at home, and can give some very convinving results. 
 
 # **Final assembly**
 
 ### Marking transfert 
 
-not too easy, be carefull. Not yet fully mastered, best bet is to use a cardboard guide. 
-BOM :
-
+BOM
 - Top and bottom enclosure
 - Assembled main PCB 
 - Battery 
@@ -554,5 +665,7 @@ BOM :
 
 Tools:
 exacto, screwdriver 
+
+DO the double sided tape between battery and PCB 
 
 don't overtighten the screws ! its only plastic

@@ -226,6 +226,8 @@ table tbody td:first-child {
 
 .synthesis_container{
     max-width: 90vw;
+    overflow: scroll;
+
 }
   #mkdocs-terminal-content{
     max-width: 100%;
@@ -235,4 +237,5 @@ table tbody td:first-child {
 
   ul{
     margin-top: calc(-0.6*var(--global-line-height)) !important;
+    margin-bottom: calc(var(--global-space) )!important;
   }
