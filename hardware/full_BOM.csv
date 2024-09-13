@@ -1,0 +1,52 @@
+Quantity,Part,Type,Sourcing,Link
+2,1608 10uf capacitor,SMD component,Pre-soldered on PCB,
+3,2012 2.2uf capacitor,SMD component,Pre-soldered on PCB,
+1,6.3x5.7 100uf capacitor,SMD component,Pre-soldered on PCB,
+1,3216 100uf capacitor,SMD component,Pre-soldered on PCB,
+8,1608 100nf capacitor,SMD component,Pre-soldered on PCB,
+1,4x5.4 10uf capacitor,SMD component,Pre-soldered on PCB,
+2,1608 2.2nf capacitor,SMD component,Pre-soldered on PCB,
+1,2012 4.7uf capacitor,SMD component,Pre-soldered on PCB,
+1,side mount bicolour led ,SMD component,Pre-soldered on PCB,
+1,SWPA60 6.8uH inductor,SMD component,Pre-soldered on PCB,
+1,2012 1k resistor,SMD component,Pre-soldered on PCB,
+1,1608 330k resistor,SMD component,Pre-soldered on PCB,
+1,2012 680 resistor,SMD component,Pre-soldered on PCB,
+2,1608 1.8M resistor,SMD component,Pre-soldered on PCB,
+1,1608 220k resistor,SMD component,Pre-soldered on PCB,
+1,1608 1M resistor,SMD component,Pre-soldered on PCB,
+1,2012 2k resistor,SMD component,Pre-soldered on PCB,
+2,2012 2k2 resistor,SMD component,Pre-soldered on PCB,
+8,2012 10k resistor,SMD component,Pre-soldered on PCB,
+1,1608 75k resistor,SMD component,Pre-soldered on PCB,
+4,1608 22 resistor,SMD component,Pre-soldered on PCB,
+1,1608 560 resistor,SMD component,Pre-soldered on PCB,
+1,1608 100 resistor,SMD component,Pre-soldered on PCB,
+1,1608 200 resistor,SMD component,Pre-soldered on PCB,
+3,1608 470 resistor,SMD component,Pre-soldered on PCB,
+1,PVQFN TPS61090,SMD component,Pre-soldered on PCB,
+1,SOT-23 MCP73831,SMD component,Pre-soldered on PCB,
+1,SOIC-16 74HC595,SMD component,Pre-soldered on PCB,
+1,TSSOP-20 PCM5102,SMD component,Pre-soldered on PCB,
+1,UQFN-20 MPR121QR2,SMD component,Pre-soldered on PCB,
+1,Red LED,TH component,Included in electronics kit,Mouser
+1,5mm RKGB LED,TH component,Included in PCB kit,-
+1,Switched Audio Jack,TH component,Included in electronics kit,Mouser
+1,JST PH 2mm 2pin male angled,TH component,Included in PCB kit,-
+1,503450 1000mAh battery,other hardware,Included in PCB kit,-
+3,Potentiometer,TH component,Included in electronics kit,Mouser
+2,Tactile switch 6x6mm,TH component,Included in electronics kit,Mouser
+21,Tactile switch 12x12mm,TH component,Included in electronics kit,Mouser
+2,Touch header female,TH component,Included in electronics kit,Mouser
+2,Touch header male,TH component,Included in electronics kit,Mouser
+1,Teensy 4.0,TH component,Included in electronics kit,PJRC
+1,Teensy headers,TH component,Included in electronics kit,Mouser
+21,Tactile switch keycap 9x9,other hardware,Included in electronics kit,Mouser
+2,Tactile switch keycap key top ,other hardware,Included in electronics kit,Mouser
+1,Tactile switch keycap 4x4 orange,other hardware,Included in electronics kit,Mouser
+1,Tactile switch keycap 4x4 yellow,other hardware,Included in electronics kit,Mouser
+1,Top shell,other hardware,Included in full kit,-
+1,Bottom shell,other hardware,Included in full kit,-
+1,Double sided tape,other hardware,Included in full kit,-
+6,M2.3x8 self taping screws,other hardware,Included in full kit,-
+3,M2.3x4 self taping screws,other hardware,Included in full kit,-

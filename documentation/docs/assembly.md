@@ -585,10 +585,9 @@ You can test it by putting the headphones to your hears and push one of the 12x1
 
 The enclosure is composed of two part, the top and the bottom shell. The STL file for those parts is available in the [Source section](/source).
 
-Depending on what equipment you have available, **you can choose different alternatives for manufacturing**. 
-
-
 ## Printing the parts
+
+Depending on what equipment you have available, **you can choose different alternatives for manufacturing**. 
 
 ### FDM printing
 
