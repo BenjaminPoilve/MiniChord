@@ -3,7 +3,7 @@
 
 Please note that depending on the kit version, you may not have to follow all the steps:
 
-* If you are building a MiniChord from scratch, start at [PCB Manufacturing](#pcb-manufacturing)
+* If you are building a minichord from scratch, start at [PCB Manufacturing](#pcb-manufacturing)
 * If you have the "PCB kit" or the "electronics kit", start at [Through-hole soldering](#through-hole-soldering)
 * If you have the "full kit" start at [Final assembly](#final-assembly)
 
@@ -14,10 +14,10 @@ In any case, bill of material (BOM) and necessary tools are listed at the beginn
 Manufacturing files for the PCB are available in the [Source section](/source) in Gerber format. 
 
 
-![the two MiniChord PCB](./ressources/both_pcb.jpg "the two MiniChord PCB")
+![the two minichord PCB](./ressources/both_pcb.jpg "the two minichord PCB")
 
 
-A MiniChord is composed of two PCB:
+A minichord is composed of two PCB:
 
 * The main PCB that is a four layer 1.6mm board;
 * The touch zone PCB that is a two layer 1.6mm board (please remember that this PCB will be visible, so choose colour accordingly and remove any marking that the fab house would like to add). 
@@ -363,7 +363,7 @@ Some parts require a few modification before starting with the soldering.
 
 First, some small modifications need to be made to the Teensy 4.0 Board. 
 
-**The onboard led needs to be disabled**. This step is purely aesthetic so if you don't feel confortable doing that modification it is ok (it will simply give your MiniChord a soft orange glow). 
+**The onboard led needs to be disabled**. This step is purely aesthetic so if you don't feel confortable doing that modification it is ok (it will simply give your minichord a soft orange glow). 
 
 The led is next to the pin 13 of the Teensy. To identify it, simply plug your teensy using a micro USB cable. The led will blink.
 
@@ -389,7 +389,7 @@ Once it is done, it's a good idea to check with a multimeter that there is indee
 
 ### Potentiometer preparation 
 
-Because of the low clearance within the MiniChord, it is necessary to slightly modify the potentiometers. On the top of the square enclosure, there is four round green plastic spikes. They need to be cut. 
+Because of the low clearance within the minichord, it is necessary to slightly modify the potentiometers. On the top of the square enclosure, there is four round green plastic spikes. They need to be cut. 
 
 ![cutting the potentiometer](./ressources/pot_cut.jpg "cutting the potentiometer")
 
@@ -524,7 +524,7 @@ The last bit of soldering needed is the headers on the touch zone PCB. Once agai
     <summary> <b>BOM</b> </summary>
     <ul>
 <br>
-<li>Fully assembled MiniChord PCB; </li>
+<li>Fully assembled minichord PCB; </li>
 <li>503450 1000mAh battery;</li>
 </ul>
 </details>
@@ -563,9 +563,9 @@ Please note that if you have TeensyDuino installed, the Teensy Loader is include
 
 To upload the firmware, please use the following steps:
 
-* Plug the battery into the MiniChord;
-* Plug in the micro USB cable between the MiniChord and your computer;
-* Plug the headphone into the MiniChord 
+* Plug the battery into the minichord;
+* Plug in the micro USB cable between the minichord and your computer;
+* Plug the headphone into the minichord 
 * Open the Teensy Loader; 
 * Download the hex file of the firmware from the [Source section](/source);
 * Drop the hex file on the Teensy loader;
@@ -627,7 +627,7 @@ Whether normal or transparent resin, it is possible to use GTC liquid dyes to dy
     <summary> <b>BOM</b> </summary>
     <ul>
 <br>
-<li>Fully assembled MiniChord PCB; </li>
+<li>Fully assembled minichord PCB; </li>
 <li>Fully assembled touch zone PCB; </li>
 <li>Keycap set; </li>
 <li>503450 1000mAh battery;</li>

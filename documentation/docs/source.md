@@ -3,7 +3,7 @@
 
 > All software is provided under a 3-clause BSD License
 
-* [MiniControl software](https://github.com/BenjaminPoilve/MiniChord/tree/main/firmware/mini_control)
+* [minicontrol software](https://github.com/BenjaminPoilve/MiniChord/tree/main/firmware/mini_control)
 * [Hex firmware](https://github.com/BenjaminPoilve/MiniChord/blob/main/firmware/firmware.hex)
 * [PlatformIO project](https://github.com/BenjaminPoilve/MiniChord/tree/main/firmware)
 * [Tutorial for PlatformIO Teensy usage](https://forum.pjrc.com/index.php?threads/tutorial-how-to-use-platformio-visual-code-studio-for-teensy.66674/)

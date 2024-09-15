@@ -1,7 +1,7 @@
 
 # **Getting started**
 
->If you have a kit version of the MiniChord, or wish to fully build one yourself, please refer to the ["Assembly" section]()
+>If you have a kit version of the minichord, or wish to fully build one yourself, please refer to the ["Assembly" section]()
 
 ![[#1 sheet]](./ressources/todo.png "#1 sheet")
 
@@ -14,7 +14,7 @@
 
 That's it, you got started! 
 
-**To switch the Minichord off, simply remove the headphone jack ⑧**. Don't forget it plugged in or it will empty its battery!
+**To switch the minichord off, simply remove the headphone jack ⑧**. Don't forget it plugged in or it will empty its battery!
 
 
 # **Basic usage**
@@ -24,7 +24,7 @@ That's it, you got started!
 
 ## ① Chord selector buttons
 
-The Minichord has :
+The minichord has :
 
 * **21 main chord buttons**, divided in 7 column of 3 buttons;
 * **1 "sharp" button (indicated by #)**.
@@ -62,7 +62,7 @@ This touch zone can be "strummed" by sweeping the finger across all sections, or
 
 ## ③ Preset selection buttons and indicator
 
-The preset selection buttons can be used to switch between preset. **The MiniChord has 12 internal preset** (see ["Default presets"](#default-presets)), that can be replaced by custom presets (see ["Making custom presets"](#custom-presets)). Going up after the 12th preset will circle back to the first, same as going down before the first will circle back to the 12th. 
+The preset selection buttons can be used to switch between preset. **The minichord has 12 internal preset** (see ["Default presets"](#default-presets)), that can be replaced by custom presets (see ["Making custom presets"](#custom-presets)). Going up after the 12th preset will circle back to the first, same as going down before the first will circle back to the 12th. 
 
 The main led will shine with a different color for each preset to help you identify the current selected one. 
 
@@ -91,20 +91,20 @@ Simply push the rythm mode button to switch from one mode to the other. That but
 
 ## ⑥ Charging 
 
-Charging is done through the mini USB jack available on the buttom right of the MiniChord. Connection to any USB outlet will do, and it will draw 500ma of current. 
+Charging is done through the mini USB jack available on the buttom right of the minichord. Connection to any USB outlet will do, and it will draw 500ma of current. 
 
 **When charging, the top right led will shine red**. 
 
 Full charge should be below 3 hours, and **the top right led will shine green once the full charge is attained**. 
-Once fully charged, the MiniChord will play for around 7 hours. 
+Once fully charged, the minichord will play for around 7 hours. 
 
-**When the battery is getting low, the main led will pulse**. Once the pulsing start, the MiniChord can play for around 15 minutes more. You can play the MiniChord while plugged in. 
+**When the battery is getting low, the main led will pulse**. Once the pulsing start, the minichord can play for around 15 minutes more. You can play the minichord while plugged in. 
 
 # **Advanced usage**
 
 ## Advanced chord selections
 
-There is two ways to access additional chords on the MiniChord:
+There is two ways to access additional chords on the minichord:
 
 **By combining buttons within the same column**. 
 
@@ -131,7 +131,7 @@ To do that simply **push any button from the column of the note you wish to borr
 
 Usually the replaced note is the fundamental of the chord and the substitution is kown as a "slash chord", written for example Am/E for a A minor chord with E as the fundamental. However this is not the case for all presets. That setting is indicated per preset in the [Default presets](#default-presets) section.
 
->⚠ Due to the way the "sharp" button works, some slash chords are impossible to do on the MiniChord. For example, Am/G is possible, Am#/G# is possible (by holding the "sharp" modifier button), but Am#/G is not. 
+>⚠ Due to the way the "sharp" button works, some slash chords are impossible to do on the minichord. For example, Am/G is possible, Am#/G# is possible (by holding the "sharp" modifier button), but Am#/G is not. 
 
 ## Secondary potentiometer functions
 
@@ -144,13 +144,13 @@ Each of the potentiometer allows you to access a secondary function. The specifi
 ![[#5 sheet]](./ressources/todo.png "#5 sheet")
 
 
->⚠ Please note that you secondary parameter value selected will be memorized by the MiniChord, but only if you switch between presets (to avoid having to write to memory the selected value with every parameter change). 
+>⚠ Please note that you secondary parameter value selected will be memorized by the minichord, but only if you switch between presets (to avoid having to write to memory the selected value with every parameter change). 
 
 ## Arpeggiator
 
 ![[#6 sheet]](./ressources/todo.png "#6 sheet")
 
-The Minichord has a very basic apreggiator function, allowing to play 16 steps pattern on the four voices of the chord section. **To activate the arpeggiator, do a long (more than 1 second) press on the "rythm" button**. The led will flash rythmically and the arpeggiator will start. 
+The minichord has a very basic apreggiator function, allowing to play 16 steps pattern on the four voices of the chord section. **To activate the arpeggiator, do a long (more than 1 second) press on the "rythm" button**. The led will flash rythmically and the arpeggiator will start. 
 
 **While the arpeggiator is playing, you can move from chord to chord by using the chord buttons as usual.** 
 
@@ -162,7 +162,7 @@ To exit the arpeggiator mode, do once again a long press on the "rythm" button.
 
 # **Following chord charts**
 
-A good way to use the MiniChord, especially if you want to cover some popular songs, is to use readily available chord charts.
+A good way to use the minichord, especially if you want to cover some popular songs, is to use readily available chord charts.
 
 **Chord charts are a simplified kind of tablature that only includes the lyrics and the chord of the song**. Usually the chords are written on top of the lyrics, at the moment where they are supposed to happen in the song. 
 
@@ -194,7 +194,7 @@ They usually look like this:
 
 As we see, to be able to play such a chord chart, **we need to have a basic understanding of the way chords are commonly written**. Since there is not widely accepted standard, it may vary slightly vary between chord charts.
 
-On the below table, we show the way chord are commonly written in chord chart and how to play them on the MiniChord, with A for our fundamental:
+On the below table, we show the way chord are commonly written in chord chart and how to play them on the minichord, with A for our fundamental:
 
 
 | Full chord name   |    Common notations      | Button selection pattern|
@@ -209,7 +209,7 @@ On the below table, we show the way chord are commonly written in chord chart an
 | Slash chord | A/G (for G substitution ) |    |
 
 
-**Most of the time, the chords are easily playable on the MiniChord**. If not, it is almost always possible to find acceptable substitutions, but that might require a bit more theoritical knowledge for the player (for example to calculate which slash chord might be an acceptable ersatz for complex chord). 
+**Most of the time, the chords are easily playable on the minichord**. If not, it is almost always possible to find acceptable substitutions, but that might require a bit more theoritical knowledge for the player (for example to calculate which slash chord might be an acceptable ersatz for complex chord). 
 
 
 # **Default presets**
@@ -223,51 +223,51 @@ On the below table, we show the way chord are commonly written in chord chart an
 Making custom presets is a lot more involved, so it is to be reserved to more advanced users.
 However, if there is an issue, you can always restore the default presets, so feel free to experiments. 
 
-Presets are designed with an interface called [MiniControl](/mini_control). In addition to designing your own presets, it allows you to manage the presets loaded into the 12 memory slots of your MiniChord, which includes loading presets shared by other users.
+Presets are designed with an interface called [minicontrol](/mini_control). In addition to designing your own presets, it allows you to manage the presets loaded into the 12 memory slots of your minichord, which includes loading presets shared by other users.
 
-## MiniControl user manual 
+## minicontrol user manual 
 
->Please note that [MiniControl](/mini_control) is a fully offline program, if you wish to access it when you don't have an internet connection, simply use the "save page as" option of the browser (CMD+S) to save it locally.  
+>Please note that [minicontrol](/mini_control) is a fully offline program, if you wish to access it when you don't have an internet connection, simply use the "save page as" option of the browser (CMD+S) to save it locally.  
 
 
-**First you need to connect your MiniChord to MiniControl**.
+**First you need to connect your minichord to minicontrol**.
 
-To do that, first open [MiniControl](/mini_control) in a compatible web browser. We recommend using Google Chrome on desktop, because of its support of WebMidi sysex commands.
+To do that, first open [minicontrol](/mini_control) in a compatible web browser. We recommend using Google Chrome on desktop, because of its support of WebMidi sysex commands.
 
-Then connect your MiniChord to the computer with a USB mini cable. Please make sure that the cable used is not "charge-only" and supports data. 
+Then connect your minichord to the computer with a USB mini cable. Please make sure that the cable used is not "charge-only" and supports data. 
 
-Reload the webpage. You should be shown a prompt asking you to "Control and reprogramme youy Midi Devices". Allow it. This is necessary to send Midi sysex commands that are used to programm the MiniChord. 
+Reload the webpage. You should be shown a prompt asking you to "Control and reprogramme youy Midi Devices". Allow it. This is necessary to send Midi sysex commands that are used to programm the minichord. 
 
-The MiniChord should then be connected. If not, a red warning should give you instruction to allow you to identify which step failed. 
+The minichord should then be connected. If not, a red warning should give you instruction to allow you to identify which step failed. 
 
-**You can then circle around the presets on your MiniChord using the preset selection buttons on the MiniChord**. 
+**You can then circle around the presets on your minichord using the preset selection buttons on the minichord**. 
 
 The associated internal parameters will be displayed on the screen. 
 
 Those parameters are grouped in three categories :
 
 * **"Gobal parameters"**: general parameters that impact the general functionning of the preset. It includes the reverb settings that is applied to both the chord and the harp, and the potentiometer function settings;
-* **"Harp parameters"**: parameters related to the sound synthesis of the harp part of the MiniChord;
-* **"Chord parameters"**: parameters related to the sound synthesis of the chord part of the MiniChord.
+* **"Harp parameters"**: parameters related to the sound synthesis of the harp part of the minichord;
+* **"Chord parameters"**: parameters related to the sound synthesis of the chord part of the minichord.
 
 By hovering on each parameter name (a question mark will appear), a short description of its function will be displayed on your screen. 
 
-You can start experimenting by modifying settings and seeing how it impact the sound of your preset. Note that by default, changes made are not loaded into the MiniChord. Simply using the preset selection buttons to go one preset up then one preset down will reset the current preset. 
+You can start experimenting by modifying settings and seeing how it impact the sound of your preset. Note that by default, changes made are not loaded into the minichord. Simply using the preset selection buttons to go one preset up then one preset down will reset the current preset. 
 
-**You can then use the command buttons to modify the presets loaded on your MiniChord**
+**You can then use the command buttons to modify the presets loaded on your minichord**
 
-[MiniControl](/mini_control) offers the following control buttons: 
+[minicontrol](/mini_control) offers the following control buttons: 
 
   * **"Save current settings to selected bank"**: by using the dropdown to choose a bank number, you can save the current parameters to the selected bank slot. This can be used to copy presets from one bank to another;
   * **"Reset seleted bank"**: by using the dropdown to choose a bank number, you can reset the parameters of the selected bank slot to factory settings
-  * **"Reset all banks"**: this buttons simply put the MiniChord to factory settings by resetting all bank slots
+  * **"Reset all banks"**: this buttons simply put the minichord to factory settings by resetting all bank slots
 
 It also allows you to share your presets and to load presets made by other users, with two additional buttons:
 
-* **"Share setting"**: this buttons will copy in your clipboard a parameter string. This parameter string fully describes the current setting playing on the MiniChord. 
-* **"Load setting"**: this button will prompt a text entry. By pasting a parameter string it will be loaded on your MiniChord for you to test it. Please note that if you wish to save it into a bank slot of your MiniChord, you will need to use the "Save current setting to selected bank" button. 
+* **"Share setting"**: this buttons will copy in your clipboard a parameter string. This parameter string fully describes the current setting playing on the minichord. 
+* **"Load setting"**: this button will prompt a text entry. By pasting a parameter string it will be loaded on your minichord for you to test it. Please note that if you wish to save it into a bank slot of your minichord, you will need to use the "Save current setting to selected bank" button. 
 
->If you have a preset that you wish to share with all MiniChord users, please send the preset string with a short description and the name of your preset to [presets@minichord.com](mailto:presets@minichord.com).
+>If you have a preset that you wish to share with all minichord users, please send the preset string with a short description and the name of your preset to [presets@minichord.com](mailto:presets@minichord.com).
 
 
 ## Synthesis schematic

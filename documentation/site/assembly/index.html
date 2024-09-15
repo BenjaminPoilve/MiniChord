@@ -18,7 +18,7 @@
 
     
  
-<title>Assembly - MiniChord Documentation</title>
+<title>Assembly - minichord documentation</title>
 
 
 <link href="../css/fontawesome/css/fontawesome.min.css" rel="stylesheet">
@@ -88,7 +88,7 @@
 <body class="terminal"><div class="container">
     <div class="terminal-nav">
         <header class="terminal-logo">
-            <div id="mkdocs-terminal-site-name" class="logo terminal-prompt"><a href="/" class="no-style">MiniChord Documentation</a></div>
+            <div id="mkdocs-terminal-site-name" class="logo terminal-prompt"><a href="/" class="no-style">minichord documentation</a></div>
         </header>
         
         <nav class="terminal-menu">
@@ -209,15 +209,15 @@
     <h3 id="assembly-notes"><strong>Assembly notes</strong></h3>
 <p>Please note that depending on the kit version, you may not have to follow all the steps:</p>
 <ul>
-<li>If you are building a MiniChord from scratch, start at <a href="#pcb-manufacturing">PCB Manufacturing</a></li>
+<li>If you are building a minichord from scratch, start at <a href="#pcb-manufacturing">PCB Manufacturing</a></li>
 <li>If you have the "PCB kit" or the "electronics kit", start at <a href="#through-hole-soldering">Through-hole soldering</a></li>
 <li>If you have the "full kit" start at <a href="#final-assembly">Final assembly</a></li>
 </ul>
 <p>In any case, bill of material (BOM) and necessary tools are listed at the beginning of each section.</p>
 <h3 id="pcb-manufacturing"><strong>PCB Manufacturing</strong></h3>
 <p>Manufacturing files for the PCB are available in the <a href="/source">Source section</a> in Gerber format. </p>
-<p><img alt="the two MiniChord PCB" src="../ressources/both_pcb.jpg" title="the two MiniChord PCB" /></p>
-<p>A MiniChord is composed of two PCB:</p>
+<p><img alt="the two minichord PCB" src="../ressources/both_pcb.jpg" title="the two minichord PCB" /></p>
+<p>A minichord is composed of two PCB:</p>
 <ul>
 <li>The main PCB that is a four layer 1.6mm board;</li>
 <li>The touch zone PCB that is a two layer 1.6mm board (please remember that this PCB will be visible, so choose colour accordingly and remove any marking that the fab house would like to add). </li>
@@ -550,7 +550,7 @@ The main PCB requires some SMD components. If you are experimented with SDM sold
 <p>Some parts require a few modification before starting with the soldering. </p>
 <h5 id="teensy-preparation">Teensy preparation</h5>
 <p>First, some small modifications need to be made to the Teensy 4.0 Board. </p>
-<p><strong>The onboard led needs to be disabled</strong>. This step is purely aesthetic so if you don't feel confortable doing that modification it is ok (it will simply give your MiniChord a soft orange glow). </p>
+<p><strong>The onboard led needs to be disabled</strong>. This step is purely aesthetic so if you don't feel confortable doing that modification it is ok (it will simply give your minichord a soft orange glow). </p>
 <p>The led is next to the pin 13 of the Teensy. To identify it, simply plug your teensy using a micro USB cable. The led will blink.</p>
 <p><img alt="identifying the led" src="../ressources/teensy_led.jpg" title="identifying the led" /></p>
 <p>There is a trace on the top side between the led and the reset pushbutton. Cut that trace using the X-acto (the specific position is in red in the image below). </p>
@@ -562,7 +562,7 @@ The main PCB requires some SMD components. If you are experimented with SDM sold
 <p>Once it is done, it's a good idea to check with a multimeter that there is indeed no contact between the two pads. </p>
 <p><img alt="checking the cut" src="../ressources/teensy_power_check.jpg" title="checking the cut" /></p>
 <h5 id="potentiometer-preparation">Potentiometer preparation</h5>
-<p>Because of the low clearance within the MiniChord, it is necessary to slightly modify the potentiometers. On the top of the square enclosure, there is four round green plastic spikes. They need to be cut. </p>
+<p>Because of the low clearance within the minichord, it is necessary to slightly modify the potentiometers. On the top of the square enclosure, there is four round green plastic spikes. They need to be cut. </p>
 <p><img alt="cutting the potentiometer" src="../ressources/pot_cut.jpg" title="cutting the potentiometer" /></p>
 <p>Do that for all three potentiometer, be careful not to cut yourself. </p>
 <p><img alt="a potentiometer after the cut" src="../ressources/pot_cutted.jpg" title="a potentiometer after the cut" /></p>
@@ -637,7 +637,7 @@ The main PCB requires some SMD components. If you are experimented with SDM sold
     <summary> <b>BOM</b> </summary>
     <ul>
 <br>
-<li>Fully assembled MiniChord PCB; </li>
+<li>Fully assembled minichord PCB; </li>
 <li>503450 1000mAh battery;</li>
 </ul>
 </details>
@@ -664,9 +664,9 @@ The main PCB requires some SMD components. If you are experimented with SDM sold
 <h4 id="uploading-the-firmware">Uploading the firmware</h4>
 <p>To upload the firmware, please use the following steps:</p>
 <ul>
-<li>Plug the battery into the MiniChord;</li>
-<li>Plug in the micro USB cable between the MiniChord and your computer;</li>
-<li>Plug the headphone into the MiniChord </li>
+<li>Plug the battery into the minichord;</li>
+<li>Plug in the micro USB cable between the minichord and your computer;</li>
+<li>Plug the headphone into the minichord </li>
 <li>Open the Teensy Loader; </li>
 <li>Download the hex file of the firmware from the <a href="/source">Source section</a>;</li>
 <li>Drop the hex file on the Teensy loader;</li>
@@ -692,7 +692,7 @@ The main PCB requires some SMD components. If you are experimented with SDM sold
 <h6 id="sla-resin-printing">SLA resin printing</h6>
 <p>For better quality part, SLA resin printing is an economical alternative. Though the equipment is costly, multiple vendors offer affordable online printing services. </p>
 <p>It should cost less than 5€ per part for basic resin choices, for very qualitative parts. Currently 9600 resin is my favorite for a low cost and good quality. </p>
-<p><img alt="Resin shells" src="./ressources/6060_resin.jpg" title="Resin shells" /></p>
+<p><img alt="Resin shells" src="../ressources/6060_resin.jpg" title="Resin shells" /></p>
 <p>It also possible (for a cost around 1.5x to 2x) to print those part with a transparent resin. </p>
 <p><img alt="Transparent shells" src="../ressources/transparent.jpg" title="Transparent shells" /></p>
 <p>Whether normal or transparent resin, it is possible to use GTC liquid dyes to dye the part, for a very good final result.</p>
@@ -702,7 +702,7 @@ The main PCB requires some SMD components. If you are experimented with SDM sold
     <summary> <b>BOM</b> </summary>
     <ul>
 <br>
-<li>Fully assembled MiniChord PCB; </li>
+<li>Fully assembled minichord PCB; </li>
 <li>Fully assembled touch zone PCB; </li>
 <li>Keycap set; </li>
 <li>503450 1000mAh battery;</li>
