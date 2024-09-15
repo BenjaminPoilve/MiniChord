@@ -14,7 +14,7 @@ In any case, bill of material (BOM) and necessary tools are listed at the beginn
 Manufacturing files for the PCB are available in the [Source section](/source) in Gerber format. 
 
 
-![Alt text](./ressources/both_pcb.jpg "a title")
+![the two MiniChord PCB](./ressources/both_pcb.jpg "the two MiniChord PCB")
 
 
 A MiniChord is composed of two PCB:
@@ -228,7 +228,7 @@ For the placement of the component, please refer to [this document](./ressources
 
 Once all the component are soldered, your PCB should look like this:
 
-![Alt text](./ressources/smd.jpg "a title")
+![After SMD assembly](./ressources/smd.jpg "after SMD assembly")
 
 
 # **Through-hole soldering**
@@ -367,11 +367,11 @@ First, some small modifications need to be made to the Teensy 4.0 Board.
 
 The led is next to the pin 13 of the Teensy. To identify it, simply plug your teensy using a micro USB cable. The led will blink.
 
-![Alt text](./ressources/teensy_led.png "a title")
+![identifying the led](./ressources/teensy_led.jpg "identifying the led")
 
 There is a trace on the top side between the led and the reset pushbutton. Cut that trace using the X-acto (the specific position is in red in the image below). 
 
-![Alt text](./ressources/teensy_cut.png "a title")
+![cutting the led](./ressources/teensy_cut.jpg "cutting the led")
 
 
 Plug the Teensy again, and check that the led is not blinking anymore. To make sure that you did not damage the Teensy, you can simply use the Teensyduino program to upload any sketch and check that it is still working normally (while the led is not glowing). 
@@ -380,22 +380,22 @@ Plug the Teensy again, and check that the led is not blinking anymore. To make s
 
 There is pads on the belly of the Teensy specifically for that reason. It is situated next to the 5V pin. With the X-acto, cut the trace between the two exposed pads. 
 
-![Alt text](./ressources/teensy_power_cut.png "a title")
+![cutting the VUSB](./ressources/teensy_power_cut.jpg "cutting the VUSB")
 
 
 Once it is done, it's a good idea to check with a multimeter that there is indeed no contact between the two pads. 
 
-![Alt text](./ressources/teensy_power_check.png "a title")
+![checking the cut](./ressources/teensy_power_check.jpg "checking the cut")
 
 ### Potentiometer preparation 
 
 Because of the low clearance within the MiniChord, it is necessary to slightly modify the potentiometers. On the top of the square enclosure, there is four round green plastic spikes. They need to be cut. 
 
-![Alt text](./ressources/pot_cut.png "a title")
+![cutting the potentiometer](./ressources/pot_cut.png "cutting the potentiometer")
 
 Do that for all three potentiometer, be careful not to cut yourself. 
 
-![Alt text](./ressources/pot_cutted.png "a title")
+![a potentiometer after the cut](./ressources/pot_cutted.png "a potentiometer after the cut")
 
 We can now start with the soldering! 
 
@@ -407,15 +407,15 @@ We can now start with the soldering!
 
 Let's start with the 12x12mm pushbuttons. The first step is to insert them all (21) on the PCB. It is a close fit, so to make it easier start with the middle line of buttons. 
 
-![Alt text](./ressources/button_insertion.png "a title")
+![putting the buttons in place](./ressources/button_insertion.jpg "putting the buttons in place")
 
 They need to be pushed firmly onto the PCB to properly latch. Make sure that they are all in place and seating flat before starting the soldering. 
 
-![Alt text](./ressources/button_soldering.png "a title")
+![soldering the buttons](./ressources/button_soldering.jpg "soldering the buttons")
 
 Once all buttons are properly soldered, they need to be cut flush on the bottom side on the PCB. It is important because they are seating on top on the battery and we do not want their metal leads to cut into the pouch. 
 
-![Alt text](./ressources/button_cutting.png "a title")
+![cutting the leads of the buttons](./ressources/button_cutting.jpg "cutting the leads of the buttons")
 
 On PCB version 0.4 and above, a white mark shows the precise outline of the battery so you can make sure that nothing protrudes in that zone. Once all buttons are cut flush, make sure to clean the cuttings from the PCB, as they could cause unwanted contact. 
 
@@ -425,14 +425,14 @@ The process is very similar to the 12x12mm button. First insert all the four pus
 
 Once done your PCB should look like this:
 
-![Alt text](./ressources/small_soldered.png "a title")
+![after soldering all the buttons](./ressources/small_soldered.jpg "after soldering all the buttons")
 
 
 ## Audio jack soldering
 
 As before, make sure the jack is fully seated before soldering. 
 
-![Alt text](./ressources/jack_solder.png "a title")
+![soldering the jack](./ressources/jack_solder.jpg "soldering the jack")
 
 
 > Note: in PCB v0.3 and before, it is necessary to:
@@ -448,7 +448,7 @@ Two leds need to be soldered.
 
 The RGB led needs to be fully seated in place before soldering. 
 
-![Alt text](./ressources/led_rgb.png "a title")
+![soldering the RGB led](./ressources/led_rgb.jpg "soldering the RGB led")
 
 Once soldered, cut the lead flush with the diagonal cutter. 
 
@@ -456,7 +456,7 @@ Once soldered, cut the lead flush with the diagonal cutter.
 
 This led should not be fully seated. the top of the led should be about the level of the top of the pushbutton next to it.
 
-![Alt text](./ressources/led_red.png "a title")
+![soldering the red led](./ressources/led_red.jpg "soldering the red led")
 
 Once soldered, cut the leads flush with the diagonal cutter. 
 
@@ -466,7 +466,7 @@ Now we need to solder the female header that will allow the touch PCB to connect
 
 Those headers are really SMD components but they are really easy to solder. Just put them in place, making sure they are flush (they should hold in place) and solder each pin. 
 
-![Alt text](./ressources/header.png "a title")
+![soldering the headers](./ressources/header.jpg "soldering the headers")
 
 ## Teensy soldering
 
@@ -477,26 +477,26 @@ First prepare the headers using the X-acto knife. You will need:
 
 Now you can place the headers on the board, with the short length on the Teensy's side. **Position the Teensy, belly up**, and make sure it is correctly seated. You can then solder the two end of each header line to "tack" the header in place. 
 
-![Alt text](./ressources/teensy_tacking.png "a title")
+![tacking the Teensy](./ressources/teensy_tacking.jpg "tacking the Teensy")
 
 Check that the Teensy is well seated, then do the same on the PCB's side. After a final check that the Teensy is well seated, you can then go over all the contact, both on the Teensy and on the PCB's side and solder them. **Don't forget to solder the VUSB pin**. 
 
-![Alt text](./ressources/teensy_soldering.png "a title")
+![soldering the Teensy](./ressources/teensy_soldering.jpg "soldering the Teensy")
 
 Next, using the diagonal cutters, cut short the excess headers on the PCB's side. 
 
-![Alt text](./ressources/teensy_cutting.png "a title")
+![cutting the leads of the Teensy](./ressources/teensy_cutting.png "cutting the leads of the Teensy")
 
 
 ## Potentiometers
 
 First place the three potentiometer. 
 
-![Alt text](./ressources/potentiometer_install.png "a title")
+![installing the potentiometers](./ressources/potentiometer_install.jpg "installing the potentiometers")
 
 Note that a low-profile trace is used, which means that the potentiometer sit deeper than they usually would. Make sure that they are fully seated. 
 
-![Alt text](./ressources/potentiometer_seat.png "a title")
+![well seated potentiometer](./ressources/potentiometer_seat.jpg "well seated potentiometer")
 
 
 They will hold in place while you solder them. 
@@ -507,7 +507,7 @@ This component is on the backside of the PCB. The silkscreen show the correct po
 
 **If the connector is installed backward and the battery is connected that way, it will destroy the device**. You need to make sure that when the battery will be connected, the polarity will be respected. 
 
-![Alt text](./ressources/connector_batt.png "a title")
+![positionning the connector](./ressources/connector_batt.jpg "positionning the connector")
 
 > Note: If you purchased the battery yourself, you need to make sure the connector attached to it is not reversed, as it sometimes happen. In that case choose the orientation of the connector to solder to make sure that the red wire of the battery indeed is connected to the positive side (following the silkscreen marking). 
 
@@ -515,7 +515,7 @@ This component is on the backside of the PCB. The silkscreen show the correct po
 
 The last bit of soldering needed is the headers on the touch zone PCB. Once again, those are technically SMD components, but easy enough to solder. Just make sure they are well aligned. 
 
-![Alt text](./ressources/solder_touch.png "a title")
+![touch zone pcb soldering](./ressources/solder_touch.jpg "touch zone pcb soldering")
 
 
 # **Firmware uploading**
@@ -544,13 +544,13 @@ First it is necessary to make sure the board is properly functioning.
 
 Without plugging the battery, plug in the micro USB. The power status led should light up green. 
 
-![Alt text](./ressources/ok_led.png "a title").
+![first led test](./ressources/ok_led.jpg "first led test").
 
 If it is not green, one the most likely reason is that you forgot to solder the VUSB header. Go back to the [Through-hole soldering](#through-hole_soldering) section and read carefully the part about the Teensy soldering. 
 
 Then plug in the battery. **Make sure that the polarity is respected** (it should be the case if you followed previous instructions). This time the led will be red, indicating that the battery is charging. 
 
-![Alt text](./ressources/ok_led_red.png "a title").
+![second led test](./ressources/ok_led_red.jpg "second led test").
 
 ## Installing the Teensy Loader Application
 
@@ -577,7 +577,7 @@ Once all those steps are done, use a header to push on the reset button of the T
 
 If you carefully followed those steps, the Teensy Loader will indicate "Download Complete" then "Reboot OK". The main colour led of the PCB should light up. 
 
-![Alt text](./ressources/board_ok.png "a title")
+![the board if functionning](./ressources/board_ok.jpg "the board if functionning")
 
 You can test it by putting the headphones to your hears and push one of the 12x12mm buttons. If you don't hear anything, check that the potentiometers are not turned fully counter-clockwise.
 
@@ -600,7 +600,7 @@ Indicatively, on my Prusa Mini+:
 
 The result is satisfactory, though not great. 
 
-![Alt text](./ressources/fdm_shells.png "a title")
+![FMD shells](./ressources/fdm_shells.jpg "FMD shells")
 
 
 
@@ -610,15 +610,15 @@ For better quality part, SLA resin printing is an economical alternative. Though
 
 It should cost less than 5€ per part for basic resin choices, for very qualitative parts. Currently 9600 resin is my favorite for a low cost and good quality. 
 
-![Alt text](./ressources/6060_resin.png "a title")
+![Resin shells](./ressources/6060_resin.jpg "Resin shells")
 
 It also possible (for a cost around 1.5x to 2x) to print those part with a transparent resin. 
 
-![Alt text](./ressources/transparent.png "a title")
+![Transparent shells](./ressources/transparent.jpg "Transparent shells")
 
 Whether normal or transparent resin, it is possible to use GTC liquid dyes to dye the part, for a very good final result.
 
-![Alt text](./ressources/dyed_shell.png "a title")
+![coloured shell](./ressources/dyed_shell.jpg "coloured shell")
 
 
 # **Final assembly**

@@ -1,4 +1,4 @@
-site_name: Minichord Documentation
+site_name: Minichord
 nav:
   - User manual: user_manual.md
   - Assembly: assembly.md
