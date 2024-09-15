@@ -391,11 +391,11 @@ Once it is done, it's a good idea to check with a multimeter that there is indee
 
 Because of the low clearance within the MiniChord, it is necessary to slightly modify the potentiometers. On the top of the square enclosure, there is four round green plastic spikes. They need to be cut. 
 
-![cutting the potentiometer](./ressources/pot_cut.png "cutting the potentiometer")
+![cutting the potentiometer](./ressources/pot_cut.jpg "cutting the potentiometer")
 
 Do that for all three potentiometer, be careful not to cut yourself. 
 
-![a potentiometer after the cut](./ressources/pot_cutted.png "a potentiometer after the cut")
+![a potentiometer after the cut](./ressources/pot_cutted.jpg "a potentiometer after the cut")
 
 We can now start with the soldering! 
 

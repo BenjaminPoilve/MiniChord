@@ -292,9 +292,7 @@ div:focus {
 body{
     overscroll-behavior-y: none;
 }
-.control_full{
-    overflow-y: hidden;
-}
+
 
 
 .title h1{
@@ -391,7 +389,7 @@ h4{
   font-weight: bold;
 }
 .data_line{
-  line-height: 0.65em;
+  line-height: 0.72em;
   color:black !important;
 
 }
@@ -418,4 +416,8 @@ span{
 }
 .row_title{
   font-weight: bold;
+}
+
+#parameters{
+  font-family: monospace;
 }

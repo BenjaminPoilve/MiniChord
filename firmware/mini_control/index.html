@@ -19,51 +19,55 @@
               <br />
               <br />
               <div tabindex="1" id="information_zone">
-                <strong id="information_text">To get started, connect your MiniChord by following the instruction displayed below</strong>
+                <strong id="information_text">To get started, connect your MiniChord to the computer, turn it on, then reload the page</strong>
               </div>
             </span>
           </div>
           <div class="bloc B9 M9 S9">
-            <p id="bank_number_zone">Current bank : unconnected</p>
+            <p id="bank_number_zone">>> Current bank : unconnected</p>
           </div>
-          <div class="bloc B3 M3 S3">
-            <div class="line">
-              <div class="bloc B3 M3 S3">
-                <select id="bank_number_selection" name="bank number">
-                  <option value="0">1</option>
-                  <option value="1">2</option>
-                  <option value="2">3</option>
-                  <option value="3">4</option>
-                  <option value="4">5</option>
-                  <option value="5">6</option>
-                  <option value="6">7</option>
-                  <option value="7">8</option>
-                  <option value="8">9</option>
-                  <option value="9">10</option>
-                  <option value="10">11</option>
-                  <option value="11">12</option>
-                </select>
-              </div>
-              <div class="bloc B3 M3 S3">
-                <button onclick="save_current_settings()" class="inactive">Save current settings to selected bank</button>
+          <div class="line">
+            <div class="bloc B3 M3 S3">
+              <div class="line">
+                <div class="bloc B3 M3 S3">
+                  <select id="bank_number_selection" name="bank number">
+                    <option value="0">1</option>
+                    <option value="1">2</option>
+                    <option value="2">3</option>
+                    <option value="3">4</option>
+                    <option value="4">5</option>
+                    <option value="5">6</option>
+                    <option value="6">7</option>
+                    <option value="7">8</option>
+                    <option value="8">9</option>
+                    <option value="9">10</option>
+                    <option value="10">11</option>
+                    <option value="11">12</option>
+                  </select>
+                </div>
+                <div class="bloc B3 M3 S3">
+                  <button onclick="save_current_settings()" class="inactive">Save current settings to selected bank</button>
+                </div>
               </div>
             </div>
+            <div class="bloc B3 M3 S3">
+              <button onclick="reset_selected_bank()" class="inactive">Reset selected bank</button>
+            </div>
+            <div class="bloc B3 M3 S3">
+              <button onclick="reset_memory()" class="inactive">Reset all memory</button>
+            </div>
           </div>
-          <div class="bloc B3 M3 S3">
-            <button onclick="generate_settings()" class="inactive">Share settings</button>
-          </div>
-          <div class="bloc B3 M3 S3">
-            <button onclick="load_settings()" class="inactive">Load settings</button>
-          </div>
-          <div class="bloc B3 M3 S3">
-            <button onclick="reset_selected_bank()" class="inactive">Reset selected bank</button>
-          </div>
-          <div class="bloc B3 M3 S3">
-            <button onclick="reset_memory()" class="inactive">Reset all memory</button>
+          <div class="line">
+            <div class="bloc B3 M3 S3">
+              <button onclick="generate_settings()" class="inactive">Share settings</button>
+            </div>
+            <div class="bloc B3 M3 S3">
+              <button onclick="load_settings()" class="inactive">Load settings</button>
+            </div>
           </div>
         </div>
         <div id="instruction_zone" class="line">
-          <p>Here we have the specific instruction for connecting</p>
+          <p></p>
         </div>
       </div>
       <div id="spacer" class="bloc B1 M0 S0"></div>
@@ -3506,7 +3510,6 @@
       </div>
     </div>
     <script src="index.js"></script>
-    <p>Output:</p>
     <p id="output_zone"></p>
   </body>
 </html>
