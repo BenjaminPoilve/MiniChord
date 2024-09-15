@@ -16,3 +16,5 @@
 * Before uploading to Github:
     * rebuild the documentation website 
     * copy mini_control into the "site" folder (burdensome, but simplest solution)
+
+* Use sh buil_site.sh for a little housekeeping. 

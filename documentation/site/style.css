@@ -258,8 +258,3 @@ table tbody td:first-child {
 
     }
   }
-
-  body{
-    background-image: url("./ressources/bg3.png");
-    background-size: cover;
-  }
