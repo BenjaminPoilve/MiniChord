@@ -672,7 +672,7 @@ The main PCB requires some SMD components. If you are experimented with SDM sold
 <li>Drop the hex file on the Teensy loader;</li>
 </ul>
 <p>Once all those steps are done, use a header to push on the reset button of the Teensy through the PCB hole. </p>
-<p><img alt="Alt text" src="../ressources/reboot.png" title="a title" /></p>
+<p><img alt="Alt text" src="./ressources/reboot.png" title="a title" /></p>
 <p>If you carefully followed those steps, the Teensy Loader will indicate "Download Complete" then "Reboot OK". The main colour led of the PCB should light up. </p>
 <p><img alt="Alt text" src="../ressources/board_ok.png" title="a title" /></p>
 <p>You can test it by putting the headphones to your hears and push one of the 12x12mm buttons. If you don't hear anything, check that the potentiometers are not turned fully counter-clockwise.</p>
@@ -697,34 +697,38 @@ The main PCB requires some SMD components. If you are experimented with SDM sold
 <p><img alt="Alt text" src="../ressources/transparent.png" title="a title" /></p>
 <p>Whether normal or transparent resin, it is possible to use GTC liquid dyes to dye the part, for a very good final result.</p>
 <p><img alt="Alt text" src="../ressources/dyed_shell.png" title="a title" /></p>
-<h4 id="adding-the-labels">Adding the labels</h4>
-<p>Different techniques are possible to add the labels to the shells. </p>
-<h5 id="uv-dtf-transfer">UV DTF transfer</h5>
-<p>The cheapest way to add the marking is a technique called UV DTF transfer. The idea is to print the marking on a film that will then be peeled to apply on the object you want to mark. The marking are full color and very durable. However (and especially in this use case, for very fine marking), it can be a bit finicky to apply. </p>
-<p>You can find the vector file for the UV DTF transfer in the <a href="/source">Source section</a>. There are many local suppliers, and a print should cost you around 5€ per A4 sheet. </p>
-<p>The main difficulty, especially for such fine marking, is to get the printed part stay on the film while peeling. To make sure of that, you need, before starting to peel, to "push" the sheet where there is some graphic components, to help it adhere properly. </p>
-<p><img alt="Alt text" src="../ressources/pushing_DTF.png" title="a title" /></p>
-<p>Then, when peeling, place the sheet with the backing on the top and carefuly "roll it back". </p>
-<p><img alt="Alt text" src="../ressources/rolling_DTF.png" title="a title" /></p>
-<p>Once your film is properly peeled, the difficulty is to properly place it on the first try as DTF transfer is not repositionnable. To that end, I would advise to make a "frame" out of a catboard cutted to the outline of the top shell. Once the film is on the frame, slowly place it on the top shell. </p>
-<p><img alt="Alt text" src="../ressources/frame_dtf.png" title="a title" /></p>
-<p>You can then once again push the film firmly down to ensure proper adhesion then remove the backing film. </p>
-<p><img alt="Alt text" src="../ressources/removing_DTF.png" title="a title" /></p>
-<p>As said beforen, doing it perfectly is not too easy. Still this technique is cheap, doable at home, and can give some very convinving results. </p>
 <h3 id="final-assembly"><strong>Final assembly</strong></h3>
-<h5 id="marking-transfert">Marking transfert</h5>
-<p>BOM
-- Top and bottom enclosure
-- Assembled main PCB 
-- Battery 
-- touch pcb assembled 
-- buttons top 
-- m2.3x8 plastic screws X6
-- m2.3x4x3</p>
-<p>Tools:
-exacto, screwdriver </p>
-<p>DO the double sided tape between battery and PCB </p>
-<p>don't overtighten the screws ! its only plastic</p>
+<details>
+    <summary> <b>BOM</b> </summary>
+    <ul>
+<br>
+<li>Fully assembled MiniChord PCB; </li>
+<li>Fully assembled touch zone PCB; </li>
+<li>Keycap set; </li>
+<li>503450 1000mAh battery;</li>
+<li>Top and bottom shells;</li>
+<li>6x M2.3x8 self-tapping screws;</li>
+<li>3x M2.3x6 self-tapping screws;</li>
+
+</ul>
+</details>
+<details>
+    <summary> <b>Tools</b> </summary>
+    <ul>
+<br>
+<li>X-acto knife (or another precise cutter); </li>
+<li>Phillips electronics screwdrive;</li>
+<li>Double-sided tapes;</li>
+</ul>
+</details>
+<hr>
+
+<p>[TBD]</p>
+<p>Note :</p>
+<ul>
+<li>do the double sided tape between battery and PCB </li>
+<li>don't overtighten the screws ! its only plastic</li>
+</ul>
 </section>
 
             </main>

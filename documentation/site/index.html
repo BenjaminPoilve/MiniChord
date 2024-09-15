@@ -18,7 +18,7 @@
 
     
  
-<title>Home - Minichord Documentation</title>
+<title>Minichord</title>
 
 
 <link href="css/fontawesome/css/fontawesome.min.css" rel="stylesheet">
@@ -41,6 +41,34 @@
     grid-template-rows: auto;
 }
 
+.terminal-nav{
+    margin-top: 0vw;
+    margin-right:12vw;
+    margin-left:12vw;
+}
+@media (max-width: 900px) {
+    .terminal-nav{
+    margin-right:2vw;
+    margin-left:2vw;
+    }
+}
+body{
+    background-image: url("./ressources/bg3.png") ;
+    -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        background-position:  center top; 
+  }
+
+  html{
+    min-height: 100%;
+  }
+
+#mkdocs-terminal-site-name{
+    font-size:3em;
+}
+
 /*  
 *   when side navigation is not hidden, use a two column grid.  
 *   if the screen is too narrow, fall back to the initial one column grid layout.
@@ -52,35 +80,21 @@
     }
 }</style>
 
-<!-- cursor_animation override -->
+
 <style>
   #mkdocs-terminal-site-name.terminal-prompt::after {
       display: none;
   }
+  .container {
+  max-width: 100vw;
+}
+
 </style>
 
+<link href="style.css" rel="stylesheet">  
     
-    <link href="style.css" rel="stylesheet">  
-    
-    
-
-    
-    <!-- search css support -->
+ <!-- search css support -->
 <link href="css/search/bootstrap-modal.css" rel="stylesheet">
-<!-- search scripts -->
-<script>
-    var base_url = ".",
-    shortcuts = "{}";
-</script>
-<script src="js/jquery/jquery-1.10.1.min.js" defer></script>
-<script src="js/bootstrap/bootstrap.min.js" defer></script>
-<script src="js/mkdocs/base.js" defer></script>
-    
-    
-    
-    
-    <script src="search/main.js"></script>
-    
 
     
 </head>
@@ -88,7 +102,7 @@
 <body class="terminal"><div class="container">
     <div class="terminal-nav">
         <header class="terminal-logo">
-            <div id="mkdocs-terminal-site-name" class="logo terminal-prompt"><a href="/" class="no-style">Minichord Documentation</a></div>
+            <div id="mkdocs-terminal-site-name" class="logo terminal-prompt"><a href="/" class="no-style">Minichord</a></div>
         </header>
         
         <nav class="terminal-menu">
@@ -195,19 +209,9 @@
 </nav>
 </aside>
             <main id="terminal-mkdocs-main-content">
-<section id="mkdocs-terminal-content">
-    <p>The minichord is ...</p>
-</section>
-
             </main>
         </div>
-        <hr><footer>
-    <div class="terminal-mkdocs-footer-grid">
-        <div id="terminal-mkdocs-footer-copyright-info">
-             Site built with <a href="http://www.mkdocs.org">MkDocs</a> and <a href="https://github.com/ntno/mkdocs-terminal">Terminal for MkDocs</a>.
-        </div>
-    </div>
-</footer>
+
     </div>
 
     

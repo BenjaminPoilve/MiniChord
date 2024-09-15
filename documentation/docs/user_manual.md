@@ -3,6 +3,9 @@
 
 >If you have a kit version of the MiniChord, or wish to fully build one yourself, please refer to the ["Assembly" section]()
 
+![[#1 sheet]](./ressources/todo.png "#1 sheet")
+
+
 **To turn it on, simply plug the headphone jack in ①. The main led ② will shine.** If it does not turn on, then its battery is empty, charge it on any USB wallwart with a mini USB cable **③**. 
 
 **Once it is started, push one the square buttons ④. You should hear a chord being played.** If you do not hear a sound, check that the potentiometer with the indication "Chord" is not fully turned left **⑤**. The chord will vary depending on which button you press. 
@@ -15,6 +18,8 @@ That's it, you got started!
 
 
 # **Basic usage**
+
+![[#2 sheet]](./ressources/todo.png "#2 sheet")
 
 
 ## ① Chord selector buttons
@@ -66,9 +71,6 @@ The main led will shine with a different color for each preset to help you ident
 
 ## ④ Potentiometers 
 
-![Alt text](./ressources/pot.png "a title")
-
-
 Each of the three potentiometer has one main function, designated by the marking on the enclosure :
 
 * **The "Chord" potentiometer** sets up the volume of the chord section;
@@ -106,6 +108,9 @@ There is two ways to access additional chords on the MiniChord:
 
 **By combining buttons within the same column**. 
 
+![[#3 sheet]](./ressources/todo.png "#3 sheet")
+
+
 It is possible to push more than one button within the same column to access more complicated chords. **The possible combination are the following**:
 
 * The *7th* button can be combined with either the *Maj* or the *Min* button of the same column to obtain a* Major 7* and *Minor 7* chord of the same note;
@@ -117,6 +122,9 @@ It is possible to push more than one button within the same column to access mor
 
 **By combining buttons across different column**
 
+![[#4 sheet]](./ressources/todo.png "#4 sheet")
+
+
 When a chord is selected within a colum (even a complex one), **it is possible to replace one of the note with the fundamental from another column**. 
 
 To do that simply **push any button from the column of the note you wish to borrow the fundamental from**. 
@@ -127,13 +135,20 @@ Usually the replaced note is the fundamental of the chord and the substitution i
 
 ## Secondary potentiometer functions
 
+
+
 Each of the potentiometer allows you to access a secondary function. The specific secondary function will depend on the selected preset, and is indicated per preset in the [Default presets](#default-presets) section.
 
 **To access the secondary function, you need to hold the "sharp button" while turning the potentiometer.**
 
+![[#5 sheet]](./ressources/todo.png "#5 sheet")
+
+
 >⚠ Please note that you secondary parameter value selected will be memorized by the MiniChord, but only if you switch between presets (to avoid having to write to memory the selected value with every parameter change). 
 
 ## Arpeggiator
+
+![[#6 sheet]](./ressources/todo.png "#6 sheet")
 
 The Minichord has a very basic apreggiator function, allowing to play 16 steps pattern on the four voices of the chord section. **To activate the arpeggiator, do a long (more than 1 second) press on the "rythm" button**. The led will flash rythmically and the arpeggiator will start. 
 
@@ -182,16 +197,16 @@ As we see, to be able to play such a chord chart, **we need to have a basic unde
 On the below table, we show the way chord are commonly written in chord chart and how to play them on the MiniChord, with A for our fundamental:
 
 
-| Full chord name   |    Common notations      |  Chord button selection |
+| Full chord name   |    Common notations      | Button selection pattern|
 |----------|:-------------:|:------:|
 | Major chord |    A, A major   |   |
 | Minor chord | Am, Aminor, Ami, A_ |  |
-| Dominant 7th chord | A7, A Seven, Adom |    $1 |
-| Major 7th chord | Amaj7, AΔ, AΔ7, AM7, Ama7|    $1 |
-| Minor 7th chord | Am7, A_7, Ami7, Amin7 |    $1 |
-| Augmented chord | Aaug, A+ |    $1 |
-| Diminished chord | Adim, A° |    $1 |
-| Slash chord | A/G (for G substitution ) |    $1 |
+| Dominant 7th chord | A7, A Seven, Adom |     |
+| Major 7th chord | Amaj7, AΔ, AΔ7, AM7, Ama7|    |
+| Minor 7th chord | Am7, A_7, Ami7, Amin7 |    |
+| Augmented chord | Aaug, A+ |    |
+| Diminished chord | Adim, A° |    |
+| Slash chord | A/G (for G substitution ) |    |
 
 
 **Most of the time, the chords are easily playable on the MiniChord**. If not, it is almost always possible to find acceptable substitutions, but that might require a bit more theoritical knowledge for the player (for example to calculate which slash chord might be an acceptable ersatz for complex chord). 
@@ -201,28 +216,7 @@ On the below table, we show the way chord are commonly written in chord chart an
 
 **The following section presents the 12 default presets**, in order.
 
-## Preset 1 - Twin synth
-
-* The color of the indicator led; 
-* A quick description of the preset;
-* The configuration of the harp zone (the notes included and the order);
-* The level within the chord which will be modified when combining button in a "slash chord" maneer; 
-
-|Chord secondary control|Harp secondary control|Mod primary control|Mod  secondary control|
-|:----------:|:-------------:|:------:|:------:|
-| chord filter frequency | A7 |    $1 | $1 | 
-
-## Preset 1 - Twin synth
-
-* The color of the indicator led; 
-* A quick description of the preset;
-* The configuration of the harp zone (the notes included and the order);
-* The level within the chord which will be modified when combining button in a "slash chord" maneer; 
-
-|Mod  control|Chord secondary control|Harp secondary control|Mod  secondary control|
-|----------|:-------------:|:------:|:------:|
-| Slash chord | A7 |    $1 | $1 | 
-
+[TBD]
 
 # **Custom presets**
 

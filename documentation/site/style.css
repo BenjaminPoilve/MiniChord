@@ -239,3 +239,27 @@ table tbody td:first-child {
     margin-top: calc(-0.6*var(--global-line-height)) !important;
     margin-bottom: calc(var(--global-space) )!important;
   }
+
+  footer{
+    margin-top:calc(4*var(--global-space) );
+  }
+
+  #terminal-mkdocs-footer-copyright-info{
+    grid-column-start: 2;
+    font-size:0.72em;
+  }
+
+  .terminal-mkdocs-footer-grid{
+    grid-column-gap: 1em;
+  }
+  @media only screen and (min-width: 50em) {
+    .terminal-mkdocs-footer-grid {
+        grid-template-columns: 4fr 9fr;
+
+    }
+  }
+
+  body{
+    background-image: url("./ressources/bg3.png");
+    background-size: cover;
+  }

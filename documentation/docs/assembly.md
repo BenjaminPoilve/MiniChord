@@ -621,50 +621,36 @@ Whether normal or transparent resin, it is possible to use GTC liquid dyes to dy
 ![Alt text](./ressources/dyed_shell.png "a title")
 
 
-## Adding the labels
-
-Different techniques are possible to add the labels to the shells. 
-
-### UV DTF transfer
-
-The cheapest way to add the marking is a technique called UV DTF transfer. The idea is to print the marking on a film that will then be peeled to apply on the object you want to mark. The marking are full color and very durable. However (and especially in this use case, for very fine marking), it can be a bit finicky to apply. 
-
-You can find the vector file for the UV DTF transfer in the [Source section](/source). There are many local suppliers, and a print should cost you around 5€ per A4 sheet. 
-
-The main difficulty, especially for such fine marking, is to get the printed part stay on the film while peeling. To make sure of that, you need, before starting to peel, to "push" the sheet where there is some graphic components, to help it adhere properly. 
-
-![Alt text](./ressources/pushing_DTF.png "a title")
-
-Then, when peeling, place the sheet with the backing on the top and carefuly "roll it back". 
-
-![Alt text](./ressources/rolling_DTF.png "a title")
-
-Once your film is properly peeled, the difficulty is to properly place it on the first try as DTF transfer is not repositionnable. To that end, I would advise to make a "frame" out of a catboard cutted to the outline of the top shell. Once the film is on the frame, slowly place it on the top shell. 
-
-![Alt text](./ressources/frame_dtf.png "a title")
-
-You can then once again push the film firmly down to ensure proper adhesion then remove the backing film. 
-
-![Alt text](./ressources/removing_DTF.png "a title")
-
-As said beforen, doing it perfectly is not too easy. Still this technique is cheap, doable at home, and can give some very convinving results. 
-
 # **Final assembly**
 
-### Marking transfert 
+<details>
+    <summary> <b>BOM</b> </summary>
+    <ul>
+<br>
+<li>Fully assembled MiniChord PCB; </li>
+<li>Fully assembled touch zone PCB; </li>
+<li>Keycap set; </li>
+<li>503450 1000mAh battery;</li>
+<li>Top and bottom shells;</li>
+<li>6x M2.3x8 self-tapping screws;</li>
+<li>3x M2.3x6 self-tapping screws;</li>
 
-BOM
-- Top and bottom enclosure
-- Assembled main PCB 
-- Battery 
-- touch pcb assembled 
-- buttons top 
-- m2.3x8 plastic screws X6
-- m2.3x4x3
+</ul>
+</details>
+<details>
+    <summary> <b>Tools</b> </summary>
+    <ul>
+<br>
+<li>X-acto knife (or another precise cutter); </li>
+<li>Phillips electronics screwdrive;</li>
+<li>Double-sided tapes;</li>
+</ul>
+</details>
+<hr>
 
-Tools:
-exacto, screwdriver 
+[TBD]
 
-DO the double sided tape between battery and PCB 
+Note :
 
-don't overtighten the screws ! its only plastic
+* do the double sided tape between battery and PCB 
+* don't overtighten the screws ! its only plastic
