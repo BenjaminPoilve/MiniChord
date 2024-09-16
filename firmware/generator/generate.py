@@ -23,40 +23,45 @@ with open('parameters.json') as f: # Reserved adresses: 0 for system command and
     with a.html():
         with a.body(id="body", klass="control_full"):
             with a.div(id='content',klass="line"):
-                with a.div(id="control", klass="bloc B3 M9 S9"):
+                with a.div(id="control", klass="bloc B4 M9 S9"):
                     with a.div(id='header',klass="line"):
                         with a.div(klass="title bloc B9 M9 S9"):
-                            a.h4(_t='MiniControl')
+                            a.h4(_t='minicontrol')
                             with a.span():
-                                a.strong(_t='MidiControl is a control interface for the MiniChord.')
-                                a('It allows users to modify existing presets, create new presets and share them with others.')
-                                a.br()
-                                a('For instruction on how to use this tool, please refer to')
-                                a.a(href='#default-presets', _t='the MiniChord documentation.')
+                                a('control interface for the minichord')
                                 a.br()
                                 a.br()
-                                with a.div(tabindex='1', id='information_zone'):
-                                    a.strong(_t='To get started, connect your MiniChord by following the instruction displayed below',id='information_text')
+                        with a.div(tabindex='1', id='information_zone'):
+                            a.strong(_t='To get started, connect your MiniChord by following the instruction displayed below',id='information_text')
                         with a.div(klass="bloc B9 M9 S9"):
-                            a.p(_t='Current bank : unconnected', id="bank_number_zone")
+                            with a.ul(klass="instruction_steps"):
+                                with a.li(id="step1", klass="unsatisfied"):
+                                    a('provide the system autorisation for MIDI control')
+                                with a.li(id="step2", klass="unsatisfied"):
+                                    a('use a recent version of Chrome')
+                                with a.li(id="step3", klass="unsatisfied"):
+                                    a('connect the minichord with a USB cable and make sure it is on.')
                         with a.div(klass="bloc B3 M3 S3"):
                             with a.div(klass="line"):
                                 with a.div(klass="bloc B3 M3 S3"):
-                                    with a.select(id='bank_number_selection', name='bank number'):
+                                    with a.select(id='bank_number_selection', klass="inactive", name='bank number'):
                                         for i in range(12):
                                             a.option(value=i, _t=(i+1))
                                 with a.div(klass="bloc B3 M3 S3"):
-                                    a.button(onclick='save_current_settings()', _t='Save current settings to selected bank',klass="inactive")
+                                    a.button(onclick='save_current_settings()', _t='save to bank',klass="inactive")
                         with a.div(klass="bloc B3 M3 S3"):
-                            a.button(onclick='generate_settings()', _t='Share settings',klass="inactive")
+                            a.button(onclick='reset_selected_bank()', _t='reset bank',klass="inactive")
                         with a.div(klass="bloc B3 M3 S3"):
-                            a.button(onclick='load_settings()', _t='Load settings',klass="inactive")
-                        with a.div(klass="bloc B3 M3 S3"):
-                            a.button(onclick='reset_selected_bank()', _t='Reset selected bank',klass="inactive")
-                        with a.div(klass="bloc B3 M3 S3"):
-                            a.button(onclick='reset_memory()', _t='Reset all memory',klass="inactive")
-                    with a.div( id='instruction_zone',klass="line"):
-                        a.p(_t='Here we have the specific instruction for connecting')
+                            a.button(onclick='reset_memory()', _t='reset all banks',klass="inactive")
+                        with a.div(klass="line"):
+                            with a.div(klass="bloc B3 M3 S3"):
+                                a.button(onclick='generate_settings()', _t='share settings',klass="inactive")
+                            with a.div(klass="bloc B3 M3 S3"):
+                                a.button(onclick='load_settings()', _t='load settings',klass="inactive")
+                    with a.span( id='instruction_zone',klass="line"):
+                        a('For instruction on how to use this tool, please refer to the ')
+                        a.a(href='../user_manual/#custom-presets', _t='minichord documentation')
+                        a('.')
                 a.div(id="spacer", klass="bloc B1 M0 S0")
                 with a.div(id="parameters", klass="bloc B8 M8 S8"):
                     with a.div(klass="array_content"):
@@ -229,7 +234,7 @@ with open('parameters.json') as f: # Reserved adresses: 0 for system command and
             a.p(_t='Output:')
             a.p(id="output_zone")
 
-Html_file= open("../controller/index.html","w")
+Html_file= open("../minicontrol/index.html","w")
 Html_file.write(str(a))
 Html_file.close()
 
