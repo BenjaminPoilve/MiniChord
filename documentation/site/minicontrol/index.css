@@ -7,14 +7,10 @@
     background-position: center;
 }
 
-*:last-child {
-  margin-bottom: 0 !important;
-}
 body{
     margin-left: 5vw;
     margin-right: 5vw;
-    font-family: sans-serif;
-
+    font-family: monospace;
 }
 .line {
   display: -webkit-box;
@@ -63,7 +59,6 @@ p{
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    font-size: .65em;
     line-height: 1em;
 }
 
@@ -177,21 +172,6 @@ p{
 /*///////////////USER CENTRIX ZONE/////////////*/
 
 
-/*LINKS*/
-a {
-    text-decoration: none;
-   cursor: pointer;
-   -webkit-transition: background-color 0.2s ease-in-out;
-   -moz-transition: background-color 0.2s ease-in-out;
-   -o-transition: background-color 0.2s ease-in-out;
-   transition: background-color 0.2s ease-in-out;
-   font-weight: 400;
-}
-a:active,
-a:hover {
-    background-color: #1bb572;
-  font-weight: 400;
-}
 
 
 
@@ -200,7 +180,7 @@ a:hover {
 body{
     font: normal normal 400;
 	  line-height: 1.25em;
-    font-size:1.4em
+    font-size:1.6em
 }
 
 pre{
@@ -230,9 +210,8 @@ h4,
 h5,
 h6 {
     font-weight: 200;
-    font-family: sans-serif;
-    margin-top: 35px;
-    margin-bottom: 10px;
+    margin-top: 1em;
+    margin-bottom: 0em;
     line-height: 1.5;
 }
 
@@ -243,8 +222,9 @@ h6 {
 
 
 
-div:focus {
-    background-color: lightcoral;
+#information_zone:focus {
+    color: red;
+    outline: none;
 }
 
 .inactive{
@@ -265,19 +245,8 @@ div:focus {
     color:lightgray;
 }
 
-#instruction_zone{
-    height: 0%;
-    transition: height 1s;
-    visibility: hidden;
 
 
-}
-#information_zone{
-    height: 3em;
-    transition: height 1s;
-
-
-}
 
 .control_full #instruction_zone{
     height: 100%;
@@ -291,18 +260,14 @@ div:focus {
 }
 body{
     overscroll-behavior-y: none;
+    line-height: 0.8em;
 }
 
 
 
 .title h1{
-    font-family: sans-serif;
     font-weight: bold;
     font-style: italic;
-}
-
-.title{
-  line-height: 0.8em;
 }
 
 .slider{
@@ -351,7 +316,6 @@ body{
 
 .parameter_section h2{
     text-align:left !important;
-    font-family: sans-serif;
     font-weight: bold;
 
 }
@@ -367,7 +331,6 @@ body{
 .parameter_group h4{
     margin:15px 0 0 0 !important;
     line-height: 1em;
-    font-family: sans-serif;
     font-weight: bold;
     font-style: normal;
     font-display: swap;
@@ -379,7 +342,6 @@ body{
 
 dfn {
     font-style: normal;
-    font-size: 0.65em;
     cursor:help;
 }
 .value_zone{
@@ -387,9 +349,10 @@ dfn {
 }
 h4{
   font-weight: bold;
+  font-size:2em;
 }
 .data_line{
-  line-height: 0.72em;
+  line-height: 1em;
   color:black !important;
 
 }
@@ -405,19 +368,93 @@ h4{
   padding: 1em 1em 0em 1em;
   max-width: 720px;
   margin-left: auto;
+  font-size:0.65em;
 }
 
 .right_aligned{
   text-align: right;
 }
 
-span{
+#header{
   font-size: 0.65em;
 }
 .row_title{
   font-weight: bold;
 }
 
-#parameters{
+
+ul{
+  margin-top: 0 !important;
+  padding-inline-start: 1em;
+  list-style-type: disc;
+}
+li>p{
+  margin: 0 !important;
+}
+li{
+  margin-bottom: 1em;
+}
+li:after {
+  content: "\2714";
+  color:green;
+
+}
+li.unsatisfied:after{
+  content: "\2718" !important;
+  color:red;
+
+}
+
+
+li::marker {
+  unicode-bidi: isolate;
+  font-variant-numeric: tabular-nums;
+  text-transform: none;
+  text-indent: 0px !important;
+  text-align: start !important;
+  text-align-last: start !important;
+}
+
+/* CSS */
+button {
+  background-color: white;
+  border-style: 1px;
+  border-color: black;
+  box-sizing: border-box;
+  color:black;
+  cursor: pointer;
+  display: inline-block;
+  font-family:monospace;
+  text-align: center;
+  text-transform: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  font-size: 1em;
+  padding: 0.3em;
+  width:10vw;
+}
+
+button:hover,
+button:focus {
+  opacity: .75;
+}
+
+select {
+  padding: 0.2em;
+  border: 1px solid black;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
   font-family: monospace;
+  font-size: 1em;
+  background-color: white;
+
+}
+#instruction_zone{
+  font-size: 0.55em;
+  display: inline;
+}
+#bank_number_zone{
+  margin-bottom: 1em;
 }

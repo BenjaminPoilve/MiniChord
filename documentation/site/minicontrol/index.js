@@ -97,6 +97,7 @@ try {
     .then(onMIDISuccess, onMIDIFailure);
   //connection
   function onMIDISuccess(midiAccess) {
+    document.getElementById("step1").classList.remove("unsatisfied");
     for (const entry of midiAccess.outputs) {
       const output = entry[1];
       if (output.name == "Minichord") {
@@ -116,14 +117,14 @@ try {
       }
     }
     if (minichord_device == false) {
-      document.getElementById("information_text").innerHTML = "Minichord not connected";
+      document.getElementById("information_text").innerHTML = "Make sure the minichord is connected to the computer and turned on";
       document.getElementById("information_zone").focus();
     }
     midiAccess.onstatechange = (event) => {
       // In case the device is disconnectd during use
       if (event.port.state == "disconnected") {
         minichord_device = false;
-        document.getElementById("information_text").innerHTML = "Minichord disconnected, please reconnect and reload page";
+        document.getElementById("information_text").innerHTML = "minichord disconnected, please reconnect and reload page";
         document.getElementById("information_zone").focus();
         var body = document.getElementById('body');
         window.scrollTo(0, 0);
@@ -135,6 +136,8 @@ try {
         }
       }
     };
+    document.getElementById("step2").classList.remove("unsatisfied");
+
   }
 } catch (error) {
   console.error(error);
@@ -202,7 +205,7 @@ function process_current_data(midiMessage) {
     bank_number = data[2 * 1]
     element.value = bank_number;
     var from_one_bank_number = bank_number + 1;
-    document.getElementById("bank_number_zone").innerText = "Current bank :" + from_one_bank_number;
+    //document.getElementById("bank_number_zone").innerText = "Current bank :" + from_one_bank_number;
     //we apply the current hue to the background of the page 
     var result = document.querySelectorAll('[adress_field="' + color_hue_sysex_adress + '"]');
     if (result.length > 0) {
@@ -215,7 +218,8 @@ function process_current_data(midiMessage) {
         elements[i].style.setProperty('--slider_color', 'hsl(' + hue + ',100%,50%)')
       }
     }
-    document.getElementById("information_text").innerHTML = "Minichord connected";
+    document.getElementById("step3").classList.remove("unsatisfied");
+    document.getElementById("information_text").innerHTML = "minichord connected";
     var body = document.getElementById('body');
     body.classList.remove("control_full");
     var elements = document.getElementsByClassName('inactive');
@@ -275,7 +279,6 @@ function reset_selected_bank() {
 //-->>SETTINGS OFFLINE SHARE
 function generate_settings() {
   if (minichord_device == false) {
-    document.getElementById("information_text").innerHTML = "Minichord not connected";
     document.getElementById("information_zone").focus();
   }else{
     var sysex_array = Array(parameter_size).fill(0);
@@ -328,7 +331,6 @@ function generate_settings() {
 
 function load_settings() {
   if (minichord_device == false) {
-    document.getElementById("information_text").innerHTML = "Minichord not connected";
     document.getElementById("information_zone").focus();
   }else{
     let preset_code = prompt('Paste preset code');

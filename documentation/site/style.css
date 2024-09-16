@@ -258,3 +258,7 @@ table tbody td:first-child {
 
     }
   }
+
+  #mkdocs-terminal-site-name{
+    font-size: 2em;
+  }
