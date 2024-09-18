@@ -3,7 +3,7 @@ var parameter_size = 256;
 var color_hue_sysex_adress = 20;
 var base_adress_rythm = 220;
 var potentiometer_memory_adress = [4, 5, 6];
-
+var active_bank_number=-1
 //-->>UTILITIES
 function map_value(value, in_min, in_max, out_min, out_max) {
   return (value - in_min) * (out_max - out_min) / (in_max - in_min) + Number(out_min);
@@ -124,8 +124,9 @@ try {
       // In case the device is disconnectd during use
       if (event.port.state == "disconnected") {
         minichord_device = false;
-        document.getElementById("information_text").innerHTML = "minichord disconnected, please reconnect and reload page";
-        document.getElementById("information_zone").focus();
+        document.getElementById("information_text").innerHTML = "> minichord disconnected, please reconnect and reload page";
+        document.getElementById("status_zone").className = "";
+        document.getElementById("status_zone").classList.add("disconnected");
         var body = document.getElementById('body');
         window.scrollTo(0, 0);
         body.classList.add("control_full");
@@ -141,13 +142,13 @@ try {
   }
 } catch (error) {
   console.error(error);
-  document.getElementById("information_text").innerHTML = "Please use a compatible browser, for example Chrome";
+  document.getElementById("information_text").innerHTML = "> please use a compatible browser";
   document.getElementById("information_zone").focus();
 }
 
 //Handle refusal to grant access
 function onMIDIFailure() {
-  document.getElementById("information_text").innerHTML = "Please reload and provide the authorisation to access the Minichord";
+  document.getElementById("information_text").innerHTML = "> please reload and provide the authorisation to access the minichord";
   document.getElementById("information_zone").focus();
 }
 function process_current_data(midiMessage) {
@@ -203,6 +204,7 @@ function process_current_data(midiMessage) {
     //We apply the bank number to dropdown and header
     let element = document.getElementById("bank_number_selection");
     bank_number = data[2 * 1]
+    active_bank_number=bank_number;
     element.value = bank_number;
     var from_one_bank_number = bank_number + 1;
     //document.getElementById("bank_number_zone").innerText = "Current bank :" + from_one_bank_number;
@@ -219,7 +221,10 @@ function process_current_data(midiMessage) {
       }
     }
     document.getElementById("step3").classList.remove("unsatisfied");
-    document.getElementById("information_text").innerHTML = "minichord connected";
+    document.getElementById("information_text").innerHTML = "";
+    document.getElementById("status_zone").className = "";
+    document.getElementById("status_zone").classList.add("connected");
+
     var body = document.getElementById('body');
     body.classList.remove("control_full");
     var elements = document.getElementsByClassName('inactive');
@@ -264,13 +269,13 @@ function save_current_settings() {
     document.getElementById("information_zone").focus();
   }
 }
-function reset_selected_bank() {
+function reset_current_bank() {
   if (minichord_device) {
-    var e = document.getElementById("bank_number_selection");
-    var bank_number = e.value;
-    console.log(bank_number);
-    const sysex_message = [0xF0, 0, 0, 3, bank_number, 0xF7]; //send 3 to reset current bank
-    minichord_device.send(sysex_message); // sends the message.
+    console.log(active_bank_number);
+    if(active_bank_number!=-1){
+      const sysex_message = [0xF0, 0, 0, 3, active_bank_number, 0xF7]; //send 3 to reset current bank
+      minichord_device.send(sysex_message); // sends the message.
+    }
   } else {
     document.getElementById("information_zone").focus();
   }

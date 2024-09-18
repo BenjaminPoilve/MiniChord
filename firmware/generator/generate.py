@@ -23,60 +23,71 @@ with open('parameters.json') as f: # Reserved adresses: 0 for system command and
     with a.html():
         with a.body(id="body", klass="control_full"):
             with a.div(id='content',klass="line"):
-                with a.div(id="control", klass="bloc B4 M9 S9"):
+                with a.div(id="control", klass="bloc B3 M4 S9"):
                     with a.div(id='header',klass="line"):
                         with a.div(klass="title bloc B9 M9 S9"):
                             a.h4(_t='minicontrol')
-                            with a.span():
-                                a('control interface for the minichord')
-                                a.br()
-                                a.br()
-                        with a.div(tabindex='1', id='information_zone'):
-                            a.strong(_t='To get started, connect your MiniChord by following the instruction displayed below',id='information_text')
-                        with a.div(klass="bloc B9 M9 S9"):
-                            with a.ul(klass="instruction_steps"):
-                                with a.li(id="step1", klass="unsatisfied"):
-                                    a('provide the system autorisation for MIDI control')
-                                with a.li(id="step2", klass="unsatisfied"):
-                                    a('use a recent version of Chrome')
-                                with a.li(id="step3", klass="unsatisfied"):
-                                    a('connect the minichord with a USB cable and make sure it is on.')
-                        with a.div(klass="bloc B3 M3 S3"):
-                            with a.div(klass="line"):
-                                with a.div(klass="bloc B3 M3 S3"):
+                        with a.div(id='status_zone', klass="unconnected"):
+                            a.span(_t='●',id='dot')
+                            a.span(_t='',id='status_value')
+                      
+                        with a.div(klass="line"):
+                            a.h5(_t='saving:',klass="inactive")
+                        with a.div(klass="line"):
+                            with a.div(klass="bloc B3 M3 S3 button_div"):
+                                with a.div( klass="select_container"):
+                                    a.span(_t='target bank:', klass="inactive")
                                     with a.select(id='bank_number_selection', klass="inactive", name='bank number'):
                                         for i in range(12):
-                                            a.option(value=i, _t=(i+1))
-                                with a.div(klass="bloc B3 M3 S3"):
-                                    a.button(onclick='save_current_settings()', _t='save to bank',klass="inactive")
-                        with a.div(klass="bloc B3 M3 S3"):
-                            a.button(onclick='reset_selected_bank()', _t='reset bank',klass="inactive")
-                        with a.div(klass="bloc B3 M3 S3"):
-                            a.button(onclick='reset_memory()', _t='reset all banks',klass="inactive")
+                                            a.option(value=i, _t=(i+1), klass="inactive")
+                            with a.div(klass="bloc B3 M3 S3 button_div"):
+                                a.button(onclick='save_current_settings()', _t='save to bank',klass="inactive")
                         with a.div(klass="line"):
-                            with a.div(klass="bloc B3 M3 S3"):
-                                a.button(onclick='generate_settings()', _t='share settings',klass="inactive")
-                            with a.div(klass="bloc B3 M3 S3"):
+                            a.h5(_t='sharing:',klass="inactive")
+                        with a.div(klass="line"):
+                            with a.div(klass="bloc B3 M3 S3 button_div"):
+                                a.button(onclick='generate_settings()', _t='export settings',klass="inactive")
+                            with a.div(klass="bloc B3 M3 S3 button_div"):
                                 a.button(onclick='load_settings()', _t='load settings',klass="inactive")
-                    with a.span( id='instruction_zone',klass="line"):
+                        with a.div(klass="line"):
+                            a.h5(_t='resetting:',klass="inactive")
+                        with a.div(klass="line"):
+                            with a.div(klass="bloc B3 M3 S3 button_div"):
+                                a.button(onclick='reset_current_bank()', _t='reset bank',klass="inactive")
+                            with a.div(klass="bloc B3 M3 S3 button_div"):
+                                a.button(onclick='reset_memory()', _t='reset all banks',klass="inactive")
+                    with a.details():
+                        with a.summary():
+                            a.b(_t='Connection steps')
+                        with a.ul(klass="instruction_steps"):
+                            with a.li(id="step1", klass="unsatisfied"):
+                                a('provide the system autorisation for MIDI control')
+                            with a.li(id="step2", klass="unsatisfied"):
+                                a('use a recent version of Chrome')
+                            with a.li(id="step3", klass="unsatisfied"):
+                                a('connect the minichord with a USB cable and make sure it is on.')
+                        with a.div(tabindex='1', id='information_zone'):
+                            a.strong(_t='> Please follow the steps above',id='information_text')
+                    
+                    with a.div( id='instruction_zone'):
                         a('For instruction on how to use this tool, please refer to the ')
                         a.a(href='../user_manual/#custom-presets', _t='minichord documentation')
                         a('.')
-                a.div(id="spacer", klass="bloc B1 M0 S0")
-                with a.div(id="parameters", klass="bloc B8 M8 S8"):
+                a.div(id="spacer", klass="bloc B0 M0 S0")
+                with a.div(id="parameters", klass="bloc B8 M8 S9"):
                     with a.div(klass="array_content"):
                         with a.div(name=id_iterator,klass="line header_data data_line inactive"):
-                            with a.div(klass=" bloc B3 M3 S6"):
+                            with a.div(klass=" bloc B4 M9 S9"):
                                 a.p(_t="Global parameters" ,klass="row_title")
-                            with a.div(klass=" bloc B2 M2 S6"):
+                            with a.div(klass=" bloc B3 M2 S3"):
                                 a.p(_t="Subcategory")
-                            with a.div(klass=" bloc B1 M1 S6"):
-                                a.p(_t="Adress")
-                            with a.div(klass=" bloc B4 M4 S6"):
+                            with a.div(klass=" bloc B1 M1 S1"):
+                                a.p(_t="ID")
+                            with a.div(klass=" bloc B6 M4 S6"):
                                 a.p(_t="Name")
                             with a.div(klass=" bloc B2 M2 S4"):
                                 a.p(_t="Control")
-                            with a.div(klass=" bloc B1 M1 S4 right_aligned"):
+                            with a.div(klass=" bloc B1 M1 S1 right_aligned"):
                                 a.p(_t="Value")
                         with a.div(name=id_iterator,klass="line data_line"):
                             a.hr()
@@ -88,21 +99,21 @@ with open('parameters.json') as f: # Reserved adresses: 0 for system command and
                                 for parameter in parameter_group:
                                     try:
                                         with a.div(name=id_iterator,klass="line data_line content_line inactive"):
-                                            with a.div(klass=" bloc B3 M3 S6"):
+                                            with a.div(klass=" bloc B4 M0 S0"):
                                                 if(not global_name_written):
                                                     a.p(_t="")
                                                     global_name_written=True
                                                 else:
                                                     a.p(_t="")
-                                            with a.div(klass=" bloc B2 M2 S6"):
+                                            with a.div(klass=" bloc B3 M2 S3"):
                                                 if(not sub_name_written):
                                                     a.p(_t=name)
                                                     sub_name_written=True
                                                 else:
                                                     a.p(_t="")
-                                            with a.div(klass=" bloc B1 M1 S6"):
+                                            with a.div(klass=" bloc B1 M1 S1"):
                                                 a.p(_t=parameter["sysex_adress"])
-                                            with a.div(klass=" bloc B4 M4 S6"):
+                                            with a.div(klass=" bloc B6 M4 S6"):
                                                 a.dfn(title=parameter["tooltip"], _t=parameter["name"])
                                                 #a.label(for_=id_iterator, _t=parameter["name"])
                                             with a.div(klass=" bloc B2 M2 S4"):
@@ -110,7 +121,7 @@ with open('parameters.json') as f: # Reserved adresses: 0 for system command and
                                                     a.input(klass="slider inactive",adress_field=parameter["sysex_adress"], curve=parameter["curve"],data_type=parameter["data_type"], id=id_iterator, max=parameter["max_value"], min=parameter["min_value"], onchange='handlechange(this)', step='1', target_max=parameter["max_value"], target_min=parameter["min_value"], type='range', value=parameter["default_value"])
                                                 else:
                                                     a.input(klass="slider inactive",adress_field=parameter["sysex_adress"], curve=parameter["curve"],data_type=parameter["data_type"], id=id_iterator, max=parameter["max_value"], min=parameter["min_value"], onchange='handlechange(this)', step='0.01', target_max=parameter["max_value"], target_min=parameter["min_value"], type='range', value=parameter["default_value"])
-                                            with a.div(klass=" bloc B1 M1 S4"):
+                                            with a.div(klass=" bloc B1 M1 S1"):
                                                 a.p(id="value_zone"+str(parameter["sysex_adress"]),klass='value_zone')
                                             id_iterator+=1
                                     except KeyError:
@@ -121,17 +132,17 @@ with open('parameters.json') as f: # Reserved adresses: 0 for system command and
                             print("Missing global parameters in JSON")
                     with a.div(klass="array_content"):
                         with a.div(name=id_iterator,klass="line header_data data_line inactive"):
-                            with a.div(klass=" bloc B3 M3 S6"):
+                            with a.div(klass=" bloc B4 M9 S9"):
                                 a.p(_t="Harp parameters" ,klass="row_title")
-                            with a.div(klass=" bloc B2 M2 S6"):
+                            with a.div(klass=" bloc B3 M2 S3"):
                                 a.p(_t="Subcategory")
-                            with a.div(klass=" bloc B1 M1 S6"):
-                                a.p(_t="Adress")
-                            with a.div(klass=" bloc B4 M4 S6"):
+                            with a.div(klass=" bloc B1 M1 S1"):
+                                a.p(_t="ID")
+                            with a.div(klass=" bloc B6 M4 S6"):
                                 a.p(_t="Name")
                             with a.div(klass=" bloc B2 M2 S4"):
                                 a.p(_t="Control")
-                            with a.div(klass=" bloc B1 M1 S4 right_aligned"):
+                            with a.div(klass=" bloc B1 M1 S1 right_aligned"):
                                 a.p(_t="Value")
                         with a.div(name=id_iterator,klass="line data_line"):
                             a.hr()
@@ -143,21 +154,21 @@ with open('parameters.json') as f: # Reserved adresses: 0 for system command and
                                 for parameter in parameter_group:
                                     try:
                                         with a.div(name=id_iterator,klass="line data_line content_line inactive"):
-                                            with a.div(klass=" bloc B3 M3 S6"):
+                                            with a.div(klass=" bloc B4 M0 S0"):
                                                 if(not global_name_written):
                                                     a.p(_t="")
                                                     global_name_written=True
                                                 else:
                                                     a.p(_t="")
-                                            with a.div(klass=" bloc B2 M2 S6"):
+                                            with a.div(klass=" bloc B3 M2 S3"):
                                                 if(not sub_name_written):
                                                     a.p(_t=name)
                                                     sub_name_written=True
                                                 else:
                                                     a.p(_t="")
-                                            with a.div(klass=" bloc B1 M1 S6"):
+                                            with a.div(klass=" bloc B1 M1 S1"):
                                                 a.p(_t=parameter["sysex_adress"])
-                                            with a.div(klass=" bloc B4 M4 S6"):
+                                            with a.div(klass=" bloc B6 M4 S6"):
                                                 a.dfn(title=parameter["tooltip"], _t=parameter["name"])
                                                 #a.label(for_=id_iterator, _t=parameter["name"])
                                             with a.div(klass=" bloc B2 M2 S4"):
@@ -165,7 +176,7 @@ with open('parameters.json') as f: # Reserved adresses: 0 for system command and
                                                     a.input(klass="slider inactive",adress_field=parameter["sysex_adress"], curve=parameter["curve"],data_type=parameter["data_type"], id=id_iterator, max=parameter["max_value"], min=parameter["min_value"], onchange='handlechange(this)', step='1', target_max=parameter["max_value"], target_min=parameter["min_value"], type='range', value=parameter["default_value"])
                                                 else:
                                                     a.input(klass="slider inactive",adress_field=parameter["sysex_adress"], curve=parameter["curve"],data_type=parameter["data_type"], id=id_iterator, max=parameter["max_value"], min=parameter["min_value"], onchange='handlechange(this)', step='0.01', target_max=parameter["max_value"], target_min=parameter["min_value"], type='range', value=parameter["default_value"])
-                                            with a.div(klass=" bloc B1 M1 S4"):
+                                            with a.div(klass=" bloc B1 M1 S1"):
                                                 a.p(id="value_zone"+str(parameter["sysex_adress"]),klass='value_zone')
                                             id_iterator+=1
                                     except KeyError:
@@ -176,17 +187,17 @@ with open('parameters.json') as f: # Reserved adresses: 0 for system command and
                             print("Missing harp parameters in JSON")
                     with a.div(klass="array_content"):
                         with a.div(name=id_iterator,klass="line header_data data_line inactive"):
-                            with a.div(klass=" bloc B3 M3 S6"):
+                            with a.div(klass=" bloc B4 M9 S9"):
                                 a.p(_t="Chord parameters",klass="row_title")
-                            with a.div(klass=" bloc B2 M2 S6"):
+                            with a.div(klass=" bloc B3 M2 S3"):
                                 a.p(_t="Subcategory")
-                            with a.div(klass=" bloc B1 M1 S6"):
-                                a.p(_t="Adress")
-                            with a.div(klass=" bloc B4 M4 S6"):
+                            with a.div(klass=" bloc B1 M1 S1"):
+                                a.p(_t="ID")
+                            with a.div(klass=" bloc B6 M4 S6"):
                                 a.p(_t="Name")
                             with a.div(klass=" bloc B2 M2 S4"):
                                 a.p(_t="Control")
-                            with a.div(klass=" bloc B1 M1 S4 right_aligned"):
+                            with a.div(klass=" bloc B1 M1 S1 right_aligned"):
                                 a.p(_t="Value")
                         with a.div(name=id_iterator,klass="line data_line"):
                             a.hr()
@@ -198,21 +209,21 @@ with open('parameters.json') as f: # Reserved adresses: 0 for system command and
                                 for parameter in parameter_group:
                                     try:
                                         with a.div(name=id_iterator,klass="line data_line content_line inactive", id=parameter["sysex_adress"]):
-                                            with a.div(klass=" bloc B3 M3 S6"):
+                                            with a.div(klass=" bloc B4 M0 S0"):
                                                 if(not global_name_written):
                                                     a.p(_t="")
                                                     global_name_written=True
                                                 else:
                                                     a.p(_t="")
-                                            with a.div(klass=" bloc B2 M2 S6"):
+                                            with a.div(klass=" bloc B3 M2 S3"):
                                                 if(not sub_name_written):
                                                     a.p(_t=name)
                                                     sub_name_written=True
                                                 else:
                                                     a.p(_t="")
-                                            with a.div(klass=" bloc B1 M1 S6"):
+                                            with a.div(klass=" bloc B1 M1 S1"):
                                                 a.p(_t=parameter["sysex_adress"])
-                                            with a.div(klass=" bloc B4 M4 S6"):
+                                            with a.div(klass=" bloc B6 M4 S6"):
                                                 a.dfn(title=parameter["tooltip"], _t=parameter["name"])
                                                 #a.label(for_=id_iterator, _t=parameter["name"])
                                             with a.div(klass=" bloc B2 M2 S4"):
@@ -220,7 +231,7 @@ with open('parameters.json') as f: # Reserved adresses: 0 for system command and
                                                     a.input(klass="slider inactive",adress_field=parameter["sysex_adress"], curve=parameter["curve"],data_type=parameter["data_type"], id=id_iterator, max=parameter["max_value"], min=parameter["min_value"], onchange='handlechange(this)', step='1', target_max=parameter["max_value"], target_min=parameter["min_value"], type='range', value=parameter["default_value"])
                                                 else:
                                                     a.input(klass="slider inactive",adress_field=parameter["sysex_adress"], curve=parameter["curve"],data_type=parameter["data_type"], id=id_iterator, max=parameter["max_value"], min=parameter["min_value"], onchange='handlechange(this)', step='0.01', target_max=parameter["max_value"], target_min=parameter["min_value"], type='range', value=parameter["default_value"])
-                                            with a.div(klass=" bloc B1 M1 S4"):
+                                            with a.div(klass=" bloc B1 M1 S1"):
                                                 a.p(id="value_zone"+str(parameter["sysex_adress"]),klass='value_zone')
                                             id_iterator+=1
                                     except KeyError:
@@ -231,7 +242,6 @@ with open('parameters.json') as f: # Reserved adresses: 0 for system command and
                             print("Missing chord parameters in JSON")
                         
             a.script(src='index.js')
-            a.p(_t='Output:')
             a.p(id="output_zone")
 
 Html_file= open("../minicontrol/index.html","w")

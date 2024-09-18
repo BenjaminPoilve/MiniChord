@@ -10,7 +10,7 @@
 body{
     margin-left: 5vw;
     margin-right: 5vw;
-    font-family: monospace;
+    font-family: sans-serif;
 }
 .line {
   display: -webkit-box;
@@ -33,8 +33,6 @@ body{
 }
 .bloc {
     flex: 1 ;
-    padding-top:10px;
-    padding-bottom:10px;
     width:100%;
 }
 
@@ -62,7 +60,7 @@ p{
     line-height: 1em;
 }
 
-@media all and (min-width: 1000px) {
+@media all and (min-width: 1200px) {
     .B0 {
       display: none;
     }
@@ -95,7 +93,7 @@ p{
     }
 }
 
-@media all and (min-width: 600px) and (max-width: 1000px) {
+@media all and (min-width: 850px) and (max-width: 1200px) {
     .M0 {
       display: none;
     }
@@ -126,12 +124,10 @@ p{
     .M9 {
       flex: 1 100%;
     }
-    .M9 >h1,.M9 >h2,.M9 >h3,.M9 >h4,.M9 >h5 {
-        text-align: center!important;
-    }
+   
 }
 
-@media all and (max-width: 600px) {
+@media all and (max-width: 850px) {
     .S0 {
       display: none;
     }
@@ -162,9 +158,7 @@ p{
     .S9 {
         flex: 1 100%;
     }
-    .S9 > h1,.S9 > h2,.S9 > h3,.S9 > h4,.S9 > h5 {
-        text-align: center!important;
-    }
+
 }
 
 
@@ -209,8 +203,8 @@ h3,
 h4,
 h5,
 h6 {
-    font-weight: 200;
-    margin-top: 1em;
+    margin-top: 0.5em;
+    font-size:1em;
     margin-bottom: 0em;
     line-height: 1.5;
 }
@@ -220,7 +214,10 @@ h6 {
 }
 
 
-
+#information_zone{
+  line-height: 1em;
+  margin-bottom: 0.5em;
+}
 
 #information_zone:focus {
     color: red;
@@ -232,13 +229,41 @@ h6 {
     accent-color: grey!important;
 }
 #control{
-    position: sticky;
+    position: sticky ;
     top: 0;
     background-color: white;
     margin:0;
     padding: 0;
     z-index: 2;
     transition: height 1s;
+}
+@media all  and (max-width: 1200px) {
+  body{
+    margin:1vw;
+  }
+  .row_title{
+    margin-bottom: 1em !important;
+  }
+}
+
+@media all  and (max-width: 850px) {
+  #control{
+    border-width: 2px;
+    border-color: black;
+    border-style: dashed;
+    padding:0.5em;
+    position: relative;
+    font-size: 0.9em;
+  }
+  body{
+    margin:0 !important;
+    font-size: 1.5em;
+  }
+
+  .array_content{
+    margin: auto;
+    margin-left:unset !important;
+  }
 }
 
 .control_full #action_zone{
@@ -305,7 +330,7 @@ body{
 }
 .parameter_section{
     margin:20px;
-    max-width: 1000px;
+    max-width: 1200px;
 
 }
 .parameter_group{
@@ -344,16 +369,15 @@ dfn {
     font-style: normal;
     cursor:help;
 }
-.value_zone{
-  font-size: 0.65em;
-}
+
 h4{
   font-weight: bold;
   font-size:2em;
 }
 .data_line{
-  line-height: 1em;
+  line-height: 1.1em;
   color:black !important;
+  font-family: monospace;
 
 }
 .data_line>.bloc{
@@ -366,7 +390,7 @@ h4{
 
 .array_content{
   padding: 1em 1em 0em 1em;
-  max-width: 720px;
+  max-width: 780px;
   margin-left: auto;
   font-size:0.65em;
 }
@@ -385,14 +409,15 @@ h4{
 
 ul{
   margin-top: 0 !important;
-  padding-inline-start: 1em;
-  list-style-type: disc;
+  padding-inline-start: 1.2em;
+  list-style-type: decimal;
 }
 li>p{
   margin: 0 !important;
 }
 li{
-  margin-bottom: 1em;
+  margin-bottom: 0.5em;
+  line-height: 1em;
 }
 li:after {
   content: "\2714";
@@ -424,15 +449,21 @@ button {
   color:black;
   cursor: pointer;
   display: inline-block;
-  font-family:monospace;
+  font-family:sans-serif;
   text-align: center;
   text-transform: none;
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
   font-size: 1em;
-  padding: 0.3em;
-  width:10vw;
+  padding: 0.1em;
+  width:100%;
+}
+
+.button_div{
+  margin-right: 0.5em;
+  margin-left:0.5em;
+  display: flex;
 }
 
 button:hover,
@@ -449,12 +480,83 @@ select {
   font-family: monospace;
   font-size: 1em;
   background-color: white;
+  text-align: right;
+}
 
+.select_container{
+  margin: auto;
+  position: relative;
 }
 #instruction_zone{
   font-size: 0.55em;
   display: inline;
+  display: inline-block;
 }
 #bank_number_zone{
   margin-bottom: 1em;
+}
+
+#parameters{
+  font-size: 1em;
+  margin-bottom: 1em;
+}
+details{
+  width: 100%;
+  font-size: 0.55em;
+  margin-top: 2em;
+}
+summary{
+  margin-bottom: 0.5em;
+}
+
+#status_zone{
+  
+  border-style: solid;
+  border-radius: 1em;
+  margin-bottom: 1em;
+  border-width: 2px;
+}
+
+#status_zone.unconnected{
+  border-color: red;
+  background-color: lightcoral;
+}
+#status_zone.connected{
+  border-color: green;
+  background-color: lightgreen;
+}
+
+#status_zone.disconnected{
+  border-color: orange;
+  background-color: rgba(255, 166, 0, 0.486);
+}
+
+#status_value{
+  margin-right:0.5em;
+}
+
+.unconnected>#dot{
+  color:red;
+  margin-left:0.5em;
+}
+.connected>#dot{
+  color:green;
+  margin-left:0.5em;
+}
+
+.disconnected>#dot{
+  color: orange;
+  margin-left:0.5em;
+}
+
+.unconnected>#status_value::after{
+  content: "minichord unconnected";
+}
+
+.disconnected>#status_value::after{
+  content: "minichord disconnected";
+}
+
+.connected>#status_value::after{
+  content: "minichord connected";
 }

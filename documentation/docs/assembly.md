@@ -485,7 +485,7 @@ Check that the Teensy is well seated, then do the same on the PCB's side. After 
 
 Next, using the diagonal cutters, cut short the excess headers on the PCB's side. 
 
-![cutting the leads of the Teensy](./ressources/teensy_cutting.png "cutting the leads of the Teensy")
+![cutting the leads of the Teensy](./ressources/teensy_cutting.jpg "cutting the leads of the Teensy")
 
 
 ## Potentiometers
