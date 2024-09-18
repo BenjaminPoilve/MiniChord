@@ -47,28 +47,44 @@ function handlechange(event) {
 
 function checkbox_array() {
   var container
-  for (var i = base_adress_rythm; i < base_adress_rythm + 16; i++) {
-    container = document.getElementById(i);
+  for (var i = 0; i <  + 16; i++) {
+    target_adress=base_adress_rythm+i
+    container = document.getElementById(target_adress);
+    if(i<7){
+      container.innerHTML = "";
+      var padding_name = document.createElement("div");
+      padding_name.className="bloc B4 M0 S0";
+      padding_name.innerHTML=""
+      container.appendChild(padding_name);
+      var padding_category = document.createElement("div");
+      padding_category.className="bloc B3 M2 S3";
+      padding_category.innerHTML=""
+      container.appendChild(padding_category);
+      var padding_ID = document.createElement("div");
+      padding_ID.className="bloc B1 M1 S1";
+      padding_ID.innerHTML="***"
+      container.appendChild(padding_ID);
+      var name_zone = document.createElement("div");
+      name_zone.className=" bloc B4 M3 S4";
+      name_zone.innerHTML="rythm voice "+i
+      container.appendChild(name_zone);
+      var line = document.createElement("div");
+      line.className="checkbox_div bloc B5 M4 S7";
+      container.appendChild(line);
+  
+      for (var j = 0; j < 16; j++) {
+        var checkBox = document.createElement("input");
+        checkBox.onclick=send_array_data;
+        checkBox.type = "checkbox";
+        checkBox.id = "checkbox" + i + j;
+  
+        line.appendChild(checkBox);
+      }
+    }else{
     container.innerHTML = "";
     container.style.display = 'block';
-  }
-  for (var j = 0; j < 7; j++) {
-    var line = document.createElement("div");
-    container.appendChild(line);
-
-    for (var i = 0; i < 16; i++) {
-      var checkBox = document.createElement("input");
-      checkBox.type = "checkbox";
-      checkBox.id = "checkbox" + j + i;
-
-      line.appendChild(checkBox);
     }
   }
-  var button = document.createElement("input");
-  button.type = "button";
-  button.value = "Send";
-  button.onclick = send_array_data;
-  container.appendChild(button);
 }
 checkbox_array();
 function send_array_data(event) {

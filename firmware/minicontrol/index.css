@@ -560,3 +560,10 @@ summary{
 .connected>#status_value::after{
   content: "minichord connected";
 }
+
+.checkbox_div{
+  text-align: right;
+}
+input[type="checkbox"]{
+  position: relative;
+  top: 3px;}
