@@ -21,6 +21,17 @@ with a.html():
 with open('parameters.json') as f: # Reserved adresses: 0 for system command and 1 for bank adress
     d = json.load(f)
     with a.html():
+        with a.head():
+            a.meta(charset='UTF-8')
+            a.meta(content='width=device-width, initial-scale=1.0', name='viewport')
+            a.meta(content='ie=edge', **{'http-equiv': 'X-UA-Compatible'})
+            a.link(href='../img/android-chrome-192x192.png', rel='icon', sizes='192x192', type='image/png')
+            a.link(href='../img/android-chrome-512x512.png', rel='icon', sizes='512x512', type='image/png')
+            a.link(href='../img/apple-touch-icon.png', rel='apple-touch-icon', sizes='180x180')
+            a.link(href='../img/favicon.ico', rel='shortcut icon', sizes='48x48', type='image/png')
+            a.link(href='../img/favicon-16x16.png', rel='icon', sizes='16x16', type='image/png')
+            a.link(href='../img/favicon-32x32.png', rel='icon', sizes='32x32', type='image/png')
+            a.title(_t='minicontrol')
         with a.body(id="body", klass="control_full"):
             with a.div(id='content',klass="line"):
                 with a.div(id="control", klass="bloc B3 M4 S9"):
@@ -58,7 +69,7 @@ with open('parameters.json') as f: # Reserved adresses: 0 for system command and
                                 a.button(onclick='reset_memory()', _t='reset all banks',klass="inactive")
                     with a.details():
                         with a.summary():
-                            a.b(_t='Connection steps')
+                            a.b(_t='Connection instruction')
                         with a.ul(klass="instruction_steps"):
                             with a.li(id="step1", klass="unsatisfied"):
                                 a('provide the system autorisation for MIDI control')
@@ -71,8 +82,7 @@ with open('parameters.json') as f: # Reserved adresses: 0 for system command and
                     
                     with a.div( id='instruction_zone'):
                         a('For instruction on how to use this tool, please refer to the ')
-                        a.a(href='../user_manual/#custom-presets', _t='minichord documentation')
-                        a('.')
+                        a.a(href='../user_manual/#custom-presets', _t='minichord documentation.')
                 a.div(id="spacer", klass="bloc B0 M0 S0")
                 with a.div(id="parameters", klass="bloc B8 M8 S9"):
                     with a.div(klass="array_content"):
