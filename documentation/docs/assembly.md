@@ -573,7 +573,7 @@ To upload the firmware, please use the following steps:
 
 Once all those steps are done, use a header to push on the reset button of the Teensy through the PCB hole. 
 
-![Alt text](./ressources/reboot.png "a title")
+![resetting the Teensy](./ressources/reset_teensy.jpg "resetting the Teensy")
 
 If you carefully followed those steps, the Teensy Loader will indicate "Download Complete" then "Reboot OK". The main colour led of the PCB should light up. 
 
