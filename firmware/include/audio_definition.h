@@ -4,126 +4,127 @@
 #include <SD.h>
 #include <SerialFlash.h>
 
+
 // GUItool: begin automatically generated code
-AudioSynthWaveform       string_vibrato_1; //xy=840,1119
-AudioEffectEnvelope      envelope_string_vibrato_1; //xy=1059,1120
-AudioSynthWaveform       chords_vibrato_lfo; //xy=1191,1621
-AudioSynthWaveformModulated waveform_string_4; //xy=1324,1224
-AudioSynthWaveformModulated waveform_string_2; //xy=1325,1156
-AudioSynthWaveformModulated waveform_string_5; //xy=1325,1261
-AudioSynthWaveformModulated waveform_string_7; //xy=1325,1332
-AudioSynthWaveformModulated waveform_string_10; //xy=1325,1439
-AudioSynthWaveformModulated waveform_string_3; //xy=1326,1190
-AudioSynthWaveformModulated waveform_string_12; //xy=1325,1506
-AudioSynthWaveformModulated waveform_string_6; //xy=1326,1298
-AudioSynthWaveformModulated waveform_string_8; //xy=1326,1368
-AudioSynthWaveformModulated waveform_string_1; //xy=1327,1121
-AudioSynthWaveformModulated waveform_string_9; //xy=1327,1404
-AudioSynthWaveformModulated waveform_string_11; //xy=1327,1474
-AudioSynthWaveformDc     filter_dc;      //xy=1350,690
-AudioEffectEnvelope      voice4_vibrato_envelope; //xy=1410,2455
-AudioEffectEnvelope      voice3_vibrato_envelope; //xy=1417,2190
-AudioEffectEnvelope      voice2_vibrato_envelope; //xy=1420,1903
-AudioEffectEnvelope      voice1_vibrato_envelope; //xy=1434,1621
-AudioEffectEnvelope      envelope_filter_2; //xy=1542,721
-AudioEffectEnvelope      envelope_filter_3; //xy=1542,751
-AudioEffectEnvelope      envelope_filter_5; //xy=1542,813
-AudioEffectEnvelope      envelope_filter_6; //xy=1542,845
-AudioEffectEnvelope      envelope_filter_7; //xy=1542,876
-AudioEffectEnvelope      envelope_filter_1; //xy=1543,690
-AudioEffectEnvelope      envelope_filter_4; //xy=1543,781
-AudioEffectEnvelope      envelope_filter_12; //xy=1542,1034
-AudioEffectEnvelope      envelope_filter_9; //xy=1543,939
-AudioEffectEnvelope      envelope_filter_11; //xy=1543,1003
-AudioEffectEnvelope      envelope_filter_10; //xy=1546,972
-AudioEffectEnvelope      envelope_filter_8; //xy=1547,906
-AudioEffectEnvelope      envelope_string_6; //xy=1547,1296
-AudioEffectEnvelope      envelope_string_8; //xy=1547,1367
-AudioEffectEnvelope      envelope_string_10; //xy=1547,1435
-AudioEffectEnvelope      envelope_string_12; //xy=1547,1504
-AudioEffectEnvelope      envelope_string_5; //xy=1548,1261
-AudioEffectEnvelope      envelope_string_7; //xy=1548,1331
-AudioEffectEnvelope      envelope_string_9; //xy=1548,1401
-AudioEffectEnvelope      envelope_string_3; //xy=1549,1190
-AudioEffectEnvelope      envelope_string_4; //xy=1550,1224
-AudioEffectEnvelope      envelope_string_11; //xy=1550,1470
-AudioEffectEnvelope      envelope_string_1; //xy=1552,1123
-AudioEffectEnvelope      envelope_string_2; //xy=1552,1156
-AudioSynthNoiseWhite     voice3_noise;   //xy=1646,2290
-AudioSynthWaveformModulated voice3_osc3;    //xy=1649,2256
-AudioSynthNoiseWhite     voice4_noise;   //xy=1649,2567
-AudioSynthWaveformModulated voice3_osc2;    //xy=1651,2220
-AudioSynthWaveformModulated voice4_osc3;    //xy=1651,2530
-AudioSynthWaveformModulated voice3_osc1;    //xy=1655,2182
-AudioSynthWaveformModulated voice4_osc2;    //xy=1654,2493
-AudioSynthWaveformModulated voice4_osc1;    //xy=1656,2458
-AudioSynthWaveform       chords_filter_LFO; //xy=1669,1813
-AudioSynthNoiseWhite     voice2_noise;   //xy=1672,2013
-AudioSynthWaveformModulated voice2_osc3;    //xy=1674,1976
-AudioSynthWaveformModulated voice2_osc2;    //xy=1676,1940
-AudioSynthWaveformModulated voice2_osc1;    //xy=1677,1903
-AudioSynthNoiseWhite     voice1_noise;   //xy=1685,1731
-AudioSynthWaveformModulated voice1_osc3;    //xy=1690,1695
-AudioSynthWaveformModulated voice1_osc1;    //xy=1691,1625
-AudioSynthWaveformModulated voice1_osc2;    //xy=1691,1660
-AudioFilterStateVariable filter_string_4; //xy=1784,1191
-AudioFilterStateVariable filter_string_5; //xy=1784,1237
-AudioFilterStateVariable filter_string_1; //xy=1785,1056
-AudioFilterStateVariable filter_string_7; //xy=1784,1329
-AudioFilterStateVariable filter_string_2; //xy=1785,1101
-AudioFilterStateVariable filter_string_8; //xy=1785,1376
-AudioFilterStateVariable filter_string_3; //xy=1786,1146
-AudioFilterStateVariable filter_string_6; //xy=1787,1286
-AudioFilterStateVariable filter_string_9; //xy=1787,1421
-AudioFilterStateVariable filter_string_11; //xy=1788,1513
-AudioFilterStateVariable filter_string_12; //xy=1788,1559
-AudioFilterStateVariable filter_string_10; //xy=1789,1466
-AudioEffectEnvelope      voice4_envelope_filter; //xy=1848,2633
-AudioMixer4              voice3_mixer;   //xy=1852,2214
-AudioMixer4              voice4_mixer;   //xy=1853,2477
-AudioMixer4              voice2_mixer;   //xy=1857,1929
-AudioEffectEnvelope      voice3_envelope_filter; //xy=1856,2320
-AudioEffectEnvelope      voice2_envelope_filter; //xy=1872,2047
-AudioEffectEnvelope      voice1_envelope_filter; //xy=1874,1816
-AudioMixer4              voice1_mixer;   //xy=1876,1659
-AudioMixer4              string_mix_3;   //xy=2042,1449
-AudioMixer4              string_mix_1;   //xy=2045,1137
-AudioMixer4              string_mix_2;   //xy=2059,1266
-AudioSynthWaveform       chords_tremolo_lfo; //xy=2124,1817
-AudioFilterStateVariable voice4_filter;  //xy=2157,2481
-AudioFilterStateVariable voice2_filter;  //xy=2165,1934
-AudioFilterStateVariable voice3_filter;  //xy=2164,2210
-AudioFilterStateVariable voice1_filter;  //xy=2186,1666
-AudioMixer4              all_string_mix; //xy=2259,1266
-AudioEffectEnvelope      voice1_envelope; //xy=2342,1817
-AudioEffectEnvelope      voice3_envelope; //xy=2344,2348
-AudioEffectEnvelope      voice2_envelope; //xy=2347,2068
-AudioEffectEnvelope      voice4_envelope; //xy=2351,2667
-AudioEffectMultiply      voice2_tremolo_mult; //xy=2390,1930
-AudioEffectMultiply      voice3_tremolo_mult; //xy=2392,2210
-AudioEffectMultiply      voice4_tremolo_mult; //xy=2395,2485
-AudioEffectMultiply      voice1_tremolo_mult; //xy=2400,1660
-AudioEffectWaveshaper    string_waveshape;     //xy=2492.200012207031,1084.200012207031
-AudioMixer4              string_waveshaper_mix;         //xy=2502.2003173828125,1264.199951171875
-AudioMixer4              chord_voice_mixer; //xy=2701,1681
-AudioMixer4              string_delay_mix; //xy=2798,1160
-AudioFilterStateVariable filter_delay_strings; //xy=2800,1234
-AudioSynthWaveform       string_tremolo_lfo; //xy=2823,1435
-AudioEffectWaveshaper    chord_waveshape; //xy=2879,1577
-AudioMixer4              chord_waveshaper_mix; //xy=2964,1680
-AudioEffectDelay         delay_strings;  //xy=3014,1197
-AudioMixer4              strings_effect_mix; //xy=3034,1317
-AudioEffectMultiply      string_multiply; //xy=3149,1420
-AudioSynthWaveform       string_filter_lfo; //xy=3186,1500
-AudioMixer4              chord_delay_mix; //xy=3238,1647
-AudioFilterStateVariable filter_delay_chords; //xy=3244,1729
-AudioMixer4              chords_effect_mix; //xy=3280,1811
-AudioFilterStateVariable string_filter;  //xy=3357,1422
-AudioEffectDelay         delay_chords;   //xy=3450,1655
-AudioMixer4              string_filter_mixer; //xy=3542,1425
-AudioFilterStateVariable chords_main_filter; //xy=3644,1726
-AudioInputI2S            i2s1;           //xy=3727,1185
-AudioMixer4              chords_main_filter_mixer; //xy=3872,1733
+AudioSynthWaveform       string_vibrato_1; //xy=176.0999755859375,748.2000122070312
+AudioEffectEnvelope      envelope_string_vibrato_1; //xy=395.0999755859375,749.2000122070312
+AudioSynthWaveform       chords_vibrato_lfo; //xy=527.0999755859375,1250.2000122070312
+AudioSynthWaveformModulated waveform_string_4; //xy=660.0999755859375,853.2000122070312
+AudioSynthWaveformModulated waveform_string_2; //xy=661.0999755859375,785.2000122070312
+AudioSynthWaveformModulated waveform_string_5; //xy=661.0999755859375,890.2000122070312
+AudioSynthWaveformModulated waveform_string_7; //xy=661.0999755859375,961.2000122070312
+AudioSynthWaveformModulated waveform_string_10; //xy=661.0999755859375,1068.2000122070312
+AudioSynthWaveformModulated waveform_string_3; //xy=662.0999755859375,819.2000122070312
+AudioSynthWaveformModulated waveform_string_12; //xy=661.0999755859375,1135.2000122070312
+AudioSynthWaveformModulated waveform_string_6; //xy=662.0999755859375,927.2000122070312
+AudioSynthWaveformModulated waveform_string_8; //xy=662.0999755859375,997.2000122070312
+AudioSynthWaveformModulated waveform_string_1; //xy=663.0999755859375,750.2000122070312
+AudioSynthWaveformModulated waveform_string_9; //xy=663.0999755859375,1033.2000122070312
+AudioSynthWaveformModulated waveform_string_11; //xy=663.0999755859375,1103.2000122070312
+AudioSynthWaveformDc     filter_dc;      //xy=686.0999755859375,319.20001220703125
+AudioEffectEnvelope      voice4_vibrato_envelope; //xy=746.0999755859375,2084.2000122070312
+AudioEffectEnvelope      voice3_vibrato_envelope; //xy=753.0999755859375,1819.2000122070312
+AudioEffectEnvelope      voice2_vibrato_envelope; //xy=756.0999755859375,1532.2000122070312
+AudioEffectEnvelope      voice1_vibrato_envelope; //xy=770.0999755859375,1250.2000122070312
+AudioEffectEnvelope      envelope_filter_2; //xy=878.0999755859375,350.20001220703125
+AudioEffectEnvelope      envelope_filter_3; //xy=878.0999755859375,380.20001220703125
+AudioEffectEnvelope      envelope_filter_5; //xy=878.0999755859375,442.20001220703125
+AudioEffectEnvelope      envelope_filter_6; //xy=878.0999755859375,474.20001220703125
+AudioEffectEnvelope      envelope_filter_7; //xy=878.0999755859375,505.20001220703125
+AudioEffectEnvelope      envelope_filter_1; //xy=879.0999755859375,319.20001220703125
+AudioEffectEnvelope      envelope_filter_4; //xy=879.0999755859375,410.20001220703125
+AudioEffectEnvelope      envelope_filter_12; //xy=878.0999755859375,663.2000122070312
+AudioEffectEnvelope      envelope_filter_9; //xy=879.0999755859375,568.2000122070312
+AudioEffectEnvelope      envelope_filter_11; //xy=879.0999755859375,632.2000122070312
+AudioEffectEnvelope      envelope_filter_10; //xy=882.0999755859375,601.2000122070312
+AudioEffectEnvelope      envelope_filter_8; //xy=883.0999755859375,535.2000122070312
+AudioEffectEnvelope      envelope_string_6; //xy=883.0999755859375,925.2000122070312
+AudioEffectEnvelope      envelope_string_8; //xy=883.0999755859375,996.2000122070312
+AudioEffectEnvelope      envelope_string_10; //xy=883.0999755859375,1064.2000122070312
+AudioEffectEnvelope      envelope_string_12; //xy=883.0999755859375,1133.2000122070312
+AudioEffectEnvelope      envelope_string_5; //xy=884.0999755859375,890.2000122070312
+AudioEffectEnvelope      envelope_string_7; //xy=884.0999755859375,960.2000122070312
+AudioEffectEnvelope      envelope_string_9; //xy=884.0999755859375,1030.2000122070312
+AudioEffectEnvelope      envelope_string_3; //xy=885.0999755859375,819.2000122070312
+AudioEffectEnvelope      envelope_string_4; //xy=886.0999755859375,853.2000122070312
+AudioEffectEnvelope      envelope_string_11; //xy=886.0999755859375,1099.2000122070312
+AudioEffectEnvelope      envelope_string_1; //xy=888.0999755859375,752.2000122070312
+AudioEffectEnvelope      envelope_string_2; //xy=888.0999755859375,785.2000122070312
+AudioSynthNoiseWhite     voice3_noise;   //xy=982.0999755859375,1919.2000122070312
+AudioSynthWaveformModulated voice3_osc3;    //xy=985.0999755859375,1885.2000122070312
+AudioSynthNoiseWhite     voice4_noise;   //xy=985.0999755859375,2196.2000122070312
+AudioSynthWaveformModulated voice3_osc2;    //xy=987.0999755859375,1849.2000122070312
+AudioSynthWaveformModulated voice4_osc3;    //xy=987.0999755859375,2159.2000122070312
+AudioSynthWaveformModulated voice3_osc1;    //xy=991.0999755859375,1811.2000122070312
+AudioSynthWaveformModulated voice4_osc2;    //xy=990.0999755859375,2122.2000122070312
+AudioSynthWaveformModulated voice4_osc1;    //xy=992.0999755859375,2087.2000122070312
+AudioSynthWaveform       chords_filter_LFO; //xy=1005.0999755859375,1442.2000122070312
+AudioSynthNoiseWhite     voice2_noise;   //xy=1008.0999755859375,1642.2000122070312
+AudioSynthWaveformModulated voice2_osc3;    //xy=1010.0999755859375,1605.2000122070312
+AudioSynthWaveformModulated voice2_osc2;    //xy=1012.0999755859375,1569.2000122070312
+AudioSynthWaveformModulated voice2_osc1;    //xy=1013.0999755859375,1532.2000122070312
+AudioSynthNoiseWhite     voice1_noise;   //xy=1021.0999755859375,1360.2000122070312
+AudioSynthWaveformModulated voice1_osc3;    //xy=1026.0999755859375,1324.2000122070312
+AudioSynthWaveformModulated voice1_osc1;    //xy=1027.0999755859375,1254.2000122070312
+AudioSynthWaveformModulated voice1_osc2;    //xy=1027.0999755859375,1289.2000122070312
+AudioFilterStateVariable filter_string_4; //xy=1120.0999755859375,820.2000122070312
+AudioFilterStateVariable filter_string_5; //xy=1120.0999755859375,866.2000122070312
+AudioFilterStateVariable filter_string_1; //xy=1121.0999755859375,685.2000122070312
+AudioFilterStateVariable filter_string_7; //xy=1120.0999755859375,958.2000122070312
+AudioFilterStateVariable filter_string_2; //xy=1121.0999755859375,730.2000122070312
+AudioFilterStateVariable filter_string_8; //xy=1121.0999755859375,1005.2000122070312
+AudioFilterStateVariable filter_string_3; //xy=1122.0999755859375,775.2000122070312
+AudioFilterStateVariable filter_string_6; //xy=1123.0999755859375,915.2000122070312
+AudioFilterStateVariable filter_string_9; //xy=1123.0999755859375,1050.2000122070312
+AudioFilterStateVariable filter_string_11; //xy=1124.0999755859375,1142.2000122070312
+AudioFilterStateVariable filter_string_12; //xy=1124.0999755859375,1188.2000122070312
+AudioFilterStateVariable filter_string_10; //xy=1125.0999755859375,1095.2000122070312
+AudioEffectEnvelope      voice4_envelope_filter; //xy=1184.0999755859375,2262.2000122070312
+AudioMixer4              voice3_mixer;   //xy=1188.0999755859375,1843.2000122070312
+AudioMixer4              voice4_mixer;   //xy=1189.0999755859375,2106.2000122070312
+AudioMixer4              voice2_mixer;   //xy=1193.0999755859375,1558.2000122070312
+AudioEffectEnvelope      voice3_envelope_filter; //xy=1192.0999755859375,1949.2000122070312
+AudioEffectEnvelope      voice2_envelope_filter; //xy=1208.0999755859375,1676.2000122070312
+AudioEffectEnvelope      voice1_envelope_filter; //xy=1210.0999755859375,1445.2000122070312
+AudioMixer4              voice1_mixer;   //xy=1212.0999755859375,1288.2000122070312
+AudioMixer4              string_mix_3;   //xy=1378.0999755859375,1078.2000122070312
+AudioMixer4              string_mix_1;   //xy=1381.0999755859375,766.2000122070312
+AudioMixer4              string_mix_2;   //xy=1395.0999755859375,895.2000122070312
+AudioSynthWaveform       chords_tremolo_lfo; //xy=1460.0999755859375,1446.2000122070312
+AudioFilterStateVariable voice4_filter;  //xy=1493.0999755859375,2110.2000122070312
+AudioFilterStateVariable voice2_filter;  //xy=1501.0999755859375,1563.2000122070312
+AudioFilterStateVariable voice3_filter;  //xy=1500.0999755859375,1839.2000122070312
+AudioFilterStateVariable voice1_filter;  //xy=1522.0999755859375,1295.2000122070312
+AudioMixer4              all_string_mix; //xy=1595.0999755859375,895.2000122070312
+AudioEffectEnvelope      voice1_envelope; //xy=1678.0999755859375,1446.2000122070312
+AudioEffectEnvelope      voice3_envelope; //xy=1680.0999755859375,1977.2000122070312
+AudioEffectEnvelope      voice2_envelope; //xy=1683.0999755859375,1697.2000122070312
+AudioEffectEnvelope      voice4_envelope; //xy=1687.0999755859375,2296.2000122070312
+AudioEffectMultiply      voice2_tremolo_mult; //xy=1726.0999755859375,1559.2000122070312
+AudioEffectMultiply      voice3_tremolo_mult; //xy=1728.0999755859375,1839.2000122070312
+AudioEffectMultiply      voice4_tremolo_mult; //xy=1731.0999755859375,2114.2000122070312
+AudioEffectMultiply      voice1_tremolo_mult; //xy=1736.0999755859375,1289.2000122070312
+AudioEffectWaveshaper    string_waveshape; //xy=1828.0999755859375,713.2000122070312
+AudioMixer4              string_waveshaper_mix; //xy=1880.099853515625,891.2000122070312
+AudioMixer4              chord_voice_mixer; //xy=2037.0999755859375,1310.2000122070312
+AudioFilterStateVariable filter_delay_strings; //xy=2064.0999755859375,679.2000122070312
+AudioEffectWaveshaper    chord_waveshape; //xy=2215.0999755859375,1206.2000122070312
+AudioMixer4              string_delay_mix; //xy=2246.0999755859375,767.2000122070312
+AudioMixer4              chord_waveshaper_mix; //xy=2368.10009765625,1291.199951171875
+AudioSynthWaveform       string_tremolo_lfo; //xy=2403.0999755859375,1070.199951171875
+AudioMixer4              strings_effect_mix; //xy=2450.0999755859375,948.2000122070312
+AudioFilterStateVariable filter_delay_chords; //xy=2460.10009765625,1166.199951171875
+AudioEffectDelay         delay_strings;  //xy=2560.0999755859375,778.2000122070312
+AudioSynthWaveform       string_filter_lfo; //xy=2656.0999755859375,1117.199951171875
+AudioMixer4              chord_delay_mix; //xy=2660.10009765625,1266.199951171875
+AudioEffectMultiply      string_multiply; //xy=2677.0999755859375,1029.199951171875
+AudioMixer4              chords_effect_mix; //xy=2808.10009765625,1414.199951171875
+AudioFilterStateVariable string_filter;  //xy=2875.0999755859375,1063.199951171875
+AudioEffectDelay         delay_chords;   //xy=2958.10009765625,1286.199951171875
+AudioInputI2S            i2s1;           //xy=3063.0999755859375,814.2000122070312
+AudioMixer4              string_filter_mixer; //xy=3080.0999755859375,1064.199951171875
+AudioFilterStateVariable chords_main_filter; //xy=3126.10009765625,1347.199951171875
+AudioMixer4              chords_main_filter_mixer; //xy=3338.10009765625,1362.199951171875
 AudioConnection          patchCord1(string_vibrato_1, envelope_string_vibrato_1);
 AudioConnection          patchCord2(envelope_string_vibrato_1, 0, waveform_string_1, 0);
 AudioConnection          patchCord3(envelope_string_vibrato_1, 0, waveform_string_3, 0);
@@ -267,24 +268,24 @@ AudioConnection          patchCord140(string_waveshaper_mix, 0, strings_effect_m
 AudioConnection          patchCord141(string_waveshaper_mix, 0, string_delay_mix, 0);
 AudioConnection          patchCord142(chord_voice_mixer, chord_waveshape);
 AudioConnection          patchCord143(chord_voice_mixer, 0, chord_waveshaper_mix, 0);
-AudioConnection          patchCord144(string_delay_mix, delay_strings);
-AudioConnection          patchCord145(string_delay_mix, 0, strings_effect_mix, 1);
-AudioConnection          patchCord146(filter_delay_strings, 0, string_delay_mix, 1);
-AudioConnection          patchCord147(filter_delay_strings, 1, string_delay_mix, 2);
-AudioConnection          patchCord148(filter_delay_strings, 2, string_delay_mix, 3);
-AudioConnection          patchCord149(string_tremolo_lfo, 0, string_multiply, 1);
-AudioConnection          patchCord150(chord_waveshape, 0, chord_waveshaper_mix, 1);
-AudioConnection          patchCord151(chord_waveshaper_mix, 0, chord_delay_mix, 0);
-AudioConnection          patchCord152(chord_waveshaper_mix, 0, chords_effect_mix, 0);
-AudioConnection          patchCord153(delay_strings, 0, filter_delay_strings, 0);
-AudioConnection          patchCord154(strings_effect_mix, 0, string_multiply, 0);
-AudioConnection          patchCord155(string_multiply, 0, string_filter, 0);
-AudioConnection          patchCord156(string_filter_lfo, 0, string_filter, 1);
-AudioConnection          patchCord157(chord_delay_mix, delay_chords);
-AudioConnection          patchCord158(chord_delay_mix, 0, chords_effect_mix, 1);
-AudioConnection          patchCord159(filter_delay_chords, 0, chord_delay_mix, 1);
-AudioConnection          patchCord160(filter_delay_chords, 1, chord_delay_mix, 2);
-AudioConnection          patchCord161(filter_delay_chords, 2, chord_delay_mix, 3);
+AudioConnection          patchCord144(filter_delay_strings, 0, string_delay_mix, 1);
+AudioConnection          patchCord145(filter_delay_strings, 1, string_delay_mix, 2);
+AudioConnection          patchCord146(filter_delay_strings, 2, string_delay_mix, 3);
+AudioConnection          patchCord147(chord_waveshape, 0, chord_waveshaper_mix, 1);
+AudioConnection          patchCord148(string_delay_mix, delay_strings);
+AudioConnection          patchCord149(string_delay_mix, 0, strings_effect_mix, 1);
+AudioConnection          patchCord150(chord_waveshaper_mix, 0, chord_delay_mix, 0);
+AudioConnection          patchCord151(chord_waveshaper_mix, 0, chords_effect_mix, 0);
+AudioConnection          patchCord152(string_tremolo_lfo, 0, string_multiply, 1);
+AudioConnection          patchCord153(strings_effect_mix, 0, string_multiply, 0);
+AudioConnection          patchCord154(filter_delay_chords, 0, chord_delay_mix, 1);
+AudioConnection          patchCord155(filter_delay_chords, 1, chord_delay_mix, 2);
+AudioConnection          patchCord156(filter_delay_chords, 2, chord_delay_mix, 3);
+AudioConnection          patchCord157(delay_strings, 0, filter_delay_strings, 0);
+AudioConnection          patchCord158(string_filter_lfo, 0, string_filter, 1);
+AudioConnection          patchCord159(chord_delay_mix, delay_chords);
+AudioConnection          patchCord160(chord_delay_mix, 0, chords_effect_mix, 1);
+AudioConnection          patchCord161(string_multiply, 0, string_filter, 0);
 AudioConnection          patchCord162(chords_effect_mix, 0, chords_main_filter, 0);
 AudioConnection          patchCord163(string_filter, 0, string_filter_mixer, 0);
 AudioConnection          patchCord164(string_filter, 1, string_filter_mixer, 1);
@@ -295,17 +296,17 @@ AudioConnection          patchCord168(chords_main_filter, 1, chords_main_filter_
 AudioConnection          patchCord169(chords_main_filter, 2, chords_main_filter_mixer, 2);
 // GUItool: end automatically generated code
 
+
 //MANUAL OUTPUT SECTION
 #include "effect_platervbstereo.h"
-AudioMixer4              stereo_l_mixer;        
-AudioMixer4              stereo_r_mixer;   
-AudioMixer4              reverb_mixer;   
 AudioAmplifier           string_gain;          
 AudioAmplifier           chords_gain;          
-
+AudioMixer4              reverb_mixer;   
+AudioEffectPlateReverb   main_reverb;    
+AudioMixer4              stereo_l_mixer;        
+AudioMixer4              stereo_r_mixer;   
 AudioOutputI2S           DAC_out;    
 AudioOutputUSB           USB_out;      
-AudioEffectPlateReverb   main_reverb;        
 
 AudioConnection          patchCord2000(string_filter_mixer, 0, string_gain, 0);
 AudioConnection          patchCord2001(string_gain, 0, stereo_r_mixer, 0);

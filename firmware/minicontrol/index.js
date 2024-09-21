@@ -116,19 +116,19 @@ try {
     document.getElementById("step1").classList.remove("unsatisfied");
     for (const entry of midiAccess.outputs) {
       const output = entry[1];
-      if (output.name == "Minichord") {
+      if (output.name == "minichord") {
         console.log(
           `Output port [type:'${output.type}'] id: '${output.id}' manufacturer: '${output.manufacturer}' name: '${output.name}' version: '${output.version}'`,
         );
         minichord_device = output
-        const sysex_message = [0xF0, 0, 0, 0, 0, 0xF7]; //Query for the current settings of the Minichord
+        const sysex_message = [0xF0, 0, 0, 0, 0, 0xF7]; //Query for the current settings of the minichord
         minichord_device.send(sysex_message); // sends the message.
       }
     }
     //handle for receiving the data
     for (const entry of midiAccess.inputs) {
       const input = entry[1];
-      if (input.name == "Minichord") {
+      if (input.name == "minichord") {
         input.onmidimessage = process_current_data;
       }
     }

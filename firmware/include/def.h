@@ -33,8 +33,3 @@
 //Capacitive touch
 #define CAP_SDA_PIN 18
 #define CAP_SDL_PIN 19
-
-
-//define block size
-#define AUDIO_BLOCK_SAMPLES  128
-

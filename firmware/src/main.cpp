@@ -544,7 +544,7 @@ void load_config(int bank_number) {
 void setup() {
   Serial.begin(9600);
   Serial.println("Initialising audio parameters");
-  AudioMemory(600);
+  AudioMemory(1200);
   //>>STATIC AUDIO PARAMETERS
   // the waveshaper
   calculate_ws_array();
