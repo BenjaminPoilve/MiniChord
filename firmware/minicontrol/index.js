@@ -4,6 +4,9 @@ var color_hue_sysex_adress = 20;
 var base_adress_rythm = 220;
 var potentiometer_memory_adress = [4, 5, 6];
 var active_bank_number=-1
+var min_firmware_accepted=0.01;
+var firmware_adress=7;
+var float_multiplier=100.0;
 //-->>UTILITIES
 function map_value(value, in_min, in_max, out_min, out_max) {
   return (value - in_min) * (out_max - out_min) / (in_max - in_min) + Number(out_min);
@@ -175,8 +178,11 @@ function process_current_data(midiMessage) {
     //the two first parameter are for control and bank number, ignored
     //the rest are applied to the sliders
     for (var i = 2; i < parameter_size; i++) {
-      if (i < base_adress_rythm + 16 & i > base_adress_rythm - 1) {
-        sysex_value = data[2 * i] + 128 * data[2 * i + 1]
+      sysex_value = data[2 * i] + 128 * data[2 * i + 1]
+      if(i==firmware_adress && sysex_value/float_multiplier<min_firmware_accepted){
+        alert("Please update the minichord firmware")
+      }
+      else if (i < base_adress_rythm + 16 & i > base_adress_rythm - 1) {
         console.log(sysex_value);
         var j = i - base_adress_rythm;
         for (var k = 0; k < 7; k++) {
@@ -191,7 +197,6 @@ function process_current_data(midiMessage) {
       } else {
         var result = document.querySelectorAll('[adress_field="' + i + '"]');
         if (result.length > 0) {
-          sysex_value = data[2 * i] + 128 * data[2 * i + 1]
           var slider_value
           if (result[0].getAttribute("curve") == "exponential") {
             slider_value = Math.round((result[0].max * Math.log(sysex_value) / Math.log(result[0].max)));
@@ -199,10 +204,10 @@ function process_current_data(midiMessage) {
             slider_value = sysex_value
           }
           if (result[0].getAttribute("data_type") == "float") {
-            result[0].value = slider_value / 100.0;
+            result[0].value = slider_value / float_multiplier;
             var value_zone = document.getElementById("value_zone" + i);
             console.log(value_zone);
-            value_zone.innerHTML = sysex_value / 100.0
+            value_zone.innerHTML = sysex_value / float_multiplier
           } else {
             result[0].value = slider_value;
             var value_zone = document.getElementById("value_zone" + i);
@@ -244,9 +249,7 @@ function process_current_data(midiMessage) {
     var body = document.getElementById('body');
     body.classList.remove("control_full");
     var elements = document.getElementsByClassName('inactive');
-    for (const i of potentiometer_memory_adress) {
-      send_parameter(minichord_device, i, 512); //we initialize the potentiometers, we want them at the middle of our setting
-    }
+  
     while (elements.length > 0) {
       elements.item(0).classList.add("active");
       elements[0].classList.remove("inactive");

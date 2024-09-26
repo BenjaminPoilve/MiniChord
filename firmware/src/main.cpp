@@ -10,7 +10,8 @@
 #include <debouncer.h>
 #include <harp.h>
 #include <potentiometer.h>
-
+//>>SOFWTARE VERSION 
+int version_ID=0001; //to be read 00.01, stored at adress 7 in memory
 //>>BUTTON ARRAYS<<
 debouncer harp_array[12];
 debouncer chord_matrix_array[22];
@@ -29,11 +30,11 @@ LittleFS_Program myfs; // to save the settings
 bool color_led_blink_state = true;
 //>>CHORD DEFINITION<<
 //for each chord, we first have the 4 notes of the chord, then decoration that might be used in specific modes
-uint8_t major[7] = {0, 4, 7, 12, 2, 5, 9};  
-uint8_t minor[7] = {0, 3, 7, 12, 2, 5, 8};
+uint8_t major[7] = {0, 4, 7, 12, 2, 5, 9};  // After the four notes of the chord (fundamental, third, fifth of seven, and octave of fifth, the next notes are the second fourth and sixth)
+uint8_t minor[7] = {0, 3, 7, 12, 1, 5, 8};
 uint8_t seventh[7] = {0, 4, 10, 7, 2, 5, 9};
 uint8_t maj_seventh[7] = {0, 4, 11, 7, 2, 5, 9};
-uint8_t min_seventh[7] = {0, 3, 10, 7, 2, 5, 8};
+uint8_t min_seventh[7] = {0, 3, 10, 7, 1, 5, 8};
 uint8_t aug[7] = {0, 4, 8, 12, 2, 5, 9};
 uint8_t dim[7] = {0, 3, 6, 12, 2, 5, 9};
 uint8_t root_button[7] = {0, 4, 2, 5, 9, 11, 7}; // defines the fundamental of each row, ie C, E, D, F, A, B, G
@@ -90,7 +91,8 @@ int8_t chord_volume_sysex = 3;
 int8_t chord_pot_alternate_storage = 4;
 int8_t harp_pot_alternate_storage = 5;
 int8_t mod_pot_alternate_storage = 6;
-// >10 and <20 are limited access, for example the potentiometer settings (we don't want a pot to control another pot)
+
+// >10 and <20 are limited access, for example the potentiometer settings (we don't want a pot to control another pot sysex adress or range)
 int8_t chord_pot_alternate_control = 10;
 int8_t chord_pot_alternate_range = 11;
 int8_t harp_pot_alternate_control = 12;
@@ -140,14 +142,14 @@ int8_t harp_shuffling_array[6][12] = {
     {0, 1, 2, 10, 11, 12, 20, 21, 22, 30, 31, 32}};
 int8_t harp_shuffling_selection = 0;
 int8_t chord_shuffling_array[6][7] = {
-    //each number indicates the note for the string 0-6 are taken within the chord pattern. 
+    //each number indicates the note for the voice 0-6 are taken within the chord pattern. In normal mode, only 0-3 is used, and 4-6 is available in rythm mode 
     //the /10 number indicates the octave
     {0, 1, 2, 3, 4, 5, 6},
     {0, 1, 2, 3, 10, 12, 15},
     {10, 11, 12, 13, 2, 5, 6},
-    {0, 1, 2, 3, 4, 5, 6},
-    {0, 1, 2, 3, 4, 5, 6},
-    {0, 1, 2, 3, 4, 5, 6}};
+    {10, 11, 12, 13, 0, 2, 3},
+    {10, 11, 12, 13, 2, 15, 16},
+    {10, 11, 12, 13, 12, 14, 15}};
 int8_t chord_shuffling_selection = 0;
 // strings filter parameters
 float string_filter_keytrack = 0;
@@ -171,7 +173,7 @@ float pan=1;
 
 //>>AUTO RYTHM<<
 u_int8_t rythm_pattern[16] = {};
-u_int16_t rythm_bpm = 80;
+float rythm_bpm = 80;
 u_int8_t rythm_current_step = 0;
 u_int16_t note_pushed_duration = 30;
 float shuffle = 1;
@@ -187,7 +189,8 @@ elapsedMillis note_off_timing[4];
 
 uint8_t rythm_limit_change_to_every = 2; // when we allow the chord change
 elapsedMillis since_last_button_push;
-bool note_change_flag[7] = {false, false, false, false, false, false, false};
+elapsedMillis last_key_change;
+
 uint8_t rythm_freeze_current_chord_notes[7]; // this array is needed because we need to handle the situation when a
 uint8_t rythm_loop_length = 16;
 u_int8_t current_selected_voice=0; //increment at each voice steal to rotate amongst voices;
@@ -410,10 +413,10 @@ uint8_t calculate_note_harp(uint8_t string, bool slashed, bool sharp) {
 
 //-->>RYTHM MODE UTILITIES
 void rythm_tick_function() {
+  //this function seems a bit long for a timed one. Maybe try to offload some logic somewhere else? 
   if (rythm_current_step % rythm_limit_change_to_every == 0) {
     for (int i = 0; i < 7; i++) {
       rythm_freeze_current_chord_notes[i] = current_applied_chord_notes[i];
-      note_change_flag[i] = true;
     }
   }
   // handling the led pattern
@@ -438,10 +441,7 @@ void rythm_tick_function() {
   result = rythm_pattern[rythm_current_step];
   for (int i = 0; i < 7; i++) {
     if (result & (1 << i)) {
-      if (note_change_flag[i] == true) {
-        set_chord_voice_frequency(current_selected_voice, rythm_freeze_current_chord_notes[i]);
-        note_change_flag[i] = false;
-      }
+      set_chord_voice_frequency(current_selected_voice, rythm_freeze_current_chord_notes[i]);
       play_note_selected_duration(current_selected_voice);
       current_selected_voice=(current_selected_voice+1)%4;
     }
@@ -628,15 +628,16 @@ void loop() {
     } else {
       //>>push tempo management
       if (since_last_button_push > 100 && since_last_button_push < 2000) {  // check that we are inside the BPM range
-        rythm_bpm = (rythm_bpm + 60 * 1000 / (since_last_button_push)) / 2; // we push for full note
+        rythm_bpm = (rythm_bpm*5.0 + 60 * 1000 / (since_last_button_push)) / 6.0; // we push for full note, with smoothing
         Serial.print("Updating the BPM to:");
         Serial.println(rythm_bpm);
-        recalculate_timer();
+        recalculate_timer();        
         if (current_long_period) {
           rythm_timer.update(long_timer_period);
         } else {
           rythm_timer.update(short_timer_period);
         }
+
       }
     }
     since_last_button_push = 0;
@@ -649,6 +650,8 @@ void loop() {
       continuous_chord = false;
       analogWrite(RYTHM_LED_PIN, 255 * continuous_chord);
       if (rythm_mode) {
+        rythm_current_step=0;
+        rythm_tick_function();
         for (int i = 0; i < 7; i++) {
           current_applied_chord_notes[i] = current_chord_notes[i];
           rythm_freeze_current_chord_notes[i] = current_chord_notes[i]; // circulate the notes to the right buffers
@@ -656,7 +659,6 @@ void loop() {
       }
     }
   }
-
   //>>Handling the preset change interface
   if (up_button.read_transition() > 1) {
     Serial.println("Switching to next preset");
@@ -784,6 +786,12 @@ void loop() {
           for (int i = 0; i < 7; i++) {
             current_applied_chord_notes[i] = current_chord_notes[i];
           }
+          //reboot rythm - Work to do here
+          /*
+          rythm_current_step=0;
+          rythm_timer.begin(rythm_tick_function,100);
+          last_key_change=0;*/
+
         }
         for (int i = 0; i < 12; i++) { // In any case we update the harp frequency
           current_harp_notes[i] = calculate_note_harp(i, slash_chord, sharp_active);

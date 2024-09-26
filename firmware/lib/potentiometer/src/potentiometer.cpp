@@ -61,15 +61,12 @@ void potentiometer::update_parameter(bool alternate_flag){
         }
     }
     if(abs(potentiometer_old_value-potentiometer_smoothed_value)>threshold || trigger_change){
-        Serial.println("loop");
         trigger_change=false;
         this->potentiometer_old_value=potentiometer_smoothed_value;
         if(!alternate_flag ){
             uint16_t min_value=max(0,current_sysex_parameters_pointer[main_adress]*(1.0-main_range/100.0));
             uint16_t max_value=current_sysex_parameters_pointer[main_adress]*(1.0+main_range/100.0);
             uint16_t output_value=constrain(map(potentiometer_smoothed_value, dead_zone,1024-dead_zone, min_value ,max_value ),min_value, max_value);
-            Serial.println(potentiometer_old_value);
-            Serial.println("applying");
             apply_audio_parameter(main_adress, output_value); //note: applied but not saved. So we can still read the initial value 
 
         }else{

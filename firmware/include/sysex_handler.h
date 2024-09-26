@@ -63,6 +63,9 @@ void apply_audio_parameter(int adress, int value) {
       case 6:
         mod_pot.set_alternate_default(value);mod_pot.force_update();
         break;
+      case 7:
+        current_sysex_parameters[7]=version_ID;
+        break;
       case 40:
         for (int i=0;i<12;i++){
           harp_shuffling_selection=value; current_harp_notes[i]=calculate_note_harp(i,slash_chord,sharp_active);
@@ -267,7 +270,7 @@ void apply_audio_parameter(int adress, int value) {
       case 2:
         string_gain.gain(value/100.0);  harp_pot.update_parameter(false);
         break;
-      case 140:
+      case 194:
         for (int i=0;i<7;i++){
           chord_shuffling_selection=value; current_chord_notes[i]=calculate_note_chord(i,slash_chord,sharp_active);
         }
@@ -345,6 +348,9 @@ void apply_audio_parameter(int adress, int value) {
         break;
       case 139:
         rythm_loop_length=value;
+        break;
+      case 140:
+        rythm_bpm=value;recalculate_timer();
         break;
       case 220:
         rythm_pattern[0]=value;
