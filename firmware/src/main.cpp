@@ -170,6 +170,7 @@ u_int32_t inter_string_delay = 30000;
 u_int32_t random_delay = 10000;
 // pan for audio output 
 float pan=1;
+float reverb_dry_proportion=0.6; //to avoid drop in volume in full reverb, keep some part of the dry signal in
 
 //>>AUTO RYTHM<<
 u_int8_t rythm_pattern[16] = {};
@@ -439,11 +440,16 @@ void rythm_tick_function() {
   }
   u_int8_t result;
   result = rythm_pattern[rythm_current_step];
-  for (int i = 0; i < 7; i++) {
+  for (int i = 6; i >= 0; i--) {
     if (result & (1 << i)) {
-      set_chord_voice_frequency(current_selected_voice, rythm_freeze_current_chord_notes[i]);
-      play_note_selected_duration(current_selected_voice);
-      current_selected_voice=(current_selected_voice+1)%4;
+      int current_voice=0;
+      if(i<4){
+        current_voice=i;
+      }else{
+        current_voice=i-3;
+      }
+      set_chord_voice_frequency(current_voice, rythm_freeze_current_chord_notes[i]);
+      play_note_selected_duration(current_voice);
     }
   }
   rythm_current_step = (rythm_current_step + 1) % rythm_loop_length;

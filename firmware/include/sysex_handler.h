@@ -232,7 +232,7 @@ void apply_audio_parameter(int adress, int value) {
         strings_effect_mix.gain(1,value/100.0);
         break;
       case 83:
-        reverb_mixer.gain(0,value/100.0);stereo_r_mixer.gain(0,(1-value/100.0)*pan);stereo_l_mixer.gain(0,1-value/100.0);
+        reverb_mixer.gain(0,value/100.0);stereo_r_mixer.gain(0,(1-reverb_dry_proportion*value/100.0)*pan);stereo_l_mixer.gain(0,1-reverb_dry_proportion*value/100.0);
         break;
       case 84:
         string_waveshaper_mix.gain(0,1-value/100.0);string_waveshaper_mix.gain(1,value/100.0);
@@ -594,7 +594,7 @@ void apply_audio_parameter(int adress, int value) {
         chords_effect_mix.gain(1,value/100.0);
         break;
       case 186:
-        reverb_mixer.gain(1,value/100.0);stereo_r_mixer.gain(1,1-value/100.0);stereo_l_mixer.gain(1,(1-value/100.0)*pan);
+        reverb_mixer.gain(1,value/100.0);stereo_r_mixer.gain(1,1-reverb_dry_proportion*value/100.0);stereo_l_mixer.gain(1,(1-reverb_dry_proportion*value/100.0)*pan);
         break;
       case 187:
         chord_waveshaper_mix.gain(0,1-value/100.0);chord_waveshaper_mix.gain(1,value/100.0);

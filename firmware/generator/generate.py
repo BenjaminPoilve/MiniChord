@@ -106,38 +106,39 @@ with open('parameters.json') as f: # Reserved adresses: 0 for system command and
                             global_name_written =False
                             for name, parameter_group in grouped:
                                 sub_name_written =False
-                                for parameter in parameter_group:
-                                    try:
-                                        with a.div(name=id_iterator,klass="line data_line content_line inactive"):
-                                            with a.div(klass=" bloc B4 M0 S0"):
-                                                if(not global_name_written):
-                                                    a.p(_t="")
-                                                    global_name_written=True
-                                                else:
-                                                    a.p(_t="")
-                                            with a.div(klass=" bloc B3 M2 S3"):
-                                                if(not sub_name_written):
-                                                    a.p(_t=name)
-                                                    sub_name_written=True
-                                                else:
-                                                    a.p(_t="")
-                                            with a.div(klass=" bloc B1 M1 S1"):
-                                                a.p(_t=parameter["sysex_adress"])
-                                            with a.div(klass=" bloc B6 M4 S6"):
-                                                a.dfn(title=parameter["tooltip"], _t=parameter["name"])
-                                                #a.label(for_=id_iterator, _t=parameter["name"])
-                                            with a.div(klass=" bloc B2 M2 S4"):
-                                                if(parameter["data_type"]=="int"):
-                                                    a.input(klass="slider inactive",adress_field=parameter["sysex_adress"], curve=parameter["curve"],data_type=parameter["data_type"], id=id_iterator, max=parameter["max_value"], min=parameter["min_value"], onchange='handlechange(this)', step='1', target_max=parameter["max_value"], target_min=parameter["min_value"], type='range', value=parameter["default_value"])
-                                                else:
-                                                    a.input(klass="slider inactive",adress_field=parameter["sysex_adress"], curve=parameter["curve"],data_type=parameter["data_type"], id=id_iterator, max=parameter["max_value"], min=parameter["min_value"], onchange='handlechange(this)', step='0.01', target_max=parameter["max_value"], target_min=parameter["min_value"], type='range', value=parameter["default_value"])
-                                            with a.div(klass=" bloc B1 M1 S1"):
-                                                a.p(id="value_zone"+str(parameter["sysex_adress"]),klass='value_zone')
-                                            id_iterator+=1
-                                    except KeyError:
-                                        print("Missing entry parameter in the JSON item : ")
-                                        print(parameter)
-                                        break
+                                if(name!="hidden"):
+                                    for parameter in parameter_group:
+                                        try:
+                                            with a.div(name=id_iterator,klass="line data_line content_line inactive"):
+                                                with a.div(klass=" bloc B4 M0 S0"):
+                                                    if(not global_name_written):
+                                                        a.p(_t="")
+                                                        global_name_written=True
+                                                    else:
+                                                        a.p(_t="")
+                                                with a.div(klass=" bloc B3 M2 S3"):
+                                                    if(not sub_name_written):
+                                                        a.p(_t=name)
+                                                        sub_name_written=True
+                                                    else:
+                                                        a.p(_t="")
+                                                with a.div(klass=" bloc B1 M1 S1"):
+                                                    a.p(_t=parameter["sysex_adress"])
+                                                with a.div(klass=" bloc B6 M4 S6"):
+                                                    a.dfn(title=parameter["tooltip"], _t=parameter["name"])
+                                                    #a.label(for_=id_iterator, _t=parameter["name"])
+                                                with a.div(klass=" bloc B2 M2 S4"):
+                                                    if(parameter["data_type"]=="int"):
+                                                        a.input(klass="slider inactive",adress_field=parameter["sysex_adress"], curve=parameter["curve"],data_type=parameter["data_type"], id=id_iterator, max=parameter["max_value"], min=parameter["min_value"], onchange='handlechange(this)', step='1', target_max=parameter["max_value"], target_min=parameter["min_value"], type='range', value=parameter["default_value"])
+                                                    else:
+                                                        a.input(klass="slider inactive",adress_field=parameter["sysex_adress"], curve=parameter["curve"],data_type=parameter["data_type"], id=id_iterator, max=parameter["max_value"], min=parameter["min_value"], onchange='handlechange(this)', step='0.01', target_max=parameter["max_value"], target_min=parameter["min_value"], type='range', value=parameter["default_value"])
+                                                with a.div(klass=" bloc B1 M1 S1"):
+                                                    a.p(id="value_zone"+str(parameter["sysex_adress"]),klass='value_zone')
+                                                id_iterator+=1
+                                        except KeyError:
+                                            print("Missing entry parameter in the JSON item : ")
+                                            print(parameter)
+                                            break
                         else:
                             print("Missing global parameters in JSON")
                     with a.div(klass="array_content"):

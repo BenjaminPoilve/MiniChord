@@ -69,7 +69,11 @@ function checkbox_array() {
       container.appendChild(padding_ID);
       var name_zone = document.createElement("div");
       name_zone.className=" bloc B4 M3 S4";
-      name_zone.innerHTML="rythm voice "+i
+      if(i<4){
+      name_zone.innerHTML="voice "+(i+1)
+      }else{
+      name_zone.innerHTML="voice "+(i-2)+'"'
+      }
       container.appendChild(name_zone);
       var line = document.createElement("div");
       line.className="checkbox_div bloc B5 M4 S7";
