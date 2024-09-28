@@ -118,7 +118,7 @@ AudioFilterStateVariable *string_filter_array[12] = {&filter_string_1, &filter_s
 AudioEffectEnvelope *chord_vibrato_envelope_array[4] = {&voice1_vibrato_envelope, &voice2_vibrato_envelope, &voice3_vibrato_envelope, &voice4_vibrato_envelope};
 AudioSynthWaveformModulated *chord_osc_1_array[4] = {&voice1_osc1, &voice2_osc1, &voice3_osc1, &voice4_osc1};
 AudioSynthWaveformModulated *chord_osc_2_array[4] = {&voice1_osc2, &voice2_osc2, &voice3_osc2, &voice4_osc2};
-AudioSynthWaveformModulated *chord_osc_3_array[4] = {&voice1_osc1, &voice2_osc3, &voice3_osc3, &voice4_osc3};
+AudioSynthWaveformModulated *chord_osc_3_array[4] = {&voice1_osc3, &voice2_osc3, &voice3_osc3, &voice4_osc3};
 AudioSynthNoiseWhite *chord_noise_array[4] = {&voice1_noise, &voice2_noise, &voice3_noise, &voice4_noise};
 AudioMixer4 *chord_voice_mixer_array[4] = {&voice1_mixer, &voice2_mixer, &voice3_mixer, &voice4_mixer};
 AudioFilterStateVariable *chord_voice_filter_array[4] = {&voice1_filter, &voice2_filter, &voice3_filter, &voice4_filter};
@@ -135,21 +135,21 @@ int8_t harp_shuffling_array[6][12] = {
     //each number indicates the note for the string 0-6 are taken within the chord pattern. 
     //the /10 number indicates the octave
     {0, 1, 2, 10, 11, 12, 20, 21, 22, 30, 31, 32},
-    {4, 1, 0, 2, 14, 11, 10, 12, 24, 21, 20, 22},
-    {5, 2, 0, 1, 15, 12, 10, 11, 25, 22, 20, 21},
-    {0, 1, 2, 10, 11, 12, 20, 21, 22, 30, 31, 32},
-    {0, 1, 2, 10, 11, 12, 20, 21, 22, 30, 31, 32},
-    {0, 1, 2, 10, 11, 12, 20, 21, 22, 30, 31, 32}};
+    {4, 1, 0, 2, 14, 11, 10, 12, 24, 21, 20, 22}, //add the seconds
+    {5, 2, 0, 1, 15, 12, 10, 11, 25, 22, 20, 21}, //add the fourth
+    {6, 2, 0, 1, 16, 12, 10, 11, 26, 22, 20, 21}, //add the sixth
+    {0, 10, 1, 11, 2, 12, 20, 30, 21, 31, 22, 32}, //octaves
+    {0, 4, 1, 5, 2, 6, 10, 14, 11, 15, 12, 16}}; //chromatic
 int8_t harp_shuffling_selection = 0;
 int8_t chord_shuffling_array[6][7] = {
     //each number indicates the note for the voice 0-6 are taken within the chord pattern. In normal mode, only 0-3 is used, and 4-6 is available in rythm mode 
     //the /10 number indicates the octave
-    {0, 1, 2, 3, 4, 5, 6},
-    {0, 1, 2, 3, 10, 12, 15},
-    {10, 11, 12, 13, 2, 5, 6},
-    {10, 11, 12, 13, 0, 2, 3},
-    {10, 11, 12, 13, 2, 15, 16},
-    {10, 11, 12, 13, 12, 14, 15}};
+    {0, 1, 2, 3, 4, 5, 6}, //normal 
+    {10, 11, 12, 13, 14, 15, 16},//one octave up with chromatics
+    {10, 11, 12, 13, 0, 2, 3},//one octave up with low chord notes
+    {10, 11, 12, 13, 2, 5, 6},//one octave up with low fifth and low chromatics
+    {10, 11, 12, 13, 2, 15, 16},//one octave up with low fifth and high chromatics
+    {20, 21, 22, 23, 24, 25, 26}};//two octave up
 int8_t chord_shuffling_selection = 0;
 // strings filter parameters
 float string_filter_keytrack = 0;
@@ -556,25 +556,26 @@ void setup() {
   calculate_ws_array();
   chord_waveshape.shape(wave_shape, 257);
   string_waveshape.shape(wave_shape, 257);
-  
-
-
+  //the base DC value for strings
+  filter_dc.amplitude(1);
   // the delay passthrough
   string_delay_mix.gain(0, 1);
   chord_delay_mix.gain(0, 1);
   // simple mixers
   for (int i = 0; i < 3; i++) {
-    string_mixer_array[i]->gain(0, 0.25);
-    string_mixer_array[i]->gain(1, 0.25);
-    string_mixer_array[i]->gain(2, 0.25);
-    string_mixer_array[i]->gain(3, 0.25);
+    string_mixer_array[i]->gain(0, 1);
+    string_mixer_array[i]->gain(1, 1);
+    string_mixer_array[i]->gain(2, 1);
+    string_mixer_array[i]->gain(3, 1);
   }
   for (int i = 0; i < 4; i++) {
-    chord_voice_mixer_array[i]->gain(0, 0.25);
-    chord_voice_mixer_array[i]->gain(1, 0.25);
-    chord_voice_mixer_array[i]->gain(2, 0.25);
+    chord_voice_mixer_array[i]->gain(0, 1);
+    chord_voice_mixer_array[i]->gain(1, 1);
+    chord_voice_mixer_array[i]->gain(2, 1);
     chord_noise_array[i]->amplitude(0.5);
   }
+
+
   // initialising the rest of the hardware
   chord_matrix.setup();
   harp_sensor.setup();
@@ -722,7 +723,7 @@ void loop() {
     for (int i = 1; i < 22; i++) {
       one_button_active = one_button_active || chord_matrix_array[i].read_value();
     }
-    if (!(one_button_active)) {
+    if (!(one_button_active) && chord_envelope_array[3]->isSustain()) { // i think the issue is there a bit of a hack now 
       AudioNoInterrupts();
       for (int i = 0; i < 4; i++) {
         chord_vibrato_envelope_array[i]->noteOff();
@@ -851,8 +852,8 @@ void loop() {
       string_enveloppe_array[i]->noteOn();
       AudioInterrupts();
     }
-    value = harp_array[i].read_value(); //weirdly if we use the debouncer some noteOff seems to be ignored
-    if (value == 0) {
+    //value = harp_array[i].read_value(); //weirdly if we use the debouncer some noteOff seems to be ignored !!!!but if we don't, then the noteoff slow down the envelope !!
+    if (value == 1) {
       AudioNoInterrupts();
       string_enveloppe_filter_array[i]->noteOff();
       string_enveloppe_array[i]->noteOff();
