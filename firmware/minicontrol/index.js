@@ -3,6 +3,8 @@ var parameter_size = 256;
 var color_hue_sysex_adress = 20;
 var base_adress_rythm = 220;
 var potentiometer_memory_adress = [4, 5, 6];
+var volume_memory_adress = [2, 3];
+
 var active_bank_number=-1
 var min_firmware_accepted=0.01;
 var firmware_adress=7;
@@ -225,6 +227,10 @@ function process_current_data(midiMessage) {
     for( const i of potentiometer_memory_adress){
       console.log(i);
       send_parameter(minichord_device, i, 512);
+    }
+    for( const i of volume_memory_adress){ //we make sure that the volume is 1
+      console.log(i);
+      send_parameter(minichord_device, i, 1*100);
     }
     //We apply the bank number to dropdown and header
     let element = document.getElementById("bank_number_selection");

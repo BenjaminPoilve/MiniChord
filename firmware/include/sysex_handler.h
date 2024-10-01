@@ -67,7 +67,7 @@ void apply_audio_parameter(int adress, int value) {
         current_sysex_parameters[7]=version_ID;
         break;
       case 2:
-        string_gain.gain(value/100.0);  harp_pot.update_parameter(false);
+        string_gain.amplitude(value/100.0,100);  harp_pot.update_parameter(false);
         break;
       case 40:
         for (int i=0;i<12;i++){
@@ -170,34 +170,43 @@ void apply_audio_parameter(int adress, int value) {
         string_tremolo_lfo.amplitude(0.01+value/100.0);string_tremolo_lfo.offset(1-value/100.0);
         break;
       case 62:
-        string_vibrato_1.begin(value);
+        string_vibrato_lfo.begin(value);
         break;
       case 63:
-        string_vibrato_1.frequency(value/100.0);
+        string_vibrato_lfo.frequency(value/100.0);
         break;
       case 64:
-        string_vibrato_1.amplitude(0.01+value/100.0);
+        string_vibrato_lfo.amplitude(0.01+value/100.0);
         break;
       case 65:
-        string_vibrato_1.offset(value/100.0-1);
+        string_vibrato_dc.amplitude(value/100.0-1);
+        break;
+      case 94:
+        envelope_string_vibrato_dc.attack(value);
+        break;
+      case 95:
+        envelope_string_vibrato_dc.hold(value);
+        break;
+      case 96:
+        envelope_string_vibrato_dc.decay(value);
         break;
       case 66:
-        envelope_string_vibrato_1.attack(value);
+        envelope_string_vibrato_lfo.attack(value);
         break;
       case 67:
-        envelope_string_vibrato_1.hold(value);
+        envelope_string_vibrato_lfo.hold(value);
         break;
       case 68:
-        envelope_string_vibrato_1.decay(value);
+        envelope_string_vibrato_lfo.decay(value);
         break;
       case 69:
-        envelope_string_vibrato_1.sustain(value/100.0);
+        envelope_string_vibrato_lfo.sustain(value/100.0);
         break;
       case 70:
-        envelope_string_vibrato_1.release(value);
+        envelope_string_vibrato_lfo.release(value);
         break;
       case 71:
-        envelope_string_vibrato_1.releaseNoteOn(value);
+        envelope_string_vibrato_lfo.releaseNoteOn(value);
         break;
       case 72:
         for (int i=0;i<12;i++){
@@ -264,8 +273,11 @@ void apply_audio_parameter(int adress, int value) {
       case 92:
         string_filter.octaveControl(value/100.0);
         break;
+      case 93:
+        string_amplifier.gain(value/100.0);
+        break;
       case 3:
-        chords_gain.gain(value/100.0);  chord_pot.update_parameter(false);
+        chords_gain.amplitude(value/100.0,100);  chord_pot.update_parameter(false);
         break;
       case 120:
         for (int i=0;i<7;i++){
@@ -451,13 +463,24 @@ void apply_audio_parameter(int adress, int value) {
         chord_vibrato_keytrack=value/100.0;
         break;
       case 163:
+        chords_vibrato_lfo.amplitude(0.01+value/100.0);
+        break;
+      case 194:
+        chords_vibrato_dc.amplitude(value/100.0-1);
+        break;
+      case 195:
         for (int i=0;i<4;i++){
-          chords_vibrato_lfo.amplitude(0.01+value/100.0);
+          chord_vibrato_dc_envelope_array[i]->attack(value);
         }
         break;
-      case 164:
+      case 196:
         for (int i=0;i<4;i++){
-          chords_vibrato_lfo.offset(value/100.0-1);
+          chord_vibrato_dc_envelope_array[i]->hold(value);
+        }
+        break;
+      case 197:
+        for (int i=0;i<4;i++){
+          chord_vibrato_dc_envelope_array[i]->decay(value);
         }
         break;
       case 165:
@@ -605,6 +628,9 @@ void apply_audio_parameter(int adress, int value) {
         break;
       case 192:
         chords_main_filter_mixer.gain(2,value/100.0);
+        break;
+      case 193:
+        chords_amplifier.gain(value/100.0);
         break;
   }
 }

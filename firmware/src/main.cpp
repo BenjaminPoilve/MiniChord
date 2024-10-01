@@ -116,6 +116,8 @@ AudioMixer4 *string_mixer_array[3] = {&string_mix_1, &string_mix_2, &string_mix_
 AudioFilterStateVariable *string_filter_array[12] = {&filter_string_1, &filter_string_2, &filter_string_3, &filter_string_4, &filter_string_5, &filter_string_6, &filter_string_7, &filter_string_8, &filter_string_9, &filter_string_10, &filter_string_11, &filter_string_12};
 // for the chord
 AudioEffectEnvelope *chord_vibrato_envelope_array[4] = {&voice1_vibrato_envelope, &voice2_vibrato_envelope, &voice3_vibrato_envelope, &voice4_vibrato_envelope};
+AudioEffectEnvelope *chord_vibrato_dc_envelope_array[4] = {&voice1_vibrato_dc_envelope, &voice2_vibrato_dc_envelope, &voice3_vibrato_dc_envelope, &voice4_vibrato_dc_envelope};
+AudioMixer4 *chord_vibrato_mixer_array[4] = {&voice1_vibrato_mixer, &voice2_vibrato_mixer, &voice3_vibrato_mixer, &voice4_vibrato_mixer};
 AudioSynthWaveformModulated *chord_osc_1_array[4] = {&voice1_osc1, &voice2_osc1, &voice3_osc1, &voice4_osc1};
 AudioSynthWaveformModulated *chord_osc_2_array[4] = {&voice1_osc2, &voice2_osc2, &voice3_osc2, &voice4_osc2};
 AudioSynthWaveformModulated *chord_osc_3_array[4] = {&voice1_osc3, &voice2_osc3, &voice3_osc3, &voice4_osc3};
@@ -336,12 +338,14 @@ void blink_color_led() {
 void play_single_note(int i, IntervalTimer *timer) {
   timer->end();
   chord_vibrato_envelope_array[i]->noteOn();
+  chord_vibrato_dc_envelope_array[i]->noteOn();
   chord_envelope_array[i]->noteOn();
   chord_envelope_filter_array[i]->noteOn();
 }
 
 void play_note_selected_duration(int i){
   chord_vibrato_envelope_array[i]->noteOn();
+  chord_vibrato_dc_envelope_array[i]->noteOn();
   chord_envelope_array[i]->noteOn();
   chord_envelope_filter_array[i]->noteOn();
   note_off_timing[i]=0;
@@ -562,6 +566,9 @@ void setup() {
   string_delay_mix.gain(0, 1);
   chord_delay_mix.gain(0, 1);
   // simple mixers
+  string_vibrato_mixer.gain(0,0.5);
+  string_vibrato_mixer.gain(1,0.5);
+  envelope_string_vibrato_dc.sustain(0);
   for (int i = 0; i < 3; i++) {
     string_mixer_array[i]->gain(0, 1);
     string_mixer_array[i]->gain(1, 1);
@@ -573,9 +580,10 @@ void setup() {
     chord_voice_mixer_array[i]->gain(1, 1);
     chord_voice_mixer_array[i]->gain(2, 1);
     chord_noise_array[i]->amplitude(0.5);
+    chord_vibrato_mixer_array[i]->gain(0,0.5);
+    chord_vibrato_mixer_array[i]->gain(1,0.5);
+    chord_vibrato_dc_envelope_array[i]->sustain(0); //for the pitch bend no need for sustain
   }
-
-
   // initialising the rest of the hardware
   chord_matrix.setup();
   harp_sensor.setup();
@@ -704,6 +712,7 @@ void loop() {
     for (int i = 0; i < 4; i++) {
       if(note_off_timing[i]>note_pushed_duration){
         chord_vibrato_envelope_array[i]->noteOff();
+        chord_vibrato_dc_envelope_array[i]->noteOff();
         chord_envelope_array[i]->noteOff();
         chord_envelope_filter_array[i]->noteOff();
       }
@@ -727,6 +736,7 @@ void loop() {
       AudioNoInterrupts();
       for (int i = 0; i < 4; i++) {
         chord_vibrato_envelope_array[i]->noteOff();
+        chord_vibrato_dc_envelope_array[i]->noteOff();
         chord_envelope_array[i]->noteOff();
         chord_envelope_filter_array[i]->noteOff();
       }
@@ -847,7 +857,9 @@ void loop() {
     if (value > 1) {
       set_harp_voice_frequency(i, current_harp_notes[i]);
       AudioNoInterrupts();
-      envelope_string_vibrato_1.noteOn();
+      envelope_string_vibrato_lfo.noteOn();
+      envelope_string_vibrato_dc.noteOn();
+
       string_enveloppe_filter_array[i]->noteOn();
       string_enveloppe_array[i]->noteOn();
       AudioInterrupts();
