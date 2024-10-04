@@ -55,6 +55,7 @@ bool sharp_active = false;     // flag for when the sharp is active
 bool continuous_chord = false; // wether the chord is held continuously. Controlled by the "hold" button
 bool rythm_mode = false;
 IntervalTimer note_timer[4]; // timers for delayed chord enveloppe
+bool inhibit_button=false;
 
 //>>SWITCHING LOGIC PARAMETERS<<
 uint8_t note_slash_level = 0;     // the level we are replacing in the chord when slashing (usually the fundamental)
@@ -731,12 +732,23 @@ void loop() {
 
   //>>Handling of chords logic
   // If not button is active in touch mode, then turn everything off
+  //if more than three buttons in a line are on, we don't take it on
   if (!continuous_chord && !rythm_mode) {
     bool one_button_active = false;
+    int line_accumulator[3]={0,0,0};
     for (int i = 1; i < 22; i++) {
-      one_button_active = one_button_active || chord_matrix_array[i].read_value();
+      bool active=chord_matrix_array[i].read_value();
+      one_button_active = one_button_active || active;
+      if(active){
+        line_accumulator[i%3]+=1;
+      }
+    }
+    if(line_accumulator[0]>2 ||line_accumulator[1]>2 || line_accumulator[2]>2){
+      current_line=-1;
+      inhibit_button=true;
     }
     if (!(one_button_active)) { 
+      inhibit_button=false; //we can resume working
       AudioNoInterrupts();
       for (int i = 0; i < 4; i++) {
         if(  chord_envelope_array[i]->isSustain()){
@@ -846,8 +858,11 @@ void loop() {
   sharp_active = chord_matrix_array[0].read_value(); // in any case we record the current value
   for (int i = 1; i < 22; i++) {                     // now the rest of the chord buttons
     int value = chord_matrix_array[i].read_transition();
-    if (value > 1) { // a button was indeed pushed
+    if (value > 1 && !inhibit_button) { // a button was indeed pushed
       button_pushed = true;
+      Serial.println(" pushed");
+      Serial.println(i);
+
       if (current_line == -1) {
         current_line = (i - 1) / 3; // if no line is currently active, we have a new base line
         if (!continuous_chord) {

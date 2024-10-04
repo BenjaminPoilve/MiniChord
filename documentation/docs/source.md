@@ -23,8 +23,7 @@ License (CC BY-NC 4.0)
 
 ## 2D files 
 
-* [UV DTF blue decal sheet](https://github.com/BenjaminPoilve/MiniChord/blob/main/hardware/graphics/print_decal_blue.pdf)
-* [UV DTF white decal sheet](https://github.com/BenjaminPoilve/MiniChord/blob/main/hardware/graphics/print_deca_white.pdf)
+* [Key engraving](https://github.com/BenjaminPoilve/MiniChord/blob/main/hardware/graphics/key_engraving.svg)
 
 ## Electronics
 

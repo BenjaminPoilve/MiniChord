@@ -207,7 +207,7 @@
 <section id="mkdocs-terminal-content">
     <h3 id="getting-started"><strong>Getting started</strong></h3>
 <blockquote>
-<p>If you have a kit version of the minichord, or wish to fully build one yourself, please refer to the <a href="">"Assembly" section</a></p>
+<p>If you have a kit version of the minichord, or wish to fully build one yourself, please refer to the <a href="/assembly">"Assembly" section</a></p>
 </blockquote>
 <p><img alt="[#1 sheet]" src="../ressources/drawing_1.png" title="#1 sheet" /></p>
 <p><strong>To turn it on, simply plug the headphone jack in ①. The main led ② will shine.</strong> If it does not turn on, then its battery is empty, charge it on any USB wallwart with a mini USB cable <strong>③</strong>. </p>
@@ -475,17 +475,21 @@ However, if there is an issue, you can always restore the default presets, so fe
 <p>To be able to better understand the synthesis parameters, please find below the synthesis schematics for the harp and chord section :</p>
 <div class="synthesis_container">
   <pre><code>
-                                                                                            x12
+
+
  Harp section                         ┌ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─
-                                     ┌────────────────────────────────────────────────────────┐│
+                                     ┌────────────────────────────────────────────────────────┐│ x12
                                     ┌┴───────────────────────────────────────────────────────┐│
 ┌─────────┐                         │┌────────────────┐                                      │││
 │DC signal├────────────────────────▶││filter enveloppe│──────────┐          ┌───────────────┐││
 └─────────┘                         │└────────────────┘          └─────────▶│low-pass filter│││├───┐
 ┌───────────┐   ┌────────────────┐  │┌─────────────────────┐  ┌────────┐ ┌─▶│               │││    │
-│vibrato OSC├──▶│vibrato envelope├─▶││modulated string OSC ├─▶│envelope├─┘  └───────────────┘││┘   │
-└───────────┘   └────────────────┘  │└─────────────────────┘  └────────┘                     ├┘    │
-                                    └────────────────────────────────────────────────────────┘     │
+│vibrato OSC├──▶│vibrato envelope├┬▶││modulated string OSC ├─▶│envelope├─┘  └───────────────┘││┘   │
+└───────────┘   └────────────────┘│ │└─────────────────────┘  └────────┘                     ├┘    │
+                                  │ └────────────────────────────────────────────────────────┘     │
+┌───────────┐   ┌────────────────┐│                                                                │
+│  bend DC  ├──▶│  bend envelope ├┘                                                                │ 
+└───────────┘   └────────────────┘                                                                 │                    
                                                                                                    │
 ┌──────────────────────────────────────────────────────────────────────────────────────────────────┘
 │  ┌──────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────┐  ┌────────────┐      ┌──────────┐
@@ -504,8 +508,10 @@ However, if there is an issue, you can always restore the default presets, so fe
 └───────────┘  └──────────┘└──────────┘  └─────────────┘            └──────────┘
 
 
-<br>
- <br>
+
+
+
+
 
  Chord section     ┌──────────────────────────────────────────────────────────────────────┐
                   ┌┴─────────────────────────────────────────────────────────────────────┐│ x4
@@ -514,9 +520,9 @@ However, if there is an issue, you can always restore the default presets, so fe
 ┌───────────┐   │┌────────────────┐  ┌───────────────┐  ┌─────┐  ┌──────┐  ┌──────────┐││││
 │vibrato OSC├─▶ ││vibrato envelope├┬▶│modulated OSC 1├─▶│ mix ├─▶│filter├─▶│multiplier│││││
 └───────────┘   │└────────────────┘│ ├───────────────┤  │     │  └──────┘  └──────────┘││││
-                │                  ├▶│modulated OSC 2├─▶│     │     ▲           ▲      ││││
-                │                  │ ├───────────────┤  │     │     │           │      ││││────────┐
-                │                  └▶│modulated OSC 3├─▶│     │     │           │      ││││        │
+┌───────────┐   │┌────────────────┐├▶│modulated OSC 2├─▶│     │     ▲           ▲      ││││
+│  bend DC  ├─▶ ││vibrato envelope├│ ├───────────────┤  │     │     │           │      ││││────────┐
+└───────────┘   │└────────────────┘└▶│modulated OSC 3├─▶│     │     │           │      ││││        │
                 │                    └─────────┬─────┤  │     │     │           │      ││││        │
                 │                              │noise├─▶│     │     │           │      ││││        │
 ┌──────────┐    │┌───────────────┐             └─────┘  └─────┘     │           │      ││││        │
