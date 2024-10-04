@@ -3,18 +3,22 @@
 
 >If you have a kit version of the minichord, or wish to fully build one yourself, please refer to the ["Assembly" section]()
 
-![[#1 sheet]](./ressources/todo.png "#1 sheet")
+![[#1 sheet]](./ressources/drawing_1.png "#1 sheet")
 
 
 **To turn it on, simply plug the headphone jack in ①. The main led ② will shine.** If it does not turn on, then its battery is empty, charge it on any USB wallwart with a mini USB cable **③**. 
 
-**Once it is started, push one the square buttons ④. You should hear a chord being played.** If you do not hear a sound, check that the potentiometer with the indication "Chord" is not fully turned left **⑤**. The chord will vary depending on which button you press. 
+![[#2 sheet]](./ressources/drawing_2.png "#2 sheet")
 
-**No drag your finger across the black vertical bar ⑥. You should hear the sound of multiple notes being played sequentially, like a harp.**  If you do not hear that, check that the potentiometer with the indication "Harp" is not fully turned left **⑦**. Those notes depend on the selected chord. Push different square buttons and test the way the harp reacts.
+**Once it is started, push one the square buttons ④. You should hear a chord being played.** If you do not hear a sound, check that the first potentiometer is not fully turned left **⑤**. The chord will vary depending on which button you press. 
+
+![[#3 sheet]](./ressources/drawing_3.png "#3 sheet")
+
+**No drag your finger across the black vertical bar ⑥. You should hear the sound of multiple notes being played sequentially, like a harp.**  If you do not hear that, check that the second potentiometer is not fully turned left **⑦**. Those notes depend on the selected chord. Push different square buttons and test the way the harp reacts.
 
 That's it, you got started! 
 
-**To switch the minichord off, simply remove the headphone jack ⑧**. Don't forget it plugged in or it will empty its battery!
+**To switch the minichord off, simply remove the headphone jack**. Don't forget it plugged in or it will empty its battery!
 
 
 # **Basic usage**
@@ -27,15 +31,15 @@ That's it, you got started!
 The minichord has :
 
 * **21 main chord buttons**, divided in 7 column of 3 buttons;
-* **1 "sharp" button (indicated by #)**.
+* **1 "sharp" button (red colored)**.
 
-**Each column of the main chord buttons is associated to a note of the C Major scale**. It is indicated by the letter at the top of the column. 
+**Each column of the main chord buttons is associated to a note of the C Major scale**. It is indicated by the letter on the first row of buttons. 
 
-**Each row of the main chord button is associated to a chord type**. It is indicated by a marking at the end of the row:
+**Each row of the main chord button is associated to a chord type**:
 
-* *Maj* indicates that the chord will be a major one;
-* *Min* indicated that the chord will be a minor one;
-* *7th* indicates that the chord will be a dominant 7th one. 
+* the first row will produce major chords;
+* the second row will produce minor chords;
+* the third row will produce 7th chords. 
 
 By following the row and the column of each button, we can identify the specific chord associated. **Here is the full table of the chord available by the push of a single button**:
 
@@ -48,7 +52,7 @@ By following the row and the column of each button, we can identify the specific
 
 
 
-**The "sharp" modifier button will add a semitone to each note of the chord, and can be added to any combinaison of the main chord buttons.**
+**The "sharp" modifier button (red button) will add a semitone to each note of the chord, and can be added to any combinaison of the main chord buttons.**
 
 > ⚠ In the basic usage only one chord button is pushed at a time to trigger a new chord. However it is possible to combine buttons to construct more complex chords. This is explained in the ["Advanced usage" section]().
 
