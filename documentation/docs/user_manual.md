@@ -1,7 +1,7 @@
 
 # **Getting started**
 
->If you have a kit version of the minichord, or wish to fully build one yourself, please refer to the ["Assembly" section]()
+>If you have a kit version of the minichord, or wish to fully build one yourself, please refer to the ["Assembly" section](/assembly)
 
 ![[#1 sheet]](./ressources/drawing_1.png "#1 sheet")
 

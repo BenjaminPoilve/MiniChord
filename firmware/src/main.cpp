@@ -153,6 +153,9 @@ int8_t chord_shuffling_array[6][7] = {
     {10, 11, 12, 13, 2, 15, 16},//one octave up with low fifth and high chromatics
     {20, 21, 22, 23, 24, 25, 26}};//two octave up
 int8_t chord_shuffling_selection = 0;
+// retrigger release for chord delayed note
+
+int chord_retrigger_release=0;
 // strings filter parameters
 float string_filter_keytrack = 0;
 int string_filter_base_freq = 0;
@@ -204,7 +207,7 @@ void load_config(int bank_number);
 void recalculate_timer();
 uint8_t calculate_note_harp(uint8_t string, bool slashed, bool sharp);
 uint8_t calculate_note_chord(uint8_t voice, bool slashed, bool sharp);
-
+void set_chord_voice_frequency(uint8_t i, uint16_t current_note);
 void calculate_ws_array();
 
 //-->>LED HSV CALCULATION
@@ -337,6 +340,7 @@ void blink_color_led() {
 }
 void play_single_note(int i, IntervalTimer *timer) {
   timer->end();
+  set_chord_voice_frequency(i, current_applied_chord_notes[i]);
   chord_vibrato_envelope_array[i]->noteOn();
   chord_vibrato_dc_envelope_array[i]->noteOn();
   chord_envelope_array[i]->noteOn();
@@ -732,13 +736,15 @@ void loop() {
     for (int i = 1; i < 22; i++) {
       one_button_active = one_button_active || chord_matrix_array[i].read_value();
     }
-    if (!(one_button_active) && chord_envelope_array[3]->isSustain()) { // i think the issue is there a bit of a hack now 
+    if (!(one_button_active)) { 
       AudioNoInterrupts();
       for (int i = 0; i < 4; i++) {
-        chord_vibrato_envelope_array[i]->noteOff();
-        chord_vibrato_dc_envelope_array[i]->noteOff();
-        chord_envelope_array[i]->noteOff();
-        chord_envelope_filter_array[i]->noteOff();
+        if(  chord_envelope_array[i]->isSustain()){
+          chord_vibrato_envelope_array[i]->noteOff();
+          chord_vibrato_dc_envelope_array[i]->noteOff();
+          chord_envelope_array[i]->noteOff();
+          chord_envelope_filter_array[i]->noteOff();
+        }
       }
       AudioInterrupts();
     }
@@ -795,7 +801,7 @@ void loop() {
       // But that target should only be applied if we have an action from the user: the push of a button
       if (button_pushed) {
         Serial.println("Updating frequences");
-        if (!rythm_mode) { // if we are not in rythm mode we can then directly apply the frequency
+        if (!rythm_mode && !trigger_chord && !retrigger_chord ) { // if we are not in rythm mode we can then directly apply the frequency
           for (int i = 0; i < 4; i++) {
             set_chord_voice_frequency(i, current_chord_notes[i]);
           }
@@ -822,10 +828,11 @@ void loop() {
         }
       }
       if ((trigger_chord || (button_pushed && retrigger_chord)) && !rythm_mode) { // if there is a explicit signal to trigger the enveloppe, or we are in a situation where trigger is needed, we do it
-        note_timer[0].begin([] { play_single_note(0, &note_timer[0]); }, 10);          // those allow for delayed triggering
-        note_timer[1].begin([] { play_single_note(1, &note_timer[1]); }, 10 + inter_string_delay + random(random_delay));
-        note_timer[2].begin([] { play_single_note(2, &note_timer[2]); }, 10 + inter_string_delay * 2 + random(random_delay));
-        note_timer[3].begin([] { play_single_note(3, &note_timer[3]); }, 10 + inter_string_delay * 3 + random(random_delay));
+        Serial.println("trigger");
+        note_timer[0].begin([] { play_single_note(0, &note_timer[0]); }, 10+chord_retrigger_release*1000);          // those allow for delayed triggering
+        note_timer[1].begin([] { play_single_note(1, &note_timer[1]); }, 10 +chord_retrigger_release*1000+ inter_string_delay + random(random_delay));
+        note_timer[2].begin([] { play_single_note(2, &note_timer[2]); }, 10 + chord_retrigger_release*1000+inter_string_delay * 2 + random(random_delay));
+        note_timer[3].begin([] { play_single_note(3, &note_timer[3]); }, 10 + chord_retrigger_release*1000+inter_string_delay * 3 + random(random_delay));
         trigger_chord = false;
       }
       button_pushed = false; // in any case after that loop, we can reset button pushed

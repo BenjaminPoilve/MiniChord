@@ -38,7 +38,7 @@ class potentiometer{
   //Potentiometer hardware parameters
   int pot_pin;
   int16_t dead_zone=20;
-  int16_t threshold=2;
+  int16_t threshold=4;
   //To access initial value
   int16_t *current_sysex_parameters_pointer;
 };

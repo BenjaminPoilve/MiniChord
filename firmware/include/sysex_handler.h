@@ -179,101 +179,104 @@ void apply_audio_parameter(int adress, int value) {
         string_vibrato_lfo.amplitude(0.01+value/100.0);
         break;
       case 65:
-        string_vibrato_dc.amplitude(value/100.0-1);
-        break;
-      case 94:
-        envelope_string_vibrato_dc.attack(value);
-        break;
-      case 95:
-        envelope_string_vibrato_dc.hold(value);
-        break;
-      case 96:
-        envelope_string_vibrato_dc.decay(value);
-        break;
-      case 66:
         envelope_string_vibrato_lfo.attack(value);
         break;
-      case 67:
+      case 66:
         envelope_string_vibrato_lfo.hold(value);
         break;
-      case 68:
+      case 67:
         envelope_string_vibrato_lfo.decay(value);
         break;
-      case 69:
+      case 68:
         envelope_string_vibrato_lfo.sustain(value/100.0);
         break;
-      case 70:
+      case 69:
         envelope_string_vibrato_lfo.release(value);
         break;
-      case 71:
+      case 70:
         envelope_string_vibrato_lfo.releaseNoteOn(value);
         break;
+      case 71:
+        string_vibrato_dc.amplitude(value/100.0-1);
+        break;
       case 72:
+        envelope_string_vibrato_dc.attack(value);
+        break;
+      case 73:
+        envelope_string_vibrato_dc.hold(value);
+        break;
+      case 74:
+        envelope_string_vibrato_dc.decay(value);
+        break;
+      case 75:
+        envelope_string_vibrato_dc.releaseNoteOn(value);
+        break;
+      case 76:
         for (int i=0;i<12;i++){
           string_waveform_array[i]->frequencyModulation(value/100.0);
         }
         break;
-      case 73:
+      case 77:
         delay_strings.delay(0,value);
         break;
-      case 74:
+      case 78:
         filter_delay_strings.frequency(value);
         break;
-      case 75:
+      case 79:
         filter_delay_strings.resonance(value/100.0);
         break;
-      case 76:
+      case 80:
         string_delay_mix.gain(1,value/100.0);
         break;
-      case 77:
+      case 81:
         string_delay_mix.gain(2,value/100.0);
         break;
-      case 78:
+      case 82:
         string_delay_mix.gain(3,value/100.0);
         break;
-      case 79:
+      case 83:
         strings_effect_mix.gain(0,value/100.0);
         break;
-      case 80:
+      case 84:
         strings_effect_mix.gain(1,value/100.0);
         break;
-      case 81:
+      case 85:
         reverb_mixer.gain(0,value/100.0);stereo_r_mixer.gain(0,(1-reverb_dry_proportion*value/100.0)*pan);stereo_l_mixer.gain(0,1-reverb_dry_proportion*value/100.0);
         break;
-      case 82:
+      case 86:
         string_waveshaper_mix.gain(0,1-value/100.0);string_waveshaper_mix.gain(1,value/100.0);
         break;
-      case 83:
+      case 87:
         ws_sin_param=value;calculate_ws_array(); string_waveshape.shape(wave_shape,257);
         break;
-      case 84:
+      case 88:
         string_filter.frequency(value);
         break;
-      case 85:
+      case 89:
         string_filter.resonance(value/100.0);
         break;
-      case 86:
+      case 90:
         string_filter_mixer.gain(0,value/100.0);
         break;
-      case 87:
+      case 91:
         string_filter_mixer.gain(1,value/100.0);
         break;
-      case 88:
+      case 92:
         string_filter_mixer.gain(2,value/100.0);
         break;
-      case 89:
+      case 93:
         string_filter_lfo.begin(value);
         break;
-      case 90:
+      case 94:
         string_filter_lfo.frequency(value/100.0);
         break;
-      case 91:
+      case 95:
         string_filter_lfo.amplitude(value/100.0);
         break;
-      case 92:
+      case 96:
         string_filter.octaveControl(value/100.0);
         break;
-      case 93:
+      case 97:
         string_amplifier.gain(value/100.0);
         break;
       case 3:
@@ -373,7 +376,7 @@ void apply_audio_parameter(int adress, int value) {
         break;
       case 142:
         for (int i=0;i<4;i++){
-          chord_envelope_array[i]->releaseNoteOn(value);
+          chord_envelope_array[i]->releaseNoteOn(value); chord_retrigger_release=value;
         }
         break;
       case 143:
@@ -465,105 +468,110 @@ void apply_audio_parameter(int adress, int value) {
       case 163:
         chords_vibrato_lfo.amplitude(0.01+value/100.0);
         break;
-      case 194:
-        chords_vibrato_dc.amplitude(value/100.0-1);
-        break;
-      case 195:
-        for (int i=0;i<4;i++){
-          chord_vibrato_dc_envelope_array[i]->attack(value);
-        }
-        break;
-      case 196:
-        for (int i=0;i<4;i++){
-          chord_vibrato_dc_envelope_array[i]->hold(value);
-        }
-        break;
-      case 197:
-        for (int i=0;i<4;i++){
-          chord_vibrato_dc_envelope_array[i]->decay(value);
-        }
-        break;
-      case 165:
+      case 164:
         for (int i=0;i<4;i++){
           chord_vibrato_envelope_array[i]->attack(value);
         }
         break;
-      case 166:
+      case 165:
         for (int i=0;i<4;i++){
           chord_vibrato_envelope_array[i]->hold(value);
         }
         break;
-      case 167:
+      case 166:
         for (int i=0;i<4;i++){
           chord_vibrato_envelope_array[i]->decay(value);
         }
         break;
-      case 168:
+      case 167:
         for (int i=0;i<4;i++){
           chord_vibrato_envelope_array[i]->sustain(value/100.0);
         }
         break;
-      case 169:
+      case 168:
         for (int i=0;i<4;i++){
           chord_vibrato_envelope_array[i]->release(value);
         }
         break;
-      case 170:
+      case 169:
         for (int i=0;i<4;i++){
           chord_vibrato_envelope_array[i]->releaseNoteOn(value);
         }
         break;
+      case 170:
+        chords_vibrato_dc.amplitude(value/100.0-1);
+        break;
       case 171:
+        for (int i=0;i<4;i++){
+          chord_vibrato_dc_envelope_array[i]->attack(value);
+        }
+        break;
+      case 172:
+        for (int i=0;i<4;i++){
+          chord_vibrato_dc_envelope_array[i]->hold(value);
+        }
+        break;
+      case 173:
+        for (int i=0;i<4;i++){
+          chord_vibrato_dc_envelope_array[i]->decay(value);
+        }
+        break;
+      case 174:
+        for (int i=0;i<4;i++){
+          chord_vibrato_dc_envelope_array[i]->releaseNoteOn(value);
+        }
+        break;
+      case 175:
         for (int i=0;i<4;i++){
           chord_osc_1_array[i]->frequencyModulation(value/100.0);chord_osc_2_array[i]->frequencyModulation(value/100.0);chord_osc_3_array[i]->frequencyModulation(value/100.0);
         }
         break;
-      case 172:
+      case 176:
         delay_chords.delay(0,value);
         break;
-      case 173:
+      case 177:
         filter_delay_chords.frequency(value);
         break;
-      case 174:
+      case 178:
         filter_delay_chords.resonance(value/100.0);
         break;
-      case 175:
+      case 179:
         chord_delay_mix.gain(1,value/100.0);
         break;
-      case 176:
+      case 180:
         chord_delay_mix.gain(2,value/100.0);
         break;
-      case 177:
+      case 181:
         chord_delay_mix.gain(3,value/100.0);
         break;
-      case 178:
+      case 182:
         chords_effect_mix.gain(0,value/100.0);
         break;
-      case 179:
+      case 183:
         chords_effect_mix.gain(1,value/100.0);
         break;
-      case 180:
+      case 184:
         reverb_mixer.gain(1,value/100.0);stereo_r_mixer.gain(1,1-reverb_dry_proportion*value/100.0);stereo_l_mixer.gain(1,(1-reverb_dry_proportion*value/100.0)*pan);
         break;
-      case 181:
+      case 185:
         chord_waveshaper_mix.gain(0,1-value/100.0);chord_waveshaper_mix.gain(1,value/100.0);
         break;
-      case 182:
+      case 186:
         ws_sin_param=value;calculate_ws_array(); chord_waveshape.shape(wave_shape,257);
         break;
-      case 183:
+      case 187:
         rythm_bpm=value;recalculate_timer();
         break;
-      case 184:
+      case 188:
         rythm_loop_length=value;
         break;
-      case 185:
+      case 189:
         rythm_limit_change_to_every=value;
         break;
-      case 186:
+      case 190:
         shuffle=value/100.0;recalculate_timer();
         break;
-      case 187:
+      case 191:
         note_pushed_duration=value;
         break;
       case 220:
@@ -614,22 +622,22 @@ void apply_audio_parameter(int adress, int value) {
       case 235:
         rythm_pattern[15]=value;
         break;
-      case 188:
+      case 192:
         chords_main_filter.frequency(value);
         break;
-      case 189:
+      case 193:
         chords_main_filter.resonance(value/100.0);
         break;
-      case 190:
+      case 194:
         chords_main_filter_mixer.gain(0,value/100.0);
         break;
-      case 191:
+      case 195:
         chords_main_filter_mixer.gain(1,value/100.0);
         break;
-      case 192:
+      case 196:
         chords_main_filter_mixer.gain(2,value/100.0);
         break;
-      case 193:
+      case 197:
         chords_amplifier.gain(value/100.0);
         break;
   }
