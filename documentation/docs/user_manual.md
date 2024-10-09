@@ -23,7 +23,7 @@ That's it, you got started!
 
 # **Basic usage**
 
-![[#2 sheet]](./ressources/todo.png "#2 sheet")
+![Chord selector buttons](./ressources/drawing_4.png "Chord selector buttons")
 
 
 ## ① Chord selector buttons
@@ -31,7 +31,7 @@ That's it, you got started!
 The minichord has :
 
 * **21 main chord buttons**, divided in 7 column of 3 buttons;
-* **1 "sharp" button (red colored)**.
+* **1 "sharp" button (on the top left)**.
 
 **Each column of the main chord buttons is associated to a note of the C Major scale**. It is indicated by the letter on the first row of buttons. 
 
@@ -52,10 +52,11 @@ By following the row and the column of each button, we can identify the specific
 
 
 
-**The "sharp" modifier button (red button) will add a semitone to each note of the chord, and can be added to any combinaison of the main chord buttons.**
+**The "sharp" modifier button (top left) will add a semitone to each note of the chord, and can be added to any combinaison of the main chord buttons.**
 
 > ⚠ In the basic usage only one chord button is pushed at a time to trigger a new chord. However it is possible to combine buttons to construct more complex chords. This is explained in the ["Advanced usage" section]().
 
+![Harp touch zone](./ressources/drawing_5.png "Harp touch zone")
 
 
 ## ② Harp touch zone 
@@ -63,6 +64,8 @@ By following the row and the column of each button, we can identify the specific
 The harp touch zone is divided **in 12 different section**, stacked vertically. Touching each section will trigger a note. Notes can be held by keeping the contact with the section. 
 
 This touch zone can be "strummed" by sweeping the finger across all sections, or individual notes can be triggered. 
+
+![Preset selection buttons and indicator](./ressources/drawing_6.png "Preset selection buttons and indicator")
 
 ## ③ Preset selection buttons and indicator
 
@@ -72,6 +75,7 @@ The main led will shine with a different color for each preset to help you ident
 
 
 
+![Potentiometers](./ressources/drawing_7.png "Potentiometers")
 
 ## ④ Potentiometers 
 
@@ -83,6 +87,7 @@ Each of the three potentiometer has one main function, designated by the marking
 
 > ⚠ Each of the potentiometer has a secondary function, which is explained in the ["Advanced usage" section](#advanced-usage). 
 
+![Rythm mode button and indicator](./ressources/drawing_8.png "Rythm mode button and indicator")
 
 ## ⑤ Rythm mode button and indicator
 
@@ -92,6 +97,8 @@ The rythm mode button has two basic mode:
 * **continuous**: the chord will keep playing until you push a new button, and seamlessly switch to the next chord. In that mode, the indicator led will be on. 
 
 Simply push the rythm mode button to switch from one mode to the other. That button may also be used to switch to the arpegiator mode with a long push, but that subject is handled in the [ "Advanced usage" section](#advanced-usage). 
+
+![Charging](./ressources/drawing_9.png "Charging")
 
 ## ⑥ Charging 
 
@@ -112,14 +119,13 @@ There is two ways to access additional chords on the minichord:
 
 **By combining buttons within the same column**. 
 
-![[#3 sheet]](./ressources/todo.png "#3 sheet")
-
+![combining in a column](./ressources/drawing_10.png "combining in a column")
 
 It is possible to push more than one button within the same column to access more complicated chords. **The possible combination are the following**:
 
-* The *7th* button can be combined with either the *Maj* or the *Min* button of the same column to obtain a* Major 7* and *Minor 7* chord of the same note;
-* The *Maj* and the *Min* button can be combined to obtain an *augmented* chord;
-* The three button together (*Maj*, *Min*, and *7th*) can be combined to obtain an *diminished* chord.
+* The *7th* button can be combined with either the *Maj* or the *Min* button of the same column to obtain a* Major 7* (①) and *Minor 7* (②) chord of the same note;
+* The *Maj* and the *Min* button can be combined to obtain an *augmented* chord (③);
+* The three button together (*Maj*, *Min*, and *7th*) can be combined to obtain an *diminished* chord (④).
 
 
 >⚠ Please note that chord change always happen when a button is pushed. Simply releasing buttons will not change the chord. This is because properly timing a release is difficult with pushbuttons and it would lead to unwanted chord change when switching from a complex chord position. For example.. 
