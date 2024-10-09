@@ -130,14 +130,16 @@ It is possible to push more than one button within the same column to access mor
 
 >⚠ Please note that chord change always happen when a button is pushed. Simply releasing buttons will not change the chord. This is because properly timing a release is difficult with pushbuttons and it would lead to unwanted chord change when switching from a complex chord position. For example.. 
 
-**By combining buttons across different column**
+**By combining buttons across different columns**
 
-![[#4 sheet]](./ressources/todo.png "#4 sheet")
 
 
 When a chord is selected within a colum (even a complex one), **it is possible to replace one of the note with the fundamental from another column**. 
 
 To do that simply **push any button from the column of the note you wish to borrow the fundamental from**. 
+
+![combining across columns](./ressources/drawing_11.png "combining across columns")
+
 
 Usually the replaced note is the fundamental of the chord and the substitution is kown as a "slash chord", written for example Am/E for a A minor chord with E as the fundamental. However this is not the case for all presets. That setting is indicated per preset in the [Default presets](#default-presets) section.
 
@@ -151,16 +153,16 @@ Each of the potentiometer allows you to access a secondary function. The specifi
 
 **To access the secondary function, you need to hold the "sharp button" while turning the potentiometer.**
 
-![[#5 sheet]](./ressources/todo.png "#5 sheet")
+![Secondary potentiometer functions](./ressources/drawing_12.png "Secondary potentiometer functions")
 
 
 >⚠ Please note that you secondary parameter value selected will be memorized by the minichord, but only if you switch between presets (to avoid having to write to memory the selected value with every parameter change). 
 
 ## Arpeggiator
 
-![[#6 sheet]](./ressources/todo.png "#6 sheet")
 
 The minichord has a very basic apreggiator function, allowing to play 16 steps pattern on the four voices of the chord section. **To activate the arpeggiator, do a long (more than 1 second) press on the "rythm" button**. The led will flash rythmically and the arpeggiator will start. 
+![Arpeggiator](./ressources/drawing_13.png "Arpeggiator")
 
 **While the arpeggiator is playing, you can move from chord to chord by using the chord buttons as usual.** 
 
@@ -209,14 +211,14 @@ On the below table, we show the way chord are commonly written in chord chart an
 
 | Full chord name   |    Common notations      | Button selection pattern|
 |----------|:-------------:|:------:|
-| Major chord |    A, A major   |   |
-| Minor chord | Am, Aminor, Ami, A_ |  |
-| Dominant 7th chord | A7, A Seven, Adom |     |
-| Major 7th chord | Amaj7, AΔ, AΔ7, AM7, Ama7|    |
-| Minor 7th chord | Am7, A_7, Ami7, Amin7 |    |
-| Augmented chord | Aaug, A+ |    |
-| Diminished chord | Adim, A° |    |
-| Slash chord | A/G (for G substitution ) |    |
+| Major chord |    A, A major   |  ![pattern](./ressources/pattern_1.png "pattern") |
+| Minor chord | Am, Aminor, Ami, A_ | ![pattern](./ressources/pattern_2.png "pattern") |
+| Dominant 7th chord | A7, A Seven, Adom |  ![pattern](./ressources/pattern_3.png "pattern")   |
+| Major 7th chord | Amaj7, AΔ, AΔ7, AM7, Ama7| ![pattern](./ressources/pattern_4.png "pattern")   |
+| Minor 7th chord | Am7, A_7, Ami7, Amin7 | ![pattern](./ressources/pattern_5.png "pattern")   |
+| Augmented chord | Aaug, A+ |  ![pattern](./ressources/pattern_6.png "pattern")  |
+| Diminished chord | Adim, A° | ![pattern](./ressources/pattern_7.png "pattern")   |
+| Slash chord | A/G (for G substitution ) | ![pattern](./ressources/pattern_8.png "pattern")   |
 
 
 **Most of the time, the chords are easily playable on the minichord**. If not, it is almost always possible to find acceptable substitutions, but that might require a bit more theoritical knowledge for the player (for example to calculate which slash chord might be an acceptable ersatz for complex chord). 
