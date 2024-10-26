@@ -6,7 +6,7 @@ This repository contains the source file both for the minichord itself and its d
 
 The best way to get to know this project is to visit the [minichord website](https://minichord.com/) which contains the documentation of the project. 
 
-In particular:
+In particular it contains:
 
 - the [user manual of the minichord](https://minichord.com/user_manual/)
 - the [assembly guide of the minichord](https://minichord.com/assembly/)
@@ -20,7 +20,7 @@ The hardware folder contains the necessary ressources to build a minichord.
 All hardware is provided under a Creative Commons Attribution-NonCommercial 4.0 International Public
 License (CC BY-NC 4.0). 
 
-In particular: 
+In particular it contains: 
 
 - the [files necessary to manufacture the PCB](https://github.com/BenjaminPoilve/MiniChord/tree/main/hardware/PCB)
 - the [full BOM of the project](https://github.com/BenjaminPoilve/MiniChord/tree/main/hardware/BOM)
@@ -31,7 +31,9 @@ In particular:
 
 The firmware folder contains the project firmware and necessary programming ressources.
 
-In particular: 
+All software is provided under a 3-clause BSD License.
+
+In particular it contains: 
 - the [Hex firmware](https://github.com/BenjaminPoilve/MiniChord/blob/main/firmware/firmware.hex)
 - the full [PlatformIO project](https://github.com/BenjaminPoilve/MiniChord/tree/main/firmware)
 - the [minicontrol software](https://github.com/BenjaminPoilve/MiniChord/tree/main/firmware/mini_control)
