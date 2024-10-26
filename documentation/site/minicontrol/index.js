@@ -176,6 +176,29 @@ function onMIDIFailure() {
   document.getElementById("information_text").innerHTML = "> please reload and provide the authorisation to access the minichord";
   document.getElementById("information_zone").focus();
 }
+
+function set_slider_to_value(slider_num, sysex_value){
+  var result = document.querySelectorAll('[adress_field="' + slider_num + '"]');
+  if (result.length > 0) {
+    var slider_value
+    if (result[0].getAttribute("curve") == "exponential") {
+      slider_value = Math.round((result[0].max * Math.log(sysex_value) / Math.log(result[0].max)));
+    } else {
+      slider_value = sysex_value
+    }
+    if (result[0].getAttribute("data_type") == "float") {
+      result[0].value = slider_value / float_multiplier;
+      var value_zone = document.getElementById("value_zone" + slider_num);
+      console.log(value_zone);
+      value_zone.innerHTML = sysex_value / float_multiplier
+    } else {
+      result[0].value = slider_value;
+      var value_zone = document.getElementById("value_zone" + slider_num);
+      console.log(value_zone);
+      value_zone.innerHTML = sysex_value
+    }
+  }
+}
 function process_current_data(midiMessage) {
   data = midiMessage.data.slice(1);
   if (data.length != parameter_size * 2 + 1) {
@@ -201,36 +224,22 @@ function process_current_data(midiMessage) {
         }
 
       } else {
-        var result = document.querySelectorAll('[adress_field="' + i + '"]');
-        if (result.length > 0) {
-          var slider_value
-          if (result[0].getAttribute("curve") == "exponential") {
-            slider_value = Math.round((result[0].max * Math.log(sysex_value) / Math.log(result[0].max)));
-          } else {
-            slider_value = sysex_value
-          }
-          if (result[0].getAttribute("data_type") == "float") {
-            result[0].value = slider_value / float_multiplier;
-            var value_zone = document.getElementById("value_zone" + i);
-            console.log(value_zone);
-            value_zone.innerHTML = sysex_value / float_multiplier
-          } else {
-            result[0].value = slider_value;
-            var value_zone = document.getElementById("value_zone" + i);
-            console.log(value_zone);
-            value_zone.innerHTML = sysex_value
-          }
-        }
+        set_slider_to_value(i, sysex_value);
       }
     }
     //We override the potentiometer value that might be stored (so we can rightfully test it)
     for( const i of potentiometer_memory_adress){
       console.log(i);
       send_parameter(minichord_device, i, 512);
+      set_slider_to_value(i, 512);
+
     }
-    for( const i of volume_memory_adress){ //we make sure that the volume is 1
+    
+    for( const i of volume_memory_adress){ //we make sure that the volume mean is 0.5
       console.log(i);
-      send_parameter(minichord_device, i, 1*100);
+      send_parameter(minichord_device, i, 0.5*100);
+      set_slider_to_value(i, 0.5*100);
+
     }
     //We apply the bank number to dropdown and header
     let element = document.getElementById("bank_number_selection");

@@ -81,9 +81,9 @@ The main led will shine with a different color for each preset to help you ident
 
 Each of the three potentiometer has one main function, designated by the marking on the enclosure :
 
-* **The "Chord" potentiometer** sets up the volume of the chord section;
-* **The "Harp" potentiometer** sets up the volume of the harp section;
-* **The "Mod" potentiometer** is assigned to a different function for each preset, depending on what is usefull for it. 
+* **The first potentiometer from the top** sets up the volume of the chord section;
+* **The second potentiometer from the top** sets up the volume of the harp section;
+* **The third potentiometer from the top** is assigned to a different function for each preset, depending on what is usefull for it. 
 
 > ⚠ Each of the potentiometer has a secondary function, which is explained in the ["Advanced usage" section](#advanced-usage). 
 
@@ -91,7 +91,7 @@ Each of the three potentiometer has one main function, designated by the marking
 
 ## ⑤ Rythm mode button and indicator
 
-The rythm mode button has two basic mode:
+The rythm mode button (on the top right) has two basic mode:
 
 * **discrete**: the chord only stays on for as long as you keep the relevant button pushed. In that mode, the indicator led will be off.
 * **continuous**: the chord will keep playing until you push a new button, and seamlessly switch to the next chord. In that mode, the indicator led will be on. 
@@ -123,15 +123,14 @@ There is two ways to access additional chords on the minichord:
 
 It is possible to push more than one button within the same column to access more complicated chords. **The possible combination are the following**:
 
-* The *7th* button can be combined with either the *Maj* or the *Min* button of the same column to obtain a* Major 7* (①) and *Minor 7* (②) chord of the same note;
-* The *Maj* and the *Min* button can be combined to obtain an *augmented* chord (③);
-* The three button together (*Maj*, *Min*, and *7th*) can be combined to obtain an *diminished* chord (④).
+* The button from the third row can be combined with button from either the first or the second row of the same column to obtain a* Major 7* (①) and *Minor 7* (②) chord of the same note;
+* The first and second row button can be combined within a column to obtain an *augmented* chord (③);
+* The three button together can be combined to obtain an *diminished* chord (④).
 
 
 >⚠ Please note that chord change always happen when a button is pushed. Simply releasing buttons will not change the chord. This is because properly timing a release is difficult with pushbuttons and it would lead to unwanted chord change when switching from a complex chord position. For example.. 
 
 **By combining buttons across different columns**
-
 
 
 When a chord is selected within a colum (even a complex one), **it is possible to replace one of the note with the fundamental from another column**. 
@@ -147,8 +146,6 @@ Usually the replaced note is the fundamental of the chord and the substitution i
 
 ## Secondary potentiometer functions
 
-
-
 Each of the potentiometer allows you to access a secondary function. The specific secondary function will depend on the selected preset, and is indicated per preset in the [Default presets](#default-presets) section.
 
 **To access the secondary function, you need to hold the "sharp button" while turning the potentiometer.**
@@ -161,7 +158,8 @@ Each of the potentiometer allows you to access a secondary function. The specifi
 ## Arpeggiator
 
 
-The minichord has a very basic apreggiator function, allowing to play 16 steps pattern on the four voices of the chord section. **To activate the arpeggiator, do a long (more than 1 second) press on the "rythm" button**. The led will flash rythmically and the arpeggiator will start. 
+The minichord has a very basic apreggiator function, allowing to play 16 steps pattern on the four voices of the chord section. **To activate the arpeggiator, do a long (more than 1 second) press on the "rythm" button** (on the top right). The led will flash rythmically and the arpeggiator will start. 
+
 ![Arpeggiator](./ressources/drawing_13.png "Arpeggiator")
 
 **While the arpeggiator is playing, you can move from chord to chord by using the chord buttons as usual.** 

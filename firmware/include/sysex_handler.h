@@ -28,7 +28,7 @@ void apply_audio_parameter(int adress, int value) {
         main_reverb.diffusion(value/100.0);
         break;
       case 29:
-        pan=value/100.0;apply_audio_parameter(83, current_sysex_parameters[83]);apply_audio_parameter(186, current_sysex_parameters[186]);
+        pan=value/100.0;apply_audio_parameter(85, current_sysex_parameters[85]);apply_audio_parameter(184, current_sysex_parameters[184]);
         break;
       case 10:
         chord_pot.set_alternate(value);
