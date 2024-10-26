@@ -28,7 +28,7 @@ License (CC BY-NC 4.0)
 ## Electronics
 
 
-* [Full BOM](https://github.com/BenjaminPoilve/MiniChord/blob/main/hardware/full_BOM.pdf)
+* [Full BOM](https://github.com/BenjaminPoilve/MiniChord/blob/main/hardware/BOM/full_BOM.pdf)
 * [Main PCB schematics](https://github.com/BenjaminPoilve/MiniChord/blob/main/hardware/PCB/miniChord_main_PCB/MiniChord.pdf)
 * [Main PCB Gerber file](https://github.com/BenjaminPoilve/MiniChord/tree/main/hardware/PCB/miniChord_main_PCB/gerber)
 * [Touch zone PCB schematics](https://github.com/BenjaminPoilve/MiniChord/blob/main/hardware/PCB/additional%20PCB/touch_zone.pdf)
