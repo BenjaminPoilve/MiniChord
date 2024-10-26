@@ -36,7 +36,7 @@ All software is provided under a 3-clause BSD License.
 In particular it contains: 
 - the [Hex firmware](https://github.com/BenjaminPoilve/MiniChord/blob/main/firmware/firmware.hex)
 - the full [PlatformIO project](https://github.com/BenjaminPoilve/MiniChord/tree/main/firmware)
-- the [minicontrol software](https://github.com/BenjaminPoilve/MiniChord/tree/main/firmware/mini_control)
+- the [minicontrol software](https://github.com/BenjaminPoilve/MiniChord/tree/main/firmware/minicontrol)
 
 ## Media 
 

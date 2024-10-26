@@ -723,12 +723,44 @@ The main PCB requires some SMD components. If you are experimented with SDM sold
 </details>
 <hr>
 
-<p>[TBD]</p>
-<p>Note :</p>
+<h4 id="marking-the-keycap">Marking the keycap</h4>
+<p>The first row of keycaps need to be marked with the chord letters. If you have a CNC router, then it is possible to engrave the keycap with a 45° V cutter, using a V-carve mode. </p>
+<p>For Omron Keycap, I've found the following setting to be satisfying:</p>
 <ul>
-<li>do the double sided tape between battery and PCB </li>
-<li>don't overtighten the screws ! its only plastic</li>
+<li>300 mm/min feed rate; </li>
+<li>150 mm/min plunge rate; </li>
+<li>10 000 rpm.</li>
 </ul>
+<p><img alt="CNC engraving" src="../ressources/CNC_routing.jpg" title="CNC engraving" /></p>
+<p>Once the keycap are engraved, the engraving is filled using Markal "Lacquer fill-in" paint stick. The following steps are recommanded: </p>
+<ul>
+<li>"sharpen" the paintstick with an X-acto to have a pointy end;</li>
+<li>overfill the engraving with color;</li>
+<li>wait for at last 15 hours for the paint to start solidifying;</li>
+<li>buff the surplus color out. Place a tissue paper flat on a table, and rub the keycap on it while maintaining it very flat to remove the color outside of the groove. You may need to do it in several passes, changing the tissue paper in between. To properly remove all remaining color, a few drops of isopropyl might help. </li>
+</ul>
+<p><img alt="keycaps" src="../ressources/keycap.jpg" title="keycaps" /></p>
+<p>Alternatively, if you don't have a CNC router, you can look into UV DTF transfers. It is a cheap method to allow color tranfers that can work for details up to 0.5mm. </p>
+<p>Once you engraved keycap are finished, you can install all the buttons on the main PCB. </p>
+<p>The engraved buttons go on the first line, and the order is G/B/A/F/D/E/C.</p>
+<p><img alt="all buttons installed" src="../ressources/all_buttons.jpg" title="all buttons installed" /></p>
+<h4 id="attaching-the-battery">Attaching the battery</h4>
+<p>The battery needs to be fixed on the pcb using double sided foam tape. The foam part is very important as it protect the soft pouch of the battery from being damaged by the possible sharp bits sticking out of the PCB. </p>
+<p>To do so, use the X-acto to cut the double sided foam tape, and press it on the battery pouch. </p>
+<p><img alt="the scotched battery" src="../ressources/scotched_battery.jpg" title="the scotched battery" /></p>
+<p>Then flip the pouch and press it onto the PCB. Use the picture to identify proper placement. </p>
+<p><img alt="attached pouch" src="../ressources/pouch_attached.jpg" title="the installed battery" /></p>
+<h4 id="assembling-the-enclosure">Assembling the enclosure</h4>
+<p>Now the easiest step ! </p>
+<p><img alt="all components" src="../ressources/all_components.jpg" title="all components" /></p>
+<p>First install the PCB in the bottom shell. Secure the PCB with the three small screws. Be sure to not overtighten the screws: once you feel a resistance, it is enough. </p>
+<p><img alt="bottom installed" src="../ressources/bottom_installed.jpg" title="bottom installed" /></p>
+<p>No install the top shell. Make sure that all keycap are well-aligned with their respective holes. Once it is the case, it should be easy to push the top shell in place. </p>
+<p>Secure the top shell with the six long screws. Be sure to not overtighten the screws: once you feel a resistance, it is enough. </p>
+<p><img alt="top installed" src="../ressources/top_installed.jpg" title="top installed" /></p>
+<p>The last step is to install the touch zone PCB. Simply be carefull that the header are in their right place, and push it until it makes contact with the shell. </p>
+<p><img alt="finished" src="../ressources/finished.jpg" title="finished" /></p>
+<p>That's it, your minichord is done! No to use it, please refer to the <a href="/user_manual">"manual" section</a></p>
 </section>
 
             </main>
