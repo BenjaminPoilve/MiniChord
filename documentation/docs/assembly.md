@@ -698,6 +698,13 @@ Now the easiest step !
 
 ![all components](./ressources/all_components.jpg "all components")
 
+To avoid any screw breakage, please follow closely the following instruction:
+
+* Use a adequately sized screwdriver. In particular, if you screwdriver slips, it might strip the screw and make the assembly impossible;
+* Pre-tap the holes on the top shell. To do that, use one of the three _small_ screw. Simply fully screw it into each one of the hole, then take it out. Repeat for each of the six holes. Do not use one of the long screw for that step.
+* Then pre-insert all of the long screw into the six corresponding holes on the bottom shell. This is simply to ensure the screw head fits all the way to the bottom of the holes. Sometimes due to print tolerances this is a tight fit, so push it in with the screwdriver, then take it out. 
+
+Now to the assembly itself :
 
 First install the PCB in the bottom shell. Secure the PCB with the three small screws. Be sure to not overtighten the screws: once you feel a resistance, it is enough. 
 
