@@ -2,6 +2,11 @@
 
 This repository contains the source file both for the minichord itself and its documentation. 
 
+
+[![Watch the video]()](https://www.youtube.com/watch?v=66Gu4NNnHgA)
+
+** If you want to help the projectn, and allow for it to be manufactured, like this video **
+
 ## Documentation 
 
 The best way to get to know this project is to visit the [minichord website](https://minichord.com/) which contains the documentation of the project. 
