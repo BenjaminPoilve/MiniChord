@@ -3,7 +3,7 @@
 This repository contains the source file both for the minichord itself and its documentation. 
 
 
-[![Watch the video]()](https://www.youtube.com/watch?v=66Gu4NNnHgA)
+[![Watch the video](https://github.com/BenjaminPoilve/minichord/blob/main/documentation/site/ressources/thumbnail.png)](https://www.youtube.com/watch?v=66Gu4NNnHgA)
 
 ** If you want to help the projectn, and allow for it to be manufactured, like this video **
 
