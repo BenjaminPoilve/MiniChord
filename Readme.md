@@ -7,6 +7,9 @@ This repository contains the source file both for the minichord itself and its d
 
 **If you want to help the project, and allow for it to be manufactured, like this video**
 
+To be informed when they are available, please subscribe to [the newsletter](https://buttondown.com/BenjaminPoilve).
+
+
 ## Documentation 
 
 The best way to get to know this project is to visit the [minichord website](https://minichord.com/) which contains the documentation of the project. 
