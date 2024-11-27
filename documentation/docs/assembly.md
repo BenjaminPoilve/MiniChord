@@ -7,6 +7,8 @@ Please note that depending on the kit version, you may not have to follow all th
 * If you have the "PCB kit" or the "electronics kit", start at [Through-hole soldering](#through-hole-soldering)
 * If you have the "full kit" start at [Final assembly](#final-assembly)
 
+Those kits are not yet on sale. To be informed when they are available, please subscribe to [the newsletter](https://buttondown.com/BenjaminPoilve).
+
 In any case, bill of material (BOM) and necessary tools are listed at the beginning of each section.
 
 # **PCB Manufacturing**
