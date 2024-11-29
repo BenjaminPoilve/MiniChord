@@ -33,15 +33,15 @@ The minichord has :
 * **21 main chord buttons**, divided into 7 column of 3 buttons;
 * **1 "sharp" button (on the top left)**.
 
-**Each column of the main chord buttons is associated to a note of the C Major scale**. It is indicated by the letter on the first row of buttons. 
+**Each column of the main chord buttons is associated with a note of the C Major scale**. It is indicated by the letter on the first row of buttons. 
 
-**Each row of the main chord button is associated to a chord type**:
+**Each row of the main chord button is associated with a chord type**:
 
 * the first row will produce major chords;
 * the second row will produce minor chords;
 * the third row will produce 7th chords. 
 
-By following the row and the column of each button, we can identify the specific chord associated. **Here is the full table of the chord available by the push of a single button**:
+By following the row and the column of each button, we can identify the specific chord associated. **Here is the full table of the chords available by the push of a single button**:
 
 
 |   **G**   |   **B**   |   **A**   |   **F**   |   **D**   |   **E**   |   **C**   |       |
@@ -52,16 +52,16 @@ By following the row and the column of each button, we can identify the specific
 
 
 
-**The "sharp" modifier button (top left) will add a semitone to each note of the chord, and can be added to any combinaison of the main chord buttons.**
+**The "sharp" modifier button (top left) will add a semitone to each note of the chord, and can be added to any combination of the main chord buttons.**
 
-> ⚠ In the basic usage only one chord button is pushed at a time to trigger a new chord. However it is possible to combine buttons to construct more complex chords. This is explained in the ["Advanced usage" section]().
+> ⚠ In the basic usage only one chord button is pushed at a time to trigger a new chord. However, it is possible to combine buttons to construct more complex chords. This is explained in the ["Advanced usage" section]().
 
 ![Harp touch zone](./ressources/drawing_5.png "Harp touch zone")
 
 
 ## ② Harp touch zone 
 
-The harp touch zone is divided **in 12 different section**, stacked vertically. Touching each section will trigger a note. Notes can be held by keeping the contact with the section. 
+The harp touch zone is divided **into 12 different sections**, stacked vertically. Touching each section will trigger a note. Notes can be held by keeping in contact with the section. 
 
 This touch zone can be "strummed" by sweeping the finger across all sections, or individual notes can be triggered. 
 
@@ -69,7 +69,7 @@ This touch zone can be "strummed" by sweeping the finger across all sections, or
 
 ## ③ Preset selection buttons and indicator
 
-The preset selection buttons can be used to switch between preset. **The minichord has 12 internal preset** (see ["Default presets"](#default-presets)), that can be replaced by custom presets (see ["Making custom presets"](#custom-presets)). Going up after the 12th preset will circle back to the first, same as going down before the first will circle back to the 12th. 
+The preset selection buttons can be used to switch between presets. **The minichord has 12 internal presets** (see ["Default presets"](#default-presets)), that can be replaced by custom presets (see ["Making custom presets"](#custom-presets)). Going up after the 12th preset will circle back to the first, same as going down before the first will circle back to the 12th. 
 
 The main led will shine with a different color for each preset to help you identify the current selected one. 
 
@@ -79,37 +79,37 @@ The main led will shine with a different color for each preset to help you ident
 
 ## ④ Potentiometers 
 
-Each of the three potentiometer has one main function, designated by the marking on the enclosure :
+Each of the three potentiometers has one main function, designated by the marking on the enclosure :
 
 * **The first potentiometer from the top** sets up the volume of the chord section;
 * **The second potentiometer from the top** sets up the volume of the harp section;
 * **The third potentiometer from the top** is assigned to a different function for each preset, depending on what is usefull for it. 
 
-> ⚠ Each of the potentiometer has a secondary function, which is explained in the ["Advanced usage" section](#advanced-usage). 
+> ⚠ Each of the potentiometers has a secondary function, which is explained in the ["Advanced usage" section](#advanced-usage). 
 
 ![Rythm mode button and indicator](./ressources/drawing_8.png "Rythm mode button and indicator")
 
 ## ⑤ Rythm mode button and indicator
 
-The rythm mode button (on the top right) has two basic mode:
+The rhythm mode button (on the top right) has two basic modes:
 
 * **discrete**: the chord only stays on for as long as you keep the relevant button pushed. In that mode, the indicator led will be off.
 * **continuous**: the chord will keep playing until you push a new button, and seamlessly switch to the next chord. In that mode, the indicator led will be on. 
 
-Simply push the rythm mode button to switch from one mode to the other. That button may also be used to switch to the arpegiator mode with a long push, but that subject is handled in the [ "Advanced usage" section](#advanced-usage). 
+Simply push the rhythm mode button to switch from one mode to the other. That button may also be used to switch to the arpeggiator mode with a long push, but that subject is handled in the [ "Advanced usage" section](#advanced-usage). 
 
 ![Charging](./ressources/drawing_9.png "Charging")
 
 ## ⑥ Charging 
 
-Charging is done through the mini USB jack available on the buttom right of the minichord. Connection to any USB outlet will do, and it will draw 500ma of current. 
+Charging is done through the mini USB jack available on the bottom right of the minichord. Connection to any USB outlet will do, and it will draw 500ma of current. 
 
 **When charging, the top right led will shine red**. 
 
 Full charge should be below 3 hours, and **the top right led will shine green once the full charge is attained**. 
 Once fully charged, the minichord will play for around 7 hours. 
 
-**When the battery is getting low, the main led will pulse**. Once the pulsing start, the minichord can play for around 15 minutes more. You can play the minichord while plugged in. 
+**When the battery is getting low, the main led will pulse**. Once the pulsing starts, the minichord can play for around 15 minutes more. You can play the minichord while plugged in. 
 
 # **Advanced usage**
 
@@ -121,32 +121,32 @@ There is two ways to access additional chords on the minichord:
 
 ![combining in a column](./ressources/drawing_10.png "combining in a column")
 
-It is possible to push more than one button within the same column to access more complicated chords. **The possible combination are the following**:
+It is possible to push more than one button within the same column to access more complicated chords. **The possible combinations are the following**:
 
-* The button from the third row can be combined with button from either the first or the second row of the same column to obtain a* Major 7* (①) and *Minor 7* (②) chord of the same note;
-* The first and second row button can be combined within a column to obtain an *augmented* chord (③);
-* The three button together can be combined to obtain an *diminished* chord (④).
+* The button from the third row can be combined with a button from either the first or the second row of the same column to obtain a* Major 7* (①) and *Minor 7* (②) chord of the same note;
+* The first and second row buttons can be combined within a column to obtain an *augmented* chord (③);
+* The three buttons together can be combined to obtain an *diminished* chord (④).
 
 
->⚠ Please note that chord change always happen when a button is pushed. Simply releasing buttons will not change the chord. This is because properly timing a release is difficult with pushbuttons and it would lead to unwanted chord change when switching from a complex chord position. For example.. 
+>⚠ Please note that chord change always happens when a button is pushed. Simply releasing buttons will not change the chord. This is because properly timing a release is difficult with pushbuttons and it would lead to unwanted chord change when switching from a complex chord position. For example... 
 
 **By combining buttons across different columns**
 
 
-When a chord is selected within a colum (even a complex one), **it is possible to replace one of the note with the fundamental from another column**. 
+When a chord is selected within a column (even a complex one), **it is possible to replace one of the notes with the fundamental from another column**. 
 
 To do that simply **push any button from the column of the note you wish to borrow the fundamental from**. 
 
 ![combining across columns](./ressources/drawing_11.png "combining across columns")
 
 
-Usually the replaced note is the fundamental of the chord and the substitution is kown as a "slash chord", written for example Am/E for an A minor chord with E as the fundamental. However this is not the case for all presets. That setting is indicated per preset in the [Default presets](#default-presets) section.
+Usually, the replaced note is the fundamental of the chord and the substitution is known as a "slash chord", written for example Am/E for an A minor chord with E as the fundamental. However, this is not the case for all presets. That setting is indicated per preset in the [Default presets](#default-presets) section.
 
 >⚠ Due to the way the "sharp" button works, some slash chords are impossible to do on the minichord. For example, Am/G is possible, Am#/G# is possible (by holding the "sharp" modifier button), but Am#/G is not. 
 
 ## Secondary potentiometer functions
 
-Each of the potentiometer allows you to access a secondary function. The specific secondary function will depend on the selected preset, and is indicated per preset in the [Default presets](#default-presets) section.
+Each of the potentiometers allows you to access a secondary function. The specific secondary function will depend on the selected preset, and is indicated per preset in the [Default presets](#default-presets) section.
 
 **To access the secondary function, you need to hold the "sharp button" while turning the potentiometer.**
 
@@ -155,26 +155,27 @@ Each of the potentiometer allows you to access a secondary function. The specifi
 
 >⚠ Please note that the secondary parameter value selected will be memorized by the minichord, but only if you switch between presets (to avoid having to write to memory the selected value with every parameter change). 
 
+
 ## Arpeggiator
 
 
-The minichord has a very basic apreggiator function, allowing to play 16 steps pattern on the four voices of the chord section. **To activate the arpeggiator, do a long (more than 1 second) press on the "rythm" button** (on the top right). The led will flash rythmically and the arpeggiator will start. 
+The minichord has a very basic arpeggiator function, allowing to play 16 steps pattern on the four voices of the chord section. **To activate the arpeggiator, do a long (more than 1 second) press on the "rhythm" button** (on the top right). The led will flash rythmically and the arpeggiator will start. 
 
 ![Arpeggiator](./ressources/drawing_13.png "Arpeggiator")
 
 **While the arpeggiator is playing, you can move from chord to chord by using the chord buttons as usual.** 
 
->⚠ Depending on the currently playing pattern, that change may not be immediatly applied and might wait until the next "strong beat". Strong beat are indicated by the rythm led flashing a brighter than the normal flash.
+>⚠ Depending on the current playing pattern, that change may not be immediately applied and might wait until the next "strong beat". Strong beats are indicated by the rhythm led flashing a brighter than the normal flash.
 
-**While in arpeggiator mode, the rythm button will function as a "tap tempo"**. By tapping it rythmically, you can change the current tempo of the arpeggiator. 
+**While in arpeggiator mode, the rhythm button will function as a "tap tempo"**. By tapping it rhythmically, you can change the current tempo of the arpeggiator. 
 
-To exit the arpeggiator mode, do once again a long press on the "rythm" button. 
+To exit the arpeggiator mode, do once again a long press on the "rhythm" button. 
 
 # **Following chord charts**
 
 A good way to use the minichord, especially if you want to cover some popular songs, is to use readily available chord charts.
 
-**Chord charts are a simplified kind of tablature that only includes the lyrics and the chord of the song**. Usually the chords are written on top of the lyrics, at the moment where they are supposed to happen in the song. 
+**Chord charts are a simplified kind of tablature that only includes the lyrics and the chord of the song**. Usually, the chords are written on top of the lyrics, at the moment where they are supposed to happen in the song. 
 
 **Chord charts are very easy to find**, usually all it takes is to google the name of the song followed by "chords".
 
@@ -202,9 +203,9 @@ They usually look like this:
         
 *Extract from the chord chart of "I'm not in love" by 10cc*
 
-As we see, to be able to play such a chord chart, **we need to have a basic understanding of the way chords are commonly written**. Since there is not widely accepted standard, it may vary slightly vary between chord charts.
+As we see, to be able to play such a chord chart, **we need to have a basic understanding of the way chords are commonly written**. Since there is no widely accepted standard, it may vary slightly between chord charts.
 
-On the below table, we show the way chord are commonly written in chord chart and how to play them on the minichord, with A for our fundamental:
+In the below table, we show the way chords are commonly written in a chord chart and how to play them on the minichord, with A for our fundamental:
 
 
 | Full chord name   |    Common notations      | Button selection pattern|
@@ -219,7 +220,8 @@ On the below table, we show the way chord are commonly written in chord chart an
 | Slash chord | A/G (for G substitution ) | ![pattern](./ressources/pattern_8.png "pattern")   |
 
 
-**Most of the time, the chords are easily playable on the minichord**. If not, it is almost always possible to find acceptable substitutions, but that might require a bit more theoretical knowledge for the player (for example to calculate which slash chord might be an acceptable ersatz for complex chord). 
+
+**Most of the time, the chords are easily playable on the minichord**. If not, it is almost always possible to find acceptable substitutions, but that might require a bit more theoretical knowledge for the player (for example to calculate which slash chord might be an acceptable ersatz for a complex chord). 
 
 
 # **Default presets**
@@ -248,7 +250,8 @@ Then connect your minichord to the computer with a USB mini cable. Please make s
 
 Reload the webpage. You should be shown a prompt asking you to "Control and reprogram youy Midi Devices". Allow it. This is necessary to send Midi sysex commands that are used to programm the minichord. 
 
-The minichord should then be connected. If not, a red warning should give you instruction to allow you to identify which step failed. 
+
+The minichord should then be connected. If not, a red warning should give you instructions to allow you to identify which step failed. 
 
 **You can then circle around the presets on your minichord using the preset selection buttons on the minichord**. 
 
@@ -256,25 +259,25 @@ The associated internal parameters will be displayed on the screen.
 
 Those parameters are grouped in three categories :
 
-* **"Gobal parameters"**: general parameters that impact the general functionning of the preset. It includes the reverb settings that is applied to both the chord and the harp, and the potentiometer function settings;
+* **"Global parameters"**: general parameters that impact the general functioning of the preset. It includes the reverb settings that is applied to both the chord and the harp, and the potentiometer function settings;
 * **"Harp parameters"**: parameters related to the sound synthesis of the harp part of the minichord;
 * **"Chord parameters"**: parameters related to the sound synthesis of the chord part of the minichord.
 
 By hovering on each parameter name (a question mark will appear), a short description of its function will be displayed on your screen. 
 
-You can start experimenting by modifying settings and seeing how it impact the sound of your preset. Note that by default, changes made are not loaded into the minichord. Simply using the preset selection buttons to go one preset up then one preset down will reset the current preset. 
+You can start experimenting by modifying settings and seeing how it impacts the sound of your preset. Note that by default, changes made are not loaded into the minichord. Simply using the preset selection buttons to go one preset up then one preset down will reset the current preset. 
 
 **You can then use the command buttons to modify the presets loaded on your minichord**
 
 [minicontrol](/minicontrol) offers the following control buttons: 
 
   * **"Save current settings to selected bank"**: by using the dropdown to choose a bank number, you can save the current parameters to the selected bank slot. This can be used to copy presets from one bank to another;
-  * **"Reset seleted bank"**: by using the dropdown to choose a bank number, you can reset the parameters of the selected bank slot to factory settings
-  * **"Reset all banks"**: this buttons simply put the minichord to factory settings by resetting all bank slots
+  * **"Reset selected bank"**: by using the dropdown to choose a bank number, you can reset the parameters of the selected bank slot to factory settings
+  * **"Reset all banks"**: this button simply puts the minichord to factory settings by resetting all bank slots
 
 It also allows you to share your presets and to load presets made by other users, with two additional buttons:
 
-* **"Share setting"**: this buttons will copy in your clipboard a parameter string. This parameter string fully describes the current setting playing on the minichord. 
+* **"Share setting"**: this button will copy in your clipboard a parameter string. This parameter string fully describes the current setting playing on the minichord. 
 * **"Load setting"**: this button will prompt a text entry. By pasting a parameter string it will be loaded on your minichord for you to test it. Please note that if you wish to save it into a bank slot of your minichord, you will need to use the "Save current setting to selected bank" button. 
 
 >If you have a preset that you wish to share with all minichord users, please send the preset string with a short description and the name of your preset to [presets@minichord.com](mailto:presets@minichord.com).
