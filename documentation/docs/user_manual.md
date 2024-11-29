@@ -10,11 +10,11 @@
 
 ![[#2 sheet]](./ressources/drawing_2.png "#2 sheet")
 
-**Once it is started, push one the square buttons ④. You should hear a chord being played.** If you do not hear a sound, check that the first potentiometer is not fully turned left **⑤**. The chord will vary depending on which button you press. 
+**Once it is started, push one of the square buttons ④. You should hear a chord being played.** If you do not hear a sound, check that the first potentiometer is not fully turned left **⑤**. The chord will vary depending on which button you press. 
 
 ![[#3 sheet]](./ressources/drawing_3.png "#3 sheet")
 
-**No drag your finger across the black vertical bar ⑥. You should hear the sound of multiple notes being played sequentially, like a harp.**  If you do not hear that, check that the second potentiometer is not fully turned left **⑦**. Those notes depend on the selected chord. Push different square buttons and test the way the harp reacts.
+**Now drag your finger across the black vertical bar ⑥. You should hear the sound of multiple notes being played sequentially, like a harp.**  If you do not hear that, check that the second potentiometer is not fully turned left **⑦**. Those notes depend on the selected chord. Push different square buttons and test the way the harp reacts.
 
 That's it, you got started! 
 
@@ -30,7 +30,7 @@ That's it, you got started!
 
 The minichord has :
 
-* **21 main chord buttons**, divided in 7 column of 3 buttons;
+* **21 main chord buttons**, divided into 7 column of 3 buttons;
 * **1 "sharp" button (on the top left)**.
 
 **Each column of the main chord buttons is associated to a note of the C Major scale**. It is indicated by the letter on the first row of buttons. 
@@ -140,7 +140,7 @@ To do that simply **push any button from the column of the note you wish to borr
 ![combining across columns](./ressources/drawing_11.png "combining across columns")
 
 
-Usually the replaced note is the fundamental of the chord and the substitution is kown as a "slash chord", written for example Am/E for a A minor chord with E as the fundamental. However this is not the case for all presets. That setting is indicated per preset in the [Default presets](#default-presets) section.
+Usually the replaced note is the fundamental of the chord and the substitution is kown as a "slash chord", written for example Am/E for an A minor chord with E as the fundamental. However this is not the case for all presets. That setting is indicated per preset in the [Default presets](#default-presets) section.
 
 >⚠ Due to the way the "sharp" button works, some slash chords are impossible to do on the minichord. For example, Am/G is possible, Am#/G# is possible (by holding the "sharp" modifier button), but Am#/G is not. 
 
@@ -153,7 +153,7 @@ Each of the potentiometer allows you to access a secondary function. The specifi
 ![Secondary potentiometer functions](./ressources/drawing_12.png "Secondary potentiometer functions")
 
 
->⚠ Please note that you secondary parameter value selected will be memorized by the minichord, but only if you switch between presets (to avoid having to write to memory the selected value with every parameter change). 
+>⚠ Please note that the secondary parameter value selected will be memorized by the minichord, but only if you switch between presets (to avoid having to write to memory the selected value with every parameter change). 
 
 ## Arpeggiator
 
@@ -219,7 +219,7 @@ On the below table, we show the way chord are commonly written in chord chart an
 | Slash chord | A/G (for G substitution ) | ![pattern](./ressources/pattern_8.png "pattern")   |
 
 
-**Most of the time, the chords are easily playable on the minichord**. If not, it is almost always possible to find acceptable substitutions, but that might require a bit more theoritical knowledge for the player (for example to calculate which slash chord might be an acceptable ersatz for complex chord). 
+**Most of the time, the chords are easily playable on the minichord**. If not, it is almost always possible to find acceptable substitutions, but that might require a bit more theoretical knowledge for the player (for example to calculate which slash chord might be an acceptable ersatz for complex chord). 
 
 
 # **Default presets**
@@ -231,7 +231,7 @@ On the below table, we show the way chord are commonly written in chord chart an
 # **Custom presets**
 
 Making custom presets is a lot more involved, so it is to be reserved to more advanced users.
-However, if there is an issue, you can always restore the default presets, so feel free to experiments. 
+However, if there is an issue, you can always restore the default presets, so feel free to experiment. 
 
 Presets are designed with an interface called [minicontrol](/minicontrol). In addition to designing your own presets, it allows you to manage the presets loaded into the 12 memory slots of your minichord, which includes loading presets shared by other users.
 
@@ -246,7 +246,7 @@ To do that, first open [minicontrol](/minicontrol) in a compatible web browser. 
 
 Then connect your minichord to the computer with a USB mini cable. Please make sure that the cable used is not "charge-only" and supports data. 
 
-Reload the webpage. You should be shown a prompt asking you to "Control and reprogramme youy Midi Devices". Allow it. This is necessary to send Midi sysex commands that are used to programm the minichord. 
+Reload the webpage. You should be shown a prompt asking you to "Control and reprogram youy Midi Devices". Allow it. This is necessary to send Midi sysex commands that are used to programm the minichord. 
 
 The minichord should then be connected. If not, a red warning should give you instruction to allow you to identify which step failed. 
 
