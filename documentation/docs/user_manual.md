@@ -14,7 +14,7 @@
 
 ![[#3 sheet]](./ressources/drawing_3.png "#3 sheet")
 
-**No drag your finger across the black vertical bar ⑥. You should hear the sound of multiple notes being played sequentially, like a harp.**  If you do not hear that, check that the second potentiometer is not fully turned left **⑦**. Those notes depend on the selected chord. Push different square buttons and test the way the harp reacts.
+**Now drag your finger across the black vertical bar ⑥. You should hear the sound of multiple notes being played sequentially, like a harp.**  If you do not hear that, check that the second potentiometer is not fully turned left **⑦**. Those notes depend on the selected chord. Push different square buttons and test the way the harp reacts.
 
 That's it, you got started! 
 
@@ -30,7 +30,7 @@ That's it, you got started!
 
 The minichord has :
 
-* **21 main chord buttons**, divided in 7 column of 3 buttons;
+* **21 main chord buttons**, divided into 7 column of 3 buttons;
 * **1 "sharp" button (on the top left)**.
 
 **Each column of the main chord buttons is associated with a note of the C Major scale**. It is indicated by the letter on the first row of buttons. 
@@ -153,7 +153,8 @@ Each of the potentiometers allows you to access a secondary function. The specif
 ![Secondary potentiometer functions](./ressources/drawing_12.png "Secondary potentiometer functions")
 
 
->⚠ Please note that your secondary parameter value selected will be memorized by the minichord, but only if you switch between presets (to avoid having to write to memory the selected value with every parameter change). 
+>⚠ Please note that the secondary parameter value selected will be memorized by the minichord, but only if you switch between presets (to avoid having to write to memory the selected value with every parameter change). 
+
 
 ## Arpeggiator
 
@@ -219,6 +220,7 @@ In the below table, we show the way chords are commonly written in a chord chart
 | Slash chord | A/G (for G substitution ) | ![pattern](./ressources/pattern_8.png "pattern")   |
 
 
+
 **Most of the time, the chords are easily playable on the minichord**. If not, it is almost always possible to find acceptable substitutions, but that might require a bit more theoretical knowledge for the player (for example to calculate which slash chord might be an acceptable ersatz for a complex chord). 
 
 
@@ -246,7 +248,8 @@ To do that, first open [minicontrol](/minicontrol) in a compatible web browser. 
 
 Then connect your minichord to the computer with a USB mini cable. Please make sure that the cable used is not "charge-only" and supports data. 
 
-Reload the webpage. You should be shown a prompt asking you to "Control and reprogramme your Midi Devices". Allow it. This is necessary to send Midi sysex commands that are used to program the minichord. 
+Reload the webpage. You should be shown a prompt asking you to "Control and reprogram youy Midi Devices". Allow it. This is necessary to send Midi sysex commands that are used to programm the minichord. 
+
 
 The minichord should then be connected. If not, a red warning should give you instructions to allow you to identify which step failed. 
 
