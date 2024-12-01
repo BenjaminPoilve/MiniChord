@@ -363,3 +363,9 @@ To be able to better understand the synthesis parameters, please find below the 
    └─────────────┘            └──────────┘
     </code></pre>
 </div>
+
+# **MIDI support**
+
+When plugged in to a computer, the minichord will present through its USB a two port MIDI connection. The first port carries the midi signal from the Chord section, and the second port from the harp section. 
+
+They can be independently assigned to virtual instruments. Each voice from the chord section is attributed a different channel, from 1 to 4 for the chord section, and from 1 to 12 for the harp section. 

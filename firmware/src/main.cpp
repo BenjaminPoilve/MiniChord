@@ -10,6 +10,7 @@
 #include <debouncer.h>
 #include <harp.h>
 #include <potentiometer.h>
+
 //>>SOFWTARE VERSION 
 int version_ID=0001; //to be read 00.01, stored at adress 7 in memory
 //>>BUTTON ARRAYS<<
@@ -38,7 +39,7 @@ uint8_t min_seventh[7] = {0, 3, 10, 7, 1, 5, 8};
 uint8_t aug[7] = {0, 4, 8, 12, 2, 5, 9};
 uint8_t dim[7] = {0, 3, 6, 12, 2, 5, 9};
 uint8_t root_button[7] = {0, 4, 2, 5, 9, 11, 7}; // defines the fundamental of each row, ie C, E, D, F, A, B, G
-float c_frequency = 130.81;                      // for 440Hz A
+float c_frequency = 130.81;                      // for C3
 uint8_t (*current_chord)[7] = &major;            // the array holding the current chord
 uint8_t current_chord_notes[7];                  // the array for the note calculation within the chord, calculate 7 of them for the arpeggiator mode
 uint8_t current_applied_chord_notes[7];          // the array for the note calculation within the chord
@@ -203,6 +204,18 @@ uint8_t rythm_freeze_current_chord_notes[7]; // this array is needed because we 
 uint8_t rythm_loop_length = 16;
 u_int8_t current_selected_voice=0; //increment at each voice steal to rotate amongst voices;
 
+//-->>MIDI PARAMETERS
+uint8_t chord_port=0;
+uint8_t chord_attack_velocity=127;
+uint8_t chord_release_velocity=20;
+uint8_t chord_started_notes[4]={0,0,0,0};                   
+
+uint8_t harp_port=1;
+uint8_t harp_attack_velocity=127;
+uint8_t harp_release_velocity=20;
+uint8_t harp_started_notes[12]={0,0,0,0,0,0,0,0,0,0,0,0};    
+uint8_t midi_base_note=48; // for C3
+
 //-->>FUNCTION THAT NEED ANNOUNCING
 void save_config(int bank_number, bool default_save);
 void load_config(int bank_number);
@@ -285,7 +298,7 @@ void control_command(uint8_t command, uint8_t parameter) {
       midi_data_array[2 * i] = current_sysex_parameters[i] % 128;
       midi_data_array[2 * i + 1] = current_sysex_parameters[i] / 128;
     }
-    usbMIDI.sendSysEx(parameter_size * 2, (const uint8_t *)&midi_data_array);
+    usbMIDI.sendSysEx(parameter_size * 2, (const uint8_t *)&midi_data_array,0);
     break;
   case 1: // SIGNAL TO WIPE MEMORY
     Serial.println("Wiping memory");
@@ -347,14 +360,22 @@ void play_single_note(int i, IntervalTimer *timer) {
   chord_vibrato_dc_envelope_array[i]->noteOn();
   chord_envelope_array[i]->noteOn();
   chord_envelope_filter_array[i]->noteOn();
+  if(chord_started_notes[i]!=0){
+    usbMIDI.sendNoteOff(chord_started_notes[i],chord_release_velocity,i,chord_port);}
+  usbMIDI.sendNoteOn(midi_base_note+ current_applied_chord_notes[i],chord_attack_velocity,i,chord_port);
+  chord_started_notes[i]=midi_base_note+ current_applied_chord_notes[i];
 }
 
-void play_note_selected_duration(int i){
+void play_note_selected_duration(int i,int current_note){
   chord_vibrato_envelope_array[i]->noteOn();
   chord_vibrato_dc_envelope_array[i]->noteOn();
   chord_envelope_array[i]->noteOn();
   chord_envelope_filter_array[i]->noteOn();
   note_off_timing[i]=0;
+  if(chord_started_notes[i]!=0){
+    usbMIDI.sendNoteOff(chord_started_notes[i],chord_release_velocity,i,chord_port);}
+  usbMIDI.sendNoteOn(midi_base_note+current_note,chord_attack_velocity,i,chord_port);
+  chord_started_notes[i]=midi_base_note+current_note;
 }
 
 void turn_off_led(IntervalTimer *timer) {
@@ -387,6 +408,12 @@ void set_chord_voice_frequency(uint8_t i, uint16_t current_note) {
   chord_osc_3_array[i]->frequency(osc_3_freq_multiplier * note_freq);
   // chord_voice_filter_array[i]->frequency(1*freq);
   AudioInterrupts();
+  if(chord_started_notes[i]!=0){
+    //we need to change the note without triggering the change, ie a pitch bend
+    usbMIDI.sendNoteOff(chord_started_notes[i],chord_release_velocity,i,chord_port);
+    usbMIDI.sendNoteOn(midi_base_note+current_note,chord_attack_velocity,i,chord_port);
+    chord_started_notes[i]=midi_base_note+ current_note;
+  }
 }
 // setting the harp
 void set_harp_voice_frequency(uint8_t i, uint16_t current_note) {
@@ -459,7 +486,7 @@ void rythm_tick_function() {
         current_voice=i-3;
       }
       set_chord_voice_frequency(current_voice, rythm_freeze_current_chord_notes[i]);
-      play_note_selected_duration(current_voice);
+      play_note_selected_duration(current_voice, rythm_freeze_current_chord_notes[i]);
     }
   }
   rythm_current_step = (rythm_current_step + 1) % rythm_loop_length;
@@ -721,11 +748,13 @@ void loop() {
   //>>Handling the turning off of notes in rythm mode (mandatory because we are missing one timer to do it cleanly)
   if(rythm_mode){
     for (int i = 0; i < 4; i++) {
-      if(note_off_timing[i]>note_pushed_duration){
+      if(note_off_timing[i]>note_pushed_duration && chord_envelope_array[i]->isSustain()){
         chord_vibrato_envelope_array[i]->noteOff();
         chord_vibrato_dc_envelope_array[i]->noteOff();
         chord_envelope_array[i]->noteOff();
         chord_envelope_filter_array[i]->noteOff();
+        usbMIDI.sendNoteOff(chord_started_notes[i],chord_release_velocity,i,chord_port);
+        chord_started_notes[i]=0;
       }
     }
   }
@@ -762,6 +791,9 @@ void loop() {
           chord_vibrato_dc_envelope_array[i]->noteOff();
           chord_envelope_array[i]->noteOff();
           chord_envelope_filter_array[i]->noteOff();
+          usbMIDI.sendNoteOff(chord_started_notes[i],chord_release_velocity,i,chord_port);
+          chord_started_notes[i]=0;
+
         }
       }
       AudioInterrupts();
@@ -890,6 +922,12 @@ void loop() {
       string_enveloppe_filter_array[i]->noteOn();
       string_enveloppe_array[i]->noteOn();
       AudioInterrupts();
+      if(chord_started_notes[i]!=0){
+      usbMIDI.sendNoteOff(chord_started_notes[i],chord_release_velocity,i,chord_port);}
+
+      usbMIDI.sendNoteOn(midi_base_note+current_harp_notes[i],harp_attack_velocity,i,harp_port);
+      harp_started_notes[i]=midi_base_note+current_harp_notes[i];
+
     }
     //value = harp_array[i].read_value(); //weirdly if we use the debouncer some noteOff seems to be ignored !!!!but if we don't, then the noteoff slow down the envelope !!
     if (value == 1) {
@@ -897,6 +935,9 @@ void loop() {
       string_enveloppe_filter_array[i]->noteOff();
       string_enveloppe_array[i]->noteOff();
       AudioInterrupts();
+      usbMIDI.sendNoteOff(harp_started_notes[i],harp_release_velocity,i,harp_port);
+      harp_started_notes[i]=0;
+
     }
   }
 }

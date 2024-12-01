@@ -125,7 +125,7 @@ try {
     document.getElementById("step1").classList.remove("unsatisfied");
     for (const entry of midiAccess.outputs) {
       const output = entry[1];
-      if (output.name == "minichord") {
+      if (output.name == "minichord Port 1") {
         console.log(
           `Output port [type:'${output.type}'] id: '${output.id}' manufacturer: '${output.manufacturer}' name: '${output.name}' version: '${output.version}'`,
         );
@@ -137,7 +137,7 @@ try {
     //handle for receiving the data
     for (const entry of midiAccess.inputs) {
       const input = entry[1];
-      if (input.name == "minichord") {
+      if (input.name == "minichord Port 1") {
         input.onmidimessage = process_current_data;
       }
     }
