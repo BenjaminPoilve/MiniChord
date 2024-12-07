@@ -43,7 +43,7 @@ void potentiometer::force_update(){
     apply_audio_parameter(alternate_adress, output_value); //now apply the value that was saved for the alternate. That allows to memorize the settings of the user.
 }
 
-void potentiometer::update_parameter(bool alternate_flag){
+bool potentiometer::update_parameter(bool alternate_flag){
     uint16_t current_reading = 1024-analogRead(pot_pin);
     potentiometer_smoothed_value=(20*potentiometer_smoothed_value+current_reading)/21;
     //let's see if one of the register was modified in the meantime, that would justify a change 
@@ -76,7 +76,9 @@ void potentiometer::update_parameter(bool alternate_flag){
             apply_audio_parameter(alternate_adress, output_value);
             this->alternate_value=potentiometer_smoothed_value;
             current_sysex_parameters_pointer[alternate_storage_adress] = potentiometer_smoothed_value; // saving the position in order to be able to retrieve it later
+            return true;
         }
         
     }
+    return false;
 }

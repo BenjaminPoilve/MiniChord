@@ -17,7 +17,7 @@ class potentiometer{
   void set_alternate_range(float range);
   void set_alternate_default(int alternate_initial_value);
   void force_update();
-  void update_parameter(bool alternate_flag); //the flag tells us whether the modifier button was pushed
+  bool update_parameter(bool alternate_flag); //the flag tells us whether the modifier button was pushed
   private:
   //Memory variable
   int potentiometer_smoothed_value=0; //smoothing of the analog reading

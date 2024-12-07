@@ -24,6 +24,7 @@ debouncer hold_button;
 debouncer up_button;
 debouncer down_button;
 debouncer LBO_flag;
+bool flag_save_needed=false; //to know if we need to save the preset
 potentiometer chord_pot(POT_CHORD_PIN);
 potentiometer harp_pot(POT_HARP_PIN);
 potentiometer mod_pot(POT_MOD_PIN);
@@ -467,7 +468,8 @@ void rythm_tick_function() {
     }
   }
   analogWrite(RYTHM_LED_PIN, (220 * (rythm_current_step % rythm_limit_change_to_every == 0) + 15) * (rythm_current_step % active_modulus == 0));
-  led_timer.begin([] { turn_off_led(&led_timer); }, 200000);
+  led_timer.priority(255);
+  led_timer.begin([] { turn_off_led(&led_timer); }, 200000); 
   if (current_long_period) {
     rythm_timer.update(short_timer_period);
     current_long_period = false;
@@ -556,7 +558,16 @@ void save_config(int bank_number, bool default_save) {
 }
 
 void load_config(int bank_number) {
-  digitalWrite(_MUTE_PIN, LOW); // muting the DAC
+  //digitalWrite(_MUTE_PIN, LOW); // muting the DAC
+  //Turn off chords notes
+  for (int i = 0; i < 4; i++) {
+    chord_vibrato_envelope_array[i]->noteOff();
+    chord_vibrato_dc_envelope_array[i]->noteOff();
+    chord_envelope_array[i]->noteOff();
+    chord_envelope_filter_array[i]->noteOff();
+  }
+  trigger_chord = true; //to be ready to retrigger if needed
+
   File entry = myfs.open(bank_name[bank_number]);
   if (entry) {
     String data_string = "";
@@ -584,7 +595,8 @@ void load_config(int bank_number) {
   chord_pot.force_update();
   harp_pot.force_update();
   mod_pot.force_update();
-  digitalWrite(_MUTE_PIN, HIGH); // unmuting the DAC
+  flag_save_needed=false;
+  //digitalWrite(_MUTE_PIN, HIGH); // unmuting the DAC
 }
 
 void setup() {
@@ -646,6 +658,7 @@ void setup() {
     current_harp_notes[i] = calculate_note_harp(i, slash_chord, sharp_active);
   }
   Serial.println("Initialisation complete");
+  digitalWrite(_MUTE_PIN, HIGH);
 }
 
 void loop() {
@@ -662,10 +675,11 @@ void loop() {
   //>>handling low battery blink indicator
   uint8_t LBO_transition = LBO_flag.read_transition();
   if (LBO_transition == 1) {
-    color_led_blink_timer.priority(200);
-    color_led_blink_timer.begin(blink_color_led, 100000);
+    color_led_blink_timer.priority(255);
+    //color_led_blink_timer.begin(blink_color_led, 100000); //THis might be an issue, we already use our 4 timers.  Need to be fixed
+
   } else if (LBO_transition == 2) {
-    color_led_blink_timer.end();
+    //color_led_blink_timer.end();
     set_led_color(bank_led_hue, 1.0, 1.0);
   }
   //>>Handlind the hold button functions
@@ -715,14 +729,14 @@ void loop() {
   //>>Handling the preset change interface
   if (up_button.read_transition() > 1) {
     Serial.println("Switching to next preset");
-    if(!sysex_controler_connected){
+    if(!sysex_controler_connected && flag_save_needed){
       save_config(current_bank_number, false); // saving to remember alternate pot position when not connnected
     }    current_bank_number = (current_bank_number + 1) % 12;
     load_config(current_bank_number);
   }
   if (down_button.read_transition() > 1) {
     Serial.println("Switching to last preset");
-    if(!sysex_controler_connected){
+    if(!sysex_controler_connected && flag_save_needed){
       save_config(current_bank_number, false); // saving to remember alternate pot position when not connnected
     }
     current_bank_number = (current_bank_number - 1);
@@ -735,6 +749,7 @@ void loop() {
   //>>Handling the rythm mode timers start and stop
   if (!rythm_timer_running && rythm_mode) {
     Serial.println("Starting rythm timers");
+    rythm_timer.priority(254);
     rythm_timer.begin(rythm_tick_function, short_timer_period);
     rythm_timer_running = true;
     rythm_timer.update(long_timer_period);
@@ -761,9 +776,9 @@ void loop() {
 
   //>>Handling the potentiometer mode
   bool alternate = chord_matrix_array[0].read_value(); // use the sharp as potentiometer alt selection
-  chord_pot.update_parameter(alternate);
-  harp_pot.update_parameter(alternate);
-  mod_pot.update_parameter(alternate);
+  flag_save_needed=chord_pot.update_parameter(alternate)||flag_save_needed;
+  flag_save_needed=harp_pot.update_parameter(alternate)||flag_save_needed;
+  flag_save_needed=mod_pot.update_parameter(alternate)||flag_save_needed;
 
   //>>Handling of chords logic
   // If not button is active in touch mode, then turn everything off
@@ -879,6 +894,11 @@ void loop() {
       }
       if ((trigger_chord || (button_pushed && retrigger_chord)) && !rythm_mode) { // if there is a explicit signal to trigger the enveloppe, or we are in a situation where trigger is needed, we do it
         Serial.println("trigger");
+        note_timer[0].priority(253);
+        note_timer[1].priority(253);
+        note_timer[2].priority(253);
+        note_timer[3].priority(253);
+
         note_timer[0].begin([] { play_single_note(0, &note_timer[0]); }, 10+chord_retrigger_release*1000);          // those allow for delayed triggering
         note_timer[1].begin([] { play_single_note(1, &note_timer[1]); }, 10 +chord_retrigger_release*1000+ inter_string_delay + random(random_delay));
         note_timer[2].begin([] { play_single_note(2, &note_timer[2]); }, 10 + chord_retrigger_release*1000+inter_string_delay * 2 + random(random_delay));
@@ -923,8 +943,7 @@ void loop() {
       string_enveloppe_array[i]->noteOn();
       AudioInterrupts();
       if(chord_started_notes[i]!=0){
-      usbMIDI.sendNoteOff(chord_started_notes[i],chord_release_velocity,i,chord_port);}
-
+      usbMIDI.sendNoteOff(chord_started_notes[i],chord_release_velocity,i,harp_port);}
       usbMIDI.sendNoteOn(midi_base_note+current_harp_notes[i],harp_attack_velocity,i,harp_port);
       harp_started_notes[i]=midi_base_note+current_harp_notes[i];
 
