@@ -67,7 +67,7 @@ void apply_audio_parameter(int adress, int value) {
         current_sysex_parameters[7]=version_ID;
         break;
       case 2:
-        string_gain.amplitude(value/100.0,100);  harp_pot.update_parameter(false);
+        string_gain.amplitude(value/100.0,100);  harp_pot.update_parameter(false);  usbMIDI.sendControlChange(midi_volume_control,127*value/100.0, 0,harp_port);
         break;
       case 40:
         for (int i=0;i<12;i++){
@@ -280,7 +280,7 @@ void apply_audio_parameter(int adress, int value) {
         string_amplifier.gain(value/100.0);
         break;
       case 3:
-        chords_gain.amplitude(value/100.0,100);  chord_pot.update_parameter(false);
+        chords_gain.amplitude(value/100.0,100);  chord_pot.update_parameter(false); usbMIDI.sendControlChange(midi_volume_control,value/100.0*127, 0,chord_port);
         break;
       case 120:
         for (int i=0;i<7;i++){

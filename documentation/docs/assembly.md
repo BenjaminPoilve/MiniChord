@@ -676,7 +676,7 @@ Alternatively, if you don't have a CNC router, you can look into UV DTF transfer
 
 Once you engraved keycap are finished, you can install all the buttons on the main PCB. 
 
-The engraved buttons go on the first line, and the order is G/B/A/F/D/E/C.
+The engraved buttons go on the first line, and the order is F,C,G,D,A,E,B from left to right (disregard the order in the picture, from an earlier version).
 
 ![all buttons installed](./ressources/all_buttons.jpg "all buttons installed")
 

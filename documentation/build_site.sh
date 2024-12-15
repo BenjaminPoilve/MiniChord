@@ -1,4 +1,5 @@
 #! /usr/bin/env bash
-mkdocs build
+source venv/bin/activate
+python3 -m mkdocs build
 cp docs/index.html site/
 cp -R ../firmware/minicontrol site/

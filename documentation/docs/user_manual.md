@@ -44,11 +44,11 @@ The minichord has :
 By following the row and the column of each button, we can identify the specific chord associated. **Here is the full table of the chords available by the push of a single button**:
 
 
-|   **G**   |   **B**   |   **A**   |   **F**   |   **D**   |   **E**   |   **C**   |       |
+|   **F**   |   **C**   |   **G**   |   **D**   |   **A**   |   **E**   |   **B**   |       |
 |:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:------:|
-|G maj|B maj|A maj|F maj|D maj|E maj|C maj|    **Maj**|
-|G min|B min|A min|F min|D min|E min|C min|    **Min**|
-| G7 |B7  |A7  |F7  |D7  |E7  |C7  |    **7th**|
+|F maj|C maj|G maj|D maj|A maj|E maj|B maj|    **Maj**|
+|F min|C min|G min|D min|A min|E min|B min|    **Min**|
+| F7 |C7  |G7  |D7  |A7  |E7  |B7  |    **7th**|
 
 
 
@@ -205,19 +205,19 @@ They usually look like this:
 
 As we see, to be able to play such a chord chart, **we need to have a basic understanding of the way chords are commonly written**. Since there is no widely accepted standard, it may vary slightly between chord charts.
 
-In the below table, we show the way chords are commonly written in a chord chart and how to play them on the minichord, with A for our fundamental:
+In the below table, we show the way chords are commonly written in a chord chart and how to play them on the minichord, with G for our fundamental:
 
 
 | Full chord name   |    Common notations      | Button selection pattern|
 |----------|:-------------:|:------:|
-| Major chord |    A, A major   |  ![pattern](./ressources/pattern_1.png "pattern") |
-| Minor chord | Am, Aminor, Ami, A_ | ![pattern](./ressources/pattern_2.png "pattern") |
-| Dominant 7th chord | A7, A Seven, Adom |  ![pattern](./ressources/pattern_3.png "pattern")   |
-| Major 7th chord | Amaj7, AΔ, AΔ7, AM7, Ama7| ![pattern](./ressources/pattern_4.png "pattern")   |
-| Minor 7th chord | Am7, A_7, Ami7, Amin7 | ![pattern](./ressources/pattern_5.png "pattern")   |
-| Augmented chord | Aaug, A+ |  ![pattern](./ressources/pattern_6.png "pattern")  |
-| Diminished chord | Adim, A° | ![pattern](./ressources/pattern_7.png "pattern")   |
-| Slash chord | A/G (for G substitution ) | ![pattern](./ressources/pattern_8.png "pattern")   |
+| Major chord |    G, G major   |  ![pattern](./ressources/pattern_1.png "pattern") |
+| Minor chord | Gm, Gminor, Gmi, G_ | ![pattern](./ressources/pattern_2.png "pattern") |
+| Dominant 7th chord | G7, G Seven, Gdom |  ![pattern](./ressources/pattern_3.png "pattern")   |
+| Major 7th chord | Gmaj7, GΔ, GΔ7, GM7, Gma7| ![pattern](./ressources/pattern_4.png "pattern")   |
+| Minor 7th chord | Gm7, G_7, Gmi7, Gmin7 | ![pattern](./ressources/pattern_5.png "pattern")   |
+| Augmented chord | Gaug, G+ |  ![pattern](./ressources/pattern_6.png "pattern")  |
+| Diminished chord | Gdim, G° | ![pattern](./ressources/pattern_7.png "pattern")   |
+| Slash chord | G/F (for F substitution ) | ![pattern](./ressources/pattern_8.png "pattern")   |
 
 
 
@@ -368,4 +368,4 @@ To be able to better understand the synthesis parameters, please find below the 
 
 When plugged in to a computer, the minichord will present through its USB a two port MIDI connection. The first port carries the midi signal from the Chord section, and the second port from the harp section. 
 
-They can be independently assigned to virtual instruments. Each voice from the chord section is attributed a different channel, from 1 to 4 for the chord section, and from 1 to 12 for the harp section. 
+They can be independently assigned to virtual instruments. All notes are sent to the channel 0 of each port. 

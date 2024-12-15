@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="Illustrations"
    version="1.1"
    viewBox="0 0 2000 2000"
    sodipodi:docname="Omnichord planches.svg"
-   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
+   inkscape:version="1.4 (e7c3feb1, 2024-10-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <g
      id="g22866"
      clip-path="url(#clipPath23195)"
@@ -3358,18 +3358,21 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1440"
-     inkscape:window-height="872"
+     inkscape:window-width="1920"
+     inkscape:window-height="1080"
      id="namedview1056"
      showgrid="false"
-     inkscape:zoom="0.051801913"
-     inkscape:cx="-7476.7962"
-     inkscape:cy="31018.052"
+     inkscape:zoom="0.029745554"
+     inkscape:cx="2033.9174"
+     inkscape:cy="36055.808"
      inkscape:window-x="0"
-     inkscape:window-y="28"
+     inkscape:window-y="0"
      inkscape:window-maximized="0"
      inkscape:current-layer="Illustrations"
-     inkscape:document-rotation="0" />
+     inkscape:document-rotation="0"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
   <defs
      id="defs835">
     <style
@@ -14754,17 +14757,6 @@
      inkscape:export-ydpi="30" />
   <rect
      class="cls-1"
-     x="-7798.1128"
-     y="25443.201"
-     width="246.82355"
-     height="246.82355"
-     id="rect7394-5-5-3-8-6"
-     style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/pattern_1.png"
-     inkscape:export-xdpi="30"
-     inkscape:export-ydpi="30" />
-  <rect
-     class="cls-1"
      x="-7458.2925"
      y="25443.201"
      width="246.82355"
@@ -15081,17 +15073,6 @@
      width="246.82355"
      height="246.82355"
      id="rect7388-6-3-0-6-3-1"
-     style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/pattern_2.png"
-     inkscape:export-xdpi="30"
-     inkscape:export-ydpi="30" />
-  <rect
-     class="cls-1"
-     x="-7868.2217"
-     y="26850.705"
-     width="246.82355"
-     height="246.82355"
-     id="rect7394-5-5-3-8-6-5"
      style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
      inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/pattern_2.png"
      inkscape:export-xdpi="30"
@@ -15420,17 +15401,6 @@
      inkscape:export-ydpi="30" />
   <rect
      class="cls-1"
-     x="-7775.2544"
-     y="28251.121"
-     width="246.82355"
-     height="246.82355"
-     id="rect7394-5-5-3-8-6-0"
-     style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/pattern_3.png"
-     inkscape:export-xdpi="30"
-     inkscape:export-ydpi="30" />
-  <rect
-     class="cls-1"
      x="-7435.4341"
      y="28251.121"
      width="246.82355"
@@ -15747,17 +15717,6 @@
      width="246.82355"
      height="246.82355"
      id="rect7388-6-3-0-6-3-1-0"
-     style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/pattern_4.png"
-     inkscape:export-xdpi="30"
-     inkscape:export-ydpi="30" />
-  <rect
-     class="cls-1"
-     x="-7845.3633"
-     y="29658.625"
-     width="246.82355"
-     height="246.82355"
-     id="rect7394-5-5-3-8-6-5-7"
      style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
      inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/pattern_4.png"
      inkscape:export-xdpi="30"
@@ -16086,17 +16045,6 @@
      inkscape:export-ydpi="30" />
   <rect
      class="cls-1"
-     x="-7862.124"
-     y="31088.854"
-     width="246.82355"
-     height="246.82355"
-     id="rect7394-5-5-3-8-6-6"
-     style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/pattern_5.png"
-     inkscape:export-xdpi="30"
-     inkscape:export-ydpi="30" />
-  <rect
-     class="cls-1"
      x="-7522.3037"
      y="31088.854"
      width="246.82355"
@@ -16413,17 +16361,6 @@
      width="246.82355"
      height="246.82355"
      id="rect7388-6-3-0-6-3-1-1"
-     style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/pattern_6.png"
-     inkscape:export-xdpi="30"
-     inkscape:export-ydpi="30" />
-  <rect
-     class="cls-1"
-     x="-7932.2329"
-     y="32496.359"
-     width="246.82355"
-     height="246.82355"
-     id="rect7394-5-5-3-8-6-5-1"
      style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
      inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/pattern_6.png"
      inkscape:export-xdpi="30"
@@ -16752,17 +16689,6 @@
      inkscape:export-ydpi="30" />
   <rect
      class="cls-1"
-     x="-7823.5151"
-     y="33839.715"
-     width="246.82355"
-     height="246.82355"
-     id="rect7394-5-5-3-8-6-63"
-     style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/pattern_7.png"
-     inkscape:export-xdpi="30"
-     inkscape:export-ydpi="30" />
-  <rect
-     class="cls-1"
      x="-7483.6948"
      y="33839.715"
      width="246.82355"
@@ -17079,17 +17005,6 @@
      width="246.82355"
      height="246.82355"
      id="rect7388-6-3-0-6-3-1-7"
-     style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/pattern_8.png"
-     inkscape:export-xdpi="30"
-     inkscape:export-ydpi="30" />
-  <rect
-     class="cls-1"
-     x="-7893.624"
-     y="35247.219"
-     width="246.82355"
-     height="246.82355"
-     id="rect7394-5-5-3-8-6-5-10"
      style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
      inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/pattern_8.png"
      inkscape:export-xdpi="30"
