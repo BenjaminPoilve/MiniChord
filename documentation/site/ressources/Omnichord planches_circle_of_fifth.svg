@@ -5,6 +5,9 @@
    viewBox="0 0 2000 2000"
    sodipodi:docname="Omnichord planches_circle_of_fifth.svg"
    inkscape:version="1.4 (e7c3feb1, 2024-10-09)"
+   inkscape:export-filename="Omnichord planches_circle_of_fifth.png"
+   inkscape:export-xdpi="30"
+   inkscape:export-ydpi="30"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -15,7 +18,7 @@
   <g
      id="g22866"
      clip-path="url(#clipPath23195)"
-     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_11.png"
+     inkscape:export-filename="drawing_11.png"
      inkscape:export-xdpi="30"
      inkscape:export-ydpi="30">
     <path
@@ -656,7 +659,10 @@
   </g>
   <g
      id="g20769"
-     clip-path="url(#clipPath20786)">
+     clip-path="url(#clipPath20786)"
+     inkscape:export-filename="drawing_10.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30">
     <g
        id="g20543"
        transform="translate(11.0439,-187.017)">
@@ -3240,7 +3246,7 @@
      id="path4034"
      style="fill:none;stroke:#000000;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
      sodipodi:nodetypes="cssc"
-     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_9.png"
+     inkscape:export-filename="drawing_9.png"
      inkscape:export-xdpi="30"
      inkscape:export-ydpi="30" />
   <line
@@ -3351,9 +3357,9 @@
      inkscape:window-height="1027"
      id="namedview1056"
      showgrid="false"
-     inkscape:zoom="0.043380561"
-     inkscape:cx="4691.0412"
-     inkscape:cy="5094.4477"
+     inkscape:zoom="0.076481274"
+     inkscape:cx="4667.8093"
+     inkscape:cy="4746.2599"
      inkscape:window-x="63"
      inkscape:window-y="25"
      inkscape:window-maximized="0"
@@ -5104,9 +5110,9 @@
   <g
      id="g11362"
      clip-path="url(#clipPath11364)"
-     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_3.png"
-     inkscape:export-xdpi="300"
-     inkscape:export-ydpi="300">
+     inkscape:export-filename="drawing_3.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30">
     <path
        class="cls-2"
        d="m 2230.4977,7531.6159 v 38.8584 l 34.2288,4.4958 v 22.0616 l -34.2288,4.9471 v 38.8583 l 34.2288,4.4792 v 22.0782 l -34.2288,4.9471 V 7711.2 l 34.2288,4.4791 v 22.0783 l -34.2288,4.9471 v 38.8583 l 34.2288,4.4792 v 22.0782 l -34.2288,4.9471 v 38.8584 l 34.2288,4.4791 v 22.0783 l -34.2288,4.9304 v 38.875 l 34.2288,4.4792 v 22.0782 l -34.2288,4.9304 v 38.8751 l 34.2288,4.4791 v 22.0783 l -34.2288,4.9304 v 38.8583 l 34.2288,4.4959 v 22.0615 l -28.3123,4.0947 c -7.3037,-12.819 -18.1172,-23.3317 -33.1424,-30.7189 -25.8387,-12.6854 -52.5799,-4.5962 -78.8532,14.6408 -11.7995,8.6407 -23.5155,19.5378 -35.031,31.7886 v -628.7363 c 0,-5.4319 4.9137,-9.5099 10.2453,-8.5238 l 130.8648,24.5016 34.2288,6.4012 v 23.666 z"
@@ -6362,7 +6368,10 @@
        style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
   </g>
   <g
-     id="g11266">
+     id="g11266"
+     inkscape:export-filename="drawing_2.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30">
     <g
        id="g6709"
        clip-path="url(#clipPath6711)">
@@ -6994,8 +7003,9 @@
      id="g6576"
      transform="translate(-20,-20)"
      clip-path="url(#clipPath6578)"
-     inkscape:export-xdpi="300"
-     inkscape:export-ydpi="300">
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30"
+     inkscape:export-filename="drawing_1.png">
     <path
        class="cls-4"
        d="m 4388.6822,3034.7704 411.17,-269.46 c 28.59,-18.74 57.85,-36.42 87.73,-53.02 l 64.4,-35.77 c 208.99,-110.29 467.82,-30.27 578.1,178.72 110.29,209 30.27,467.83 -178.72,578.11 0,0 -114.01,58.47 -230.6,44.15 -27.47,-3.37 -51.46,-7.81 -72.09,-12.63"
@@ -10591,7 +10601,7 @@
      d="m 3228.0129,16080.351 c -53.8946,-69.188 -117.3868,-130.438 -188.6575,-181.538 -200.9446,-144.097 -445.4214,-219.376 -696.3319,-210.78 l -38.6016,1.319 c -206.8508,7.093 -413.5962,-16.928 -613.3014,-71.271 l -527.239,-143.411 c -264.5687,-75.489 -447.02985,-317.277 -447.02985,-592.419 v 0 c 2.03026,-300.428 231.13509,-550.602 530.21845,-578.972 l 2475.8555,-234.88 c 101.6193,-9.65 203.5549,-15.556 305.5961,-17.772 l 219.929,-4.745 c 705.6923,0 1277.7555,572.064 1277.7555,1277.756 0,705.692 -572.0632,1277.755 -1277.7555,1277.755 0,0 -382.5884,-4.481 -670.5448,-204.793 -194.3791,-135.211 -301.0872,-253.627 -349.9457,-316.328 z"
      id="path7358-4"
      style="font-size:42.16px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:none;stroke:#000000;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_5.png"
+     inkscape:export-filename="drawing_5.png"
      inkscape:export-xdpi="30"
      inkscape:export-ydpi="30" />
   <rect
@@ -11092,7 +11102,7 @@
      d="m 3236.4179,19333.391 c -53.8946,-69.188 -117.3868,-130.438 -188.6575,-181.538 -200.9446,-144.097 -445.4214,-219.376 -696.3319,-210.78 l -38.6016,1.319 c -206.8508,7.093 -413.5962,-16.928 -613.3014,-71.271 l -527.239,-143.411 c -264.56871,-75.489 -447.02986,-317.277 -447.02986,-592.419 v 0 c 2.03026,-300.428 231.13509,-550.602 530.21846,-578.972 l 2475.8555,-234.88 c 101.6193,-9.65 203.5549,-15.556 305.5961,-17.772 l 219.929,-4.745 c 705.6923,0 1277.7555,572.064 1277.7555,1277.756 0,705.692 -572.0632,1277.755 -1277.7555,1277.755 0,0 -382.5884,-4.481 -670.5448,-204.793 -194.3791,-135.211 -301.0872,-253.627 -349.9457,-316.328 z"
      id="path7358-4-3"
      style="font-size:42.16px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:none;stroke:#000000;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_6.png"
+     inkscape:export-filename="drawing_6.png"
      inkscape:export-xdpi="30"
      inkscape:export-ydpi="30" />
   <rect
@@ -11597,7 +11607,7 @@
      d="m 3251.5825,22654.436 c -53.8946,-69.188 -117.3868,-130.438 -188.6575,-181.538 -200.9446,-144.097 -445.4214,-219.376 -696.332,-210.78 l -38.6016,1.319 c -206.8508,7.093 -413.5962,-16.928 -613.3014,-71.271 l -527.239,-143.411 c -264.56862,-75.489 -447.02977,-317.277 -447.02977,-592.419 v 0 c 2.03026,-300.428 231.13509,-550.602 530.21837,-578.972 l 2475.8556,-234.88 c 101.6193,-9.65 203.5549,-15.556 305.5961,-17.772 l 219.929,-4.745 c 705.6923,0 1277.7555,572.064 1277.7555,1277.756 0,705.692 -572.0632,1277.755 -1277.7555,1277.755 0,0 -382.5884,-4.481 -670.5448,-204.793 -194.3791,-135.211 -301.0872,-253.627 -349.9457,-316.328 z"
      id="path7358-4-3-9"
      style="font-size:42.16px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:none;stroke:#000000;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_7.png"
+     inkscape:export-filename="drawing_7.png"
      inkscape:export-xdpi="30"
      inkscape:export-ydpi="30" />
   <rect
@@ -12098,7 +12108,7 @@
      d="m 3255.5191,25995.952 c -53.8946,-69.188 -117.3868,-130.438 -188.6575,-181.538 -200.9446,-144.097 -445.4214,-219.376 -696.332,-210.78 l -38.6016,1.319 c -206.8508,7.093 -413.5962,-16.928 -613.3013,-71.271 l -527.239,-143.411 c -264.56866,-75.489 -447.0298,-317.277 -447.0298,-592.419 v 0 c 2.03026,-300.428 231.13508,-550.602 530.2184,-578.972 L 3750.4318,23984 c 101.6193,-9.65 203.5549,-15.556 305.5961,-17.772 l 219.929,-4.745 c 705.6923,0 1277.7555,572.064 1277.7555,1277.756 0,705.692 -572.0632,1277.755 -1277.7555,1277.755 0,0 -382.5884,-4.481 -670.5448,-204.793 -194.3791,-135.211 -301.0872,-253.627 -349.9457,-316.328 z"
      id="path7358-4-3-9-9"
      style="font-size:42.16px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:none;stroke:#000000;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_8.png"
+     inkscape:export-filename="drawing_8.png"
      inkscape:export-xdpi="30"
      inkscape:export-ydpi="30" />
   <rect
@@ -13261,7 +13271,10 @@
        class="cls-2"
        d="m 9444.9247,41102.081 v 46.457 c -17.9556,-22.976 -43.8225,-30.456 -68.7302,-31.31 v -15.147 z"
        id="path23203"
-       style="fill:#b2b2b2;stroke-width:0px" />
+       style="fill:#b2b2b2;stroke-width:0px"
+       inkscape:export-filename="drawing_12.png"
+       inkscape:export-xdpi="30"
+       inkscape:export-ydpi="30" />
     <path
        class="cls-2"
        d="m 11784.276,41214.337 c 0,20.196 -11.11,37.801 -27.518,47.017 -9.537,-0.934 -18.303,-1.202 -26.16,-1.041 -9.725,0.16 -18.036,0.961 -24.643,1.87 -17.236,-8.977 -29.037,-27.01 -29.037,-47.846 0,-24.205 15.93,-44.614 37.802,-51.426 v 0 c 7.672,2.03 15.397,3.713 23.017,5.048 4.501,0.829 8.924,1.522 13.266,2.084 3.409,0.455 7.139,0.721 11.188,0.775 13.373,9.778 22.031,25.62 22.031,43.492 z"
@@ -14000,7 +14013,7 @@
      transform="matrix(1.4498551,0,0,1.4503686,-8366.8214,-22096.214)"
      style="stroke-width:0.689602"
      clip-path="url(#clipPath26021)"
-     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_13.png"
+     inkscape:export-filename="drawing_13.png"
      inkscape:export-xdpi="30"
      inkscape:export-ydpi="30">
     <path
@@ -14584,7 +14597,7 @@
      height="246.82355"
      id="rect7392-6-0-1-3-7"
      style="fill:none;stroke:#000000;stroke-width:10.5469;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/pattern_1.png"
+     inkscape:export-filename="pattern_1.png"
      inkscape:export-xdpi="30"
      inkscape:export-ydpi="30" />
   <rect
@@ -14906,7 +14919,7 @@
      height="246.82355"
      id="rect7392-6-0-1-3-7-4"
      style="fill:none;stroke:#000000;stroke-width:10.5469;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/pattern_2.png"
+     inkscape:export-filename="pattern_2.png"
      inkscape:export-xdpi="30"
      inkscape:export-ydpi="30" />
   <rect
@@ -15228,7 +15241,7 @@
      height="246.82355"
      id="rect7392-6-0-1-3-7-46"
      style="fill:none;stroke:#000000;stroke-width:10.5469;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/pattern_3.png"
+     inkscape:export-filename="pattern_3.png"
      inkscape:export-xdpi="30"
      inkscape:export-ydpi="30" />
   <rect
@@ -15550,7 +15563,7 @@
      height="246.82355"
      id="rect7392-6-0-1-3-7-4-9"
      style="fill:none;stroke:#000000;stroke-width:10.5469;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/pattern_4.png"
+     inkscape:export-filename="pattern_4.png"
      inkscape:export-xdpi="30"
      inkscape:export-ydpi="30" />
   <rect
@@ -15872,7 +15885,7 @@
      height="246.82355"
      id="rect7392-6-0-1-3-7-1"
      style="fill:none;stroke:#000000;stroke-width:10.5469;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/pattern_5.png"
+     inkscape:export-filename="pattern_5.png"
      inkscape:export-xdpi="30"
      inkscape:export-ydpi="30" />
   <rect
@@ -16194,7 +16207,7 @@
      height="246.82355"
      id="rect7392-6-0-1-3-7-4-8"
      style="fill:none;stroke:#000000;stroke-width:10.5469;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/pattern_6.png"
+     inkscape:export-filename="pattern_6.png"
      inkscape:export-xdpi="30"
      inkscape:export-ydpi="30" />
   <rect
@@ -16516,7 +16529,7 @@
      height="246.82355"
      id="rect7392-6-0-1-3-7-5"
      style="fill:none;stroke:#000000;stroke-width:10.5469;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/pattern_7.png"
+     inkscape:export-filename="pattern_7.png"
      inkscape:export-xdpi="30"
      inkscape:export-ydpi="30" />
   <rect
@@ -16838,7 +16851,7 @@
      height="246.82355"
      id="rect7392-6-0-1-3-7-4-0"
      style="fill:none;stroke:#000000;stroke-width:10.5469;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/pattern_8.png"
+     inkscape:export-filename="pattern_8.png"
      inkscape:export-xdpi="30"
      inkscape:export-ydpi="30" />
   <rect

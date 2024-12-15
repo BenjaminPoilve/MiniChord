@@ -12,6 +12,9 @@ void apply_audio_parameter(int adress, int value) {
       case 23:
         note_slash_level=value;
         break;
+      case 30:
+        transpose_semitones=value;
+        break;
       case 24:
         main_reverb.size(value/100.0);
         break;

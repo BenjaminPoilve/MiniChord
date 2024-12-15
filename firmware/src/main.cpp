@@ -12,7 +12,7 @@
 #include <potentiometer.h>
 
 //>>SOFWTARE VERSION 
-int version_ID=0001; //to be read 00.01, stored at adress 7 in memory
+int version_ID=0002; //to be read 00.01, stored at adress 7 in memory
 //>>BUTTON ARRAYS<<
 debouncer harp_array[12];
 debouncer chord_matrix_array[22];
@@ -41,6 +41,7 @@ uint8_t aug[7] = {0, 4, 8, 12, 2, 5, 9};
 uint8_t dim[7] = {0, 3, 6, 12, 2, 5, 9};
 uint8_t root_button[7] = {11, 4, 9, 2, 7, 0, 5}; // defines the fundamental of each row in the circle of fifth, ie F,C,G,D,A,E,B from left to right
 float c_frequency = 130.81;                      // for C3
+uint8_t transpose_semitones=0;                       // to use to transpose the instrument, number of semitones
 uint8_t (*current_chord)[7] = &major;            // the array holding the current chord
 uint8_t current_chord_notes[7];                  // the array for the note calculation within the chord, calculate 7 of them for the arpeggiator mode
 uint8_t current_applied_chord_notes[7];          // the array for the note calculation within the chord
@@ -398,7 +399,7 @@ void calculate_ws_array() {
 }
 // setting the pad_frequency
 void set_chord_voice_frequency(uint8_t i, uint16_t current_note) {
-  float note_freq = c_frequency/2.0 * pow(2, (current_note) / 12.0); //down one octave to let more possibilities with the shuffling array
+  float note_freq = c_frequency/2.0 * pow(2, (current_note+transpose_semitones) / 12.0); //down one octave to let more possibilities with the shuffling array
   AudioNoInterrupts();
   chords_vibrato_lfo.frequency(chord_vibrato_base_freq + chord_vibrato_keytrack * current_chord_notes[0]);
   chords_tremolo_lfo.frequency(chord_tremolo_base_freq + chord_tremolo_keytrack * current_chord_notes[0]);
@@ -419,7 +420,7 @@ void set_chord_voice_frequency(uint8_t i, uint16_t current_note) {
 }
 // setting the harp
 void set_harp_voice_frequency(uint8_t i, uint16_t current_note) {
-  float note_freq = c_frequency * pow(2, (current_note) / 12.0);
+  float note_freq = c_frequency * pow(2, (current_note+transpose_semitones) / 12.0);
   AudioNoInterrupts();
   string_waveform_array[i]->frequency(note_freq);
   string_filter_array[i]->frequency(string_filter_base_freq + note_freq * string_filter_keytrack);
