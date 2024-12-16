@@ -366,6 +366,16 @@ To be able to better understand the synthesis parameters, please find below the 
 
 # **MIDI support**
 
-When plugged in to a computer, the minichord will present through its USB a two port MIDI connection. The first port carries the midi signal from the Chord section, and the second port from the harp section. 
+When plugged in to a computer through USB, the minichord will appear as a MIDI instrument exposing two separate MIDI port. The first port carries the MIDI signal from the chord section, and the second port from the harp section. The minichord has to be turned on to appear, so make sure that an audio output cable is plugged in to the minichord. 
 
-They can be independently assigned to virtual instruments. All notes are sent to the channel 0 of each port. 
+For example, using the "Audio MIDI Setup" utility of macOS we can look at the characteristics of the minichord
+
+![Midi screen](./ressources/minichord_midi.jpg "Midi screen")
+
+The potentiometers control the volume of each port (MIDI CC 7). All notes are sent to the channel 0 of each port. Each port can be independently assigned to virtual instruments by most music softwares. For example, using Surge XT, using the option screen allows to select which midi input to active.
+
+![Surge XT screen](./ressources/SurgeXToptions.jpg "Surge XT screen")
+
+The minichord stays usable with softwate that does not distinguish between ports (such as GarageBand), but all of the notes will be attributed to a single instrument. 
+
+

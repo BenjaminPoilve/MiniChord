@@ -214,10 +214,11 @@ uint8_t chord_started_notes[4]={0,0,0,0};
 uint8_t midi_volume_control=7;
 uint8_t midi_mod_control=1;
 uint8_t harp_port=1;
-uint8_t harp_attack_velocity=127;
+uint8_t harp_attack_velocity=127; 
 uint8_t harp_release_velocity=20;
 uint8_t harp_started_notes[12]={0,0,0,0,0,0,0,0,0,0,0,0};    
 uint8_t midi_base_note=48; // for C3
+uint8_t midi_base_note_transposed=midi_base_note; //to handle note transposition
 
 //-->>FUNCTION THAT NEED ANNOUNCING
 void save_config(int bank_number, bool default_save);
@@ -364,9 +365,10 @@ void play_single_note(int i, IntervalTimer *timer) {
   chord_envelope_array[i]->noteOn();
   chord_envelope_filter_array[i]->noteOn();
   if(chord_started_notes[i]!=0){
-    usbMIDI.sendNoteOff(chord_started_notes[i],chord_release_velocity,0,chord_port);}
-  usbMIDI.sendNoteOn(midi_base_note+ current_applied_chord_notes[i],chord_attack_velocity,0,chord_port);
-  chord_started_notes[i]=midi_base_note+ current_applied_chord_notes[i];
+    usbMIDI.sendNoteOff(chord_started_notes[i],chord_release_velocity,0,chord_port);
+    chord_started_notes[i]=0;}
+  usbMIDI.sendNoteOn(midi_base_note_transposed+ current_applied_chord_notes[i],chord_attack_velocity,0,chord_port);
+  chord_started_notes[i]=midi_base_note_transposed+ current_applied_chord_notes[i];
 }
 
 void play_note_selected_duration(int i,int current_note){
@@ -376,9 +378,10 @@ void play_note_selected_duration(int i,int current_note){
   chord_envelope_filter_array[i]->noteOn();
   note_off_timing[i]=0;
   if(chord_started_notes[i]!=0){
-    usbMIDI.sendNoteOff(chord_started_notes[i],chord_release_velocity,0,chord_port);}
-  usbMIDI.sendNoteOn(midi_base_note+current_note,chord_attack_velocity,0,chord_port);
-  chord_started_notes[i]=midi_base_note+current_note;
+    usbMIDI.sendNoteOff(chord_started_notes[i],chord_release_velocity,0,chord_port);
+    chord_started_notes[i]=0;}
+  usbMIDI.sendNoteOn(midi_base_note_transposed+current_note,chord_attack_velocity,0,chord_port);
+  chord_started_notes[i]=midi_base_note_transposed+current_note;
 }
 
 void turn_off_led(IntervalTimer *timer) {
@@ -414,8 +417,9 @@ void set_chord_voice_frequency(uint8_t i, uint16_t current_note) {
   if(chord_started_notes[i]!=0){
     //we need to change the note without triggering the change, ie a pitch bend
     usbMIDI.sendNoteOff(chord_started_notes[i],chord_release_velocity,0,chord_port);
-    usbMIDI.sendNoteOn(midi_base_note+current_note,chord_attack_velocity,0,chord_port);
-    chord_started_notes[i]=midi_base_note+ current_note;
+    chord_started_notes[i]=0;
+    usbMIDI.sendNoteOn(midi_base_note_transposed+current_note,chord_attack_velocity,0,chord_port);
+    chord_started_notes[i]=midi_base_note_transposed+ current_note;
   }
 }
 // setting the harp
@@ -770,8 +774,10 @@ void loop() {
         chord_vibrato_dc_envelope_array[i]->noteOff();
         chord_envelope_array[i]->noteOff();
         chord_envelope_filter_array[i]->noteOff();
-        usbMIDI.sendNoteOff(chord_started_notes[i],chord_release_velocity,0,chord_port);
-        chord_started_notes[i]=0;
+        if(chord_started_notes[i]!=0){
+          usbMIDI.sendNoteOff(chord_started_notes[i],chord_release_velocity,0,chord_port);
+          chord_started_notes[i]=0;
+        }
       }
     }
   }
@@ -808,8 +814,10 @@ void loop() {
           chord_vibrato_dc_envelope_array[i]->noteOff();
           chord_envelope_array[i]->noteOff();
           chord_envelope_filter_array[i]->noteOff();
-          usbMIDI.sendNoteOff(chord_started_notes[i],chord_release_velocity,0,chord_port);
-          chord_started_notes[i]=0;
+          if(chord_started_notes[i]!=0){
+            usbMIDI.sendNoteOff(chord_started_notes[i],chord_release_velocity,0,chord_port);
+            chord_started_notes[i]=0;
+          }
 
         }
       }
@@ -887,6 +895,12 @@ void loop() {
           current_harp_notes[i] = calculate_note_harp(i, slash_chord, sharp_active);
           if (change_held_strings) {
             for (int i = 0; i < 12; i++) {
+              if(harp_started_notes[i]!=0){
+                  usbMIDI.sendNoteOff(harp_started_notes[i],harp_release_velocity,0,harp_port);
+                  harp_started_notes[i]=0;
+                  usbMIDI.sendNoteOn(midi_base_note_transposed+current_harp_notes[i],harp_attack_velocity,0,harp_port);
+                  harp_started_notes[i]=midi_base_note_transposed+current_harp_notes[i];}
+             
               if (string_enveloppe_array[i]->isSustain()) { // change the frequency if we are in the sustain part
                 set_harp_voice_frequency(i, current_harp_notes[i]);
               }
@@ -944,10 +958,12 @@ void loop() {
       string_enveloppe_filter_array[i]->noteOn();
       string_enveloppe_array[i]->noteOn();
       AudioInterrupts();
-      if(chord_started_notes[i]!=0){
-      usbMIDI.sendNoteOff(chord_started_notes[i],chord_release_velocity,0,harp_port);}
-      usbMIDI.sendNoteOn(midi_base_note+current_harp_notes[i],harp_attack_velocity,0,harp_port);
-      harp_started_notes[i]=midi_base_note+current_harp_notes[i];
+      if(harp_started_notes[i]!=0){
+        usbMIDI.sendNoteOff(harp_started_notes[i],harp_release_velocity,0,harp_port);
+        harp_started_notes[i]=0;
+      }
+      usbMIDI.sendNoteOn(midi_base_note_transposed+current_harp_notes[i],harp_attack_velocity,0,harp_port);
+      harp_started_notes[i]=midi_base_note_transposed+current_harp_notes[i];
 
     }
     //value = harp_array[i].read_value(); //weirdly if we use the debouncer some noteOff seems to be ignored !!!!but if we don't, then the noteoff slow down the envelope !!
@@ -956,8 +972,10 @@ void loop() {
       string_enveloppe_filter_array[i]->noteOff();
       string_enveloppe_array[i]->noteOff();
       AudioInterrupts();
-      usbMIDI.sendNoteOff(harp_started_notes[i],harp_release_velocity,0,harp_port);
-      harp_started_notes[i]=0;
+      if(harp_started_notes[i]!=0){
+        usbMIDI.sendNoteOff(harp_started_notes[i],harp_release_velocity,0,harp_port);
+        harp_started_notes[i]=0;
+      }
 
     }
   }
