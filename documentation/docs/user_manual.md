@@ -372,7 +372,7 @@ For example, using the "Audio MIDI Setup" utility of macOS we can look at the ch
 
 ![Midi screen](./ressources/minichord_midi.jpg "Midi screen")
 
-The potentiometers control the volume of each port (MIDI CC 7). All notes are sent to the channel 0 of each port. Each port can be independently assigned to virtual instruments by most music softwares. For example, using Surge XT, using the option screen allows to select which midi input to active.
+The potentiometers control the volume of each port (MIDI CC 7). All notes are sent to the channel 1 of each port. Each port can be independently assigned to virtual instruments by most music softwares. For example, using Surge XT, using the option screen allows to select which midi input to active.
 
 ![Surge XT screen](./ressources/SurgeXToptions.jpg "Surge XT screen")
 
