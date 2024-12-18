@@ -3357,19 +3357,38 @@
      inkscape:window-height="1027"
      id="namedview1056"
      showgrid="false"
-     inkscape:zoom="0.076481274"
-     inkscape:cx="4667.8093"
-     inkscape:cy="4746.2599"
+     inkscape:zoom="0.051005926"
+     inkscape:cx="9920.4159"
+     inkscape:cy="10881.089"
      inkscape:window-x="63"
      inkscape:window-y="25"
      inkscape:window-maximized="0"
-     inkscape:current-layer="g24778"
+     inkscape:current-layer="Illustrations"
      inkscape:document-rotation="0"
      inkscape:showpageshadow="2"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1" />
   <defs
      id="defs835">
+    <marker
+       style="overflow:visible"
+       id="Triangle"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Triangle arrow"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135" />
+    </marker>
     <style
        id="style833">
       .cls-1 {
@@ -5106,6 +5125,241 @@
          inkscape:export-xdpi="30"
          inkscape:export-ydpi="30" />
     </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath1945-6-9">
+      <rect
+         style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="rect1947-4-0"
+         width="2000"
+         height="2000"
+         x="2136.6672"
+         y="2378.5762"
+         inkscape:export-xdpi="300"
+         inkscape:export-ydpi="300" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath1941-4-5">
+      <rect
+         style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="rect1943-8-5"
+         width="2000"
+         height="2000"
+         x="2136.6672"
+         y="2378.5762"
+         inkscape:export-xdpi="300"
+         inkscape:export-ydpi="300" />
+    </clipPath>
+    <marker
+       style="overflow:visible"
+       id="Triangle-4"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Triangle arrow"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135-5" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Triangle-4-2"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Triangle arrow"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135-5-9" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Triangle-4-2-1"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Triangle arrow"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135-5-9-1" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Triangle-4-2-11"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Triangle arrow"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135-5-9-8" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Triangle-4-1"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Triangle arrow"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135-5-5" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Triangle-4-0"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Triangle arrow"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135-5-8" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Triangle-4-7"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Triangle arrow"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135-5-0" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Triangle-4-3"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Triangle arrow"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135-5-4" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Triangle-4-75"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Triangle arrow"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135-5-1" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Triangle-4-0-6"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Triangle arrow"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135-5-8-6" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Triangle-4-7-1"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Triangle arrow"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135-5-0-4" />
+    </marker>
   </defs>
   <g
      id="g11362"
@@ -13997,6 +14251,516 @@
        d="m 9172.4553,41518.512 c 42.5434,-23.723 97.9273,-34.328 142.095,-9.163 -44.1945,-24.204 -99.0191,-12.796 -140.6835,11.434 -1.4651,0.961 -2.9837,-1.335 -1.4115,-2.271 z"
        id="path23445"
        style="fill:#000000;stroke:#000000;stroke-width:4.36852;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <path
+       class="cls-2"
+       d="m 24617.916,22364.789 c -39.249,-50.363 -85.487,-94.948 -137.39,-132.145 -146.339,-104.891 -324.381,-159.688 -507.108,-153.431 l -28.111,0.96 c -150.641,5.163 -301.204,-12.322 -446.64,-51.879 l -383.965,-104.392 c -192.673,-54.95 -325.551,-230.952 -325.551,-431.233 v 0 c 1.478,-218.688 168.325,-400.794 386.134,-421.446 l 1803.054,-170.973 c 74.005,-7.025 148.24,-11.324 222.552,-12.937 l 160.164,-3.454 c 513.924,0 930.532,416.417 930.532,930.104 0,513.687 -416.608,930.103 -930.532,930.103 0,0 -278.622,-3.262 -488.327,-149.073 -141.558,-98.423 -219.269,-184.62 -254.85,-230.261 z"
+       id="path7358-1"
+       style="font-size:42.16px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:none;stroke:#000000;stroke-width:10.9213;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
+    <rect
+       class="cls-1"
+       x="23228.992"
+       y="21200.908"
+       width="179.75046"
+       height="179.66771"
+       id="rect7392-3"
+       style="fill:none;stroke:#000000;stroke-width:7.67906;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
+    <rect
+       class="cls-1"
+       x="23080.178"
+       y="21200.908"
+       width="84.450653"
+       height="84.411781"
+       id="rect7408-7"
+       style="fill:none;stroke:#000000;stroke-width:7.67906;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
+    <g
+       id="g2413-8"
+       style="fill:#ffffff;fill-opacity:1;stroke-width:10;stroke-miterlimit:4;stroke-dasharray:none"
+       inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"
+       transform="matrix(0.72825489,0,0,0.72791965,22284.225,13063.426)">
+      <rect
+         class="cls-1"
+         x="1544.1016"
+         y="11862.323"
+         width="246.82355"
+         height="246.82355"
+         id="rect7360-83"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+      <rect
+         class="cls-1"
+         x="1883.9219"
+         y="11862.323"
+         width="246.82355"
+         height="246.82355"
+         id="rect7362-8"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+      <rect
+         class="cls-1"
+         x="2223.7693"
+         y="11862.323"
+         width="246.82355"
+         height="246.82355"
+         id="rect7364-1"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+      <rect
+         class="cls-1"
+         x="2903.4099"
+         y="11862.323"
+         width="246.82355"
+         height="246.82355"
+         id="rect7366-5"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+      <rect
+         class="cls-1"
+         x="3243.2317"
+         y="11862.323"
+         width="246.82355"
+         height="246.82355"
+         id="rect7368-3"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+      <rect
+         class="cls-1"
+         x="3583.0522"
+         y="11862.323"
+         width="246.82355"
+         height="246.82355"
+         id="rect7370-5"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+      <rect
+         class="cls-1"
+         x="2563.5896"
+         y="11862.323"
+         width="246.82355"
+         height="246.82355"
+         id="rect7372-4"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+      <rect
+         class="cls-1"
+         x="1420.702"
+         y="11520.708"
+         width="246.82355"
+         height="246.82355"
+         id="rect7376-3"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+      <rect
+         class="cls-1"
+         x="1760.524"
+         y="11520.708"
+         width="246.82355"
+         height="246.82355"
+         id="rect7378-6"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+      <rect
+         class="cls-1"
+         x="2100.3442"
+         y="11520.708"
+         width="246.82355"
+         height="246.82355"
+         id="rect7380-5"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+      <rect
+         class="cls-1"
+         x="2779.9849"
+         y="11520.708"
+         width="246.82355"
+         height="246.82355"
+         id="rect7382-95"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+      <rect
+         class="cls-1"
+         x="3119.8064"
+         y="11520.708"
+         width="246.82355"
+         height="246.82355"
+         id="rect7384-4"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+      <rect
+         class="cls-1"
+         x="3459.6272"
+         y="11520.708"
+         width="246.82355"
+         height="246.82355"
+         id="rect7386-9"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+      <rect
+         class="cls-1"
+         x="2440.1646"
+         y="11520.708"
+         width="246.82355"
+         height="246.82355"
+         id="rect7388-1"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+      <rect
+         class="cls-1"
+         x="1297.3041"
+         y="11179.095"
+         width="246.82355"
+         height="246.82355"
+         id="rect7394-7"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+      <rect
+         class="cls-1"
+         x="1637.1245"
+         y="11179.095"
+         width="246.82355"
+         height="246.82355"
+         id="rect7396-5"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+      <rect
+         class="cls-1"
+         x="1976.9463"
+         y="11179.095"
+         width="246.82355"
+         height="246.82355"
+         id="rect7398-5"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+      <rect
+         class="cls-1"
+         x="2656.5867"
+         y="11179.095"
+         width="246.82355"
+         height="246.82355"
+         id="rect7400-41"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+      <rect
+         class="cls-1"
+         x="2996.4072"
+         y="11179.095"
+         width="246.82355"
+         height="246.82355"
+         id="rect7402-88"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+      <rect
+         class="cls-1"
+         x="3336.229"
+         y="11179.095"
+         width="246.82355"
+         height="246.82355"
+         id="rect7404-3"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+      <rect
+         class="cls-1"
+         x="2316.7664"
+         y="11179.095"
+         width="246.82355"
+         height="246.82355"
+         id="rect7406-52"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+      <rect
+         class="cls-1"
+         x="1092.9579"
+         y="11179.095"
+         width="115.96304"
+         height="115.96304"
+         id="rect7410-2"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    </g>
+    <g
+       id="g2417-6"
+       style="stroke-width:10;stroke-miterlimit:4;stroke-dasharray:none"
+       inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"
+       transform="matrix(0.72825489,0,0,0.72791965,22284.225,13063.426)">
+      <rect
+         class="cls-1"
+         x="3737.3003"
+         y="10937.649"
+         width="115.96304"
+         height="115.96304"
+         id="rect7412-6"
+         style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+      <rect
+         class="cls-1"
+         x="3618.0674"
+         y="10952.47"
+         width="57.243233"
+         height="86.299904"
+         id="rect7414-7"
+         style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    </g>
+    <ellipse
+       class="cls-3"
+       cx="25974.887"
+       cy="21930.674"
+       id="circle7420-8"
+       style="fill:none;stroke:#000000;stroke-width:7.67906;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"
+       rx="65.939865"
+       ry="65.909508" />
+    <g
+       id="g2424-4"
+       style="stroke-width:10;stroke-miterlimit:4;stroke-dasharray:none"
+       inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"
+       transform="matrix(0.72825489,0,0,0.72791965,22284.225,13063.426)">
+      <circle
+         class="cls-1"
+         cx="5067.8164"
+         cy="12181.629"
+         r="77.124115"
+         id="circle7418-1"
+         style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+      <circle
+         class="cls-1"
+         cx="5067.8164"
+         cy="11763.209"
+         r="77.124115"
+         id="circle7424-7"
+         style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+      <circle
+         class="cls-3"
+         cx="5067.8164"
+         cy="11763.209"
+         r="90.545036"
+         id="circle7426-1"
+         style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+      <circle
+         class="cls-1"
+         cx="5067.8164"
+         cy="11344.812"
+         r="77.124115"
+         id="circle7430-8"
+         style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+      <circle
+         class="cls-3"
+         cx="5067.8164"
+         cy="11344.812"
+         r="90.545036"
+         id="circle7432-7"
+         style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    </g>
+    <g
+       id="g2429-8"
+       style="stroke-width:10;stroke-miterlimit:4;stroke-dasharray:none"
+       inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"
+       transform="matrix(0.72825489,0,0,0.72791965,22284.225,13063.426)">
+      <circle
+         class="cls-1"
+         cx="3814.2131"
+         cy="12430.035"
+         r="63.202221"
+         id="circle7416-7"
+         style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+      <path
+         class="cls-1"
+         d="m 4994.7794,12545.423 v -42.979 c 0,-3.559 1.0811,-7.013 3.1113,-9.94 l 59.0626,-85.193 c 3.2695,-4.693 8.6221,-7.515 14.3438,-7.515 h 21.6738 c 5.7217,0 11.0742,2.796 14.3437,7.515 l 59.0627,85.193 c 2.0302,2.927 3.1112,6.381 3.1112,9.94 v 42.979 c 0,9.624 -7.8046,17.455 -17.455,17.455 h -139.799 c -9.624,0 -17.4551,-7.805 -17.4551,-17.455 z"
+         id="path7436-7"
+         style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+      <path
+         class="cls-1"
+         d="m 5169.4622,12622.626 v 42.979 c 0,3.559 -1.0811,7.013 -3.1113,9.941 l -59.0626,85.191 c -3.2695,4.694 -8.6221,7.515 -14.3438,7.515 h -21.6738 c -5.7217,0 -11.0742,-2.795 -14.3437,-7.515 l -59.0627,-85.191 c -2.0302,-2.928 -3.1112,-6.382 -3.1112,-9.941 v -42.979 c 0,-9.624 7.8046,-17.455 17.455,-17.455 h 139.799 c 9.6241,0 17.4551,7.804 17.4551,17.455 z"
+         id="path7438-4"
+         style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    </g>
+    <path
+       class="cls-1"
+       d="m 25547.565,21290.737 v -32.859 l -47.564,-8.887 -181.786,-34.011 c -7.393,-1.382 -14.248,4.299 -14.248,11.823 v 1159.732 c 0,7.294 6.433,12.897 13.653,11.92 l 182.362,-24.856 47.564,-6.488 v -32.321 c 0,0 -47.564,-6.218 -47.564,-6.218 v -53.952 c 0,0 47.544,-6.871 47.544,-6.871 v -30.652 l -47.544,-6.219 v -53.952 c 0,0 47.544,-6.871 47.544,-6.871 v -30.652 l -47.544,-6.218 v -53.953 c 0,0 47.544,-6.871 47.544,-6.871 v -30.651 l -47.544,-6.219 v -53.952 c 0,0 47.544,-6.871 47.544,-6.871 v -30.651 l -47.544,-6.22 v -53.951 c 0,0 47.544,-6.872 47.544,-6.872 v -30.651 l -47.544,-6.219 v -53.952 c 0,0 47.544,-6.871 47.544,-6.871 v -30.652 l -47.544,-6.218 v -53.952 c 0,0 47.544,-6.871 47.544,-6.871 v -30.652 l -47.544,-6.219 v -53.952 c 0,0 47.544,-6.871 47.544,-6.871 v -30.652 l -47.544,-6.218 v -53.953 c 0,0 47.544,-6.871 47.544,-6.871 v -30.651 l -47.544,-6.219 v -53.952 c 0,0 47.544,-6.871 47.544,-6.871 v -30.651 l -47.544,-6.22 v -53.951 c 0,0 47.544,-6.871 47.544,-6.871"
+       id="path7440-4"
+       style="fill:none;stroke:#000000;stroke-width:7.28087;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
+    <ellipse
+       class="cls-3"
+       cx="25484.391"
+       cy="22349.086"
+       id="circle7442-9"
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:7.67906;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"
+       rx="15.630476"
+       ry="15.623281" />
+    <ellipse
+       class="cls-3"
+       cx="25484.391"
+       cy="22057.311"
+       id="circle7444-1"
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:7.67906;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"
+       rx="15.630476"
+       ry="15.623281" />
+    <ellipse
+       class="cls-3"
+       cx="25484.391"
+       cy="21764.211"
+       id="circle7446-55"
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:7.67906;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"
+       rx="15.630476"
+       ry="15.623281" />
+    <ellipse
+       class="cls-3"
+       cx="25484.391"
+       cy="21471.131"
+       id="circle7448-5"
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:7.67906;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"
+       rx="15.630476"
+       ry="15.623281" />
+    <text
+       class="cls-4"
+       id="text7456-8"
+       style="font-size:97.6583px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:#000000;stroke:#000000;stroke-width:2.91235;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       x="23336.516"
+       y="21341.596"
+       inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"
+       transform="scale(1.0002302,0.99976981)"><tspan
+         x="23336.516"
+         y="21341.596"
+         id="tspan7454-2"
+         style="stroke-width:2.91235;stroke-miterlimit:4;stroke-dasharray:none">f</tspan></text>
+    <text
+       class="cls-4"
+       id="text7460-9"
+       style="font-size:97.6583px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:#000000;stroke:#000000;stroke-width:2.91235;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       x="23555.861"
+       y="21341.596"
+       inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"
+       transform="scale(1.0002302,0.99976981)"><tspan
+         x="23555.861"
+         y="21341.596"
+         id="tspan7458-8"
+         style="stroke-width:2.91235;stroke-miterlimit:4;stroke-dasharray:none">c</tspan></text>
+    <text
+       class="cls-4"
+       id="text7464-2"
+       style="font-size:97.6583px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:#000000;stroke:#000000;stroke-width:2.91235;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       x="23808.752"
+       y="21341.596"
+       inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"
+       transform="scale(1.0002302,0.99976981)"><tspan
+         x="23808.752"
+         y="21341.596"
+         id="tspan7462-0"
+         style="stroke-width:2.91235;stroke-miterlimit:4;stroke-dasharray:none">g</tspan></text>
+    <text
+       class="cls-4"
+       id="text7468-7"
+       style="font-size:97.6583px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:#000000;stroke:#000000;stroke-width:2.91235;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       x="24057.768"
+       y="21341.596"
+       inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"
+       transform="scale(1.0002302,0.99976981)"><tspan
+         x="24057.768"
+         y="21341.596"
+         id="tspan7466-4"
+         style="stroke-width:2.91235;stroke-miterlimit:4;stroke-dasharray:none">d</tspan></text>
+    <text
+       class="cls-4"
+       id="text7472-8"
+       style="font-size:97.6583px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:#000000;stroke:#000000;stroke-width:2.91235;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       x="24298.117"
+       y="21341.596"
+       inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"
+       transform="scale(1.0002302,0.99976981)"><tspan
+         x="24298.117"
+         y="21341.596"
+         id="tspan7470-5"
+         style="stroke-width:2.91235;stroke-miterlimit:4;stroke-dasharray:none">a</tspan></text>
+    <text
+       class="cls-4"
+       id="text7476-8"
+       style="font-size:97.6583px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:#000000;stroke:#000000;stroke-width:2.91235;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       x="24551.008"
+       y="21341.596"
+       inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"
+       transform="scale(1.0002302,0.99976981)"><tspan
+         x="24551.008"
+         y="21341.596"
+         id="tspan7474-3"
+         style="stroke-width:2.91235;stroke-miterlimit:4;stroke-dasharray:none">e</tspan></text>
+    <text
+       class="cls-4"
+       id="text7480-0"
+       style="font-size:97.6583px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:#000000;stroke:#000000;stroke-width:2.91235;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       x="24798.428"
+       y="21341.596"
+       inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"
+       transform="scale(1.0002302,0.99976981)"><tspan
+         x="24798.428"
+         y="21341.596"
+         id="tspan7478-6"
+         style="stroke-width:2.91235;stroke-miterlimit:4;stroke-dasharray:none">b</tspan></text>
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:12.7577;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect6715-9-1-8-8-2-5-9-2"
+       width="4648.0703"
+       height="2171.0042"
+       x="22267.162"
+       y="20706.342"
+       inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
+    <rect
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:7.28087;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect6978-84-2"
+       width="207.55258"
+       height="207.45708"
+       x="22267.162"
+       y="22669.891"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"
+       inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:156.972px;line-height:1.25;font-family:sans-serif;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:5.84709;stroke-miterlimit:4;stroke-dasharray:none"
+       x="22285.746"
+       y="22828.771"
+       id="text5485-04-5"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"
+       inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+       transform="scale(1.0002302,0.99976981)"><tspan
+         sodipodi:role="line"
+         id="tspan5483-6-2"
+         x="22285.746"
+         y="22828.771"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:156.972px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:5.84709;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">①</tspan></text>
+    <path
+       id="path2896-2"
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:0.08;fill-rule:nonzero;stroke:#000000;stroke-width:10.9213;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.5;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000"
+       d="m 23081.439,21158.058 c -24.132,0 -43.693,19.555 -43.696,43.676 v 84.411 c 0,24.121 19.564,43.673 43.696,43.676 h 84.452 c 7.213,0 14.314,-1.787 20.67,-5.198 v 56.777 c 0,24.121 19.564,43.673 43.695,43.675 h 54.266 c -5.266,7.395 -8.096,16.247 -8.097,25.324 v 179.668 c 0,24.12 19.564,43.673 43.695,43.675 h 54.271 c -5.267,7.396 -8.098,16.247 -8.099,25.325 v 179.668 c 0,24.121 19.564,43.673 43.695,43.676 545.469,1.01 1134.644,7.223 1664.626,0 24.131,0 43.692,-19.555 43.695,-43.676 v -179.668 c 0,-24.12 -19.564,-43.673 -43.695,-43.675 h -54.288 c 5.267,-7.396 8.098,-16.247 8.099,-25.325 v -179.668 c 0,-24.12 -19.564,-43.673 -43.695,-43.675 h -54.268 c 5.266,-7.395 8.096,-16.247 8.097,-25.324 v -179.666 c 0,-24.121 -19.564,-43.673 -43.695,-43.676 h -179.751 c -536.556,3.684 -1088.915,0 -1633.673,0 z"
+       sodipodi:nodetypes="cccccccccccccccccccccccccccccc"
+       inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
   </g>
   <rect
      style="fill:none;stroke:#000000;stroke-width:17.5222;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -17173,4 +17937,1656 @@
      inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
      inkscape:export-xdpi="300"
      inkscape:export-ydpi="300" />
+  <path
+     class="cls-2"
+     d="m 11854.508,12314.409 c -53.894,-69.188 -117.387,-130.438 -188.657,-181.538 -200.945,-144.097 -445.422,-219.376 -696.332,-210.78 l -38.602,1.319 c -206.851,7.093 -413.596,-16.928 -613.302,-71.271 l -527.2386,-143.411 c -264.5687,-75.489 -447.0299,-317.277 -447.0299,-592.419 v 0 c 2.0303,-300.428 231.1351,-550.602 530.2185,-578.972 l 2475.856,-234.88 c 101.619,-9.65 203.555,-15.556 305.596,-17.772 l 219.929,-4.745 c 705.692,0 1277.755,572.064 1277.755,1277.756 0,705.692 -572.063,1277.755 -1277.755,1277.755 0,0 -382.588,-4.481 -670.545,-204.793 -194.379,-135.211 -301.087,-253.627 -349.945,-316.328 z"
+     id="path7358-7"
+     style="font-size:42.16px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:none;stroke:#000000;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Downloads/test_plan/keycaps.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30" />
+  <rect
+     class="cls-1"
+     x="9947.3135"
+     y="10715.495"
+     width="246.82355"
+     height="246.82355"
+     id="rect7392-1"
+     style="fill:none;stroke:#000000;stroke-width:10.5469;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+     inkscape:export-xdpi="300"
+     inkscape:export-ydpi="300" />
+  <rect
+     class="cls-1"
+     x="9742.9678"
+     y="10715.495"
+     width="115.96304"
+     height="115.96304"
+     id="rect7408-5"
+     style="fill:none;stroke:#000000;stroke-width:10.5469;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+     inkscape:export-xdpi="300"
+     inkscape:export-ydpi="300" />
+  <g
+     id="g2413-2"
+     style="fill:#ffffff;fill-opacity:1;stroke-width:10;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+     inkscape:export-xdpi="300"
+     inkscape:export-ydpi="300"
+     transform="translate(8650.0099,-463.59904)">
+    <rect
+       class="cls-1"
+       x="1544.1016"
+       y="11862.323"
+       width="246.82355"
+       height="246.82355"
+       id="rect7360-1"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="1883.9219"
+       y="11862.323"
+       width="246.82355"
+       height="246.82355"
+       id="rect7362-1"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="2223.7693"
+       y="11862.323"
+       width="246.82355"
+       height="246.82355"
+       id="rect7364-01"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="2903.4099"
+       y="11862.323"
+       width="246.82355"
+       height="246.82355"
+       id="rect7366-8"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="3243.2317"
+       y="11862.323"
+       width="246.82355"
+       height="246.82355"
+       id="rect7368-7"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="3583.0522"
+       y="11862.323"
+       width="246.82355"
+       height="246.82355"
+       id="rect7370-6"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="2563.5896"
+       y="11862.323"
+       width="246.82355"
+       height="246.82355"
+       id="rect7372-0"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="1420.702"
+       y="11520.708"
+       width="246.82355"
+       height="246.82355"
+       id="rect7376-0"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="1760.524"
+       y="11520.708"
+       width="246.82355"
+       height="246.82355"
+       id="rect7378-9"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="2100.3442"
+       y="11520.708"
+       width="246.82355"
+       height="246.82355"
+       id="rect7380-56"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="2779.9849"
+       y="11520.708"
+       width="246.82355"
+       height="246.82355"
+       id="rect7382-2"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="3119.8064"
+       y="11520.708"
+       width="246.82355"
+       height="246.82355"
+       id="rect7384-8"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="3459.6272"
+       y="11520.708"
+       width="246.82355"
+       height="246.82355"
+       id="rect7386-59"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="2440.1646"
+       y="11520.708"
+       width="246.82355"
+       height="246.82355"
+       id="rect7388-4"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="1297.3041"
+       y="11179.095"
+       width="246.82355"
+       height="246.82355"
+       id="rect7394-3"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="1637.1245"
+       y="11179.095"
+       width="246.82355"
+       height="246.82355"
+       id="rect7396-9"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="1976.9463"
+       y="11179.095"
+       width="246.82355"
+       height="246.82355"
+       id="rect7398-05"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="2656.5867"
+       y="11179.095"
+       width="246.82355"
+       height="246.82355"
+       id="rect7400-6"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="2996.4072"
+       y="11179.095"
+       width="246.82355"
+       height="246.82355"
+       id="rect7402-3"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="3336.229"
+       y="11179.095"
+       width="246.82355"
+       height="246.82355"
+       id="rect7404-6"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="2316.7664"
+       y="11179.095"
+       width="246.82355"
+       height="246.82355"
+       id="rect7406-3"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="1092.9579"
+       y="11179.095"
+       width="115.96304"
+       height="115.96304"
+       id="rect7410-0"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+  </g>
+  <g
+     id="g2417-8"
+     style="stroke-width:10;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+     inkscape:export-xdpi="300"
+     inkscape:export-ydpi="300"
+     transform="translate(8650.0099,-463.59904)">
+    <rect
+       class="cls-1"
+       x="3737.3003"
+       y="10937.649"
+       width="115.96304"
+       height="115.96304"
+       id="rect7412-4"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="3618.0674"
+       y="10952.47"
+       width="57.243233"
+       height="86.299904"
+       id="rect7414-0"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+  </g>
+  <circle
+     class="cls-3"
+     cx="13717.826"
+     cy="11718.029"
+     r="90.545036"
+     id="circle7420-4"
+     style="fill:none;stroke:#000000;stroke-width:10.5469;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+     inkscape:export-xdpi="300"
+     inkscape:export-ydpi="300" />
+  <g
+     id="g2424-6"
+     style="stroke-width:10;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+     inkscape:export-xdpi="300"
+     inkscape:export-ydpi="300"
+     transform="translate(8650.0099,-463.59904)">
+    <circle
+       class="cls-1"
+       cx="5067.8164"
+       cy="12181.629"
+       r="77.124115"
+       id="circle7418-46"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <circle
+       class="cls-1"
+       cx="5067.8164"
+       cy="11763.209"
+       r="77.124115"
+       id="circle7424-4"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <circle
+       class="cls-3"
+       cx="5067.8164"
+       cy="11763.209"
+       r="90.545036"
+       id="circle7426-3"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <circle
+       class="cls-1"
+       cx="5067.8164"
+       cy="11344.812"
+       r="77.124115"
+       id="circle7430-84"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <circle
+       class="cls-3"
+       cx="5067.8164"
+       cy="11344.812"
+       r="90.545036"
+       id="circle7432-0"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+  </g>
+  <g
+     id="g2429-0"
+     style="stroke-width:10;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+     inkscape:export-xdpi="300"
+     inkscape:export-ydpi="300"
+     transform="translate(8650.0099,-463.59904)">
+    <circle
+       class="cls-1"
+       cx="3814.2131"
+       cy="12430.035"
+       r="63.202221"
+       id="circle7416-9"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <path
+       class="cls-1"
+       d="m 4994.7794,12545.423 v -42.979 c 0,-3.559 1.0811,-7.013 3.1113,-9.94 l 59.0626,-85.193 c 3.2695,-4.693 8.6221,-7.515 14.3438,-7.515 h 21.6738 c 5.7217,0 11.0742,2.796 14.3437,7.515 l 59.0627,85.193 c 2.0302,2.927 3.1112,6.381 3.1112,9.94 v 42.979 c 0,9.624 -7.8046,17.455 -17.455,17.455 h -139.799 c -9.624,0 -17.4551,-7.805 -17.4551,-17.455 z"
+       id="path7436-37"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <path
+       class="cls-1"
+       d="m 5169.4622,12622.626 v 42.979 c 0,3.559 -1.0811,7.013 -3.1113,9.941 l -59.0626,85.191 c -3.2695,4.694 -8.6221,7.515 -14.3438,7.515 h -21.6738 c -5.7217,0 -11.0742,-2.795 -14.3437,-7.515 l -59.0627,-85.191 c -2.0302,-2.928 -3.1112,-6.382 -3.1112,-9.941 v -42.979 c 0,-9.624 7.8046,-17.455 17.455,-17.455 h 139.799 c 9.6241,0 17.4551,7.804 17.4551,17.455 z"
+       id="path7438-5"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+  </g>
+  <path
+     class="cls-1"
+     d="m 13131.051,10838.9 v -45.141 l -65.312,-12.209 -249.618,-46.723 c -10.152,-1.899 -19.565,5.906 -19.565,16.242 v 1593.214 c 0,10.02 8.833,17.718 18.747,16.375 l 250.41,-34.146 65.312,-8.913 v -44.402 c 0,0 -65.312,-8.542 -65.312,-8.542 v -74.119 c 0,0 65.285,-9.439 65.285,-9.439 v -42.109 l -65.285,-8.543 v -74.118 c 0,0 65.285,-9.44 65.285,-9.44 v -42.109 l -65.285,-8.542 v -74.119 c 0,0 65.285,-9.439 65.285,-9.439 v -42.108 l -65.285,-8.543 v -74.119 c 0,0 65.285,-9.439 65.285,-9.439 v -42.108 l -65.285,-8.544 v -74.117 c 0,0 65.285,-9.441 65.285,-9.441 v -42.108 l -65.285,-8.543 v -74.118 c 0,0 65.285,-9.439 65.285,-9.439 v -42.109 l -65.285,-8.542 v -74.119 c 0,0 65.285,-9.439 65.285,-9.439 v -42.109 l -65.285,-8.543 v -74.118 c 0,0 65.285,-9.44 65.285,-9.44 v -42.108 l -65.285,-8.543 v -74.119 c 0,0 65.285,-9.439 65.285,-9.439 v -42.108 l -65.285,-8.543 v -74.119 c 0,0 65.285,-9.439 65.285,-9.439 v -42.108 l -65.285,-8.544 v -74.117 c 0,0 65.285,-9.44 65.285,-9.44"
+     id="path7440-72"
+     style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+     inkscape:export-xdpi="300"
+     inkscape:export-ydpi="300" />
+  <circle
+     class="cls-3"
+     cx="13044.302"
+     cy="12292.835"
+     r="21.462919"
+     id="circle7442-97"
+     style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:10.5469;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+     inkscape:export-xdpi="300"
+     inkscape:export-ydpi="300" />
+  <circle
+     class="cls-3"
+     cx="13044.302"
+     cy="11892.002"
+     r="21.462919"
+     id="circle7444-5"
+     style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:10.5469;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+     inkscape:export-xdpi="300"
+     inkscape:export-ydpi="300" />
+  <circle
+     class="cls-3"
+     cx="13044.302"
+     cy="11489.348"
+     r="21.462919"
+     id="circle7446-6"
+     style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:10.5469;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+     inkscape:export-xdpi="300"
+     inkscape:export-ydpi="300" />
+  <circle
+     class="cls-3"
+     cx="13044.302"
+     cy="11086.72"
+     r="21.462919"
+     id="circle7448-53"
+     style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:10.5469;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+     inkscape:export-xdpi="300"
+     inkscape:export-ydpi="300" />
+  <text
+     class="cls-4"
+     id="text7456-0"
+     style="font-size:134.13px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:#000000;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     x="10102.336"
+     y="10902.018"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+     inkscape:export-xdpi="300"
+     inkscape:export-ydpi="300"><tspan
+       x="10102.336"
+       y="10902.018"
+       id="tspan7454-4"
+       style="stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none">f</tspan></text>
+  <text
+     class="cls-4"
+     id="text7460-85"
+     style="font-size:134.13px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:#000000;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     x="10403.598"
+     y="10902.018"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+     inkscape:export-xdpi="300"
+     inkscape:export-ydpi="300"><tspan
+       x="10403.598"
+       y="10902.018"
+       id="tspan7458-5"
+       style="stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none">c</tspan></text>
+  <text
+     class="cls-4"
+     id="text7464-5"
+     style="font-size:134.13px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:#000000;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     x="10750.935"
+     y="10902.018"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+     inkscape:export-xdpi="300"
+     inkscape:export-ydpi="300"><tspan
+       x="10750.935"
+       y="10902.018"
+       id="tspan7462-4"
+       style="stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none">g</tspan></text>
+  <text
+     class="cls-4"
+     id="text7468-2"
+     style="font-size:134.13px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:#000000;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     x="11092.949"
+     y="10902.018"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+     inkscape:export-xdpi="300"
+     inkscape:export-ydpi="300"><tspan
+       x="11092.949"
+       y="10902.018"
+       id="tspan7466-1"
+       style="stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none">d</tspan></text>
+  <text
+     class="cls-4"
+     id="text7472-9"
+     style="font-size:134.13px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:#000000;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     x="11423.061"
+     y="10902.018"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+     inkscape:export-xdpi="300"
+     inkscape:export-ydpi="300"><tspan
+       x="11423.061"
+       y="10902.018"
+       id="tspan7470-2"
+       style="stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none">a</tspan></text>
+  <text
+     class="cls-4"
+     id="text7476-4"
+     style="font-size:134.13px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:#000000;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     x="11770.396"
+     y="10902.018"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+     inkscape:export-xdpi="300"
+     inkscape:export-ydpi="300"><tspan
+       x="11770.396"
+       y="10902.018"
+       id="tspan7474-5"
+       style="stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none">e</tspan></text>
+  <text
+     class="cls-4"
+     id="text7480-8"
+     style="font-size:134.13px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:#000000;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     x="12110.216"
+     y="10902.018"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+     inkscape:export-xdpi="300"
+     inkscape:export-ydpi="300"><tspan
+       x="12110.216"
+       y="10902.018"
+       id="tspan7478-62"
+       style="stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none">b</tspan></text>
+  <path
+     id="path2896-7"
+     style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:0.08;fill-rule:nonzero;stroke:#000000;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.5;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000"
+     d="m 9744.7003,10656.629 c -33.1357,0 -59.9967,26.864 -60,60 v 115.963 c 0,33.136 26.8643,59.997 60,60 h 115.9649 c 9.9053,0 19.6563,-2.455 28.3828,-7.141 v 78 c 0,33.136 26.8643,59.997 60,60 h 74.516 c -7.232,10.159 -11.118,22.319 -11.12,34.789 v 246.824 c 0,33.136 26.865,59.997 60,60 h 74.522 c -7.232,10.16 -11.119,22.32 -11.121,34.791 v 246.824 c 0,33.136 26.864,59.997 60,60 749.009,1.388 1558.032,9.924 2285.774,0 33.135,0 59.996,-26.864 60,-60 v -246.824 c 0,-33.136 -26.865,-59.997 -60,-60 h -74.545 c 7.232,-10.16 11.119,-22.32 11.121,-34.791 v -246.824 c 0,-33.136 -26.864,-59.997 -60,-60 h -74.518 c 7.231,-10.159 11.118,-22.319 11.119,-34.789 v -246.822 c 0,-33.136 -26.864,-59.997 -60,-60 h -246.824 c -736.769,5.061 -1495.24,0 -2243.2717,0 z"
+     sodipodi:nodetypes="cccccccccccccccccccccccccccccc"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_4.png"
+     inkscape:export-xdpi="300"
+     inkscape:export-ydpi="300" />
+  <path
+     class="cls-2"
+     d="m 11116.689,15619.097 c -53.894,-69.188 -117.387,-130.438 -188.657,-181.538 -200.945,-144.097 -445.422,-219.376 -696.332,-210.78 l -38.602,1.319 c -206.8506,7.093 -413.596,-16.928 -613.3012,-71.271 l -527.239,-143.411 c -264.5687,-75.489 -447.0298,-317.277 -447.0298,-592.419 v 0 c 2.0302,-300.428 231.135,-550.602 530.2184,-578.972 l 2475.8556,-234.88 c 101.619,-9.65 203.555,-15.556 305.596,-17.772 l 219.929,-4.745 c 705.692,0 1277.755,572.064 1277.755,1277.756 0,705.692 -572.063,1277.755 -1277.755,1277.755 0,0 -382.588,-4.481 -670.545,-204.793 -194.379,-135.211 -301.087,-253.627 -349.945,-316.328 z"
+     id="path7358-4-6"
+     style="font-size:42.16px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:none;stroke:#000000;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Downloads/test_plan/parts.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30" />
+  <rect
+     class="cls-1"
+     x="9209.4951"
+     y="14020.185"
+     width="246.82355"
+     height="246.82355"
+     id="rect7392-6-3"
+     style="fill:none;stroke:#000000;stroke-width:10.5469;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_5.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30" />
+  <rect
+     class="cls-1"
+     x="9005.1494"
+     y="14020.185"
+     width="115.96304"
+     height="115.96304"
+     id="rect7408-4-2"
+     style="fill:none;stroke:#000000;stroke-width:10.5469;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_5.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30" />
+  <g
+     id="g2413-3-6"
+     style="stroke-width:10;stroke-miterlimit:4;stroke-dasharray:none"
+     transform="translate(7912.1913,2841.0889)"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_5.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30">
+    <rect
+       class="cls-1"
+       x="1544.1016"
+       y="11862.323"
+       width="246.82355"
+       height="246.82355"
+       id="rect7360-8-8"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="1883.9219"
+       y="11862.323"
+       width="246.82355"
+       height="246.82355"
+       id="rect7362-4-9"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="2223.7693"
+       y="11862.323"
+       width="246.82355"
+       height="246.82355"
+       id="rect7364-0-1"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="2903.4099"
+       y="11862.323"
+       width="246.82355"
+       height="246.82355"
+       id="rect7366-0-4"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="3243.2317"
+       y="11862.323"
+       width="246.82355"
+       height="246.82355"
+       id="rect7368-9-8"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="3583.0522"
+       y="11862.323"
+       width="246.82355"
+       height="246.82355"
+       id="rect7370-3-8"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="2563.5896"
+       y="11862.323"
+       width="246.82355"
+       height="246.82355"
+       id="rect7372-7-7"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="1420.702"
+       y="11520.708"
+       width="246.82355"
+       height="246.82355"
+       id="rect7376-5-1"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="1760.524"
+       y="11520.708"
+       width="246.82355"
+       height="246.82355"
+       id="rect7378-7-9"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="2100.3442"
+       y="11520.708"
+       width="246.82355"
+       height="246.82355"
+       id="rect7380-2-3"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="2779.9849"
+       y="11520.708"
+       width="246.82355"
+       height="246.82355"
+       id="rect7382-9-1"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="3119.8064"
+       y="11520.708"
+       width="246.82355"
+       height="246.82355"
+       id="rect7384-7-1"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="3459.6272"
+       y="11520.708"
+       width="246.82355"
+       height="246.82355"
+       id="rect7386-5-4"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="2440.1646"
+       y="11520.708"
+       width="246.82355"
+       height="246.82355"
+       id="rect7388-6-9"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="1297.3041"
+       y="11179.095"
+       width="246.82355"
+       height="246.82355"
+       id="rect7394-5-59"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="1637.1245"
+       y="11179.095"
+       width="246.82355"
+       height="246.82355"
+       id="rect7396-3-09"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="1976.9463"
+       y="11179.095"
+       width="246.82355"
+       height="246.82355"
+       id="rect7398-0-3"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="2656.5867"
+       y="11179.095"
+       width="246.82355"
+       height="246.82355"
+       id="rect7400-4-4"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="2996.4072"
+       y="11179.095"
+       width="246.82355"
+       height="246.82355"
+       id="rect7402-8-0"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="3336.229"
+       y="11179.095"
+       width="246.82355"
+       height="246.82355"
+       id="rect7404-5-75"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="2316.7664"
+       y="11179.095"
+       width="246.82355"
+       height="246.82355"
+       id="rect7406-5-7"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="1092.9579"
+       y="11179.095"
+       width="115.96304"
+       height="115.96304"
+       id="rect7410-5-5"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+  </g>
+  <g
+     id="g2417-4-06"
+     style="stroke-width:10;stroke-miterlimit:4;stroke-dasharray:none"
+     transform="translate(7912.1913,2841.0889)"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_5.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30">
+    <rect
+       class="cls-1"
+       x="3737.3003"
+       y="10937.649"
+       width="115.96304"
+       height="115.96304"
+       id="rect7412-2-4"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="3618.0674"
+       y="10952.47"
+       width="57.243233"
+       height="86.299904"
+       id="rect7414-1-78"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+  </g>
+  <circle
+     class="cls-3"
+     cx="12980.008"
+     cy="15022.719"
+     r="90.545036"
+     id="circle7420-9-4"
+     style="fill:none;stroke:#000000;stroke-width:10.5469;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_5.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30" />
+  <g
+     id="g2424-2-0"
+     style="stroke-width:10;stroke-miterlimit:4;stroke-dasharray:none"
+     transform="translate(7912.1913,2841.0889)"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_5.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30">
+    <circle
+       class="cls-1"
+       cx="5067.8164"
+       cy="12181.629"
+       r="77.124115"
+       id="circle7418-4-0"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <circle
+       class="cls-1"
+       cx="5067.8164"
+       cy="11763.209"
+       r="77.124115"
+       id="circle7424-5-6"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <circle
+       class="cls-3"
+       cx="5067.8164"
+       cy="11763.209"
+       r="90.545036"
+       id="circle7426-8-2"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <circle
+       class="cls-1"
+       cx="5067.8164"
+       cy="11344.812"
+       r="77.124115"
+       id="circle7430-6-4"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <circle
+       class="cls-3"
+       cx="5067.8164"
+       cy="11344.812"
+       r="90.545036"
+       id="circle7432-2-7"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+  </g>
+  <g
+     id="g2429-5-4"
+     style="stroke-width:10;stroke-miterlimit:4;stroke-dasharray:none"
+     transform="translate(7912.1913,2841.0889)"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_5.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30">
+    <circle
+       class="cls-1"
+       cx="3814.2131"
+       cy="12430.035"
+       r="63.202221"
+       id="circle7416-1-1"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <path
+       class="cls-1"
+       d="m 4994.7794,12545.423 v -42.979 c 0,-3.559 1.0811,-7.013 3.1113,-9.94 l 59.0626,-85.193 c 3.2695,-4.693 8.6221,-7.515 14.3438,-7.515 h 21.6738 c 5.7217,0 11.0742,2.796 14.3437,7.515 l 59.0627,85.193 c 2.0302,2.927 3.1112,6.381 3.1112,9.94 v 42.979 c 0,9.624 -7.8046,17.455 -17.455,17.455 h -139.799 c -9.624,0 -17.4551,-7.805 -17.4551,-17.455 z"
+       id="path7436-3-8"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <path
+       class="cls-1"
+       d="m 5169.4622,12622.626 v 42.979 c 0,3.559 -1.0811,7.013 -3.1113,9.941 l -59.0626,85.191 c -3.2695,4.694 -8.6221,7.515 -14.3438,7.515 h -21.6738 c -5.7217,0 -11.0742,-2.795 -14.3437,-7.515 l -59.0627,-85.191 c -2.0302,-2.928 -3.1112,-6.382 -3.1112,-9.941 v -42.979 c 0,-9.624 7.8046,-17.455 17.455,-17.455 h 139.799 c 9.6241,0 17.4551,7.804 17.4551,17.455 z"
+       id="path7438-9-58"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+  </g>
+  <path
+     class="cls-1"
+     d="m 12393.232,14143.588 v -45.141 l -65.312,-12.209 -249.618,-46.723 c -10.152,-1.899 -19.565,5.906 -19.565,16.242 v 1593.214 c 0,10.02 8.833,17.718 18.747,16.375 l 250.41,-34.146 65.312,-8.913 v -44.402 c 0,0 -65.312,-8.542 -65.312,-8.542 v -74.119 c 0,0 65.285,-9.439 65.285,-9.439 v -42.109 l -65.285,-8.543 v -74.118 c 0,0 65.285,-9.44 65.285,-9.44 v -42.109 l -65.285,-8.542 v -74.119 c 0,0 65.285,-9.439 65.285,-9.439 v -42.108 l -65.285,-8.543 v -74.119 c 0,0 65.285,-9.439 65.285,-9.439 v -42.108 l -65.285,-8.544 v -74.117 c 0,0 65.285,-9.441 65.285,-9.441 v -42.108 l -65.285,-8.543 v -74.118 c 0,0 65.285,-9.439 65.285,-9.439 v -42.109 l -65.285,-8.542 v -74.119 c 0,0 65.285,-9.439 65.285,-9.439 v -42.109 l -65.285,-8.543 v -74.118 c 0,0 65.285,-9.44 65.285,-9.44 v -42.108 l -65.285,-8.543 v -74.119 c 0,0 65.285,-9.439 65.285,-9.439 v -42.108 l -65.285,-8.543 v -74.119 c 0,0 65.285,-9.439 65.285,-9.439 v -42.108 l -65.285,-8.544 v -74.117 c 0,0 65.285,-9.44 65.285,-9.44"
+     id="path7440-7-9"
+     style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_5.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30" />
+  <circle
+     class="cls-3"
+     cx="12306.484"
+     cy="15597.524"
+     r="21.462919"
+     id="circle7442-3-9"
+     style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:10.5469;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_5.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30" />
+  <circle
+     class="cls-3"
+     cx="12306.484"
+     cy="15196.691"
+     r="21.462919"
+     id="circle7444-7-9"
+     style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:10.5469;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_5.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30" />
+  <circle
+     class="cls-3"
+     cx="12306.484"
+     cy="14794.037"
+     r="21.462919"
+     id="circle7446-5-3"
+     style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:10.5469;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_5.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30" />
+  <circle
+     class="cls-3"
+     cx="12306.484"
+     cy="14391.409"
+     r="21.462919"
+     id="circle7448-0-3"
+     style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:10.5469;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_5.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30" />
+  <text
+     class="cls-4"
+     id="text7456-2-7"
+     style="font-size:134.13px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:#000000;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     x="9354.5176"
+     y="14206.707"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_5.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30"><tspan
+       x="9354.5176"
+       y="14206.707"
+       id="tspan7454-1-7"
+       style="stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none">f</tspan></text>
+  <text
+     class="cls-4"
+     id="text7460-8-32"
+     style="font-size:134.13px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:#000000;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     x="9665.7793"
+     y="14206.707"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_5.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30"><tspan
+       x="9665.7793"
+       y="14206.707"
+       id="tspan7458-7-5"
+       style="stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none">c</tspan></text>
+  <text
+     class="cls-4"
+     id="text7464-1-63"
+     style="font-size:134.13px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:#000000;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     x="10013.116"
+     y="14206.707"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_5.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30"><tspan
+       x="10013.116"
+       y="14206.707"
+       id="tspan7462-5-4"
+       style="stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none">g</tspan></text>
+  <text
+     class="cls-4"
+     id="text7468-5-0"
+     style="font-size:134.13px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:#000000;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     x="10357.131"
+     y="14206.707"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_5.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30"><tspan
+       x="10357.131"
+       y="14206.707"
+       id="tspan7466-8-6"
+       style="stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none">d</tspan></text>
+  <text
+     class="cls-4"
+     id="text7472-5-0"
+     style="font-size:134.13px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:#000000;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     x="10685.242"
+     y="14206.707"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_5.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30"><tspan
+       x="10685.242"
+       y="14206.707"
+       id="tspan7470-6-4"
+       style="stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none">a</tspan></text>
+  <text
+     class="cls-4"
+     id="text7476-7-05"
+     style="font-size:134.13px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:#000000;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     x="11032.577"
+     y="14206.707"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_5.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30"><tspan
+       x="11032.577"
+       y="14206.707"
+       id="tspan7474-9-68"
+       style="stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none">e</tspan></text>
+  <text
+     class="cls-4"
+     id="text7480-4-5"
+     style="font-size:134.13px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:#000000;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     x="11372.397"
+     y="14206.707"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_5.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30"><tspan
+       x="11372.397"
+       y="14206.707"
+       id="tspan7478-1-3"
+       style="stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none">b</tspan></text>
+  <path
+     class="cls-4"
+     d="m 15326.077,31417.257 h 18.522 c 24.308,0 43.993,-19.711 43.993,-43.993 v -239.834"
+     id="path4034-7"
+     style="fill:none;stroke:#000000;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     sodipodi:nodetypes="cssc"
+     inkscape:export-filename="/Users/benjaminpoilve/Downloads/test_plan/battery.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30" />
+  <line
+     class="cls-3"
+     x1="15184.271"
+     y1="31417.258"
+     x2="15326.078"
+     y2="31417.258"
+     id="line4036-3"
+     style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_9.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30" />
+  <path
+     class="cls-4"
+     d="m 15130.318,31233.208 v 140.056 c 0,24.308 19.711,43.993 43.992,43.993 h 9.961"
+     id="path4038-4"
+     style="fill:none;stroke:#000000;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     sodipodi:nodetypes="cssc"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_9.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30" />
+  <path
+     class="cls-4"
+     d="m 15183.293,31416.279 v 25.282 c 0,7.074 7.795,12.809 17.411,12.809 h 108.941 c 9.616,0 17.411,-5.735 17.411,-12.809 v -25.282"
+     id="path4040-3"
+     style="fill:none;stroke:#000000;stroke-width:13.0432;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_9.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30" />
+  <path
+     class="cls-1"
+     d="m 15579.937,28891.059 48.696,-335.664 -46.08,336.034 c -0.238,1.664 -2.853,1.4 -2.616,-0.37 z"
+     id="path4046-0"
+     style="fill:#000000;stroke:#000000;stroke-width:6;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_9.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30" />
+  <path
+     class="cls-1"
+     d="m 15649.163,28926.305 112.319,-312.491 -109.836,313.39 c -0.554,1.585 -3.091,0.792 -2.483,-0.872 v 0 z"
+     id="path4048-4"
+     style="fill:#000000;stroke:#000000;stroke-width:6;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_9.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30" />
+  <path
+     class="cls-1"
+     d="m 15704.781,28968.263 165.559,-287.866 -163.261,289.161 c -0.819,1.453 -3.17,0.238 -2.298,-1.321 v 0 z"
+     id="path4050-8"
+     style="fill:#000000;stroke:#000000;stroke-width:6;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_9.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30" />
+  <path
+     class="cls-1"
+     d="m 15760.874,29016.113 217.901,-250.585 -215.893,252.303 c -1.083,1.268 -3.17,-0.37 -2.008,-1.718 z"
+     id="path4052-7"
+     style="fill:#000000;stroke:#000000;stroke-width:6;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_9.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30" />
+  <path
+     class="cls-1"
+     d="m 15821.803,29072.788 258.221,-208.785 -256.556,210.82 c -1.295,1.057 -3.039,-0.925 -1.665,-2.061 v 0 z"
+     id="path4054-5"
+     style="fill:#000000;stroke:#000000;stroke-width:6;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_9.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30" />
+  <path
+     class="cls-1"
+     d="m 15861.33,29117.626 309.427,-161.781 -308.185,164.133 c -1.479,0.792 -2.801,-1.506 -1.242,-2.325 v 0 z"
+     id="path4056-9"
+     style="fill:#000000;stroke:#000000;stroke-width:6;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_9.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30" />
+  <path
+     class="cls-1"
+     d="m 15911.162,29170.866 313.601,-88.196 -312.888,90.733 c -1.611,0.475 -2.431,-2.061 -0.713,-2.537 z"
+     id="path4058-5"
+     style="fill:#000000;stroke:#000000;stroke-width:6;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_9.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30" />
+  <path
+     class="cls-2"
+     d="m 13793.69,30748.099 c -53.895,-69.188 -117.387,-130.438 -188.658,-181.538 -200.945,-144.097 -445.421,-219.376 -696.332,-210.78 l -38.602,1.319 c -206.851,7.093 -413.596,-16.928 -613.301,-71.271 l -527.239,-143.411 c -264.569,-75.489 -447.03,-317.277 -447.03,-592.419 v 0 c 2.03,-300.428 231.135,-550.602 530.219,-578.972 l 2475.855,-234.88 c 101.619,-9.65 203.555,-15.556 305.596,-17.772 l 219.929,-4.745 c 705.693,0 1277.756,572.064 1277.756,1277.756 0,705.692 -572.063,1277.755 -1277.756,1277.755 0,0 -382.588,-4.481 -670.544,-204.793 -194.38,-135.211 -301.088,-253.627 -349.946,-316.328 z"
+     id="path7358-4-3-9-9-2-9"
+     style="font-size:42.16px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:none;stroke:#000000;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_9.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30" />
+  <rect
+     class="cls-1"
+     x="11886.496"
+     y="29149.186"
+     width="246.82355"
+     height="246.82355"
+     id="rect7392-6-0-1-3-1-7"
+     style="fill:none;stroke:#000000;stroke-width:10.5469;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_9.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30" />
+  <rect
+     class="cls-1"
+     x="11682.149"
+     y="29149.186"
+     width="115.96304"
+     height="115.96304"
+     id="rect7408-4-5-3-4-5-7"
+     style="fill:none;stroke:#000000;stroke-width:10.5469;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_9.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30" />
+  <g
+     id="g2413-3-2-8-7-4-9"
+     style="stroke-width:10;stroke-miterlimit:4;stroke-dasharray:none"
+     transform="translate(10589.192,17970.092)"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_9.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30">
+    <rect
+       class="cls-1"
+       x="1544.1016"
+       y="11862.323"
+       width="246.82355"
+       height="246.82355"
+       id="rect7360-8-3-8-9-9-5"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="1883.9219"
+       y="11862.323"
+       width="246.82355"
+       height="246.82355"
+       id="rect7362-4-8-9-8-0-3"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="2223.7693"
+       y="11862.323"
+       width="246.82355"
+       height="246.82355"
+       id="rect7364-0-7-4-0-2-3"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="2903.4099"
+       y="11862.323"
+       width="246.82355"
+       height="246.82355"
+       id="rect7366-0-8-3-7-0-3"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="3243.2317"
+       y="11862.323"
+       width="246.82355"
+       height="246.82355"
+       id="rect7368-9-0-9-5-3-8"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="3583.0522"
+       y="11862.323"
+       width="246.82355"
+       height="246.82355"
+       id="rect7370-3-4-5-8-8-5"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="2563.5896"
+       y="11862.323"
+       width="246.82355"
+       height="246.82355"
+       id="rect7372-7-5-1-4-2-8"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="1420.702"
+       y="11520.708"
+       width="246.82355"
+       height="246.82355"
+       id="rect7376-5-7-7-2-1-9"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="1760.524"
+       y="11520.708"
+       width="246.82355"
+       height="246.82355"
+       id="rect7378-7-1-4-5-6-6"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="2100.3442"
+       y="11520.708"
+       width="246.82355"
+       height="246.82355"
+       id="rect7380-2-0-5-0-8-0"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="2779.9849"
+       y="11520.708"
+       width="246.82355"
+       height="246.82355"
+       id="rect7382-9-6-1-7-3-4"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="3119.8064"
+       y="11520.708"
+       width="246.82355"
+       height="246.82355"
+       id="rect7384-7-0-4-0-2-2"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="3459.6272"
+       y="11520.708"
+       width="246.82355"
+       height="246.82355"
+       id="rect7386-5-3-6-7-9-3"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="2440.1646"
+       y="11520.708"
+       width="246.82355"
+       height="246.82355"
+       id="rect7388-6-3-0-6-7-3"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="1297.3041"
+       y="11179.095"
+       width="246.82355"
+       height="246.82355"
+       id="rect7394-5-5-3-8-3-7"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="1637.1245"
+       y="11179.095"
+       width="246.82355"
+       height="246.82355"
+       id="rect7396-3-0-2-2-4-0"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="1976.9463"
+       y="11179.095"
+       width="246.82355"
+       height="246.82355"
+       id="rect7398-0-2-2-3-8-0"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="2656.5867"
+       y="11179.095"
+       width="246.82355"
+       height="246.82355"
+       id="rect7400-4-3-1-9-6-1"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="2996.4072"
+       y="11179.095"
+       width="246.82355"
+       height="246.82355"
+       id="rect7402-8-2-4-0-1-0"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="3336.229"
+       y="11179.095"
+       width="246.82355"
+       height="246.82355"
+       id="rect7404-5-7-7-3-1-3"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="2316.7664"
+       y="11179.095"
+       width="246.82355"
+       height="246.82355"
+       id="rect7406-5-1-7-8-5-0"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="1092.9579"
+       y="11179.095"
+       width="115.96304"
+       height="115.96304"
+       id="rect7410-5-0-0-3-6-0"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+  </g>
+  <g
+     id="g2417-4-0-9-1-9-3"
+     style="stroke-width:10;stroke-miterlimit:4;stroke-dasharray:none"
+     transform="translate(10589.192,17970.092)"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_9.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30">
+    <rect
+       class="cls-1"
+       x="3737.3003"
+       y="10937.649"
+       width="115.96304"
+       height="115.96304"
+       id="rect7412-2-9-5-0-8-8"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <rect
+       class="cls-1"
+       x="3618.0674"
+       y="10952.47"
+       width="57.243233"
+       height="86.299904"
+       id="rect7414-1-7-7-0-0-3"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+  </g>
+  <g
+     id="g2429-5-2-9-8-2-6"
+     style="stroke-width:10;stroke-miterlimit:4;stroke-dasharray:none"
+     transform="translate(10589.192,17970.092)"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_9.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30">
+    <circle
+       class="cls-1"
+       cx="3814.2131"
+       cy="12430.035"
+       r="63.202221"
+       id="circle7416-1-5-8-0-2-0"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <path
+       class="cls-1"
+       d="m 4994.7794,12545.423 v -42.979 c 0,-3.559 1.0811,-7.013 3.1113,-9.94 l 59.0626,-85.193 c 3.2695,-4.693 8.6221,-7.515 14.3438,-7.515 h 21.6738 c 5.7217,0 11.0742,2.796 14.3437,7.515 l 59.0627,85.193 c 2.0302,2.927 3.1112,6.381 3.1112,9.94 v 42.979 c 0,9.624 -7.8046,17.455 -17.455,17.455 h -139.799 c -9.624,0 -17.4551,-7.805 -17.4551,-17.455 z"
+       id="path7436-3-4-3-4-6-4"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <path
+       class="cls-1"
+       d="m 5169.4622,12622.626 v 42.979 c 0,3.559 -1.0811,7.013 -3.1113,9.941 l -59.0626,85.191 c -3.2695,4.694 -8.6221,7.515 -14.3438,7.515 h -21.6738 c -5.7217,0 -11.0742,-2.795 -14.3437,-7.515 l -59.0627,-85.191 c -2.0302,-2.928 -3.1112,-6.382 -3.1112,-9.941 v -42.979 c 0,-9.624 7.8046,-17.455 17.455,-17.455 h 139.799 c 9.6241,0 17.4551,7.804 17.4551,17.455 z"
+       id="path7438-9-5-7-7-7-0"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+  </g>
+  <path
+     class="cls-1"
+     d="m 15070.232,29272.59 v -45.141 l -65.311,-12.209 -249.619,-46.723 c -10.151,-1.899 -19.564,5.906 -19.564,16.242 v 1593.214 c 0,10.02 8.833,17.718 18.747,16.375 l 250.409,-34.146 65.312,-8.913 v -44.402 c 0,0 -65.312,-8.542 -65.312,-8.542 v -74.119 c 0,0 65.285,-9.439 65.285,-9.439 v -42.109 l -65.285,-8.543 v -74.118 c 0,0 65.285,-9.44 65.285,-9.44 v -42.109 l -65.285,-8.542 v -74.119 c 0,0 65.285,-9.439 65.285,-9.439 v -42.108 l -65.285,-8.543 v -74.119 c 0,0 65.285,-9.439 65.285,-9.439 v -42.108 l -65.285,-8.544 v -74.117 c 0,0 65.285,-9.441 65.285,-9.441 v -42.108 l -65.285,-8.543 v -74.118 c 0,0 65.285,-9.439 65.285,-9.439 v -42.109 l -65.285,-8.542 v -74.119 c 0,0 65.285,-9.439 65.285,-9.439 v -42.109 l -65.285,-8.543 v -74.118 c 0,0 65.285,-9.44 65.285,-9.44 v -42.108 l -65.285,-8.543 v -74.119 c 0,0 65.285,-9.439 65.285,-9.439 v -42.108 l -65.285,-8.543 v -74.119 c 0,0 65.285,-9.439 65.285,-9.439 v -42.108 l -65.285,-8.544 v -74.117 c 0,0 65.285,-9.44 65.285,-9.44"
+     id="path7440-7-3-1-6-6-9"
+     style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_9.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30" />
+  <circle
+     class="cls-1"
+     cx="15657.008"
+     cy="30151.719"
+     r="77.124115"
+     id="circle7418-4-4-7-1-1-2"
+     style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_9.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30" />
+  <circle
+     class="cls-1"
+     cx="15657.008"
+     cy="29733.299"
+     r="77.124115"
+     id="circle7424-5-5-6-6-2-4"
+     style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_9.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30" />
+  <circle
+     class="cls-1"
+     cx="15657.008"
+     cy="29314.902"
+     r="77.124115"
+     id="circle7430-6-7-2-1-1-9"
+     style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_9.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30" />
+  <g
+     id="g3567-4-3-2"
+     transform="translate(10542.107,8093.6629)"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_9.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30">
+    <circle
+       class="cls-3"
+       cx="5114.9014"
+       cy="22058.059"
+       r="90.545036"
+       id="circle7420-9-1-2-9-6-9"
+       style="fill:none;stroke:#000000;stroke-width:10.5469;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <circle
+       class="cls-3"
+       cx="5114.9009"
+       cy="21639.637"
+       r="90.545036"
+       id="circle7426-8-1-8-6-5-1"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <circle
+       class="cls-3"
+       cx="5114.9009"
+       cy="21221.24"
+       r="90.545036"
+       id="circle7432-2-8-9-4-7-0"
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+  </g>
+  <circle
+     class="cls-3"
+     cx="14983.484"
+     cy="30726.525"
+     r="21.462919"
+     id="circle7442-3-0-2-2-3-9"
+     style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:10.5469;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_9.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30" />
+  <circle
+     class="cls-3"
+     cx="14983.484"
+     cy="30325.693"
+     r="21.462919"
+     id="circle7444-7-1-6-8-6-3"
+     style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:10.5469;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_9.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30" />
+  <circle
+     class="cls-3"
+     cx="14983.484"
+     cy="29923.039"
+     r="21.462919"
+     id="circle7446-5-9-1-4-3-0"
+     style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:10.5469;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_9.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30" />
+  <circle
+     class="cls-3"
+     cx="14983.484"
+     cy="29520.41"
+     r="21.462919"
+     id="circle7448-0-4-7-4-2-0"
+     style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:10.5469;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_9.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30" />
+  <text
+     class="cls-4"
+     id="text7456-2-5-6-9-5-3"
+     style="font-size:134.13px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:#000000;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     x="12035.518"
+     y="29335.709"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_9.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30"><tspan
+       x="12035.518"
+       y="29335.709"
+       id="tspan7454-1-9-5-8-0-0"
+       style="stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none">f</tspan></text>
+  <text
+     class="cls-4"
+     id="text7460-8-3-0-1-3-1"
+     style="font-size:134.13px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:#000000;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     x="12342.78"
+     y="29335.709"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_9.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30"><tspan
+       x="12342.78"
+       y="29335.709"
+       id="tspan7458-7-9-4-0-7-9"
+       style="stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none">c</tspan></text>
+  <text
+     class="cls-4"
+     id="text7464-1-6-5-3-3-8"
+     style="font-size:134.13px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:#000000;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     x="12690.116"
+     y="29335.709"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_9.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30"><tspan
+       x="12690.116"
+       y="29335.709"
+       id="tspan7462-5-6-1-7-5-6"
+       style="stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none">g</tspan></text>
+  <text
+     class="cls-4"
+     id="text7468-5-4-2-4-9-9"
+     style="font-size:134.13px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:#000000;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     x="13034.131"
+     y="29335.709"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_9.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30"><tspan
+       x="13034.131"
+       y="29335.709"
+       id="tspan7466-8-0-3-3-1-0"
+       style="stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none">d</tspan></text>
+  <text
+     class="cls-4"
+     id="text7472-5-8-7-4-8-1"
+     style="font-size:134.13px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:#000000;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     x="13362.242"
+     y="29335.709"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_9.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30"><tspan
+       x="13362.242"
+       y="29335.709"
+       id="tspan7470-6-2-2-8-4-6"
+       style="stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none">a</tspan></text>
+  <text
+     class="cls-4"
+     id="text7476-7-0-4-1-0-4"
+     style="font-size:134.13px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:#000000;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     x="13709.577"
+     y="29335.709"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_9.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30"><tspan
+       x="13709.577"
+       y="29335.709"
+       id="tspan7474-9-6-1-2-8-4"
+       style="stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none">e</tspan></text>
+  <text
+     class="cls-4"
+     id="text7480-4-0-8-8-9-8"
+     style="font-size:134.13px;font-family:HelveticaNeue-Roman, 'Helvetica Neue';fill:#000000;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     x="14049.397"
+     y="29335.709"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_9.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30"><tspan
+       x="14049.397"
+       y="29335.709"
+       id="tspan7478-1-7-2-3-5-6"
+       style="stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none">b</tspan></text>
+  <path
+     id="path5341-8"
+     style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:0.08;fill-rule:nonzero;stroke:#000000;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.5;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000"
+     d="m 15388.59,31073.429 c -33.137,0 -48.049,9.924 -103.821,35.094 -89.545,35.762 -89.325,36.966 -130.55,53.728 -82.933,29.878 -83.903,37.819 -83.903,70.956 v 140.056 c 0,30.759 13.905,58.715 35.662,77.879 h 306.952 c 21.761,-19.17 35.66,-47.133 35.66,-77.879 v -239.834 c 0,-33.137 -26.863,-60 -60,-60 z"
+     inkscape:export-filename="/Users/benjaminpoilve/Documents/Kicad/MiniChord_project/documentation/docs/ressources/drawing_9.png"
+     inkscape:export-xdpi="30"
+     inkscape:export-ydpi="30" />
+  <path
+     style="fill:none;stroke:#000000;stroke-width:20;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Triangle)"
+     d="m 8551.5647,13568.973 407.1212,401.429"
+     id="path1" />
+  <path
+     style="fill:none;stroke:#000000;stroke-width:20;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Triangle-4)"
+     d="m 11981.239,13349.782 -195.23,336.617"
+     id="path1-3"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;stroke:#000000;stroke-width:20;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Triangle-4-1)"
+     d="m 10939.013,15961.455 653.489,-587.446"
+     id="path1-3-0"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;stroke:#000000;stroke-width:20;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Triangle-4-0)"
+     d="m 13860.639,14852.365 -724.588,383.52"
+     id="path1-3-3"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;stroke:#000000;stroke-width:20;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Triangle-4-0-6)"
+     d="m 13893,15094.481 -724.588,383.52"
+     id="path1-3-3-5"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;stroke:#000000;stroke-width:20;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Triangle-4-7)"
+     d="m 10007.536,15570.788 468.245,-620.553"
+     id="path1-3-1"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;stroke:#000000;stroke-width:20;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Triangle-4-3)"
+     d="m 10359.96,13408.097 1054.286,380.462"
+     id="path1-3-37"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;stroke:#000000;stroke-width:20;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Triangle-4-75)"
+     d="m 12994.299,16220.404 -530.076,-486.327"
+     id="path1-3-2"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;stroke:#000000;stroke-width:20;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Triangle-4-2)"
+     d="m 13885.016,13665.142 -709.48,443.796"
+     id="path1-3-8"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;stroke:#000000;stroke-width:20;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Triangle-4-2-1)"
+     d="m 13885.016,13665.142 -769.692,1197.241"
+     id="path1-3-8-6"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;stroke:#000000;stroke-width:20;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Triangle-4-2-11)"
+     d="m 13885.016,13665.142 -748.965,843.611"
+     id="path1-3-8-1"
+     sodipodi:nodetypes="cc" />
+  <text
+     xml:space="preserve"
+     style="font-size:192px;line-height:1.25;font-family:sans-serif;text-align:end;text-anchor:end"
+     x="9180.3564"
+     y="13495.657"
+     id="text1"><tspan
+       sodipodi:role="line"
+       id="tspan1"
+       x="9180.3564"
+       y="13495.657"
+       style="font-size:192px">Sharp button</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:192px;line-height:1.25;font-family:sans-serif;text-align:end;text-anchor:end"
+     x="12704.474"
+     y="13263.664"
+     id="text1-0"><tspan
+       sodipodi:role="line"
+       id="tspan1-1"
+       x="12704.474"
+       y="13263.664"
+       style="font-size:192px">Rhythm button</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:192px;line-height:1.25;font-family:sans-serif;text-align:end;text-anchor:end"
+     x="10831.852"
+     y="13355.914"
+     id="text1-0-3"><tspan
+       sodipodi:role="line"
+       id="tspan1-1-8"
+       x="10831.852"
+       y="13355.914"
+       style="font-size:192px">Rhythm LED</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:192px;line-height:1.25;font-family:sans-serif;text-align:start;text-anchor:start"
+     x="13945.043"
+     y="13711.672"
+     id="text1-0-4"><tspan
+       sodipodi:role="line"
+       id="tspan1-1-1"
+       x="13945.043"
+       y="13711.672"
+       style="font-size:192px;text-align:start;text-anchor:start">3 Potentiometers</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:192px;line-height:1.25;font-family:sans-serif;text-align:start;text-anchor:start"
+     x="13066.514"
+     y="16308.444"
+     id="text1-0-4-4"><tspan
+       sodipodi:role="line"
+       id="tspan1-1-1-58"
+       x="13066.514"
+       y="16308.444"
+       style="font-size:192px;text-align:start;text-anchor:start">Touch Zone</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:192px;line-height:1.25;font-family:sans-serif;text-align:center;text-anchor:middle"
+     x="10927.185"
+     y="16178.951"
+     id="text1-0-4-4-7"><tspan
+       sodipodi:role="line"
+       id="tspan1-1-1-58-8"
+       x="10927.185"
+       y="16178.951"
+       style="font-size:192px;text-align:center;text-anchor:middle">Main colour </tspan><tspan
+       sodipodi:role="line"
+       x="10927.185"
+       y="16418.951"
+       style="font-size:192px;text-align:center;text-anchor:middle"
+       id="tspan2">LED</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:192px;line-height:1.25;font-family:sans-serif;text-align:start;text-anchor:start"
+     x="13934.532"
+     y="14889.117"
+     id="text1-0-4-8"><tspan
+       sodipodi:role="line"
+       id="tspan1-1-1-5"
+       x="13934.532"
+       y="14889.117"
+       style="font-size:192px;text-align:start;text-anchor:start">Preset UP</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:192px;line-height:1.25;font-family:sans-serif;text-align:start;text-anchor:start"
+     x="13934.532"
+     y="15165.219"
+     id="text1-0-4-8-0"><tspan
+       sodipodi:role="line"
+       id="tspan1-1-1-5-8"
+       x="13934.532"
+       y="15165.219"
+       style="font-size:192px;text-align:start;text-anchor:start">Preset DOW</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:192px;line-height:1.25;font-family:sans-serif;text-align:center;text-anchor:middle"
+     x="9861.6611"
+     y="15759.236"
+     id="text1-0-4-4-7-6"><tspan
+       sodipodi:role="line"
+       x="9861.6611"
+       y="15759.236"
+       style="font-size:192px;text-align:center;text-anchor:middle"
+       id="tspan2-7">21 Main buttons</tspan></text>
+  <path
+     style="fill:none;stroke:#000000;stroke-width:20;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Triangle-4-7-1)"
+     d="m 8279.2163,15164.92 955.496,-900.722"
+     id="path1-3-1-6"
+     sodipodi:nodetypes="cc" />
+  <text
+     xml:space="preserve"
+     style="font-size:192px;line-height:1.25;font-family:sans-serif;text-align:center;text-anchor:middle"
+     x="8133.3413"
+     y="15353.368"
+     id="text1-0-4-4-7-6-1"><tspan
+       sodipodi:role="line"
+       x="8133.3413"
+       y="15353.368"
+       style="font-size:192px;text-align:center;text-anchor:middle"
+       id="tspan2-7-0">F button</tspan></text>
 </svg>

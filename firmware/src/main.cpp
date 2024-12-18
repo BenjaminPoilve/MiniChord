@@ -211,8 +211,6 @@ uint8_t chord_port=0;
 uint8_t chord_attack_velocity=127;
 uint8_t chord_release_velocity=20;
 uint8_t chord_started_notes[4]={0,0,0,0};                   
-uint8_t midi_volume_control=7;
-uint8_t midi_mod_control=1;
 uint8_t harp_port=1;
 uint8_t harp_attack_velocity=127; 
 uint8_t harp_release_velocity=20;
@@ -414,7 +412,7 @@ void set_chord_voice_frequency(uint8_t i, uint16_t current_note) {
   chord_osc_3_array[i]->frequency(osc_3_freq_multiplier * note_freq);
   // chord_voice_filter_array[i]->frequency(1*freq);
   AudioInterrupts();
-  if(chord_started_notes[i]!=0){
+  if(chord_started_notes[i]!=0 && chord_started_notes[i]!=midi_base_note_transposed+current_note){
     //we need to change the note without triggering the change, ie a pitch bend
     usbMIDI.sendNoteOff(chord_started_notes[i],chord_release_velocity,1,chord_port);
     chord_started_notes[i]=0;
