@@ -5,9 +5,9 @@ This repository contains the source file both for the minichord itself and its d
 
 [![Watch the video](https://github.com/BenjaminPoilve/minichord/blob/main/documentation/site/ressources/thumbnail.png)](https://www.youtube.com/watch?v=66Gu4NNnHgA)
 
-**If you want to help the project, and allow for it to be manufactured, like this video**
-
 To be informed when they are available, please subscribe to [the newsletter](https://buttondown.com/BenjaminPoilve).
+
+* [#1 project update](https://buttondown.com/BenjaminPoilve/archive/minichord-update-1/) 
 
 
 ## Documentation 
