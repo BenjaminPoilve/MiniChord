@@ -18,6 +18,9 @@ class harp{
   void setup();
   void recalibrate();
   void update(debouncer (&data_array)[12]);
+  // How far each pad's reading is below its baseline, in harp order: how
+  // strongly it is touched, not only whether. Used to find a finger between pads.
+  void read_strength(int16_t (&strength)[12]);
 
   private:
   #if CAP_CHIP==1

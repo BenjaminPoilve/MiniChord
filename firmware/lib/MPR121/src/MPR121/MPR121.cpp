@@ -448,6 +448,31 @@ uint16_t MPR121::getDeviceChannelBaselineData(DeviceAddress device_address,
   return device_channel_baseline_data << BASELINE_DATA_BIT_SHIFT;
 }
 
+void MPR121::getDeviceAllChannelsData(DeviceAddress device_address,
+  uint16_t (&filtered_data)[PHYSICAL_CHANNELS_PER_DEVICE],
+  uint16_t (&baseline_data)[PHYSICAL_CHANNELS_PER_DEVICE])
+{
+  // the chip steps through its registers on a burst read
+  wire_ptr_->beginTransmission((uint8_t)device_address);
+  wire_ptr_->write(FILTERED_DATA0_REGISTER_ADDRESS);
+  wire_ptr_->endTransmission(false);
+  wire_ptr_->requestFrom(device_address,PHYSICAL_CHANNELS_PER_DEVICE*2);
+  for (uint8_t channel=0; channel<PHYSICAL_CHANNELS_PER_DEVICE; ++channel)
+  {
+    uint16_t low = wire_ptr_->read();
+    uint16_t high = wire_ptr_->read();
+    filtered_data[channel] = ((high << BITS_PER_BYTE) | low) & 0x3FF;
+  }
+  wire_ptr_->beginTransmission((uint8_t)device_address);
+  wire_ptr_->write(BASELINE_DATA0_REGISTER_ADDRESS);
+  wire_ptr_->endTransmission(false);
+  wire_ptr_->requestFrom(device_address,PHYSICAL_CHANNELS_PER_DEVICE);
+  for (uint8_t channel=0; channel<PHYSICAL_CHANNELS_PER_DEVICE; ++channel)
+  {
+    baseline_data[channel] = wire_ptr_->read() << BASELINE_DATA_BIT_SHIFT;
+  }
+}
+
 void MPR121::setBaselineTracking(DeviceAddress device_address,
   BaselineTracking baseline_tracking)
 {
