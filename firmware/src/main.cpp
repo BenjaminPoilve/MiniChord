@@ -12,7 +12,7 @@
 #include <potentiometer.h>
 
 //>>SOFWTARE VERSION 
-int version_ID=9; //to be read 00.03, stored at adress 7 in memory
+int version_ID=11; //to be read 00.03, stored at adress 7 in memory
 //>>BUTTON ARRAYS<<
 debouncer harp_array[12];
 debouncer chord_matrix_array[22];
@@ -193,10 +193,24 @@ bool retrigger_chord = true;      // wether or not to retrigger the enveloppe wh
 bool change_held_strings = false; // to control wether hold strings change with chord:
 bool chromatic_harp_mode = false; // to switch the harp to chromatic mode
 //>>SYSEX PARAMETERS<<
-// SYSEX midi message are used to control up to 256 synthesis parameters.
-const uint16_t parameter_size = 256;
+// SYSEX midi message are used to control up to 512 synthesis parameters, in two pages of 256.
+//
+// Page 0 (0-255) is every setting there was before the array grew, and stays exactly as it was
+// everywhere, so no existing preset changes: the preset files, the factory presets below, the
+// dump an editor reads on command 0, and preset codes. Page 1 (256-511) is for new settings. A
+// preset file holds all 512 now, but one saved before holds 256, and loading starts every slot at
+// its default (parameter_default) before the file is read over it, so page 1 comes up at its
+// defaults; firmware from before the growth reads the first 256 of a longer file and keeps page 0.
+// Page 1 goes to an editor only when asked (command 7), with a header, so no tool that knows only
+// page 0 can take it for a dump. 382, 383, 510 and 511 stay unused: their low byte is a universal
+// SysEx id (0x7E, 0x7F), as the first byte of a write.
+const uint16_t parameter_size = 512;
+const uint16_t page_size = 256;
 const uint8_t preset_number = 12;
-int16_t default_bank_sysex_parameters[preset_number][parameter_size] = {
+static_assert(sizeof(parameter_page1_defaults) / sizeof(parameter_page1_defaults[0]) == parameter_size - page_size, "parameter_lookup.h is for another array size: run the generator");
+// The factory presets' page 0; page 1's defaults are generated, the same for every bank
+// (parameter_page1_defaults in parameter_lookup.h, from parameters.json)
+int16_t default_bank_sysex_parameters[preset_number][page_size] = {
   {0,0,50,50,512,512,512,0,0,0,192,100,49,100,184,100,157,100,0,0,0,0,0,0,43,0,50,37,38,67,0,0,0,0,0,0,0,0,0,0,0,16,0,8,8,12,42,1171,1,423,20,70,3,35,83,59,2658,1,0,0,0,0,0,0,0,1,1,1,100,1,1,0,1,1,1,1,14,0,0,70,0,0,0,100,0,6,0,0,755,195,23,61,29,0,0,0,0,162,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,13,8,100,16,0,200,0,0,50,0,50,18,32,50,0,0,10,66,353,65,995,1,569,16,141,32,83,28,48,54,1,0,0,0,56,0,389,0,20,0,0,0,0,1,1,1,0,1,1,0,1,1,1,1,0,0,0,70,0,0,0,100,0,64,0,0,80,16,4,94,753,474,70,5,100,100,100,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,0,6,6,32,0,6,0,16,0,6,6,32,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
   {0,0,50,50,512,512,512,0,0,0,194,100,85,100,60,100,61,100,0,0,10,1,0,0,0,0,0,0,0,100,0,0,0,0,0,0,0,0,0,0,4,25,8,3,29,18,65,488,3,159,25,70,5,18,4,26,6,1,77,0,587,32,0,390,0,76,1,1,100,1,1,68,17,14,22,20,0,340,1682,70,48,0,0,100,18,54,0,0,800,70,57,100,100,0,0,0,0,199,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,7,0,100,0,0,100,6,8,200,2,50,36,75,50,28,0,3,1,1,80,1218,2,1659,38,114,19,8,32,80,1,1,0,30,0,0,0,0,0,0,0,24,0,3,1,1,1,100,1,1,100,1,1,1,1,31,0,0,70,0,0,0,100,0,33,2,1,162,16,4,100,100,1436,118,100,50,32,107,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,13,0,4,0,7,0,0,2,13,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
   {0,0,50,50,512,512,512,0,0,0,192,100,49,100,184,100,157,100,0,0,30,0,1,1,87,33,62,12,80,67,0,0,0,0,0,0,0,0,0,0,0,6,3,8,8,12,42,1855,1,42,20,217,3,35,83,59,2658,1,185,0,282,14,0,247,11,1,1,1,100,1,1,0,1,1,1,1,14,0,0,70,0,0,0,100,0,23,0,0,755,195,82,61,29,0,0,0,0,162,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,13,0,100,23,8,200,0,0,50,0,50,18,32,50,0,0,10,66,353,44,1452,1,569,16,141,32,83,28,48,54,1,0,698,82,56,0,579,0,28,0,0,0,0,1,1,1,0,1,1,100,1,1,1,1,0,0,0,70,0,0,0,100,0,100,0,0,80,16,4,94,753,474,70,5,100,100,100,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,0,6,6,32,0,6,0,16,0,6,6,32,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -333,6 +347,12 @@ u_int32_t random_delay = 10000;
 // pan for audio output 
 float pan=1;
 float reverb_dry_proportion=0.6; //to avoid drop in volume in full reverb, keep some part of the dry signal in
+// the vocoder (addresses 260-262), see VOCODER
+uint8_t vocoder_amount = 0;      // 0-100: the vocoded sound in place of the dry, 0 off
+uint8_t vocoder_carrier = 0;     // what the incoming sound shapes: 0 the chords, 1 the harp, 2 both
+uint8_t vocoder_consonants = 30; // 0-100: the incoming sound's hiss blended in, for words
+void vocoder_set();
+void vocoder_setup();
 
 //>>AUTO RYTHM<<
 u_int8_t rythm_pattern[16] = {};
@@ -515,18 +535,102 @@ void set_led_color(float h, float s, float v) {
   return;
 }
 
+// ---------- USB audio (address 244), a setting of the instrument, not of a preset ----------
+// The minichord sends its sound to the phone or computer it's plugged into (the recording tap,
+// audio_definition.h USB_out). The Teensy's USB type that gives it that also offers the host a USB
+// speaker, which nothing ever played: a phone sends all its sound there and goes quiet. Now:
+//   0  as it always was: the speaker offered, what's sent to it not played
+//   1  play along: what's sent to it played through the minichord, beside the instrument
+//   2  no speaker offered, so the host keeps its own sound
+// The host reads what a device offers once, when it connects, so the choice is kept in the Teensy's
+// EEPROM (not in the presets, whose every address a preset load replaces) and read before USB starts
+// (startup_middle_hook); changing to or from 2 saves it and restarts the minichord, once the
+// settings have stopped arriving for a moment, so a whole backup sent from an editor isn't cut off.
+// The descriptors for both arrangements are in the core's usb_desc.c, as tools/usb_audio_choice.py
+// builds it.
+const int usb_audio_adress = 244;
+const int usb_audio_eeprom = 0;                  // EEPROM byte; erased (0xFF) reads as 0, stock
+const uint32_t usb_audio_restart_ms = 1500;      // quiet before the restart
+uint8_t usb_audio_mode = 0;                      // as it works now
+uint8_t usb_audio_booted = 0;                    // as the host was told when it connected
+bool usb_audio_restart_pending = false;
+elapsedMillis usb_audio_since;
+extern "C" uint8_t eeprom_read_byte(const uint8_t *addr);
+extern "C" void eeprom_write_byte(uint8_t *addr, uint8_t value);
+extern "C" void usb_desc_pick(int speaker);      // the core's usb_desc.c, as usb_audio_choice.py builds it
+static uint8_t usb_audio_stored() { uint8_t v = eeprom_read_byte((const uint8_t *)usb_audio_eeprom); return v <= 2 ? v : 0; }
+static bool usb_audio_speaker(uint8_t mode) { return mode != 2; }
+// before USB starts: the host is told of a speaker or not, as last chosen
+extern "C" void startup_middle_hook(void) {
+  usb_audio_booted = usb_audio_mode = usb_audio_stored();
+  usb_desc_pick(usb_audio_speaker(usb_audio_booted));
+}
+// the host's sound through the minichord only when playing along, at the host's volume where the host
+// sets the minichord's (most computers, some phones), and as it comes where it never does
+void usb_audio_gain() {
+#ifdef AUDIO_INTERFACE
+  static float last = -1;
+  float v = usb_audio_mode != 1 ? 0.0f : (AudioInputUSB::features.change ? USB_in.volume() : 1.0f);
+  if (v == last) return;
+  last = v;
+  DAC_l_mixer.gain(1, v);
+  DAC_r_mixer.gain(1, v);
+#endif
+}
+// a value written to 244 (by an editor or a page): kept, and a restart scheduled if the host must be told
+void usb_audio_request(int value) {
+  uint8_t mode = constrain(value, 0, 2);
+  current_sysex_parameters[usb_audio_adress] = mode;
+  if (mode == usb_audio_mode && !usb_audio_restart_pending) return;
+  usb_audio_mode = mode;
+  if (usb_audio_stored() != mode) eeprom_write_byte((uint8_t *)usb_audio_eeprom, mode);
+  usb_audio_restart_pending = usb_audio_speaker(mode) != usb_audio_speaker(usb_audio_booted);
+  usb_audio_since = 0;
+  usb_audio_gain();
+}
+// in the loop: the restart, once nothing's been sent for a moment
+void usb_audio_update() {
+  usb_audio_gain();
+  if (!usb_audio_restart_pending || usb_audio_since < usb_audio_restart_ms) return;
+  Serial.println("USB audio changed: restarting so the host sees it");
+  digitalWrite(_MUTE_PIN, LOW);                  // no click on the way down
+  delay(20);
+  SCB_AIRCR = 0x05FA0004;                        // a system reset: the program starts again, USB with it
+}
+
 //-->>UTILITIES FOR SYSEX HANDLING
+// A setting's factory default in a bank: page 0's from the bank's factory preset, page 1's generated
+static inline int16_t parameter_default(int bank_number, uint16_t i) {
+  return i < page_size ? default_bank_sysex_parameters[bank_number][i] : parameter_page1_defaults[i - page_size];
+}
+
+// A page of settings to an editor. Page 0 is the dump every editor has always read, recognised by
+// its length alone, so it stays exactly that; the others carry a header (7D, the id for
+// non-commercial use, then 6D and the page) and are a few bytes longer, which an editor that
+// knows only page 0 drops.
+void send_parameter_page(uint8_t page) {
+  if (page >= parameter_size / page_size) return;
+  const uint8_t header = page == 0 ? 0 : 3;
+  uint8_t midi_data_array[3 + page_size * 2];
+  midi_data_array[0] = 0x7D;
+  midi_data_array[1] = 0x6D;
+  midi_data_array[2] = page;
+  for (uint16_t i = 0; i < page_size; i++) {
+    int16_t parameter_value = constrain(current_sysex_parameters[page * page_size + i], 0, 16383); // a sysex byte only carries 7 bits
+    midi_data_array[header + 2 * i] = parameter_value % 128;
+    midi_data_array[header + 2 * i + 1] = parameter_value / 128;
+  }
+  usbMIDI.sendSysEx(header + page_size * 2, midi_data_array, 0);
+}
+
 void control_command(uint8_t command, uint8_t parameter) {
   switch (command) {
-  case 0: // SIGNAL TO SEND BACK ALL DATA
+  case 0: // SIGNAL TO SEND BACK ALL DATA: page 0, as it always was, two bytes a setting and no header
     Serial.println("Reporting all data");
-    uint8_t midi_data_array[parameter_size * 2];
-    for (int i = 0; i < parameter_size; i++) {
-      int16_t parameter_value = constrain(current_sysex_parameters[i], 0, 16383); // a sysex byte only carries 7 bits
-      midi_data_array[2 * i] = parameter_value % 128;
-      midi_data_array[2 * i + 1] = parameter_value / 128;
-    }
-    usbMIDI.sendSysEx(parameter_size * 2, midi_data_array,0);
+    send_parameter_page(0);
+    break;
+  case 7: // page 1 and on, for an editor that knows them: 7D 6D <page>, then two bytes a setting
+    send_parameter_page(parameter);
     break;
   case 1: // SIGNAL TO WIPE MEMORY
     Serial.println("Wiping memory");
@@ -586,6 +690,7 @@ void processMIDI(void) {
           current_sysex_parameters[adress] = value;
           apply_audio_parameter(adress, value);
         }
+        usb_audio_since = 0;                           // a restart waits till the settings stop coming
       }
     }
   }
@@ -1006,6 +1111,60 @@ uint8_t calculate_note_harp(uint8_t string, bool slashed, bool sharp) {
   }
   return note;
 }
+//-->>VOCODER
+// Sixteen bands from 100 Hz to 8 kHz, a third of an octave and a bit apart, each two bandpass
+// stages so they overlap without smearing. The incoming sound's level in each band, read as it is
+// measured (every block), rises fast and falls slower, and sets its band's gain in the carrier.
+const uint8_t vocoder_band_count = 16;
+const float vocoder_makeup = 10.0f;   // a band's level is a small part of full scale
+const float vocoder_hiss_makeup = 2.0f;
+
+void vocoder_setup() {
+  vocoder_modulator.gain(0, 0.5);
+  vocoder_modulator.gain(1, 0.5);
+  for (uint8_t k = 0; k < vocoder_band_count; k++) {
+    float f = 100.0f * powf(80.0f, k / (float)(vocoder_band_count - 1));
+    const float q = 3.4f;   // neighbouring bands meet about where each is 3 dB down
+    vocoder_analysis[k].setBandpass(0, f, q);
+    vocoder_analysis[k].setBandpass(1, f, q);
+    vocoder_synthesis[k].setBandpass(0, f, q);
+    vocoder_synthesis[k].setBandpass(1, f, q);
+    vocoder_bands[k / 4].gain(k % 4, 0);
+  }
+  for (uint8_t m = 0; m < 4; m++) vocoder_bands_mix.gain(m, 1);
+  vocoder_hiss.setHighpass(0, 5000, 0.707);
+  vocoder_hiss.setHighpass(1, 5000, 0.707);
+  vocoder_set();
+}
+
+// The returns, the carrier and the consonants, from the settings. Carrying both, the harp's
+// vocoded part comes back through the chords, since there is one bank.
+void vocoder_set() {
+  float a = vocoder_amount / 100.0f;
+  bool chords = vocoder_carrier != 1;
+  bool harp = vocoder_carrier != 0;
+  vocoder_carrier_mix.gain(0, chords ? 1 : 0);
+  vocoder_carrier_mix.gain(1, harp ? 1 : 0);
+  vocoder_chord_return.gain(0, chords ? 1 - a : 1);
+  vocoder_chord_return.gain(1, chords ? a : 0);
+  vocoder_string_return.gain(0, harp ? 1 - a : 1);
+  vocoder_string_return.gain(1, vocoder_carrier == 1 ? a : 0);
+  vocoder_out.gain(0, 1);
+  vocoder_out.gain(1, vocoder_consonants / 100.0f * vocoder_hiss_makeup);
+}
+
+// Called from loop(): each band's gain follows the incoming sound's level in it
+void vocoder_update() {
+  static float level[vocoder_band_count] = {0};
+  if (vocoder_amount == 0) return;
+  for (uint8_t k = 0; k < vocoder_band_count; k++) {
+    if (!vocoder_level[k].available()) continue;
+    float r = vocoder_level[k].read();
+    level[k] += (r - level[k]) * (r > level[k] ? 0.5f : 0.08f);   // about 5 ms up, 35 ms down
+    vocoder_bands[k / 4].gain(k % 4, level[k] * vocoder_makeup);
+  }
+}
+
 //-->>RYTHM MODE UTILITIES
 void rythm_tick_function() {
   //this function seems a bit long for a timed one. Maybe try to offload some logic somewhere else? 
@@ -1097,7 +1256,9 @@ void save_config(int bank_number, bool default_save) {
     // if we need to put the default in memory
     Serial.println("Writing the default file");
     Serial.println(bank_name[bank_number]);
-    String return_data = serialize(default_bank_sysex_parameters[bank_number], parameter_size);
+    static int16_t factory[parameter_size];
+    for (uint16_t i = 0; i < parameter_size; i++) factory[i] = parameter_default(bank_number, i);
+    String return_data = serialize(factory, parameter_size);
     dataFile.println(return_data);
   } else {
     Serial.println("Saving current settings");
@@ -1139,7 +1300,11 @@ void load_config(int bank_number) {
     while (entry.available()) {
       data_string += char(entry.read());
     }
+    // every slot from its default first, so a slot the file doesn't hold (all of page 1, in a
+    // preset saved before the array grew) comes up at its default, not the last preset's
+    for (uint16_t i = 0; i < parameter_size; i++) current_sysex_parameters[i] = parameter_default(bank_number, i);
     deserialize(data_string, current_sysex_parameters);
+    current_sysex_parameters[usb_audio_adress] = usb_audio_mode;   // the instrument's, whatever the preset holds
     Serial.print("Loaded preset: ");
     Serial.println(entry.name());
     entry.close();
@@ -1214,6 +1379,7 @@ void setup() {
     string_transient_envelope_array[i]->sustain(0);//don't need sustain for the transient
   }
   all_string_mix.gain(3,0.02); //for the transient
+  vocoder_setup();
 
   // initialising the rest of the hardware
   chord_matrix.setup();
@@ -1560,6 +1726,7 @@ void trigger_chord_notes() {
 }
 
 void loop() {
+  usb_audio_update();
   // Process incoming MIDI messages
   if (usbMIDI.read()) {
     processMIDI();
@@ -1619,6 +1786,9 @@ void loop() {
 
   // Handle harp functions
   handle_harp();
+
+  // The vocoder's bands follow the sound coming in over USB
+  vocoder_update();
 
   // The only point at which this firmware transmits MIDI. Must stay last, and must
   // stay in loop() -- see the MIDI OUTPUT QUEUE comment above.

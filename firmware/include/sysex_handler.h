@@ -6,6 +6,9 @@ void apply_audio_parameter(int adress, int value) {
       case 32:
         led_attenuation=value/100.0; set_led_color(bank_led_hue, 1.0, 1-led_attenuation);
         break;
+      case 244:
+        usb_audio_request(value);
+        break;
       case 21:
         retrigger_chord=value;
         break;
@@ -86,6 +89,15 @@ void apply_audio_parameter(int adress, int value) {
         break;
       case 28:
         main_reverb.diffusion(value/100.0);
+        break;
+      case 260:
+        vocoder_amount=value; vocoder_set();
+        break;
+      case 261:
+        vocoder_carrier=value; vocoder_set();
+        break;
+      case 262:
+        vocoder_consonants=value; vocoder_set();
         break;
       case 29:
         pan=value/100.0;apply_audio_parameter(85, current_sysex_parameters[85]);apply_audio_parameter(184, current_sysex_parameters[184]);
