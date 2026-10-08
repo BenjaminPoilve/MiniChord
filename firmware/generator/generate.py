@@ -19,6 +19,21 @@ with a.html():
     with a.head():
         a.link(href='index.css', rel='stylesheet')
 
+# The parameter array: two pages of 256. Page 0 (0-255) is every setting from before
+# the array grew and must never move; new settings go on page 1 (256-511). The
+# firmware's parameter_size and this must agree (main.cpp checks the table's size).
+# 382, 383, 510 and 511 can't be written over SysEx (their low byte, the first byte
+# of a write, is a universal SysEx id, 0x7E or 0x7F), so nothing may live there.
+PARAMETER_SIZE = 512
+PAGE_SIZE = 256
+RESERVED_ADRESSES = {0, 1, 382, 383, 510, 511}
+with open('parameters.json') as _f:
+    for _section in json.load(_f).values():
+        for _p in _section:
+            _a = _p["sysex_adress"]
+            assert 0 <= _a < PARAMETER_SIZE, "%s: address %d is past the parameter array" % (_p["name"], _a)
+            assert _a not in RESERVED_ADRESSES, "%s: address %d is reserved" % (_p["name"], _a)
+
 with open('parameters.json') as f: # Reserved adresses: 0 for system command and 1 for bank adress
     d = json.load(f)
     with a.html():
@@ -342,6 +357,16 @@ with open('parameters.json') as f:
         else:
             print("Missing chord parameters in JSON")
         cpp_output.write(cpp_end_file)
+        # Each parameter's range as parameters.json declares it, as stored (floats in hundredths),
+        # for code that sets a value it didn't get from an editor, such as hover.
+        cpp_output.write("\r\n\r\n// the range parameters.json declares for each parameter, as stored (floats in hundredths)\r\n")
+        cpp_output.write("bool parameter_range(int adress, int16_t &lo, int16_t &hi) {\r\n    switch(adress){\r\n")
+        for section in ("global_parameter", "harp_parameter", "chord_parameter"):
+            for parameter in d.get(section, []):
+                scale = 100 if parameter["data_type"] == "float" else 1
+                lo = int(round(parameter["min_value"] * scale)); hi = int(round(parameter["max_value"] * scale))
+                cpp_output.write("      case "+str(parameter["sysex_adress"])+": lo="+str(lo)+"; hi="+str(hi)+"; return true;\r\n")
+        cpp_output.write("  }\r\n  return false;\r\n}")
 
     # Emit a lookup table of declared parameter bounds, so the potentiometer
     # library can map selector targets across their real range rather than
@@ -365,7 +390,7 @@ with open('parameters.json') as f:
 #include <stdint.h>
 
 struct ParameterInfo {
-    uint8_t sysex_adress;
+    uint16_t sysex_adress;
     bool is_selector;   // mapped across min..max; everything else scales around its value
     int16_t min_value;
     int16_t max_value;
@@ -385,6 +410,44 @@ static const ParameterInfo parameter_lookup[] = {
                 name = parameter.get("name", "unnamed")
                 lookup_file_content += "    { %d, %d, %d, %d }, // %s\n" % (
                     parameter["sysex_adress"], is_selector, min_value, max_value, name)
+    lookup_file_content += """};
+
+// Page 1's factory defaults, as stored (floats in hundredths), from each parameter's
+// default_value: the same in every bank. Page 0's are the factory presets in main.cpp.
+static const int16_t parameter_page1_defaults[%d] = {
+""" % (PARAMETER_SIZE - PAGE_SIZE)
+    page1 = [0] * (PARAMETER_SIZE - PAGE_SIZE)
+    for section in d:
+        for parameter in d[section]:
+            a = parameter.get("sysex_adress", -1)
+            if a >= PAGE_SIZE:
+                v = parameter.get("default_value", 0)
+                page1[a - PAGE_SIZE] = int(round(v * 100)) if parameter.get("data_type") == "float" else int(v)
+    for row in range(0, PARAMETER_SIZE - PAGE_SIZE, 32):
+        lookup_file_content += "    " + ", ".join(str(v) for v in page1[row:row + 32]) + ",\n"
+    lookup_file_content += """};
+
+// Which controls may move each address, from each parameter's "controls" in
+// parameters.json: "all" (the default) for any control, the knobs included; "tap"
+// for controls that set an exact value but not those that sweep, for settings a
+// sweep would only scramble; "none" for settings no control should touch (the
+// knobs' own wiring, the instrument's setup, MIDI routing, the rythm patterns).
+// Addresses with no parameter are "none". It goes by the setting, not its address,
+// so a new setting can live anywhere, on either page.
+#define PARAMETER_CONTROL_NONE 0
+#define PARAMETER_CONTROL_TAP 1
+#define PARAMETER_CONTROL_ALL 2
+static const uint8_t parameter_control[%d] = {
+""" % PARAMETER_SIZE
+    control_values = {"none": 0, "tap": 1, "all": 2}
+    control = [0] * PARAMETER_SIZE
+    for section in d:
+        for parameter in d[section]:
+            c = parameter.get("controls", "all")
+            assert c in control_values, "%s: controls must be all, tap or none, not %s" % (parameter["name"], c)
+            control[parameter["sysex_adress"]] = control_values[c]
+    for row in range(0, PARAMETER_SIZE, 32):
+        lookup_file_content += "    " + ", ".join(str(v) for v in control[row:row + 32]) + ",\n"
     lookup_file_content += """};
 
 #endif // PARAMETER_LOOKUP_H

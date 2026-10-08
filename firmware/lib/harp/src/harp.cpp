@@ -50,10 +50,13 @@ harp::harp(){}
           data_array[remap_array[key]].set(touch_sensor.touched(status,key));
       }
   }
+
+  // This chip has no proximity channel
+  uint16_t harp::read_proximity(){ return 0; }
 #else
   void harp::setup(){
     touch_sensor.setupSingleDevice(Wire,MPR121::ADDRESS_5A,true);
-    touch_sensor.startAllChannels();
+    touch_sensor.startAllChannels(MPR121::COMBINE_CHANNELS_0_TO_11);
     if (!touch_sensor.communicating(MPR121::ADDRESS_5A)){
       Serial.println("Harp not communicating");
       return;
@@ -79,8 +82,8 @@ harp::harp(){}
     second_filter_iterations);
     touch_sensor.setSamplePeriod(MPR121::ADDRESS_5A,
     sample_period);
-    touch_sensor.startAllChannels();
-
+    touch_sensor.startAllChannels(MPR121::COMBINE_CHANNELS_0_TO_11);
+    set_proximity_charge();
   }
 
 
@@ -88,11 +91,46 @@ harp::harp(){}
       uint16_t touch_status = touch_sensor.getTouchStatus(MPR121::ADDRESS_5A);
       if (touch_sensor.overCurrentDetected(touch_status)){
         Serial.println("Over current detected!\n\n");
-        touch_sensor.startAllChannels();
+        touch_sensor.startAllChannels(MPR121::COMBINE_CHANNELS_0_TO_11);
         return;
       }
       for (uint8_t key=0; key < 12; key++){
           data_array[remap_array[key]].set(touch_sensor.deviceChannelTouched(touch_status,key));
       }
+  }
+
+  // Sets the proximity channel's charge so its reading sits high in the chip's
+  // range: the counts a hand moves it grow with the charge, and the top of the
+  // range (about 800 at 3.3 V) is where the chip starts reading out of range.
+  // Doubles the charge time until the reading passes the target, then trims the
+  // current to land on it. On the stock plate: 2 us reads about 590, so 4 us at
+  // about 38 uA.
+  void harp::set_proximity_charge(){
+    const uint16_t target = 720;
+    const uint16_t saturated = 1000;   // past the top it reads full scale, whatever the charge
+    uint16_t previous = 0;
+    for (uint8_t cdt = 1; cdt <= 7; cdt++){
+      touch_sensor.setDeviceChannelChargeDischargeCurrent(MPR121::ADDRESS_5A, proximity_channel, charge_discharge_current);
+      touch_sensor.setDeviceChannelChargeDischargeTime(MPR121::ADDRESS_5A, proximity_channel, (MPR121::ChargeDischargeTime)cdt);
+      delay(30);   // the filters settle
+      uint16_t level = touch_sensor.getDeviceChannelFilteredData(MPR121::ADDRESS_5A, proximity_channel);
+      if (level < target && cdt < 7){
+        previous = level;
+        continue;
+      }
+      // the reading grows with the current: scale it to the target, estimating a
+      // saturated reading from the step before, at half the time
+      uint16_t full = (level >= saturated && previous) ? previous * 2 : level;
+      uint8_t current = full ? constrain((uint32_t)charge_discharge_current * target / full, 1, charge_discharge_current) : charge_discharge_current;
+      touch_sensor.setDeviceChannelChargeDischargeCurrent(MPR121::ADDRESS_5A, proximity_channel, current);
+      delay(30);
+      Serial.printf("Hover charge: %.1f us at %d uA, reads %d\n", (1 << (cdt - 1)) * 0.5, current,
+        touch_sensor.getDeviceChannelFilteredData(MPR121::ADDRESS_5A, proximity_channel));
+      return;
+    }
+  }
+
+  uint16_t harp::read_proximity(){
+    return touch_sensor.getDeviceChannelFilteredData(MPR121::ADDRESS_5A, proximity_channel);
   }
 #endif
