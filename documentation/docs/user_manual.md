@@ -222,6 +222,32 @@ In the below table, we show the way chords are commonly written in a chord chart
 
 **Most of the time, the chords are easily playable on the minichord**. If not, it is almost always possible to find acceptable substitutions, but that might require a bit more theoretical knowledge for the player (for example to calculate which slash chord might be an acceptable ersatz for a complex chord). 
 
+## Temperament
+
+Out of the box the minichord is tuned in equal temperament, like almost every modern instrument: the octave is split into twelve identical steps, so every key sounds the same, but no interval except the octave is perfectly in tune. A major third, for example, is about 14 cents wider than a pure 5:4.
+
+Before equal temperament became universal, keyboards were tuned so that some keys were sweeter than others. The temperament setting lets the minichord play in those tunings. Choose it in [minicontrol](/minicontrol), in the Settings group. Like every setting, it is saved with the preset.
+
+| Value | Temperament | Character |
+|---|---|---|
+| 0 | Equal | The default. Every key the same. |
+| 1 | Quarter-comma meantone | Pure major thirds. Eb, Bb, F, C, G, D, A and E major are sweet; B, F#, Db and Ab major are unusable. |
+| 2 | Five-limit just (C major) | Pure thirds and fifths in C major, out of tune elsewhere. |
+| 3 | Pythagorean | Pure fifths, bright and wide thirds. Medieval music. |
+| 4 | Werckmeister III | A well temperament from 1691. Every key usable, each with its own colour. |
+| 5 | Kirnberger III | C–E is a pure third; very sweet near C, bright far from it. |
+| 6 | Vallotti | Smooth and even; a common choice for Baroque music. |
+| 7 | Young | Vallotti's shape, centred a fifth higher. |
+| 8 | Kellner | A well temperament proposed for Bach's Well-Tempered Clavier. |
+| 9 | Sixth-comma meantone | A gentler meantone: thirds slightly wide, more keys usable. |
+
+A few things to know:
+
+* **A stays at the master tuning pitch** in every temperament, the way a piano tuner sets A to the fork and tunes the rest around it.
+* **The temperament is fixed to the keyboard.** The sweet keys are the ones around C, whatever key signature you have selected, just as on a harpsichord.
+* **Changing temperament retunes whatever is sounding**, so you can hold a chord and hear the difference.
+* **MIDI out is not affected.** Note numbers stay the same, so an external instrument keeps its own tuning.
+
 # **Custom presets**
 
 You can easily test and save custom presets by going to the [minishop](https://minichord.com/minicontrol/minishop.html) with a a compatible web browser. We recommend using Google Chrome on desktop, because of its support of WebMidi sysex commands.
