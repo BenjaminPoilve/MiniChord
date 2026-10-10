@@ -73,6 +73,12 @@ with open('parameters.json') as f: # Reserved adresses: 0 for system command and
                                             a.option(value=i, _t=(i+1), klass="inactive")
                             with a.div(klass="bloc B3 M3 S3 button_div"):
                                 a.button(onclick='save_current_settings()', _t='save to bank',klass="inactive")
+                        # the preset's name (firmware 11), which saving keeps with it as every setting
+                        with a.div(klass="line"):
+                            with a.div(klass="bloc B6 M6 S6 button_div"):
+                                with a.div(klass="select_container"):
+                                    a.label(for_='preset_name', _t='name:', klass="inactive", version='11')
+                                    a.input(id='preset_name', type='text', maxlength='24', placeholder='no name', autocomplete='off', spellcheck='false', klass="inactive", version='11', onchange='set_preset_name(this.value)', title="the preset's name, up to 24 plain letters: save to a bank to keep it")
                         with a.div(klass="line"):
                             a.h5(_t='sharing:',klass="inactive")
                         with a.div(klass="line"):

@@ -12,7 +12,7 @@
 #include <potentiometer.h>
 
 //>>SOFWTARE VERSION 
-int version_ID=10; //to be read 00.03, stored at adress 7 in memory
+int version_ID=11; //to be read 00.03, stored at adress 7 in memory
 //>>BUTTON ARRAYS<<
 debouncer harp_array[12];
 debouncer chord_matrix_array[22];
@@ -203,7 +203,8 @@ bool chromatic_harp_mode = false; // to switch the harp to chromatic mode
 // defaults; firmware from before the growth reads the first 256 of a longer file and keeps page 0.
 // Page 1 goes to an editor only when asked (command 7), with a header, so no tool that knows only
 // page 0 can take it for a dump. 382, 383, 510 and 511 stay unused: their low byte is a universal
-// SysEx id (0x7E, 0x7F), as the first byte of a write.
+// SysEx id (0x7E, 0x7F), as the first byte of a write. 290-301 hold the preset's name, two ASCII
+// letters to each, which the firmware only keeps for an editor to show.
 const uint16_t parameter_size = 512;
 const uint16_t page_size = 256;
 const uint8_t preset_number = 12;

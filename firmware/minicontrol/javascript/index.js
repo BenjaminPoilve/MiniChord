@@ -156,7 +156,53 @@ miniChordController.onConnectionChange = function(connected, message) {
 // Page 1, which arrives after page 0 from firmware that has it
 miniChordController.onPageReceived = function(page, parameters) {
   parameters.forEach((value, adress) => { if (value !== undefined) set_slider_to_value(adress, value); });
+  if (parameters[name_first_adress] !== undefined) show_preset_name(parameters);
 };
+
+//-->>PRESET NAME
+// The preset's name, from firmware 11: two letters to each of the twelve settings from 290, the
+// first in the low seven bits and the second in the high seven, plain ASCII, and the first 0 ends
+// it. The minichord only keeps it, so "save to bank" keeps it with the preset as every setting.
+const name_first_adress = 290;
+const name_slots = 12;
+function is_name_adress(adress) {
+  return adress >= name_first_adress && adress < name_first_adress + name_slots;
+}
+// what a name can be on the minichord: plain letters (accents taken off), at most 24 of them
+function plain_name(text) {
+  return String(text || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^\x20-\x7e]/g, "").replace(/\s+/g, " ").trim().slice(0, 2 * name_slots);
+}
+function preset_name(parameters) {
+  let name = "";
+  for (let k = 0; k < name_slots; k++) {
+    const value = parameters[name_first_adress + k] || 0;
+    for (const c of [value & 127, (value >> 7) & 127]) {
+      if (c < 32) return name.trim();
+      name += String.fromCharCode(c);
+    }
+  }
+  return name.trim();
+}
+function show_preset_name(parameters) {
+  const box = document.getElementById("preset_name");
+  if (box && document.activeElement !== box) box.value = preset_name(parameters);
+}
+function set_preset_name(text) {
+  const box = document.getElementById("preset_name");
+  if (!miniChordController.isConnected() || !box.classList.contains("active")) {
+    document.getElementById("information_zone").focus();
+    return;
+  }
+  const name = plain_name(text);
+  for (let k = 0; k < name_slots; k++) {
+    const first = name.charCodeAt(2 * k) || 0, second = name.charCodeAt(2 * k + 1) || 0;
+    const value = first ? first + 128 * second : 0;
+    miniChordController.sendParameter(name_first_adress + k, value);
+    set_slider_to_value(name_first_adress + k, value);
+  }
+  box.value = name;
+}
 
 miniChordController.onDataReceived = function(data) {
   // Update sliders
@@ -345,7 +391,9 @@ function generate_settings() {
     }
     // A code holds page 0 alone when page 1 is all at its defaults, as every code before the array
     // grew did, so an editor that knows only page 0 still reads it; both pages otherwise.
-    const page1_at_defaults = Object.entries(miniChordController.page1_defaults).every(([adress, value]) => sysex_array[adress] == value);
+    // A name alone doesn't make it the longer code: it goes with the code only when page 1 does.
+    const page1_at_defaults = Object.entries(miniChordController.page1_defaults)
+      .every(([adress, value]) => is_name_adress(parseInt(adress)) || sysex_array[adress] == value);
     const code_length = page1_at_defaults ? miniChordController.page_size : miniChordController.parameter_size;
     output_base64="";
     output_string="{";
@@ -548,6 +596,7 @@ async function generateRandomPreset() {
   
   // Send the preset to the device
   for (let i = 2; i < miniChordController.parameter_size; i++) {
+    if (is_name_adress(i)) continue;   // the name stays the preset's own
     if (preset[i] !== undefined && !miniChordController.reserved_adresses.includes(i)) {
       let valueToSend = preset[i];
       

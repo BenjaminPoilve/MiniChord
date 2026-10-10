@@ -485,6 +485,18 @@ select {
   position: relative;
 }
 
+/* the preset's name, set like the bank dropdown beside it */
+#preset_name {
+  width: 14em;
+  padding: 0.2em;
+  border: 1px solid var(--select-border);
+  font-family: monospace;
+  font-size: 1em;
+  background-color: var(--select-bg);
+  color: var(--select-text);
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
 #instruction_zone {
   font-size: 0.55em;
   display: inline-block;
