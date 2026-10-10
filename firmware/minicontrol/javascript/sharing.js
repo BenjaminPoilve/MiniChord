@@ -199,6 +199,8 @@ class PresetManager {
             
             // Send all parameters to the device, page 1 at its defaults if the code has only page 0
             miniChordController.applyPreset(presetData);
+            // and its name from the shop, which the code doesn't carry, so saving it keeps it
+            this.sendPresetName(preset.name);
             
             console.log(`Trying preset: ${preset.name}`);
             this.showNotification(`Applied preset: ${preset.name}`, 'success');
@@ -251,6 +253,28 @@ class PresetManager {
         } catch (error) {
             console.error('Error opening preset in minicontrol:', error);
             this.showNotification('Error applying preset', 'error');
+        }
+    }
+
+    // The preset's name, kept in the preset from firmware 11: two letters to each of the twelve
+    // settings from 290, the first in the low seven bits, plain ASCII. A name longer than the 24
+    // letters it holds is cut at its last whole word that fits. Firmware without page 1 has no room.
+    minichordName(text) {
+        const plain = String(text || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+            .replace(/[^\x20-\x7e]/g, "").replace(/\s+/g, " ").trim();
+        if (plain.length <= 24) return plain;
+        const head = plain.slice(0, 25);   // a word ending at 24 still fits
+        const words = head.replace(/\s+\S*$/, "");
+        if (words === head) return plain.slice(0, 24);   // one long word: cut it
+        return words.replace(/[\s&,-]+$/, "") || plain.slice(0, 24);
+    }
+
+    sendPresetName(text) {
+        if (!miniChordController.has_page1) return;
+        const name = this.minichordName(text);
+        for (let k = 0; k < 12; k++) {
+            const first = name.charCodeAt(2 * k) || 0, second = name.charCodeAt(2 * k + 1) || 0;
+            miniChordController.sendParameter(290 + k, first ? first + 128 * second : 0);
         }
     }
 

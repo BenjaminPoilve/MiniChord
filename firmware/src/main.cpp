@@ -1117,6 +1117,24 @@ void deserialize(String input, int16_t data_array[]) {
   }
 }
 
+// The name a factory preset is written with, "Default Preset 1" to "Default Preset 12", as the
+// minishop lists them: two letters to each of the name's settings (290-301), the first in the low
+// seven bits. Only a factory write names a bank. Loading leaves page 1 at parameter_default, which
+// names nothing, so a preset of one's own saved before page 1 doesn't come up called a default.
+const uint16_t name_first_adress = 290;
+const uint8_t name_slots = 12;
+void name_factory_preset(int16_t values[], int bank_number) {
+  char name[2 * name_slots + 1];
+  const uint8_t number = bank_number + 1;
+  snprintf(name, sizeof(name), "Default Preset %u", number);
+  const size_t length = strlen(name);
+  for (size_t k = 0; k < name_slots; k++) {
+    const uint8_t first = 2 * k < length ? name[2 * k] : 0;
+    const uint8_t second = 2 * k + 1 < length ? name[2 * k + 1] : 0;
+    values[name_first_adress + k] = first ? first + 128 * second : 0;
+  }
+}
+
 void save_config(int bank_number, bool default_save) {
   if (bank_number < 0 || bank_number >= preset_number) {
     Serial.printf("Error: Invalid bank_number %d in save_config\n", bank_number);
@@ -1135,6 +1153,7 @@ void save_config(int bank_number, bool default_save) {
     Serial.println(bank_name[bank_number]);
     static int16_t factory[parameter_size];
     for (uint16_t i = 0; i < parameter_size; i++) factory[i] = parameter_default(bank_number, i);
+    name_factory_preset(factory, bank_number);
     String return_data = serialize(factory, parameter_size);
     dataFile.println(return_data);
   } else {
