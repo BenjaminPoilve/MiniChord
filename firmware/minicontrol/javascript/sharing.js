@@ -199,8 +199,9 @@ class PresetManager {
             
             // Send all parameters to the device, page 1 at its defaults if the code has only page 0
             miniChordController.applyPreset(presetData);
-            // and its name from the shop, which the code doesn't carry, so saving it keeps it
-            this.sendPresetName(preset.name);
+            // and its name from the shop, which the code doesn't carry, so saving it keeps it: its
+            // short_name if the shop gives one, for a title longer than the 24 letters a preset holds
+            this.sendPresetName(preset.short_name || preset.name);
             
             console.log(`Trying preset: ${preset.name}`);
             this.showNotification(`Applied preset: ${preset.name}`, 'success');
