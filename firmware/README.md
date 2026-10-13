@@ -32,13 +32,14 @@ Generation can then simply be done by running the `generate.py`script: `python3 
 
 ### USB descriptor customisation
 
-The device uses the stock `USB_MIDI16_AUDIO_SERIAL` USB type of the Teensy core, with two changes: it advertises 2 MIDI cables instead of 16, and it reports `minichord` as manufacturer and product name.
+The device uses the stock `USB_MIDI16_AUDIO_SERIAL` USB type of the Teensy core, with three changes: it advertises 2 MIDI cables instead of 16, it reports `minichord` as manufacturer and product name, and it offers no USB speaker. The minichord's sound still goes to the host for recording, but a phone or computer no longer sends its own sound to the minichord, where nothing would play it.
 
 The USB audio recording tap in `include/audio_definition.h` is guarded by `#ifdef AUDIO_INTERFACE`, so building against a USB type without audio interfaces still works without further edits.
 
-Both are done from within the project, so no file of the `framework-arduinoteensy` package has to be touched:
+All three are done from within the project, so no file of the `framework-arduinoteensy` package has to be touched:
 
 - the names are set in [src/name.c](src/name.c), which overrides the (weakly defined) `usb_string_manufacturer_name` and `usb_string_product_name` descriptors of the core;
-- the cable count is set in [include/usb_desc_override.h](include/usb_desc_override.h), which `platformio.ini` force-includes in front of every translation unit with `-include`. Because the core's `usb_desc.h` uses `#pragma once`, reading it from that header first means the core sources later get a no-op include and keep our value of `MIDI_NUM_CABLES`.
+- the cable count is set in [include/usb_desc_override.h](include/usb_desc_override.h), which `platformio.ini` force-includes in front of every translation unit with `-include`. Because the core's `usb_desc.h` uses `#pragma once`, reading it from that header first means the core sources later get a no-op include and keep our value of `MIDI_NUM_CABLES`;
+- the speaker is removed by [tools/usb_no_speaker.py](tools/usb_no_speaker.py), a PlatformIO pre-script that compiles a copy of the core's `usb_desc.c`, without the speaker's descriptors, in place of the original. If the core's file ever stops reading as the script expects, the build stops.
 
 Earlier versions of this project instead asked for a manual edit of `usb_desc.h` in `~/.platformio/packages/framework-arduinoteensy/cores/teensy4`. That is no longer needed, and if you patched that file previously you can restore it to its original content.
