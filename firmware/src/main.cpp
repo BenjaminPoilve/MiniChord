@@ -435,7 +435,11 @@ void drain_midi_queue() {
     }
     sent = true;
   }
-  if (sent) usbMIDI.send_now();
+  // No send_now() here. The packet a message leaves half full goes out on the next USB start-of-frame
+  // (125 us at 480 Mbit, 1 ms at 12), from the SOF interrupt. Flushing it from here as well froze the
+  // USB controller under load: the core's usb_midi_flush_output() has no lock, the interrupt's flush
+  // could land inside this one, and the descriptor the hardware had just taken was prepared again and
+  // linked to itself.
 }
 
 //-->>FUNCTION THAT NEED ANNOUNCING
