@@ -14,6 +14,7 @@ class debouncer{
   bool flag=false; //flag warns that there has been a change in value that was not yet accounted for 
   elapsedMicros last_update=0;
   bool value=false;
+  bool pending=false; //the raw reading, which becomes value once it has held
 };
 
 #endif
