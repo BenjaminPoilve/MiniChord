@@ -4185,7 +4185,167 @@
               <p id="value_zone235" class="value_zone"></p>
             </div>
           </div>
-          <div name="200" class="line data_line content_line inactive" version="2" id="192">
+          <div name="200" class="line data_line content_line inactive" version="11" id="274">
+            <div class=" bloc B4 M0 S0">
+              <p></p>
+            </div>
+            <div class=" bloc B3 M2 S3">
+              <p></p>
+            </div>
+            <div class=" bloc B1 M1 S1">
+              <p>274</p>
+            </div>
+            <div class=" bloc B6 M4 S6">
+              <dfn title="what rhythm mode plays. 0: the rythm pattern steps below, as it always has. The rest are written parts that follow whatever chord is held: 1 Alberti bass (lowest, top, middle, top in sixteenths), 2 waltz (oom-pah-pah, the bass alternating root and fifth), 3 boom-chick (root, chord, fifth, chord), 4 walking bass (root, third, fifth and a step into the next chord, under a Charleston comp), 5 boogie (root under a fifth rocking to the sixth), 6 Travis picking, 7 strummed guitar (down, down-up, up-down-up), 8 bossa nova, 9 arpeggio up, 10 arpeggio up and down, 11 ballad (bass held under chords pulsing in eighths), 12 reggae (chords on the offbeats), 13 6/8 arpeggio, 14 habanera. The first chord note is the bass part and the other three the chord part. Shuffle value swings them; an inversion makes the Alberti and the arpeggios move as a hand does">rhythm style</dfn>
+            </div>
+            <div class=" bloc B2 M2 S4">
+              <input class="slider inactive" adress_field="274" curve="linear" data_type="int" id="200" max="14" min="0" onchange="handlechange(this)" step="1" target_max="14" target_min="0" type="range" value="0" />
+            </div>
+            <div class=" bloc B1 M1 S1">
+              <p id="value_zone274" class="value_zone"></p>
+            </div>
+          </div>
+          <div name="201" class="line data_line content_line inactive" version="11" id="275">
+            <div class=" bloc B4 M0 S0">
+              <p></p>
+            </div>
+            <div class=" bloc B3 M2 S3">
+              <p></p>
+            </div>
+            <div class=" bloc B1 M1 S1">
+              <p>275</p>
+            </div>
+            <div class=" bloc B6 M4 S6">
+              <dfn title="what the first chord note does under a rhythm style: 0 plays the style's bass part, 1 holds the chord's bass note as it does outside rhythm mode, 2 rests. Not for rhythm style 0">rhythm bass</dfn>
+            </div>
+            <div class=" bloc B2 M2 S4">
+              <input class="slider inactive" adress_field="275" curve="linear" data_type="int" id="201" max="2" min="0" onchange="handlechange(this)" step="1" target_max="2" target_min="0" type="range" value="0" />
+            </div>
+            <div class=" bloc B1 M1 S1">
+              <p id="value_zone275" class="value_zone"></p>
+            </div>
+          </div>
+          <div name="202" class="line data_line content_line inactive" version="11" id="276">
+            <div class=" bloc B4 M0 S0">
+              <p></p>
+            </div>
+            <div class=" bloc B3 M2 S3">
+              <p></p>
+            </div>
+            <div class=" bloc B1 M1 S1">
+              <p>276</p>
+            </div>
+            <div class=" bloc B6 M4 S6">
+              <dfn title="what the other three chord notes do under a rhythm style: 0 play the style's chord part, 1 hold the chord as outside rhythm mode (a bass line walking under a sustained pad), 2 rest (the bass line alone). Not for rhythm style 0">rhythm chords</dfn>
+            </div>
+            <div class=" bloc B2 M2 S4">
+              <input class="slider inactive" adress_field="276" curve="linear" data_type="int" id="202" max="2" min="0" onchange="handlechange(this)" step="1" target_max="2" target_min="0" type="range" value="0" />
+            </div>
+            <div class=" bloc B1 M1 S1">
+              <p id="value_zone276" class="value_zone"></p>
+            </div>
+          </div>
+          <div name="203" class="line data_line content_line inactive" version="11" id="277">
+            <div class=" bloc B4 M0 S0">
+              <p></p>
+            </div>
+            <div class=" bloc B3 M2 S3">
+              <p></p>
+            </div>
+            <div class=" bloc B1 M1 S1">
+              <p>277</p>
+            </div>
+            <div class=" bloc B6 M4 S6">
+              <dfn title="whether rhythm mode plays only while a chord is held. 0: it plays on, as it always has. 1: it sounds while a chord button is down and stops when you let go, the beat running on underneath so it comes back in time. 2: the same, and a chord pressed from silence starts the bar, as an Omnichord's sync start (not while following a MIDI clock)">rhythm follows hands</dfn>
+            </div>
+            <div class=" bloc B2 M2 S4">
+              <input class="slider inactive" adress_field="277" curve="linear" data_type="int" id="203" max="2" min="0" onchange="handlechange(this)" step="1" target_max="2" target_min="0" type="range" value="0" />
+            </div>
+            <div class=" bloc B1 M1 S1">
+              <p id="value_zone277" class="value_zone"></p>
+            </div>
+          </div>
+          <div name="204" class="line data_line content_line inactive" version="11" id="278">
+            <div class=" bloc B4 M0 S0">
+              <p></p>
+            </div>
+            <div class=" bloc B3 M2 S3">
+              <p></p>
+            </div>
+            <div class=" bloc B1 M1 S1">
+              <p>278</p>
+            </div>
+            <div class=" bloc B6 M4 S6">
+              <dfn title="when a new chord comes into a rhythm style. 0: on its next note, and a chord pressed just after a beat (up to a quarter of a beat, 100 ms at most) still takes that beat. 1: on the next beat. 2: on the next bar, and a walking bass then steps into the chord waiting to come in. Rhythm style 0 keeps measure update">rhythm chord change</dfn>
+            </div>
+            <div class=" bloc B2 M2 S4">
+              <input class="slider inactive" adress_field="278" curve="linear" data_type="int" id="204" max="2" min="0" onchange="handlechange(this)" step="1" target_max="2" target_min="0" type="range" value="0" />
+            </div>
+            <div class=" bloc B1 M1 S1">
+              <p id="value_zone278" class="value_zone"></p>
+            </div>
+          </div>
+          <div name="205" class="line data_line content_line inactive" version="11" id="279">
+            <div class=" bloc B4 M0 S0">
+              <p></p>
+            </div>
+            <div class=" bloc B3 M2 S3">
+              <p></p>
+            </div>
+            <div class=" bloc B1 M1 S1">
+              <p>279</p>
+            </div>
+            <div class=" bloc B6 M4 S6">
+              <dfn title="how long a rhythm style's notes are held, in percent of their written length: lower is more staccato, higher more legato. Notes written to ring (the strummed guitar) ring until struck again whatever this is. Not for rhythm style 0, which has note pushed duration">rhythm articulation</dfn>
+            </div>
+            <div class=" bloc B2 M2 S4">
+              <input class="slider inactive" adress_field="279" curve="linear" data_type="int" id="205" max="200" min="10" onchange="handlechange(this)" step="1" target_max="200" target_min="10" type="range" value="100" />
+            </div>
+            <div class=" bloc B1 M1 S1">
+              <p id="value_zone279" class="value_zone"></p>
+            </div>
+          </div>
+          <div name="206" class="line data_line content_line inactive" version="11" id="280">
+            <div class=" bloc B4 M0 S0">
+              <p></p>
+            </div>
+            <div class=" bloc B3 M2 S3">
+              <p></p>
+            </div>
+            <div class=" bloc B1 M1 S1">
+              <p>280</p>
+            </div>
+            <div class=" bloc B6 M4 S6">
+              <dfn title="how much a rhythm style's strong beats stand out from its weak ones, in percent of the written accents: 0 plays every note equally loud. Applies to the sound and to the midi velocity. Not for rhythm style 0">rhythm accents</dfn>
+            </div>
+            <div class=" bloc B2 M2 S4">
+              <input class="slider inactive" adress_field="280" curve="linear" data_type="int" id="206" max="100" min="0" onchange="handlechange(this)" step="1" target_max="100" target_min="0" type="range" value="100" />
+            </div>
+            <div class=" bloc B1 M1 S1">
+              <p id="value_zone280" class="value_zone"></p>
+            </div>
+          </div>
+          <div name="207" class="line data_line content_line inactive" version="11" id="281">
+            <div class=" bloc B4 M0 S0">
+              <p></p>
+            </div>
+            <div class=" bloc B3 M2 S3">
+              <p></p>
+            </div>
+            <div class=" bloc B1 M1 S1">
+              <p>281</p>
+            </div>
+            <div class=" bloc B6 M4 S6">
+              <dfn title="what a tap on the hold button counts in rhythm mode. 0: a tap a beat, as before. 1: a tap an eighth, two to the beat, for tapping along with the pulse the pattern moves in. Either way the second tap sets the tempo, the next few refine it, and each tap puts the beat (or the eighth) where it fell">tap tempo counts</dfn>
+            </div>
+            <div class=" bloc B2 M2 S4">
+              <input class="slider inactive" adress_field="281" curve="linear" data_type="int" id="207" max="1" min="0" onchange="handlechange(this)" step="1" target_max="1" target_min="0" type="range" value="0" />
+            </div>
+            <div class=" bloc B1 M1 S1">
+              <p id="value_zone281" class="value_zone"></p>
+            </div>
+          </div>
+          <div name="208" class="line data_line content_line inactive" version="2" id="192">
             <div class=" bloc B4 M0 S0">
               <p></p>
             </div>
@@ -4199,13 +4359,13 @@
               <dfn title="corner frequency of the output filter">frequency</dfn>
             </div>
             <div class=" bloc B2 M2 S4">
-              <input class="slider inactive" adress_field="192" curve="linear" data_type="int" id="200" max="5000" min="0" onchange="handlechange(this)" step="1" target_max="5000" target_min="0" type="range" value="500" />
+              <input class="slider inactive" adress_field="192" curve="linear" data_type="int" id="208" max="5000" min="0" onchange="handlechange(this)" step="1" target_max="5000" target_min="0" type="range" value="500" />
             </div>
             <div class=" bloc B1 M1 S1">
               <p id="value_zone192" class="value_zone"></p>
             </div>
           </div>
-          <div name="201" class="line data_line content_line inactive" version="2" id="193">
+          <div name="209" class="line data_line content_line inactive" version="2" id="193">
             <div class=" bloc B4 M0 S0">
               <p></p>
             </div>
@@ -4219,13 +4379,13 @@
               <dfn title="resonance of the output filter">resonance</dfn>
             </div>
             <div class=" bloc B2 M2 S4">
-              <input class="slider inactive" adress_field="193" curve="linear" data_type="float" id="201" max="5" min="0.7" onchange="handlechange(this)" step="0.01" target_max="5" target_min="0.7" type="range" value="0.7" />
+              <input class="slider inactive" adress_field="193" curve="linear" data_type="float" id="209" max="5" min="0.7" onchange="handlechange(this)" step="0.01" target_max="5" target_min="0.7" type="range" value="0.7" />
             </div>
             <div class=" bloc B1 M1 S1">
               <p id="value_zone193" class="value_zone"></p>
             </div>
           </div>
-          <div name="202" class="line data_line content_line inactive" version="2" id="194">
+          <div name="210" class="line data_line content_line inactive" version="2" id="194">
             <div class=" bloc B4 M0 S0">
               <p></p>
             </div>
@@ -4239,13 +4399,13 @@
               <dfn title="output lowpass component">lowpass</dfn>
             </div>
             <div class=" bloc B2 M2 S4">
-              <input class="slider inactive" adress_field="194" curve="linear" data_type="float" id="202" max="1" min="0" onchange="handlechange(this)" step="0.01" target_max="1" target_min="0" type="range" value="0.05" />
+              <input class="slider inactive" adress_field="194" curve="linear" data_type="float" id="210" max="1" min="0" onchange="handlechange(this)" step="0.01" target_max="1" target_min="0" type="range" value="0.05" />
             </div>
             <div class=" bloc B1 M1 S1">
               <p id="value_zone194" class="value_zone"></p>
             </div>
           </div>
-          <div name="203" class="line data_line content_line inactive" version="2" id="195">
+          <div name="211" class="line data_line content_line inactive" version="2" id="195">
             <div class=" bloc B4 M0 S0">
               <p></p>
             </div>
@@ -4259,13 +4419,13 @@
               <dfn title="output bandpass component">bandpass</dfn>
             </div>
             <div class=" bloc B2 M2 S4">
-              <input class="slider inactive" adress_field="195" curve="linear" data_type="float" id="203" max="1" min="0" onchange="handlechange(this)" step="0.01" target_max="1" target_min="0" type="range" value="1.0" />
+              <input class="slider inactive" adress_field="195" curve="linear" data_type="float" id="211" max="1" min="0" onchange="handlechange(this)" step="0.01" target_max="1" target_min="0" type="range" value="1.0" />
             </div>
             <div class=" bloc B1 M1 S1">
               <p id="value_zone195" class="value_zone"></p>
             </div>
           </div>
-          <div name="204" class="line data_line content_line inactive" version="2" id="196">
+          <div name="212" class="line data_line content_line inactive" version="2" id="196">
             <div class=" bloc B4 M0 S0">
               <p></p>
             </div>
@@ -4279,13 +4439,13 @@
               <dfn title="output highpass component">highpass</dfn>
             </div>
             <div class=" bloc B2 M2 S4">
-              <input class="slider inactive" adress_field="196" curve="linear" data_type="float" id="204" max="1" min="0" onchange="handlechange(this)" step="0.01" target_max="1" target_min="0" type="range" value="1.0" />
+              <input class="slider inactive" adress_field="196" curve="linear" data_type="float" id="212" max="1" min="0" onchange="handlechange(this)" step="0.01" target_max="1" target_min="0" type="range" value="1.0" />
             </div>
             <div class=" bloc B1 M1 S1">
               <p id="value_zone196" class="value_zone"></p>
             </div>
           </div>
-          <div name="205" class="line data_line content_line inactive" version="2" id="197">
+          <div name="213" class="line data_line content_line inactive" version="2" id="197">
             <div class=" bloc B4 M0 S0">
               <p></p>
             </div>
@@ -4299,7 +4459,7 @@
               <dfn title="amplifies the volume of the chords">output amplifier</dfn>
             </div>
             <div class=" bloc B2 M2 S4">
-              <input class="slider inactive" adress_field="197" curve="linear" data_type="float" id="205" max="2" min="0" onchange="handlechange(this)" step="0.01" target_max="2" target_min="0" type="range" value="1.0" />
+              <input class="slider inactive" adress_field="197" curve="linear" data_type="float" id="213" max="2" min="0" onchange="handlechange(this)" step="0.01" target_max="2" target_min="0" type="range" value="1.0" />
             </div>
             <div class=" bloc B1 M1 S1">
               <p id="value_zone197" class="value_zone"></p>
