@@ -6,7 +6,7 @@
 #include <stdint.h>
 
 struct ParameterInfo {
-    uint8_t sysex_adress;
+    uint16_t sysex_adress;
     bool is_selector;   // mapped across min..max; everything else scales around its value
     int16_t min_value;
     int16_t max_value;
@@ -202,12 +202,34 @@ static const ParameterInfo parameter_lookup[] = {
     { 233, 0, 0, 128 }, // rythm pattern
     { 234, 0, 0, 128 }, // rythm pattern
     { 235, 0, 0, 128 }, // rythm pattern
+    { 274, 1, 0, 14 }, // rhythm style
+    { 275, 1, 0, 2 }, // rhythm bass
+    { 276, 1, 0, 2 }, // rhythm chords
+    { 277, 1, 0, 2 }, // rhythm follows hands
+    { 278, 1, 0, 2 }, // rhythm chord change
+    { 279, 0, 10, 200 }, // rhythm articulation
+    { 280, 0, 0, 100 }, // rhythm accents
+    { 281, 1, 0, 1 }, // tap tempo counts
+    { 287, 1, 0, 5 }, // chord memory
     { 192, 0, 0, 5000 }, // frequency
     { 193, 0, 1, 5 }, // resonance
     { 194, 0, 0, 1 }, // lowpass
     { 195, 0, 0, 1 }, // bandpass
     { 196, 0, 0, 1 }, // highpass
     { 197, 0, 0, 2 }, // output amplifier
+};
+
+// Page 1's factory defaults, as stored (floats in hundredths), from each parameter's
+// default_value: the same in every bank. Page 0's are the factory presets in main.cpp.
+static const int16_t parameter_page1_defaults[256] = {
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 100, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 
 #endif // PARAMETER_LOOKUP_H
