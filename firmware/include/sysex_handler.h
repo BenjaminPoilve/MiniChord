@@ -27,6 +27,9 @@ void apply_audio_parameter(int adress, int value) {
       case 108:
         harp_port=1-value;
         break;
+      case 215:
+        harp_note_off_on_lift=value;
+        break;
       case 31:
         flat_button_modifier=value;
         break;
@@ -143,9 +146,7 @@ void apply_audio_parameter(int adress, int value) {
         chromatic_harp_mode=value;
         break;
       case 41:
-        for (int i=0;i<12;i++){
-          string_waveform_array[i]->amplitude(value/100.0);
-        }
+        string_level=value/100.0; for (int s=0;s<12;s++) apply_string_firmness(s);
         break;
       case 42:
         for (int i=0;i<12;i++){
@@ -174,13 +175,34 @@ void apply_audio_parameter(int adress, int value) {
         break;
       case 47:
         for (int i=0;i<12;i++){
-          string_enveloppe_array[i]->release(value);
+          string_enveloppe_array[i]->release(value); string_release=value;
         }
         break;
       case 48:
         for (int i=0;i<12;i++){
           string_enveloppe_array[i]->releaseNoteOn(value);
         }
+        break;
+      case 252:
+        touch_velocity=value;
+        break;
+      case 253:
+        touch_pressure=value;
+        break;
+      case 263:
+        strum_velocity=value;
+        break;
+      case 213:
+        palm_mute_pads=value ? max(value,2) : 0;
+        break;
+      case 214:
+        palm_mute_release=value ? value : 15;
+        break;
+      case 216:
+        harp_pluck_on_lift=value;
+        break;
+      case 289:
+        koto_press=value;
         break;
       case 49:
         string_filter_base_freq=value;
@@ -234,9 +256,7 @@ void apply_audio_parameter(int adress, int value) {
         }
         break;
       case 101:
-        for (int i=0;i<12;i++){
-          string_transient_waveform_array[i]->amplitude(value/100.0);
-        }
+        transient_level=value/100.0; for (int s=0;s<12;s++) apply_string_firmness(s);
         break;
       case 102:
         for (int i=0;i<12;i++){

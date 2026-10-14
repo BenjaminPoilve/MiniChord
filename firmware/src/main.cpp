@@ -12,9 +12,10 @@
 #include <potentiometer.h>
 
 //>>SOFWTARE VERSION 
-int version_ID=9; //to be read 00.03, stored at adress 7 in memory
+int version_ID=12; //to be read 00.03, stored at adress 7 in memory
 //>>BUTTON ARRAYS<<
 debouncer harp_array[12];
+const uint16_t harp_debounce_us = 4000;   // the harp pads' settle, shorter than the buttons' (see setup)
 debouncer chord_matrix_array[22];
 
 //>>HARDWARE SETUP<<
@@ -192,25 +193,71 @@ uint8_t note_slash_level = 0;     // the level we are replacing in the chord whe
 bool retrigger_chord = true;      // wether or not to retrigger the enveloppe when the chord is switched within current line (including when selecting slash chord)
 bool change_held_strings = false; // to control wether hold strings change with chord:
 bool chromatic_harp_mode = false; // to switch the harp to chromatic mode
+// Palm mute: this many harp pads held at once is a hand laid across the strings
+// rather than a strum, and stops everything ringing. 0 is off. Pads under the
+// palm are silent until they are lifted, so the landing hand is a short chuck,
+// not a chord; other pads still play while it is held. See handle_harp().
+uint8_t palm_mute_pads = 0;
+uint16_t palm_mute_release = 15;   // ms, how fast a palm stops the strings
+uint16_t string_release = 1000;    // the strings' own release, put back after a palm mute
+// Pads arriving this soon after a palm mute are part of the palm. A slap's
+// last finger or the heel of the hand can trail the rest by a hundred ms or
+// more; plucking on touch the window is kept short so a strum can follow the
+// mute at once, but plucking on lift a straggler would be plucked as the palm
+// lifts, and a touch there sounds nothing anyway.
+const uint8_t palm_landing_ms = 30;
+const uint8_t palm_landing_lift_ms = 150;
+const uint8_t palm_spread_ms = 40;   // plucking on lift, a palm's pads land within this of one another
+// Harp pluck on lift: a touch stops the string and the lift plucks it, as a
+// harpist's finger does. 0 plucks on touch, as before.
+bool harp_pluck_on_lift = false;
+bool string_plucked[12] = {false, false, false, false, false, false, false, false, false, false, false, false};   // plucked on lift, not yet ringing out
+// Koto press: plucking on lift, a finger on a ringing string presses it rather
+// than stopping it, as a koto player presses a string beside the bridge, and
+// the string bends up as far as it is pressed: this many semitones at a full
+// press, 0 off. Easing off lets it back down. Lifting a finger that pressed
+// lets the string ring on at its own pitch; one that only rested plucks it
+// again. See koto_follow().
+uint8_t koto_press = 0;
+bool string_pressing[12] = {false, false, false, false, false, false, false, false, false, false, false, false};   // a finger is on this ringing string
+bool string_pressed[12] = {false, false, false, false, false, false, false, false, false, false, false, false};    // ...and has bent it, so its lift plucks nothing
+int16_t press_rest[12] = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};   // the lightest it has read since settling, which a press is measured from
+float string_bend[12] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};                 // semitones a press holds each string above its note
+uint16_t harp_voice_current_note[12] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};  // the note each string sounds, which a press bends
+bool string_palmed[12] = {false, false, false, false, false, false, false, false, false, false, false, false};
 //>>SYSEX PARAMETERS<<
-// SYSEX midi message are used to control up to 256 synthesis parameters.
-const uint16_t parameter_size = 256;
+// SYSEX midi message are used to control up to 512 synthesis parameters, in two pages of 256.
+//
+// Page 0 (0-255) is every setting there was before the array grew, and stays exactly as it was
+// everywhere, so no existing preset changes: the preset files, the factory presets below, the
+// dump an editor reads on command 0, and preset codes. Page 1 (256-511) is for new settings. A
+// preset file holds all 512 now, but one saved before holds 256, and loading starts every slot at
+// its default (parameter_default) before the file is read over it, so page 1 comes up at its
+// defaults; firmware from before the growth reads the first 256 of a longer file and keeps page 0.
+// Page 1 goes to an editor only when asked (command 7), with a header, so no tool that knows only
+// page 0 can take it for a dump. 382, 383, 510 and 511 stay unused: their low byte is a universal
+// SysEx id (0x7E, 0x7F), as the first byte of a write.
+const uint16_t parameter_size = 512;
+const uint16_t page_size = 256;
 const uint8_t preset_number = 12;
-int16_t default_bank_sysex_parameters[preset_number][parameter_size] = {
-  {0,0,50,50,512,512,512,0,0,0,192,100,49,100,184,100,157,100,0,0,0,0,0,0,43,0,50,37,38,67,0,0,0,0,0,0,0,0,0,0,0,16,0,8,8,12,42,1171,1,423,20,70,3,35,83,59,2658,1,0,0,0,0,0,0,0,1,1,1,100,1,1,0,1,1,1,1,14,0,0,70,0,0,0,100,0,6,0,0,755,195,23,61,29,0,0,0,0,162,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,13,8,100,16,0,200,0,0,50,0,50,18,32,50,0,0,10,66,353,65,995,1,569,16,141,32,83,28,48,54,1,0,0,0,56,0,389,0,20,0,0,0,0,1,1,1,0,1,1,0,1,1,1,1,0,0,0,70,0,0,0,100,0,64,0,0,80,16,4,94,753,474,70,5,100,100,100,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,0,6,6,32,0,6,0,16,0,6,6,32,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-  {0,0,50,50,512,512,512,0,0,0,194,100,85,100,60,100,61,100,0,0,10,1,0,0,0,0,0,0,0,100,0,0,0,0,0,0,0,0,0,0,4,25,8,3,29,18,65,488,3,159,25,70,5,18,4,26,6,1,77,0,587,32,0,390,0,76,1,1,100,1,1,68,17,14,22,20,0,340,1682,70,48,0,0,100,18,54,0,0,800,70,57,100,100,0,0,0,0,199,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,7,0,100,0,0,100,6,8,200,2,50,36,75,50,28,0,3,1,1,80,1218,2,1659,38,114,19,8,32,80,1,1,0,30,0,0,0,0,0,0,0,24,0,3,1,1,1,100,1,1,100,1,1,1,1,31,0,0,70,0,0,0,100,0,33,2,1,162,16,4,100,100,1436,118,100,50,32,107,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,13,0,4,0,7,0,0,2,13,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-  {0,0,50,50,512,512,512,0,0,0,192,100,49,100,184,100,157,100,0,0,30,0,1,1,87,33,62,12,80,67,0,0,0,0,0,0,0,0,0,0,0,6,3,8,8,12,42,1855,1,42,20,217,3,35,83,59,2658,1,185,0,282,14,0,247,11,1,1,1,100,1,1,0,1,1,1,1,14,0,0,70,0,0,0,100,0,23,0,0,755,195,82,61,29,0,0,0,0,162,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,13,0,100,23,8,200,0,0,50,0,50,18,32,50,0,0,10,66,353,44,1452,1,569,16,141,32,83,28,48,54,1,0,698,82,56,0,579,0,28,0,0,0,0,1,1,1,0,1,1,100,1,1,1,1,0,0,0,70,0,0,0,100,0,100,0,0,80,16,4,94,753,474,70,5,100,100,100,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,0,6,6,32,0,6,0,16,0,6,6,32,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-  {0,0,50,50,512,512,512,0,0,0,196,76,92,100,184,100,85,100,0,0,60,0,1,0,14,0,0,0,42,46,0,0,0,0,0,0,0,0,0,0,3,10,8,11,42,30,61,2137,1,106,22,140,4,35,83,24,1956,1,139,0,282,0,0,247,10,1,1,1,100,1,1,0,1,1,1,1,0,0,0,70,0,0,0,100,0,57,0,1,858,70,66,100,100,0,0,0,0,127,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,8,200,11,0,134,10,0,100,7,50,59,15,50,0,15,10,10,45,61,1489,1,652,16,84,32,21,15,33,19,1,0,490,0,109,0,252,0,8,0,244,1,49,1,1,1,15,1,1,100,1,1,1,1,26,479,1931,70,0,50,0,100,40,78,21,0,162,16,4,100,1000,639,140,100,47,100,85,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,65,0,12,0,0,12,0,0,65,0,6,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-  {0,0,50,50,512,512,512,0,0,0,146,100,76,100,85,79,184,100,0,0,110,0,0,0,57,0,0,0,67,58,0,0,0,0,0,0,0,0,0,0,0,6,8,8,65,12,38,1855,5,57,24,152,3,35,83,59,2658,6,137,0,640,8,0,247,11,1,1,1,100,1,1,131,4,116,3,1,11,424,1360,70,46,0,0,100,60,85,0,0,996,125,82,61,71,0,0,0,0,90,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,20,0,100,23,0,200,15,8,100,0,50,0,18,50,0,0,2,293,17,44,1012,1,10,33,141,32,83,28,67,239,1,0,0,0,287,0,579,0,0,0,366,0,35,5,52,12,0,1,1,100,1,1,1,1,16,0,0,70,0,0,0,100,0,50,0,0,184,16,4,100,100,657,70,86,100,100,95,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,2,4,2,15,0,2,2,6,2,6,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-  {0,0,50,50,512,512,512,0,0,0,192,60,47,56,159,100,157,100,0,0,138,1,0,0,0,0,0,0,27,74,0,0,0,0,0,0,0,0,0,0,4,14,11,3,29,18,65,1102,3,302,11,70,5,18,4,26,6,1,38,0,516,16,0,0,0,76,1,1,100,1,1,68,17,14,22,20,0,340,1682,70,48,0,0,100,18,58,0,0,800,70,43,100,100,0,0,0,0,200,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,10,11,100,9,0,200,4,8,200,0,50,36,75,50,0,0,3,1,1,80,1855,2,769,15,114,19,8,32,80,1,1,0,30,0,11,0,467,0,35,0,24,0,3,1,1,1,100,1,1,100,1,1,1,1,0,341,2164,70,54,0,0,100,36,42,0,1,80,16,4,100,20,2101,70,100,6,22,55,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,4,8,17,0,12,0,1,2,4,8,16,6,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-  {0,0,50,50,512,512,512,0,0,0,192,100,61,100,130,100,83,100,0,0,175,0,0,0,0,0,0,0,0,35,0,0,0,0,0,0,0,0,0,0,0,12,9,11,1,1,70,2141,1,383,17,302,101,103,34,30,1,12,0,0,367,17,0,363,5,1,1,1,86,1,1,0,1,1,1,1,8,0,0,70,0,0,0,100,0,33,50,0,5000,70,100,0,0,0,0,0,0,90,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,9,9,200,13,6,99,6,0,50,27,50,50,50,50,0,0,345,1,1,80,800,32,2200,0,70,1,1,1,100,1,1,0,30,0,0,0,166,0,6,0,0,0,0,1,1,1,0,1,1,100,1,1,1,1,0,0,0,70,0,0,0,100,0,59,100,0,80,16,4,100,100,2366,70,100,40,23,57,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,4,4,16,16,12,0,1,6,8,6,0,6,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-  {0,0,50,50,512,512,512,0,0,0,146,100,76,100,85,79,184,100,0,0,220,0,0,0,0,0,0,86,55,63,0,0,0,0,0,0,0,0,0,0,0,6,8,8,65,12,38,1855,5,57,24,152,3,35,83,59,2658,6,137,0,640,8,0,247,11,1,1,1,100,1,1,131,4,116,3,1,11,424,1360,70,46,0,0,100,60,84,0,0,996,125,82,61,71,0,0,0,0,90,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,20,0,100,23,0,200,15,8,100,0,50,0,18,50,0,0,2,293,17,44,1012,1,10,33,141,32,83,28,67,239,1,0,0,0,287,0,579,0,0,0,366,0,35,5,52,12,0,1,1,100,1,1,1,1,16,0,0,70,0,0,0,100,0,50,0,0,184,16,4,100,100,657,70,86,100,100,95,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,2,4,2,15,0,2,2,6,2,6,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-  {0,0,50,50,512,512,512,0,0,0,196,100,47,56,159,100,157,100,0,0,253,1,0,0,0,0,0,0,0,59,0,0,0,0,0,0,0,0,0,0,4,15,11,3,29,18,65,1102,3,302,11,70,5,18,4,26,6,1,38,0,516,16,0,0,12,76,1,22,100,1,1,68,17,14,22,20,0,340,1682,70,48,0,0,100,18,58,0,0,800,70,43,100,100,0,0,0,0,158,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,10,0,100,9,0,200,4,8,200,0,50,36,75,50,0,0,3,1,1,80,1855,2,769,15,114,19,8,32,80,1,1,0,30,0,11,0,467,0,22,0,24,0,3,1,1,1,100,1,1,100,1,1,1,1,0,341,2164,70,54,0,0,100,36,42,0,1,80,16,4,100,20,532,70,100,6,82,96,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,4,8,17,0,12,0,1,2,4,8,16,6,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-  {0,0,50,50,512,512,512,0,0,0,149,69,76,100,85,79,184,100,0,0,266,0,0,0,0,0,0,0,65,70,0,0,0,0,0,0,0,0,0,0,0,5,0,8,65,12,38,1855,5,57,24,152,3,35,83,59,2658,6,137,0,640,8,0,247,11,1,1,1,100,1,1,131,4,116,3,1,0,424,1360,70,46,0,0,100,60,81,0,0,996,125,82,61,71,0,0,0,0,108,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,20,12,100,23,0,200,15,8,100,0,50,45,17,0,0,0,2,293,17,44,1012,1,10,33,141,32,83,28,67,239,1,0,0,0,287,0,579,0,0,0,366,0,35,5,52,12,0,1,1,100,1,1,1,1,16,0,0,70,0,0,0,100,0,50,0,0,184,16,4,100,100,857,70,42,100,100,158,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,2,4,2,15,0,2,2,6,2,6,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-  {0,0,50,50,512,512,512,0,0,0,192,55,61,100,184,100,85,100,0,0,310,0,0,0,86,0,56,87,37,60,0,0,0,0,0,0,0,0,0,0,4,15,12,36,42,30,59,1410,1,30,33,140,4,35,83,24,615,1,94,0,282,15,0,247,0,1,1,1,100,1,1,0,1,1,1,1,0,0,0,70,0,0,0,100,0,40,0,1,858,70,46,100,82,0,0,0,0,124,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,16,8,200,18,0,134,21,0,200,2,50,59,15,50,18,15,10,66,43,35,711,1,271,16,84,32,83,733,31,54,1,0,698,0,220,0,252,0,8,0,244,1,49,1,1,1,15,1,1,100,1,1,1,1,26,479,1931,70,0,50,0,100,34,75,0,0,162,16,4,100,1000,1889,116,49,100,42,129,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,65,0,12,0,0,12,0,0,65,0,6,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-  {0,0,50,50,512,512,512,0,0,0,194,100,85,100,60,100,61,100,0,0,340,1,0,0,0,0,0,0,0,62,0,0,0,0,0,0,0,0,0,0,4,25,3,3,29,18,65,488,3,159,25,70,5,18,4,26,40,1,77,0,587,32,0,715,11,76,1,1,100,1,1,68,17,14,22,20,17,340,1682,70,48,0,0,100,18,54,0,0,800,70,57,100,100,0,0,0,0,199,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,3,1,100,0,0,100,6,8,200,2,50,36,75,50,28,0,3,1,1,80,1218,2,706,38,114,19,8,32,80,1,1,0,30,0,0,0,0,0,0,0,24,0,3,1,1,1,100,1,1,100,1,1,1,1,31,0,0,70,0,0,0,100,0,33,2,1,162,16,4,100,100,678,118,100,50,32,168,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,13,0,4,0,7,0,0,2,13,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+static_assert(sizeof(parameter_page1_defaults) / sizeof(parameter_page1_defaults[0]) == parameter_size - page_size, "parameter_lookup.h is for another array size: run the generator");
+// The factory presets' page 0; page 1's defaults are generated, the same for every bank
+// (parameter_page1_defaults in parameter_lookup.h, from parameters.json)
+int16_t default_bank_sysex_parameters[preset_number][page_size] = {
+  {0,0,50,50,512,512,512,0,0,0,192,100,49,100,184,100,157,100,0,0,0,0,0,0,43,0,50,37,38,67,0,0,0,0,0,0,0,0,0,0,0,16,0,8,8,12,42,1171,1,423,20,70,3,35,83,59,2658,1,0,0,0,0,0,0,0,1,1,1,100,1,1,0,1,1,1,1,14,0,0,70,0,0,0,100,0,6,0,0,755,195,23,61,29,0,0,0,0,162,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,13,8,100,16,0,200,0,0,50,0,50,18,32,50,0,0,10,66,353,65,995,1,569,16,141,32,83,28,48,54,1,0,0,0,56,0,389,0,20,0,0,0,0,1,1,1,0,1,1,0,1,1,1,1,0,0,0,70,0,0,0,100,0,64,0,0,80,16,4,94,753,474,70,5,100,100,100,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15,0,0,0,0,0,16,0,6,6,32,0,6,0,16,0,6,6,32,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+  {0,0,50,50,512,512,512,0,0,0,194,100,85,100,60,100,61,100,0,0,10,1,0,0,0,0,0,0,0,100,0,0,0,0,0,0,0,0,0,0,4,25,8,3,29,18,65,488,3,159,25,70,5,18,4,26,6,1,77,0,587,32,0,390,0,76,1,1,100,1,1,68,17,14,22,20,0,340,1682,70,48,0,0,100,18,54,0,0,800,70,57,100,100,0,0,0,0,199,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,7,0,100,0,0,100,6,8,200,2,50,36,75,50,28,0,3,1,1,80,1218,2,1659,38,114,19,8,32,80,1,1,0,30,0,0,0,0,0,0,0,24,0,3,1,1,1,100,1,1,100,1,1,1,1,31,0,0,70,0,0,0,100,0,33,2,1,162,16,4,100,100,1436,118,100,50,32,107,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15,0,0,0,0,0,7,0,0,0,13,0,4,0,7,0,0,2,13,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+  {0,0,50,50,512,512,512,0,0,0,192,100,49,100,184,100,157,100,0,0,30,0,1,1,87,33,62,12,80,67,0,0,0,0,0,0,0,0,0,0,0,6,3,8,8,12,42,1855,1,42,20,217,3,35,83,59,2658,1,185,0,282,14,0,247,11,1,1,1,100,1,1,0,1,1,1,1,14,0,0,70,0,0,0,100,0,23,0,0,755,195,82,61,29,0,0,0,0,162,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,13,0,100,23,8,200,0,0,50,0,50,18,32,50,0,0,10,66,353,44,1452,1,569,16,141,32,83,28,48,54,1,0,698,82,56,0,579,0,28,0,0,0,0,1,1,1,0,1,1,100,1,1,1,1,0,0,0,70,0,0,0,100,0,100,0,0,80,16,4,94,753,474,70,5,100,100,100,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15,0,0,0,0,0,16,0,6,6,32,0,6,0,16,0,6,6,32,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+  {0,0,50,50,512,512,512,0,0,0,196,76,92,100,184,100,85,100,0,0,60,0,1,0,14,0,0,0,42,46,0,0,0,0,0,0,0,0,0,0,3,10,8,11,42,30,61,2137,1,106,22,140,4,35,83,24,1956,1,139,0,282,0,0,247,10,1,1,1,100,1,1,0,1,1,1,1,0,0,0,70,0,0,0,100,0,57,0,1,858,70,66,100,100,0,0,0,0,127,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,8,200,11,0,134,10,0,100,7,50,59,15,50,0,15,10,10,45,61,1489,1,652,16,84,32,21,15,33,19,1,0,490,0,109,0,252,0,8,0,244,1,49,1,1,1,15,1,1,100,1,1,1,1,26,479,1931,70,0,50,0,100,40,78,21,0,162,16,4,100,1000,639,140,100,47,100,85,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15,0,0,0,0,0,65,0,12,0,0,12,0,0,65,0,6,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+  {0,0,50,50,512,512,512,0,0,0,146,100,76,100,85,79,184,100,0,0,110,0,0,0,57,0,0,0,67,58,0,0,0,0,0,0,0,0,0,0,0,6,8,8,65,12,38,1855,5,57,24,152,3,35,83,59,2658,6,137,0,640,8,0,247,11,1,1,1,100,1,1,131,4,116,3,1,11,424,1360,70,46,0,0,100,60,85,0,0,996,125,82,61,71,0,0,0,0,90,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,20,0,100,23,0,200,15,8,100,0,50,0,18,50,0,0,2,293,17,44,1012,1,10,33,141,32,83,28,67,239,1,0,0,0,287,0,579,0,0,0,366,0,35,5,52,12,0,1,1,100,1,1,1,1,16,0,0,70,0,0,0,100,0,50,0,0,184,16,4,100,100,657,70,86,100,100,95,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15,0,0,0,0,0,7,0,0,2,4,2,15,0,2,2,6,2,6,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+  {0,0,50,50,512,512,512,0,0,0,192,60,47,56,159,100,157,100,0,0,138,1,0,0,0,0,0,0,27,74,0,0,0,0,0,0,0,0,0,0,4,14,11,3,29,18,65,1102,3,302,11,70,5,18,4,26,6,1,38,0,516,16,0,0,0,76,1,1,100,1,1,68,17,14,22,20,0,340,1682,70,48,0,0,100,18,58,0,0,800,70,43,100,100,0,0,0,0,200,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,10,11,100,9,0,200,4,8,200,0,50,36,75,50,0,0,3,1,1,80,1855,2,769,15,114,19,8,32,80,1,1,0,30,0,11,0,467,0,35,0,24,0,3,1,1,1,100,1,1,100,1,1,1,1,0,341,2164,70,54,0,0,100,36,42,0,1,80,16,4,100,20,2101,70,100,6,22,55,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15,0,0,0,0,0,1,2,4,8,17,0,12,0,1,2,4,8,16,6,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+  {0,0,50,50,512,512,512,0,0,0,192,100,61,100,130,100,83,100,0,0,175,0,0,0,0,0,0,0,0,35,0,0,0,0,0,0,0,0,0,0,0,12,9,11,1,1,70,2141,1,383,17,302,101,103,34,30,1,12,0,0,367,17,0,363,5,1,1,1,86,1,1,0,1,1,1,1,8,0,0,70,0,0,0,100,0,33,50,0,5000,70,100,0,0,0,0,0,0,90,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,9,9,200,13,6,99,6,0,50,27,50,50,50,50,0,0,345,1,1,80,800,32,2200,0,70,1,1,1,100,1,1,0,30,0,0,0,166,0,6,0,0,0,0,1,1,1,0,1,1,100,1,1,1,1,0,0,0,70,0,0,0,100,0,59,100,0,80,16,4,100,100,2366,70,100,40,23,57,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15,0,0,0,0,0,1,0,4,4,16,16,12,0,1,6,8,6,0,6,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+  {0,0,50,50,512,512,512,0,0,0,146,100,76,100,85,79,184,100,0,0,220,0,0,0,0,0,0,86,55,63,0,0,0,0,0,0,0,0,0,0,0,6,8,8,65,12,38,1855,5,57,24,152,3,35,83,59,2658,6,137,0,640,8,0,247,11,1,1,1,100,1,1,131,4,116,3,1,11,424,1360,70,46,0,0,100,60,84,0,0,996,125,82,61,71,0,0,0,0,90,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,20,0,100,23,0,200,15,8,100,0,50,0,18,50,0,0,2,293,17,44,1012,1,10,33,141,32,83,28,67,239,1,0,0,0,287,0,579,0,0,0,366,0,35,5,52,12,0,1,1,100,1,1,1,1,16,0,0,70,0,0,0,100,0,50,0,0,184,16,4,100,100,657,70,86,100,100,95,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15,0,0,0,0,0,7,0,0,2,4,2,15,0,2,2,6,2,6,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+  {0,0,50,50,512,512,512,0,0,0,196,100,47,56,159,100,157,100,0,0,253,1,0,0,0,0,0,0,0,59,0,0,0,0,0,0,0,0,0,0,4,15,11,3,29,18,65,1102,3,302,11,70,5,18,4,26,6,1,38,0,516,16,0,0,12,76,1,22,100,1,1,68,17,14,22,20,0,340,1682,70,48,0,0,100,18,58,0,0,800,70,43,100,100,0,0,0,0,158,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,10,0,100,9,0,200,4,8,200,0,50,36,75,50,0,0,3,1,1,80,1855,2,769,15,114,19,8,32,80,1,1,0,30,0,11,0,467,0,22,0,24,0,3,1,1,1,100,1,1,100,1,1,1,1,0,341,2164,70,54,0,0,100,36,42,0,1,80,16,4,100,20,532,70,100,6,82,96,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15,0,0,0,0,0,1,2,4,8,17,0,12,0,1,2,4,8,16,6,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+  {0,0,50,50,512,512,512,0,0,0,149,69,76,100,85,79,184,100,0,0,266,0,0,0,0,0,0,0,65,70,0,0,0,0,0,0,0,0,0,0,0,5,0,8,65,12,38,1855,5,57,24,152,3,35,83,59,2658,6,137,0,640,8,0,247,11,1,1,1,100,1,1,131,4,116,3,1,0,424,1360,70,46,0,0,100,60,81,0,0,996,125,82,61,71,0,0,0,0,108,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,20,12,100,23,0,200,15,8,100,0,50,45,17,0,0,0,2,293,17,44,1012,1,10,33,141,32,83,28,67,239,1,0,0,0,287,0,579,0,0,0,366,0,35,5,52,12,0,1,1,100,1,1,1,1,16,0,0,70,0,0,0,100,0,50,0,0,184,16,4,100,100,857,70,42,100,100,158,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15,0,0,0,0,0,7,0,0,2,4,2,15,0,2,2,6,2,6,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+  {0,0,50,50,512,512,512,0,0,0,192,55,61,100,184,100,85,100,0,0,310,0,0,0,86,0,56,87,37,60,0,0,0,0,0,0,0,0,0,0,4,15,12,36,42,30,59,1410,1,30,33,140,4,35,83,24,615,1,94,0,282,15,0,247,0,1,1,1,100,1,1,0,1,1,1,1,0,0,0,70,0,0,0,100,0,40,0,1,858,70,46,100,82,0,0,0,0,124,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,16,8,200,18,0,134,21,0,200,2,50,59,15,50,18,15,10,66,43,35,711,1,271,16,84,32,83,733,31,54,1,0,698,0,220,0,252,0,8,0,244,1,49,1,1,1,15,1,1,100,1,1,1,1,26,479,1931,70,0,50,0,100,34,75,0,0,162,16,4,100,1000,1889,116,49,100,42,129,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15,0,0,0,0,0,65,0,12,0,0,12,0,0,65,0,6,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+  {0,0,50,50,512,512,512,0,0,0,194,100,85,100,60,100,61,100,0,0,340,1,0,0,0,0,0,0,0,62,0,0,0,0,0,0,0,0,0,0,4,25,3,3,29,18,65,488,3,159,25,70,5,18,4,26,40,1,77,0,587,32,0,715,11,76,1,1,100,1,1,68,17,14,22,20,17,340,1682,70,48,0,0,100,18,54,0,0,800,70,57,100,100,0,0,0,0,199,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,3,1,100,0,0,100,6,8,200,2,50,36,75,50,28,0,3,1,1,80,1218,2,706,38,114,19,8,32,80,1,1,0,30,0,0,0,0,0,0,0,24,0,3,1,1,1,100,1,1,100,1,1,1,1,31,0,0,70,0,0,0,100,0,33,2,1,162,16,4,100,100,678,118,100,50,32,168,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15,0,0,0,0,0,7,0,0,0,13,0,4,0,7,0,0,2,13,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 }; 
-int16_t current_sysex_parameters[parameter_size] = {0,0,50,50,512,512,512,1,0,0,192,100,49,100,184,100,157,100,0,0,0,0,0,0,0,0,0,0,0,67,0,0,0,0,0,0,0,0,0,0,0,16,0,8,8,12,42,1171,1,423,20,70,3,35,83,59,2658,1,0,0,0,0,0,0,0,1,1,1,100,1,1,0,1,1,1,1,14,0,0,70,0,0,0,100,0,6,0,0,755,195,23,61,29,0,0,0,0,162,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,13,8,100,16,0,200,0,0,50,0,50,18,32,50,0,0,10,66,353,65,995,1,569,16,141,32,83,28,48,54,1,0,0,0,56,0,389,0,20,0,0,0,0,1,1,1,0,1,1,0,1,1,1,1,0,0,0,70,0,0,0,100,0,38,0,0,80,16,4,94,753,474,70,5,100,100,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,0,6,6,32,0,6,0,16,0,6,6,32,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+int16_t current_sysex_parameters[parameter_size] = {0,0,50,50,512,512,512,1,0,0,192,100,49,100,184,100,157,100,0,0,0,0,0,0,0,0,0,0,0,67,0,0,0,0,0,0,0,0,0,0,0,16,0,8,8,12,42,1171,1,423,20,70,3,35,83,59,2658,1,0,0,0,0,0,0,0,1,1,1,100,1,1,0,1,1,1,1,14,0,0,70,0,0,0,100,0,6,0,0,755,195,23,61,29,0,0,0,0,162,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,13,8,100,16,0,200,0,0,50,0,50,18,32,50,0,0,10,66,353,65,995,1,569,16,141,32,83,28,48,54,1,0,0,0,56,0,389,0,20,0,0,0,0,1,1,1,0,1,1,0,1,1,1,1,0,0,0,70,0,0,0,100,0,38,0,0,80,16,4,94,753,474,70,5,100,100,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15,0,0,0,0,0,16,0,6,6,32,0,6,0,16,0,6,6,32,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 const char *bank_name[preset_number] = {"a.txt", "b.txt", "c.txt", "d.txt", "e.txt", "f.txt", "g.txt", "h.txt", "i.txt", "j.txt", "k.txt", "l.txt"};
 int8_t current_bank_number = 0;
 float bank_led_hue = 0;
@@ -369,8 +416,48 @@ uint8_t chord_started_notes[4]={0,0,0,0};
 uint8_t harp_port=1;
 uint8_t harp_channel=1;
 uint8_t harp_attack_velocity=127; 
+// Touch velocity and pressure (addresses 252, 253): how firmly a string is plucked, and how hard
+// it is pressed while held, read from its pad's strength (see touch_firmness)
+uint8_t touch_velocity = 0;      // 0-100: how much softer and darker a light touch plays than a firm one
+uint8_t touch_pressure = 0;      // a held string follows how hard it is pressed (1) or only swells (2), and sends it as MIDI pressure
+// Strum velocity (address 263), see strum_softness
+uint8_t strum_velocity = 0;      // 0-100: how much softer a slow strum plays than a fast one, 0 off
+float string_level = 0.15;       // the strings' amplitude (41), before each string's own firmness
+float transient_level = 0.1;     // the transient's amplitude (101), likewise
+float string_pluck_firmness[12] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};   // 0-1, how firmly each string was plucked
+float string_firmness[12] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};         // that, or firmer while pressed harder
+float string_strum_softness[12] = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};   // strum velocity's say, -1 none
+bool string_held[12] = {false, false, false, false, false, false, false, false, false, false, false, false};
+uint8_t string_pressure_sent[12] = {0};
+// A held string's pressure, kept as the firmest of each of the last four 5 ms stretches, so it
+// follows a finger up at once and down 20 ms late. Easing off, the lag doesn't show; lifting, the
+// reading falls away for a few milliseconds before the pad lets go, and the string would follow it
+// down and then release from there, which sounds like the note cut short.
+const uint8_t press_slots = 4;
+const uint8_t press_slot_ms = 5;
+float press_recent[12][press_slots] = {{0}};
+uint8_t press_slot = 0;
+float string_note_freq[12] = {0};   // the frequency each string sounds, for its filter
+void apply_string_firmness(uint8_t i);
+float touch_softness(float firmness);
+// How much softer than full string i plays, 0 to 1: touch velocity's say (from how firmly it is
+// held, if touch velocity is on) and strum velocity's (from the strum it was part of, if it is on
+// and the strum had a speed), the less soft of the two; full if neither has a say.
+static inline float string_softness(uint8_t i) {
+  float s = touch_velocity ? touch_softness(string_firmness[i]) : -1;
+  if (string_strum_softness[i] >= 0) s = s < 0 ? string_strum_softness[i] : fminf(s, string_strum_softness[i]);
+  return s < 0 ? 0 : s;
+}
 uint8_t harp_release_velocity=20;
 uint8_t harp_started_notes[12]={0,0,0,0,0,0,0,0,0,0,0,0};    
+// Where each harp note went, so its note-off follows it there even if the
+// channel or port changes while it rings.
+uint8_t harp_started_channel[12]={0,0,0,0,0,0,0,0,0,0,0,0};
+uint8_t harp_started_port[12]={0,0,0,0,0,0,0,0,0,0,0,0};
+// A string's midi note lasts as long as the string sounds, so a strum arrives
+// at the far end as ringing strings, not a row of finger-length blips. 1 ends
+// it when the finger lifts, as before.
+bool harp_note_off_on_lift = false;
 uint8_t midi_base_note=48; // for C3
 uint8_t midi_base_note_transposed=midi_base_note; //to handle note transposition
 uint midi_buffer_delay=300; //in microseconds, helps compatibility with some hardware devices
@@ -381,12 +468,15 @@ uint midi_buffer_delay=300; //in microseconds, helps compatibility with some har
 // usbMIDI. Everything else enqueues via queue_midi(), safe from ISR context.
 #define MIDI_QUEUE_SIZE 256 // power of two, max 256 for uint8_t indices
 #define MIDI_DRAIN_MAX_PER_LOOP 16 // caps how long a drain can hold up loop()
+#define MIDI_EVT_NOTE_OFF 0
+#define MIDI_EVT_NOTE_ON 1
+#define MIDI_EVT_POLY 2       // polyphonic aftertouch: note and pressure
 struct midi_event_t {
   uint8_t note;
-  uint8_t velocity;
+  uint8_t velocity;  // velocity, or pressure for aftertouch
   uint8_t channel;
   uint8_t cable;
-  bool note_on;
+  uint8_t type;
 };
 volatile midi_event_t midi_queue[MIDI_QUEUE_SIZE];
 volatile uint8_t midi_queue_head = 0; // written by producers
@@ -395,7 +485,7 @@ volatile uint32_t midi_queue_dropped = 0; // diagnostic: events lost to a full q
 
 // Safe to call from any context, including an ISR. Drops the event if the queue is
 // full rather than blocking -- blocking is what caused the original fault.
-void queue_midi(bool note_on, uint8_t note, uint8_t velocity, uint8_t channel, uint8_t cable) {
+void queue_midi_event(uint8_t type, uint8_t note, uint8_t velocity, uint8_t channel, uint8_t cable) {
   uint32_t primask;
   __asm__ volatile("mrs %0, primask" : "=r"(primask));
   __disable_irq();
@@ -405,12 +495,16 @@ void queue_midi(bool note_on, uint8_t note, uint8_t velocity, uint8_t channel, u
     midi_queue[midi_queue_head].velocity = velocity;
     midi_queue[midi_queue_head].channel = channel;
     midi_queue[midi_queue_head].cable = cable;
-    midi_queue[midi_queue_head].note_on = note_on;
+    midi_queue[midi_queue_head].type = type;
     midi_queue_head = next;
   } else {
     midi_queue_dropped++;
   }
   if (!primask) __enable_irq();
+}
+
+void queue_midi(bool note_on, uint8_t note, uint8_t velocity, uint8_t channel, uint8_t cable) {
+  queue_midi_event(note_on ? MIDI_EVT_NOTE_ON : MIDI_EVT_NOTE_OFF, note, velocity, channel, cable);
 }
 
 // Called from loop() only. The single point at which this firmware talks to usbMIDI.
@@ -425,13 +519,13 @@ void drain_midi_queue() {
     e.velocity = midi_queue[midi_queue_tail].velocity;
     e.channel = midi_queue[midi_queue_tail].channel;
     e.cable = midi_queue[midi_queue_tail].cable;
-    e.note_on = midi_queue[midi_queue_tail].note_on;
+    e.type = midi_queue[midi_queue_tail].type;
     midi_queue_tail = (midi_queue_tail + 1) & (MIDI_QUEUE_SIZE - 1);
     if (sent) delayMicroseconds(midi_buffer_delay); // pacing for slower hardware synths
-    if (e.note_on) {
-      usbMIDI.sendNoteOn(e.note, e.velocity, e.channel, e.cable);
-    } else {
-      usbMIDI.sendNoteOff(e.note, e.velocity, e.channel, e.cable);
+    switch (e.type) {
+      case MIDI_EVT_NOTE_ON:  usbMIDI.sendNoteOn(e.note, e.velocity, e.channel, e.cable); break;
+      case MIDI_EVT_NOTE_OFF: usbMIDI.sendNoteOff(e.note, e.velocity, e.channel, e.cable); break;
+      case MIDI_EVT_POLY:     usbMIDI.sendAfterTouchPoly(e.note, e.velocity, e.channel, e.cable); break;
     }
     sent = true;
   }
@@ -520,17 +614,38 @@ void set_led_color(float h, float s, float v) {
 }
 
 //-->>UTILITIES FOR SYSEX HANDLING
+// A setting's factory default in a bank: page 0's from the bank's factory preset, page 1's generated
+static inline int16_t parameter_default(int bank_number, uint16_t i) {
+  return i < page_size ? default_bank_sysex_parameters[bank_number][i] : parameter_page1_defaults[i - page_size];
+}
+
+// A page of settings to an editor. Page 0 is the dump every editor has always read, recognised by
+// its length alone, so it stays exactly that; the others carry a header (7D, the id for
+// non-commercial use, then 6D and the page) and are a few bytes longer, which an editor that
+// knows only page 0 drops.
+void send_parameter_page(uint8_t page) {
+  if (page >= parameter_size / page_size) return;
+  const uint8_t header = page == 0 ? 0 : 3;
+  uint8_t midi_data_array[3 + page_size * 2];
+  midi_data_array[0] = 0x7D;
+  midi_data_array[1] = 0x6D;
+  midi_data_array[2] = page;
+  for (uint16_t i = 0; i < page_size; i++) {
+    int16_t parameter_value = constrain(current_sysex_parameters[page * page_size + i], 0, 16383); // a sysex byte only carries 7 bits
+    midi_data_array[header + 2 * i] = parameter_value % 128;
+    midi_data_array[header + 2 * i + 1] = parameter_value / 128;
+  }
+  usbMIDI.sendSysEx(header + page_size * 2, midi_data_array, 0);
+}
+
 void control_command(uint8_t command, uint8_t parameter) {
   switch (command) {
-  case 0: // SIGNAL TO SEND BACK ALL DATA
+  case 0: // SIGNAL TO SEND BACK ALL DATA: page 0, as it always was, two bytes a setting and no header
     Serial.println("Reporting all data");
-    uint8_t midi_data_array[parameter_size * 2];
-    for (int i = 0; i < parameter_size; i++) {
-      int16_t parameter_value = constrain(current_sysex_parameters[i], 0, 16383); // a sysex byte only carries 7 bits
-      midi_data_array[2 * i] = parameter_value % 128;
-      midi_data_array[2 * i + 1] = parameter_value / 128;
-    }
-    usbMIDI.sendSysEx(parameter_size * 2, midi_data_array,0);
+    send_parameter_page(0);
+    break;
+  case 7: // page 1 and on, for an editor that knows them: 7D 6D <page>, then two bytes a setting
+    send_parameter_page(parameter);
     break;
   case 1: // SIGNAL TO WIPE MEMORY
     Serial.println("Wiping memory");
@@ -768,13 +883,31 @@ void set_chord_voice_frequency(uint8_t i, uint16_t current_note) {
   }
 }
 // setting the harp
+// A light touch plays darker, by up to two octaves of the string's filter at full touch velocity
+float string_filter_freq(uint8_t i) {
+  float darker = powf(2.0f, -2.0f * string_softness(i));
+  return (string_filter_base_freq + string_note_freq[i] * string_filter_keytrack) * darker;
+}
+
+// and quieter, by up to 24 dB
+void apply_string_firmness(uint8_t i) {
+  float gain = powf(10.0f, -1.2f * string_softness(i));
+  AudioNoInterrupts();
+  string_waveform_array[i]->amplitude(string_level * gain);
+  string_transient_waveform_array[i]->amplitude(transient_level * gain);
+  string_filter_array[i]->frequency(string_filter_freq(i));
+  AudioInterrupts();
+}
+
 void set_harp_voice_frequency(uint8_t i, uint16_t current_note) {
-  float note_freq =  pow(2,harp_octave_change)*c_frequency/4 * pow(2, (current_note+transpose_semitones) / 12.0);
+  harp_voice_current_note[i] = current_note;
+  float note_freq =  pow(2,harp_octave_change)*c_frequency/4 * pow(2, (current_note+transpose_semitones+string_bend[i]) / 12.0);
   float transient_freq =  64.0*c_frequency/4 *pow(2, ((current_note+transpose_semitones)%12+transient_note_level) / 12.0);
+  string_note_freq[i] = note_freq;
   AudioNoInterrupts();
   string_waveform_array[i]->frequency(note_freq);
   string_transient_waveform_array[i]->frequency(transient_freq);
-  string_filter_array[i]->frequency(string_filter_base_freq + note_freq * string_filter_keytrack);
+  string_filter_array[i]->frequency(string_filter_freq(i));
   // string_vibrato_1.offset(0);
   AudioInterrupts();
 }
@@ -1120,7 +1253,9 @@ void save_config(int bank_number, bool default_save) {
     // if we need to put the default in memory
     Serial.println("Writing the default file");
     Serial.println(bank_name[bank_number]);
-    String return_data = serialize(default_bank_sysex_parameters[bank_number], parameter_size);
+    static int16_t factory[parameter_size];
+    for (uint16_t i = 0; i < parameter_size; i++) factory[i] = parameter_default(bank_number, i);
+    String return_data = serialize(factory, parameter_size);
     dataFile.println(return_data);
   } else {
     Serial.println("Saving current settings");
@@ -1162,6 +1297,9 @@ void load_config(int bank_number) {
     while (entry.available()) {
       data_string += char(entry.read());
     }
+    // every slot from its default first, so a slot the file doesn't hold (all of page 1, in a
+    // preset saved before the array grew) comes up at its default, not the last preset's
+    for (uint16_t i = 0; i < parameter_size; i++) current_sysex_parameters[i] = parameter_default(bank_number, i);
     deserialize(data_string, current_sysex_parameters);
     Serial.print("Loaded preset: ");
     Serial.println(entry.name());
@@ -1242,6 +1380,11 @@ void setup() {
   chord_matrix.setup();
   harp_sensor.setup();
   harp_sensor.recalibrate();
+  // The harp pads don't bounce: the touch chip already wants two readings in a row before it calls a
+  // pad touched. The buttons' 10 ms was most of the harp's latency: from a pad's reading crossing
+  // the touch threshold to the pluck took 17 ms (median, measured), and with 4 ms it takes 11.
+  // 4 ms rather than none gives a landing finger's reading time to rise, for touch velocity.
+  for (int i = 0; i < 12; i++) harp_array[i].set_debounce(harp_debounce_us);
   pinMode(BATT_LBO_PIN, INPUT);
   pinMode(DOWN_PGM_PIN, INPUT);
   pinMode(UP_PGM_PIN, INPUT);
@@ -1298,35 +1441,314 @@ void handle_chords_button() {
   }
 }
 
+// How firm a touch a pad's strength is, 0 to 1. Measured on the stock plate: a soft tap peaks at
+// 35-120, a firm one at 300-350; strummed strings read 80-260 (the middle half), 154 typically; a
+// fingertip resting lightly reads 100-200 and pressed hard 450. The strength is read as the string
+// sounds, by when a firm tap has already reached its peak and a soft one is still creeping up, so
+// soft reads softer; a slow strum rolls onto each pad gently and reads soft, a quick one firm.
+float touch_firmness(float strength) {
+  return constrain((strength - 40) / 210, 0.0f, 1.0f);
+}
+
+// How much softer than full a firmness plays, 0 to 1: the square of how far short of full it is,
+// so an ordinary strum sounds nearly full and only a really light touch is quiet. At full touch
+// velocity a typical strum plays 5 dB down, a soft tap 20.
+float touch_softness(float firmness) {
+  return touch_velocity / 100.0f * (1 - firmness) * (1 - firmness);
+}
+
+// Strum velocity: a strum is plucks on neighbouring strings one after another in the same
+// direction, each under 200 ms after the last; two fingers on strings apart, or a turn back, start
+// over. Its speed, the time between neighbours, says how firmly it plays: measured, about 150 ms a
+// string for a slow strum and 15 for a fast one, so on a log scale from soft at 150 to full at 15,
+// at strum velocity's depth. The first string of a strum has nothing to measure and leaves it to
+// touch velocity (full if that's off). Called at each pluck, with its string.
+float strum_softness(int16_t string) {
+  static int16_t last_string = -1;
+  static uint32_t last_us = 0;
+  static int8_t direction = 0;
+  uint32_t now = micros();
+  float gap_ms = (now - last_us) / 1000.0f;
+  int16_t step = string - last_string;
+  float softness = -1;
+  if (strum_velocity && last_string >= 0 && abs(step) == 1 && gap_ms < 200 && (direction == 0 || step == direction)) {
+    direction = step;
+    float f = constrain(logf(150.0f / fmaxf(gap_ms, 1.0f)) / logf(10.0f), 0.0f, 1.0f);
+    softness = strum_velocity / 100.0f * (1 - f) * (1 - f);
+  } else {
+    direction = 0;
+  }
+  last_string = string;
+  last_us = now;
+  return softness;
+}
+
+// A plucked string's midi velocity: the harp's, softer for a light touch or a slow strum, down to a tenth
+uint8_t harp_note_velocity(uint8_t i) {
+  float softer = 0.9f * string_softness(i);
+  return max(1, (int)lroundf(harp_attack_velocity * (1 - softer)));
+}
+
+// A string's pressure goes out as polyphonic aftertouch on its note
+void send_string_pressure(uint8_t i, float firmness) {
+  if (harp_started_notes[i] == 0) return;
+  uint8_t value = (uint8_t)lroundf(firmness * 127);
+  queue_midi_event(MIDI_EVT_POLY, harp_started_notes[i], value, harp_channel, harp_port);
+  string_pressure_sent[i] = value;
+}
+
+// A held string pressed harder than it was plucked swells, as far as it would have sounded plucked
+// that firmly, and its pressure goes out.
+void press_string(uint8_t i, float strength) {
+  if (!touch_pressure) return;
+  static uint32_t slot_clock = 0;
+  uint32_t now_slot = millis() / press_slot_ms;
+  if (now_slot != slot_clock) {
+    slot_clock = now_slot;
+    press_slot = (press_slot + 1) % press_slots;
+    for (uint8_t k = 0; k < 12; k++) press_recent[k][press_slot] = 0;
+  }
+  press_recent[i][press_slot] = fmaxf(press_recent[i][press_slot], touch_firmness(strength));
+  float firmness = 0;
+  for (uint8_t k = 0; k < press_slots; k++) firmness = fmaxf(firmness, press_recent[i][k]);
+  // swelling only, it keeps the firmest it has been pressed until it is let go
+  float swelled = fmaxf(touch_pressure == 2 ? string_firmness[i] : string_pluck_firmness[i], firmness);
+  if (fabsf(swelled - string_firmness[i]) >= 0.02f) {
+    string_firmness[i] = swelled;
+    apply_string_firmness(i);
+  }
+  uint8_t value = (uint8_t)lroundf(firmness * 127);
+  if (abs(value - string_pressure_sent[i]) >= 2 || (value == 0 && string_pressure_sent[i] != 0)) send_string_pressure(i, firmness);
+}
+
+void harp_midi_off(uint8_t i) {
+  if (harp_started_notes[i] == 0) return;
+  queue_midi(false, harp_started_notes[i], harp_release_velocity, harp_started_channel[i], harp_started_port[i]);
+  harp_started_notes[i] = 0;
+}
+
+// A string still sounding the note another is about to start, on the same
+// channel, is ended first. Its own note-off would otherwise arrive later and cut
+// the new note short at the far end.
+void harp_midi_on(uint8_t i) {
+  harp_midi_off(i);
+  uint8_t note = midi_base_note_transposed + current_harp_notes[i];
+  for (uint8_t j = 0; j < 12; j++) {
+    if (j != i && harp_started_notes[j] == note && harp_started_channel[j] == harp_channel && harp_started_port[j] == harp_port) {
+      harp_midi_off(j);
+    }
+  }
+  queue_midi(true, note, harp_note_velocity(i), harp_channel, harp_port);
+  harp_started_notes[i] = note;
+  harp_started_channel[i] = harp_channel;
+  harp_started_port[i] = harp_port;
+}
+
+// A string sounds: tuned to the note its pad plays now, its envelopes started,
+// its midi note sent, as firmly as the pad read (strength) and the strum went
+// (strum, from strum_softness()).
+void pluck_string(uint8_t i, int16_t strength, float strum) {
+  string_strum_softness[i] = strum;
+  string_pluck_firmness[i] = touch_firmness(strength);
+  string_firmness[i] = string_pluck_firmness[i];
+  for (uint8_t k = 0; k < press_slots; k++) press_recent[i][k] = string_pluck_firmness[i];
+  set_harp_voice_frequency(i, current_harp_notes[i]);
+  apply_string_firmness(i);
+  AudioNoInterrupts();
+  envelope_string_vibrato_lfo.noteOn();
+  envelope_string_vibrato_dc.noteOn();
+  string_enveloppe_filter_array[i]->noteOn();
+  string_enveloppe_array[i]->noteOn();
+  string_transient_envelope_array[i]->noteOn();
+  AudioInterrupts();
+  harp_midi_on(i);
+  if (touch_pressure) send_string_pressure(i, string_pluck_firmness[i]);   // the note starts from its own pressure, not the last one's
+}
+
+// A string is let go to ring out through its release. With note-off on lift
+// its midi note ends here; otherwise it ends with the sound.
+void release_string(uint8_t i) {
+  string_held[i] = false;
+  AudioNoInterrupts();
+  string_enveloppe_array[i]->noteOff();
+  string_transient_envelope_array[i]->noteOff();
+  string_enveloppe_filter_array[i]->noteOff();
+  AudioInterrupts();
+  if (harp_note_off_on_lift) harp_midi_off(i);
+}
+
+// A string is stopped, by a palm or a finger, with the palm mute release
+// rather than its own, which is put back for the next pluck. noteOff on a
+// string already in its release restarts it from where it is, so a ringing
+// string is cut short as well as a held one.
+void damp_string(uint8_t i) {
+  string_plucked[i] = false;
+  string_held[i] = false;
+  AudioNoInterrupts();
+  if (string_enveloppe_array[i]->isActive()) {
+    string_enveloppe_array[i]->release(palm_mute_release);
+    string_enveloppe_array[i]->noteOff();
+    string_enveloppe_array[i]->release(string_release);
+  }
+  AudioInterrupts();
+  harp_midi_off(i);
+}
+
+void palm_mute() {
+  for (uint8_t i = 0; i < 12; i++) damp_string(i);
+}
+
+// ---- koto press: bending a ringing string by pressing it ----
+// A finger is measured from the lightest it has read since it settled, so
+// resting on a string bends nothing however firm the resting finger is, and a
+// finger easing off as it lifts brings the pitch back down with it. A full
+// press is a fixed firmness, not a fixed amount above the rest: measured from
+// the rest, a finger that landed firmly had to push past a hard press to reach
+// the top of the bend.
+const uint8_t koto_settle_ms = 30;   // a finger pressing down is still landing this long
+const int16_t koto_dead = 30;        // strength above the rest that still bends nothing, a finger flattening
+const int16_t koto_full = 380;       // strength of a full press: firm, short of a hard one (a light finger reads 100-200, a hard one 430-490)
+const int16_t koto_span_min = 100;   // strength from the slack to a full press, at least, for a finger that lands firm
+const float koto_pressed = 0.1;      // of a full press, past which the finger has pressed, and its lift plucks nothing
+
+// Bend string i this many semitones above the note it sounds.
+void koto_bend(uint8_t i, float semitones) {
+  if (fabsf(semitones - string_bend[i]) < 0.005f) return;
+  string_bend[i] = semitones;
+  set_harp_voice_frequency(i, harp_voice_current_note[i]);
+}
+
+void koto_follow(uint8_t i, int16_t strength, uint32_t held_ms) {
+  if (held_ms < koto_settle_ms) return;
+  if (press_rest[i] < 0 || strength < press_rest[i]) press_rest[i] = strength;
+  int16_t span = max(koto_full - press_rest[i] - koto_dead, koto_span_min);
+  float amount = constrain((strength - press_rest[i] - koto_dead) / (float)span, 0.0f, 1.0f);
+  if (amount >= koto_pressed) string_pressed[i] = true;
+  koto_bend(i, koto_press * amount);
+}
+
 void handle_harp() {
   harp_sensor.update(harp_array);
+  // When each pad last landed, for the palm when plucking on lift.
+  static uint32_t pad_landed[12] = {0};
+  static bool pad_was_down[12] = {false};
+  uint32_t now = millis();
+  for (int i = 0; i < 12; i++) {
+    bool down = harp_array[i].read_value();
+    if (down && !pad_was_down[i]) pad_landed[i] = now;
+    pad_was_down[i] = down;
+  }
+  // A fingertip strum holds two or three pads at a time and moves on; a hand
+  // laid flat holds many at once. The pads the hand landed on before the count
+  // was reached have already sounded, and are stopped with the rest, which is
+  // the muted chuck. The palm is the pads down as it lands, and the few that
+  // arrive just after, since a flat hand does not land all in one instant;
+  // those stay silent until lifted. Any other pad plays as usual, so fingers
+  // can hold the mute while the rest of the hand strums. The palm is over once
+  // all of its pads have lifted, and only then can another one land, so
+  // strumming beside a held palm never mutes again.
+  if (palm_mute_pads) {
+    static bool palm_down = false;
+    static uint32_t palm_landed = 0;
+    // Plucking on lift, fingers placed on strings are a chord waiting to be
+    // played, and a chord of four placed pads looks like a palm by count alone.
+    // A palm lands all at once and placed fingers one by one, so only pads that
+    // landed together count, and only they are silenced: strings placed before
+    // the palm keep their pluck.
+    uint8_t held = 0;
+    for (int i = 0; i < 12; i++) {
+      if (!harp_array[i].read_value()) continue;
+      if (!harp_pluck_on_lift || now - pad_landed[i] <= palm_spread_ms) held++;
+    }
+    if (!palm_down && held >= palm_mute_pads) {
+      palm_mute();
+      palm_down = true;
+      palm_landed = now;
+    }
+    if (palm_down) {
+      bool palm_held = false;
+      for (int i = 0; i < 12; i++) {
+        if (!harp_array[i].read_value()) continue;
+        bool landed_with_palm = !harp_pluck_on_lift || pad_landed[i] + palm_spread_ms >= palm_landed;
+        uint8_t landing = harp_pluck_on_lift ? palm_landing_lift_ms : palm_landing_ms;
+        if (now - palm_landed < landing && landed_with_palm) string_palmed[i] = true;
+        if (string_palmed[i]) palm_held = true;
+      }
+      if (!palm_held) palm_down = false;
+    }
+  }
+  // Touch velocity and pressure read the pads' strengths while any is touched. Plucking on lift, a
+  // string sounds as firmly as it was held at its firmest.
+  static int16_t pad_strength[12] = {0};
+  static int16_t pad_firmest[12] = {0};
+  // A press let go of by a change of mode: the string goes back to its pitch.
+  for (int i = 0; i < 12; i++) {
+    if (string_pressing[i] && (!harp_pluck_on_lift || !koto_press)) {
+      string_pressing[i] = false;
+      koto_bend(i, 0);
+    }
+  }
+  if (touch_velocity || touch_pressure || (koto_press && harp_pluck_on_lift)) {
+    bool any = false;
+    for (int i = 0; i < 12; i++) any |= harp_array[i].read_value();
+    if (any) {
+      harp_sensor.read_strength(pad_strength);
+      for (int i = 0; i < 12; i++) if (harp_array[i].read_value()) pad_firmest[i] = max(pad_firmest[i], pad_strength[i]);
+    }
+  }
   for (int i = 0; i < 12; i++) {
     int value = harp_array[i].read_transition();
-    if (value == 2) {
-      set_harp_voice_frequency(i, current_harp_notes[i]);
-      AudioNoInterrupts();
-      envelope_string_vibrato_lfo.noteOn();
-      envelope_string_vibrato_dc.noteOn();
-      string_enveloppe_filter_array[i]->noteOn();
-      string_enveloppe_array[i]->noteOn();
-      string_transient_envelope_array[i]->noteOn();
-      AudioInterrupts();
-      if (harp_started_notes[i] != 0) {
-        queue_midi(false, harp_started_notes[i], harp_release_velocity, harp_channel, harp_port);
+    if (value == 2 && string_palmed[i]) {
+      // landed under the palm: silent until lifted
+    } else if (value == 1 && string_palmed[i]) {
+      string_palmed[i] = false;   // the palm already stopped it
+    } else if (harp_pluck_on_lift) {
+      // As on a harp, the finger on a string stops it and the string sounds as
+      // the finger leaves it. Nothing sounds while a pad is held, so strings can
+      // be placed ahead of time, under a chord yet to come, and lifted together
+      // or one by one.
+      // With koto press a finger on a ringing string presses it instead, and
+      // bends it as far as it is pressed.
+      if (value == 2) {
+        pad_firmest[i] = pad_strength[i];
+        if (koto_press && string_enveloppe_array[i]->isActive()) {
+          string_pressing[i] = true;
+          string_pressed[i] = false;
+          press_rest[i] = -1;
+        } else {
+          damp_string(i);
+        }
+      } else if (value == 1) {
+        bool pressed = string_pressing[i] && string_pressed[i];
+        if (string_pressing[i]) koto_bend(i, 0);
+        string_pressing[i] = false;
+        if (!pressed) {
+          pluck_string(i, pad_firmest[i], strum_softness(i));
+          string_plucked[i] = true;
+        }
+      } else if (string_pressing[i] && harp_array[i].read_value()) {
+        koto_follow(i, pad_strength[i], now - pad_landed[i]);
       }
-      queue_midi(true, midi_base_note_transposed + current_harp_notes[i], harp_attack_velocity, harp_channel, harp_port);
-      harp_started_notes[i] = midi_base_note_transposed + current_harp_notes[i];
+    } else if (value == 2) {
+      string_plucked[i] = false;
+      pluck_string(i, pad_strength[i], strum_softness(i));
+      string_held[i] = true;
     } else if (value == 1) {
-      AudioNoInterrupts();
-      string_enveloppe_array[i]->noteOff();
-      string_transient_envelope_array[i]->noteOff();
-      string_enveloppe_filter_array[i]->noteOff();
-      AudioInterrupts();
-      if (harp_started_notes[i] != 0) {
-        queue_midi(false, harp_started_notes[i], harp_release_velocity, harp_channel, harp_port);
-        harp_started_notes[i] = 0;
-      }
+      release_string(i);
     }
+    // A string plucked on lift has no finger on it to hold it at sustain: once
+    // it has come through its decay it rings out through its release, as a
+    // quick touch does when plucking on touch.
+    if (string_plucked[i] && string_enveloppe_array[i]->isSustain()) {
+      string_plucked[i] = false;
+      release_string(i);
+    }
+    // A string let go of keeps its midi note until its release has run out, so
+    // the far end hears the ring the strings here make.
+    if (harp_started_notes[i] != 0 && !harp_array[i].read_value() && !string_enveloppe_array[i]->isActive()) {
+      harp_midi_off(i);
+    }
+    if (string_held[i] && harp_array[i].read_value()) press_string(i, pad_strength[i]);
   }
 }
 
@@ -1405,10 +1827,10 @@ void update_harp_notes() {
   if (button_pushed) {
     for (int i = 0; i < 12; i++) {
       current_harp_notes[i] = calculate_note_harp(i, slash_chord, sharp_active);
-      if (change_held_strings && harp_started_notes[i] != 0) {
-        queue_midi(false, harp_started_notes[i], harp_release_velocity, harp_channel, harp_port);
-        queue_midi(true, midi_base_note_transposed + current_harp_notes[i], harp_attack_velocity, harp_channel, harp_port);
-        harp_started_notes[i] = midi_base_note_transposed + current_harp_notes[i];
+      // Only strings still held: one ringing out after the finger has lifted
+      // keeps the note it was struck on.
+      if (change_held_strings && harp_started_notes[i] != 0 && harp_array[i].read_value()) {
+        harp_midi_on(i);
         if (string_enveloppe_array[i]->isSustain()) {
           set_harp_voice_frequency(i, current_harp_notes[i]);
         }
