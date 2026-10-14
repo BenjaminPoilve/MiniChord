@@ -6,7 +6,7 @@
 #include <stdint.h>
 
 struct ParameterInfo {
-    uint8_t sysex_adress;
+    uint16_t sysex_adress;
     bool is_selector;   // mapped across min..max; everything else scales around its value
     int16_t min_value;
     int16_t max_value;
@@ -26,6 +26,17 @@ static const ParameterInfo parameter_lookup[] = {
     { 33, 1, 0, 1 }, // barry harris mode
     { 34, 1, 0, 6 }, // chord frame shift
     { 35, 1, 0, 11 }, // chord key signature
+    { 36, 1, 0, 9 }, // scalar harp mode
+    { 37, 1, 0, 3 }, // chord inversion
+    { 38, 1, 0, 4 }, // chord spacing
+    { 39, 1, 0, 1 }, // chord layout
+    { 202, 1, 0, 18 }, // alt layout major
+    { 203, 1, 0, 18 }, // alt layout minor
+    { 204, 1, 0, 18 }, // alt layout seventh
+    { 205, 1, 0, 18 }, // alt layout maj+7th
+    { 206, 1, 0, 18 }, // alt layout min+7th
+    { 207, 1, 0, 18 }, // alt layout maj+min
+    { 208, 1, 0, 18 }, // alt layout all three
     { 24, 0, 0, 1 }, // reverb size
     { 25, 0, 0, 1 }, // reverb high damping
     { 26, 0, 0, 1 }, // reverb low damping
@@ -44,6 +55,18 @@ static const ParameterInfo parameter_lookup[] = {
     { 5, 0, 0, 1024 }, // harp alternate value
     { 6, 0, 0, 1024 }, // mod alternate value
     { 7, 0, 0, 10 }, // firmware revision
+    { 290, 0, 0, 16383 }, // name 1
+    { 291, 0, 0, 16383 }, // name 2
+    { 292, 0, 0, 16383 }, // name 3
+    { 293, 0, 0, 16383 }, // name 4
+    { 294, 0, 0, 16383 }, // name 5
+    { 295, 0, 0, 16383 }, // name 6
+    { 296, 0, 0, 16383 }, // name 7
+    { 297, 0, 0, 16383 }, // name 8
+    { 298, 0, 0, 16383 }, // name 9
+    { 299, 0, 0, 16383 }, // name 10
+    { 300, 0, 0, 16383 }, // name 11
+    { 301, 0, 0, 16383 }, // name 12
     { 2, 0, 0, 1 }, // global gain
     { 99, 1, 0, 4 }, // octave change
     { 40, 1, 0, 6 }, // harp shuffling
@@ -208,6 +231,19 @@ static const ParameterInfo parameter_lookup[] = {
     { 195, 0, 0, 1 }, // bandpass
     { 196, 0, 0, 1 }, // highpass
     { 197, 0, 0, 2 }, // output amplifier
+};
+
+// Page 1's factory defaults, as stored (floats in hundredths), from each parameter's
+// default_value: the same in every bank. Page 0's are the factory presets in main.cpp.
+static const int16_t parameter_page1_defaults[256] = {
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 
 #endif // PARAMETER_LOOKUP_H

@@ -126,6 +126,42 @@ void apply_audio_parameter(int adress, int value) {
       case 7:
         current_sysex_parameters[7]=version_ID;
         break;
+      case 290:
+        
+        break;
+      case 291:
+        
+        break;
+      case 292:
+        
+        break;
+      case 293:
+        
+        break;
+      case 294:
+        
+        break;
+      case 295:
+        
+        break;
+      case 296:
+        
+        break;
+      case 297:
+        
+        break;
+      case 298:
+        
+        break;
+      case 299:
+        
+        break;
+      case 300:
+        
+        break;
+      case 301:
+        
+        break;
       case 2:
         string_gain.amplitude(value/100.0,100);  harp_attack_velocity=value/100.0*127;
         break;
