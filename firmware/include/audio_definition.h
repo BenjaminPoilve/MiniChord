@@ -1,4 +1,5 @@
 #include <Audio.h>
+#include "metronome_click.h"   // the looper's click, silent between ticks (metronome_click.h)
 #include <Wire.h>
 #include <SPI.h>
 #include <SD.h>
@@ -408,6 +409,11 @@ AudioEffectPlateReverb   main_reverb;
 AudioMixer4              stereo_l_mixer;        
 AudioMixer4              stereo_r_mixer;   
 AudioOutputI2S           DAC_out;
+// The looper's click (looper click, 285): mixed into what goes to the speaker and headphones only,
+// after the USB recording tap takes the stereo mixers, so a recording never has it
+AudioSynthClick          looper_click_tick;
+AudioMixer4              DAC_l_mixer;
+AudioMixer4              DAC_r_mixer;
 #ifdef AUDIO_INTERFACE
 AudioOutputUSB           USB_out;
 #endif
@@ -438,11 +444,15 @@ AudioConnection          patchCord2020(reverb_mixer, 0, main_reverb, 0);
 AudioConnection          patchCord2021(main_reverb, 0, stereo_r_mixer, 2);
 AudioConnection          patchCord2022(main_reverb, 1, stereo_l_mixer, 2);
 
-AudioConnection          patchCord2023(stereo_l_mixer, 0, DAC_out, 1);
-AudioConnection          patchCord2024(stereo_r_mixer, 0, DAC_out, 0);
+AudioConnection          patchCord2023(stereo_l_mixer, 0, DAC_l_mixer, 0);
+AudioConnection          patchCord2024(stereo_r_mixer, 0, DAC_r_mixer, 0);
+AudioConnection          clickCord1(looper_click_tick, 0, DAC_l_mixer, 1);
+AudioConnection          clickCord2(looper_click_tick, 0, DAC_r_mixer, 1);
+AudioConnection          clickCord3(DAC_l_mixer, 0, DAC_out, 1);
+AudioConnection          clickCord4(DAC_r_mixer, 0, DAC_out, 0);
 
 // USB audio recording tap; absent when the USB type has no audio interfaces.
-// The headphone/speaker path (patchCord2023/2024 into DAC_out) is unaffected.
+// The headphone/speaker path (through DAC_l_mixer and DAC_r_mixer, which add the click) is apart.
 #ifdef AUDIO_INTERFACE
 AudioConnection          patchCord2025(stereo_l_mixer, 0, USB_out, 1);
 AudioConnection          patchCord2026(stereo_r_mixer, 0, USB_out, 0);

@@ -19,6 +19,21 @@ with a.html():
     with a.head():
         a.link(href='index.css', rel='stylesheet')
 
+# The parameter array: two pages of 256. Page 0 (0-255) is every setting from before
+# the array grew and must never move; new settings go on page 1 (256-511). The
+# firmware's parameter_size and this must agree (main.cpp checks the table's size).
+# 382, 383, 510 and 511 can't be written over SysEx (their low byte, the first byte
+# of a write, is a universal SysEx id, 0x7E or 0x7F), so nothing may live there.
+PARAMETER_SIZE = 512
+PAGE_SIZE = 256
+RESERVED_ADRESSES = {0, 1, 382, 383, 510, 511}
+with open('parameters.json') as _f:
+    for _section in json.load(_f).values():
+        for _p in _section:
+            _a = _p["sysex_adress"]
+            assert 0 <= _a < PARAMETER_SIZE, "%s: address %d is past the parameter array" % (_p["name"], _a)
+            assert _a not in RESERVED_ADRESSES, "%s: address %d is reserved" % (_p["name"], _a)
+
 with open('parameters.json') as f: # Reserved adresses: 0 for system command and 1 for bank adress
     d = json.load(f)
     with a.html():
@@ -72,6 +87,17 @@ with open('parameters.json') as f: # Reserved adresses: 0 for system command and
                                 a.button(onclick='reset_current_bank()', _t='reset bank',klass="inactive")
                             with a.div(klass="bloc B3 M3 S3 button_div"):
                                 a.button(onclick='reset_memory()', _t='reset all banks',klass="inactive")
+                        # the looper (firmware 11 on): each button writes setting 256 once
+                        with a.div(klass="line"):
+                            a.h5(_t='looper:',klass="inactive", version="11")
+                        with a.div(klass="line"):
+                            for action, label in ((1, 'record'), (2, 'play'), (3, 'stop')):
+                                with a.div(klass="bloc B2 M2 S2 button_div"):
+                                    a.button(onclick='looper(%d)' % action, _t=label, klass="inactive", version="11")
+                        with a.div(klass="line"):
+                            for action, label in ((5, 'overdub'), (4, 'clear')):
+                                with a.div(klass="bloc B2 M2 S2 button_div"):
+                                    a.button(onclick='looper(%d)' % action, _t=label, klass="inactive", version="11")
                     with a.details():
                         with a.summary():
                             a.b(_t='Connection instruction')
@@ -365,7 +391,7 @@ with open('parameters.json') as f:
 #include <stdint.h>
 
 struct ParameterInfo {
-    uint8_t sysex_adress;
+    uint16_t sysex_adress;
     bool is_selector;   // mapped across min..max; everything else scales around its value
     int16_t min_value;
     int16_t max_value;
@@ -385,6 +411,21 @@ static const ParameterInfo parameter_lookup[] = {
                 name = parameter.get("name", "unnamed")
                 lookup_file_content += "    { %d, %d, %d, %d }, // %s\n" % (
                     parameter["sysex_adress"], is_selector, min_value, max_value, name)
+    lookup_file_content += """};
+
+// Page 1's factory defaults, as stored (floats in hundredths), from each parameter's
+// default_value: the same in every bank. Page 0's are the factory presets in main.cpp.
+static const int16_t parameter_page1_defaults[%d] = {
+""" % (PARAMETER_SIZE - PAGE_SIZE)
+    page1 = [0] * (PARAMETER_SIZE - PAGE_SIZE)
+    for section in d:
+        for parameter in d[section]:
+            a = parameter.get("sysex_adress", -1)
+            if a >= PAGE_SIZE:
+                v = parameter.get("default_value", 0)
+                page1[a - PAGE_SIZE] = int(round(v * 100)) if parameter.get("data_type") == "float" else int(v)
+    for row in range(0, PARAMETER_SIZE - PAGE_SIZE, 32):
+        lookup_file_content += "    " + ", ".join(str(v) for v in page1[row:row + 32]) + ",\n"
     lookup_file_content += """};
 
 #endif // PARAMETER_LOOKUP_H

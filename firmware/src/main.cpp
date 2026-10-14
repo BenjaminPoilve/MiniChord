@@ -12,7 +12,7 @@
 #include <potentiometer.h>
 
 //>>SOFWTARE VERSION 
-int version_ID=9; //to be read 00.03, stored at adress 7 in memory
+int version_ID=12; //to be read 00.03, stored at adress 7 in memory
 //>>BUTTON ARRAYS<<
 debouncer harp_array[12];
 debouncer chord_matrix_array[22];
@@ -176,6 +176,19 @@ bool button_pushed = false;    // flag for when any button has been pushed durin
 bool trigger_chord = false;    // flag to trigger the enveloppe of the chord
 bool sharp_active = false;     // flag for when the sharp is active
 bool flat_button_modifier= false; //flag to set the modifier to flat instead of sharp
+
+// Double-tapping the modifier toggles one parameter between its stored value
+// and a chosen one, and back. Which parameter and which value are up to the
+// player, so the gesture is not tied to any one feature.
+const uint16_t modifier_tap_max = 250;  // ms: a press longer than this is a hold, not a tap
+const uint16_t modifier_tap_gap = 400;  // ms: the second tap must land within this of the first
+bool double_tap_engaged = false;
+uint8_t double_tap_led_step = 0;
+elapsedMillis led_anim_timer;
+int16_t double_tap_saved = 0;
+int16_t double_tap_engaged_adress = -1; // the parameter the engaged toggle is holding, latched at engage time
+const uint8_t double_tap_control_adress = 200;
+const uint8_t double_tap_value_adress = 201;
 bool continuous_chord = false; // wether the chord is held continuously. Controlled by the "hold" button
 bool rythm_mode = false;
 bool barry_harris_mode = false;
@@ -193,10 +206,24 @@ bool retrigger_chord = true;      // wether or not to retrigger the enveloppe wh
 bool change_held_strings = false; // to control wether hold strings change with chord:
 bool chromatic_harp_mode = false; // to switch the harp to chromatic mode
 //>>SYSEX PARAMETERS<<
-// SYSEX midi message are used to control up to 256 synthesis parameters.
-const uint16_t parameter_size = 256;
+// SYSEX midi message are used to control up to 512 synthesis parameters, in two pages of 256.
+//
+// Page 0 (0-255) is every setting there was before the array grew, and stays exactly as it was
+// everywhere, so no existing preset changes: the preset files, the factory presets below, the
+// dump an editor reads on command 0, and preset codes. Page 1 (256-511) is for new settings. A
+// preset file holds all 512 now, but one saved before holds 256, and loading starts every slot at
+// its default (parameter_default) before the file is read over it, so page 1 comes up at its
+// defaults; firmware from before the growth reads the first 256 of a longer file and keeps page 0.
+// Page 1 goes to an editor only when asked (command 7), with a header, so no tool that knows only
+// page 0 can take it for a dump. 382, 383, 510 and 511 stay unused: their low byte is a universal
+// SysEx id (0x7E, 0x7F), as the first byte of a write.
+const uint16_t parameter_size = 512;
+const uint16_t page_size = 256;
 const uint8_t preset_number = 12;
-int16_t default_bank_sysex_parameters[preset_number][parameter_size] = {
+static_assert(sizeof(parameter_page1_defaults) / sizeof(parameter_page1_defaults[0]) == parameter_size - page_size, "parameter_lookup.h is for another array size: run the generator");
+// The factory presets' page 0; page 1's defaults are generated, the same for every bank
+// (parameter_page1_defaults in parameter_lookup.h, from parameters.json)
+int16_t default_bank_sysex_parameters[preset_number][page_size] = {
   {0,0,50,50,512,512,512,0,0,0,192,100,49,100,184,100,157,100,0,0,0,0,0,0,43,0,50,37,38,67,0,0,0,0,0,0,0,0,0,0,0,16,0,8,8,12,42,1171,1,423,20,70,3,35,83,59,2658,1,0,0,0,0,0,0,0,1,1,1,100,1,1,0,1,1,1,1,14,0,0,70,0,0,0,100,0,6,0,0,755,195,23,61,29,0,0,0,0,162,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,13,8,100,16,0,200,0,0,50,0,50,18,32,50,0,0,10,66,353,65,995,1,569,16,141,32,83,28,48,54,1,0,0,0,56,0,389,0,20,0,0,0,0,1,1,1,0,1,1,0,1,1,1,1,0,0,0,70,0,0,0,100,0,64,0,0,80,16,4,94,753,474,70,5,100,100,100,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,0,6,6,32,0,6,0,16,0,6,6,32,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
   {0,0,50,50,512,512,512,0,0,0,194,100,85,100,60,100,61,100,0,0,10,1,0,0,0,0,0,0,0,100,0,0,0,0,0,0,0,0,0,0,4,25,8,3,29,18,65,488,3,159,25,70,5,18,4,26,6,1,77,0,587,32,0,390,0,76,1,1,100,1,1,68,17,14,22,20,0,340,1682,70,48,0,0,100,18,54,0,0,800,70,57,100,100,0,0,0,0,199,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,7,0,100,0,0,100,6,8,200,2,50,36,75,50,28,0,3,1,1,80,1218,2,1659,38,114,19,8,32,80,1,1,0,30,0,0,0,0,0,0,0,24,0,3,1,1,1,100,1,1,100,1,1,1,1,31,0,0,70,0,0,0,100,0,33,2,1,162,16,4,100,100,1436,118,100,50,32,107,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,13,0,4,0,7,0,0,2,13,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
   {0,0,50,50,512,512,512,0,0,0,192,100,49,100,184,100,157,100,0,0,30,0,1,1,87,33,62,12,80,67,0,0,0,0,0,0,0,0,0,0,0,6,3,8,8,12,42,1855,1,42,20,217,3,35,83,59,2658,1,185,0,282,14,0,247,11,1,1,1,100,1,1,0,1,1,1,1,14,0,0,70,0,0,0,100,0,23,0,0,755,195,82,61,29,0,0,0,0,162,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,13,0,100,23,8,200,0,0,50,0,50,18,32,50,0,0,10,66,353,44,1452,1,569,16,141,32,83,28,48,54,1,0,698,82,56,0,579,0,28,0,0,0,0,1,1,1,0,1,1,100,1,1,1,1,0,0,0,70,0,0,0,100,0,100,0,0,80,16,4,94,753,474,70,5,100,100,100,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,0,6,6,32,0,6,0,16,0,6,6,32,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -237,6 +264,11 @@ int8_t mod_pot_alternate_range = 17;
 // 40-119 are harp parameters
 // 120-219 are chord parameters
 // 220-235 are rythm patterns
+// 236-255 are free, for the parameters still to come
+// What the double tap can be pointed at: any parameter from 21 on but the rythm patterns
+static inline bool is_target_adress(int16_t adress) {
+  return (adress >= 21 && adress <= 219) || (adress >= 236 && adress < (int16_t)parameter_size);
+}
 bool sysex_controler_connected=false; //bool to remember if there is a controller that is connected to avoid saving any change
 
 //>>AUDIO OBJECT ARRAYS<<
@@ -340,17 +372,26 @@ float rythm_bpm = 80;
 u_int8_t rythm_current_step = 0;
 u_int16_t note_pushed_duration = 30;
 float shuffle = 1;
-u_int32_t long_timer_period = shuffle * (60 * 1000 * 1000) / (2 * rythm_bpm);
-u_int32_t short_timer_period = 2 * (60 * 1000 * 1000) / (2 * rythm_bpm) - long_timer_period;
-bool current_long_period = true;
 bool rythm_timer_running = false;
-IntervalTimer rythm_timer;       // that gives the general rythm
+volatile bool rythm_clock_synced = false;   // the rhythm following a MIDI clock (see the clock in processMIDI)
+IntervalTimer rythm_timer;       // the rhythm's clock, every millisecond (see ACCOMPANIMENT)
 IntervalTimer note_off_timer[4]; // timers for delayed chord enveloppe
-IntervalTimer led_timer;
 IntervalTimer color_led_blink_timer;
-elapsedMillis note_off_timing[4];
+// The rhythm LED's flash: lit on the step or the beat (acc_step, acc_beat), let go 200 ms on by the
+// rhythm's own clock (acc_tick), so lighting it no longer starts a timer from inside an interrupt
+volatile bool rythm_led_lit = false;
+volatile uint32_t rythm_led_lit_at = 0;
 elapsedMicros last_midi_clock_in;
-int midi_clock_current_step=0;
+// The accompaniment's settings (274-280), see ACCOMPANIMENT
+uint8_t acc_style = 0;          // 0 the sixteen steps of rythm pattern, else a written part (accompaniment_styles.h)
+uint8_t acc_bass_part = 0;      // voice 0: 0 plays the style's part, 1 holds the chord's note, 2 rests
+uint8_t acc_chord_part = 0;     // voices 1-3, the same
+uint8_t acc_follow = 0;         // 0 plays on, 1 only while a chord is held, 2 that and the bar starts on the press
+uint8_t acc_change = 0;         // a new chord comes in: 0 on the next note, 1 on the beat, 2 on the bar
+uint8_t acc_articulation = 100; // % of each written note's length
+uint8_t acc_accents = 100;      // % of the written difference between loud and soft notes
+uint8_t tap_counts = 0;         // tap tempo counts (281): 0 a tap a beat, 1 a tap an eighth; see acc_tap
+volatile double acc_phase_error = 0;   // 24ths of a beat the rhythm is to catch up (or fall back) to a tap
 
 uint8_t rythm_limit_change_to_every = 2; // when we allow the chord change
 elapsedMillis since_last_button_push;
@@ -374,6 +415,45 @@ uint8_t harp_started_notes[12]={0,0,0,0,0,0,0,0,0,0,0,0};
 uint8_t midi_base_note=48; // for C3
 uint8_t midi_base_note_transposed=midi_base_note; //to handle note transposition
 uint midi_buffer_delay=300; //in microseconds, helps compatibility with some hardware devices
+// MIDI in plays (address 8): notes sent to the minichord play its voices (see MIDI IN)
+bool midi_in_plays = false;
+struct midi_in_voice {
+  bool owned;       // sounding a note that came in, which the minichord's own playing leaves alone
+  bool key_down;
+  bool sustained;   // let go of with the pedal down: it rings until the pedal lifts
+  uint8_t note;
+  uint32_t since;
+  bool looped;      // the looper's, not an incoming note's (see LOOPER)
+  float freq;       // the frequency it sounds
+};
+midi_in_voice midi_in_harp[12] = {};
+midi_in_voice midi_in_chord[4] = {};
+float chord_voice_level[4] = {1, 1, 1, 1};   // each chord voice's loudness, from an incoming note's velocity
+float chord_noise_level = 0;                // the chord voices' noise (130), before that
+void apply_chord_voice_level(uint8_t i);
+void midi_in_message(uint8_t type, uint8_t cable, uint8_t channel, uint8_t data1, uint8_t data2);
+void midi_in_set(bool on);
+void looper_action(int16_t action);
+void looper_voice_taken(bool harp, uint8_t v);
+void looper_update();
+void looper_capture(uint8_t kind, uint8_t voice, float freq, float firmness, uint8_t midi_note, uint8_t midi_velocity);
+enum { LOOP_START, LOOP_RELEASE, LOOP_RETUNE };
+enum { LOOPER_EMPTY, LOOPER_RECORDING, LOOPER_PLAYING, LOOPER_STOPPED, LOOPER_COUNTIN };
+volatile uint8_t looper_state = LOOPER_EMPTY;   // see LOOPER
+volatile bool looper_overdub = false;
+volatile uint32_t rythm_beat_ms = 0;   // when the rhythm's latest beat began (its even steps), for the looper
+volatile uint32_t rythm_beat_count = 0;   // beats the rhythm has begun, and whether the latest began a bar (the looper's click)
+volatile bool rythm_beat_bar = false;
+// The looper in time (283-286), see LOOPER
+uint8_t looper_quantize = 0;     // 0 off, 1 quarter notes, 2 eighths, 3 sixteenths, 4 eighth triplets
+uint8_t looper_count_in = 0;     // bars of count-in before a recording: 0, 1 or 2
+uint8_t looper_click = 0;        // 0 off, 1 the count-in, 2 and the recording, 3 and the playing
+uint8_t looper_click_level = 50;
+uint32_t looper_click_flash_ms = 0;   // the latest tick, for the count-in's LED
+uint32_t acc_bar_ms_after(uint32_t at_least);
+uint8_t acc_beats_per_bar();
+uint32_t modifier_pressed_ms = 0;      // when the modifier was last pressed: a double tap's second tap lands then
+float string_note_freq[12] = {};       // the frequency the harp last tuned each string to
 
 //-->>MIDI OUTPUT QUEUE
 // usbMIDI is not reentrant; calling it from both loop() and a PIT ISR corrupts its
@@ -381,12 +461,13 @@ uint midi_buffer_delay=300; //in microseconds, helps compatibility with some har
 // usbMIDI. Everything else enqueues via queue_midi(), safe from ISR context.
 #define MIDI_QUEUE_SIZE 256 // power of two, max 256 for uint8_t indices
 #define MIDI_DRAIN_MAX_PER_LOOP 16 // caps how long a drain can hold up loop()
+enum { MIDI_EVT_NOTE_OFF, MIDI_EVT_NOTE_ON, MIDI_EVT_CC };
 struct midi_event_t {
-  uint8_t note;
-  uint8_t velocity;
+  uint8_t note;       // or the controller, for a control change
+  uint8_t velocity;   // or its value
   uint8_t channel;
   uint8_t cable;
-  bool note_on;
+  uint8_t kind;       // MIDI_EVT_NOTE_OFF, MIDI_EVT_NOTE_ON or MIDI_EVT_CC
 };
 volatile midi_event_t midi_queue[MIDI_QUEUE_SIZE];
 volatile uint8_t midi_queue_head = 0; // written by producers
@@ -395,7 +476,7 @@ volatile uint32_t midi_queue_dropped = 0; // diagnostic: events lost to a full q
 
 // Safe to call from any context, including an ISR. Drops the event if the queue is
 // full rather than blocking -- blocking is what caused the original fault.
-void queue_midi(bool note_on, uint8_t note, uint8_t velocity, uint8_t channel, uint8_t cable) {
+void queue_midi_event(uint8_t kind, uint8_t note, uint8_t velocity, uint8_t channel, uint8_t cable) {
   uint32_t primask;
   __asm__ volatile("mrs %0, primask" : "=r"(primask));
   __disable_irq();
@@ -405,12 +486,20 @@ void queue_midi(bool note_on, uint8_t note, uint8_t velocity, uint8_t channel, u
     midi_queue[midi_queue_head].velocity = velocity;
     midi_queue[midi_queue_head].channel = channel;
     midi_queue[midi_queue_head].cable = cable;
-    midi_queue[midi_queue_head].note_on = note_on;
+    midi_queue[midi_queue_head].kind = kind;
     midi_queue_head = next;
   } else {
     midi_queue_dropped++;
   }
   if (!primask) __enable_irq();
+}
+
+void queue_midi(bool note_on, uint8_t note, uint8_t velocity, uint8_t channel, uint8_t cable) {
+  queue_midi_event(note_on ? MIDI_EVT_NOTE_ON : MIDI_EVT_NOTE_OFF, note, velocity, channel, cable);
+}
+
+void queue_midi_cc(uint8_t controller, uint8_t value, uint8_t channel, uint8_t cable) {
+  queue_midi_event(MIDI_EVT_CC, controller, value, channel, cable);
 }
 
 // Called from loop() only. The single point at which this firmware talks to usbMIDI.
@@ -425,13 +514,15 @@ void drain_midi_queue() {
     e.velocity = midi_queue[midi_queue_tail].velocity;
     e.channel = midi_queue[midi_queue_tail].channel;
     e.cable = midi_queue[midi_queue_tail].cable;
-    e.note_on = midi_queue[midi_queue_tail].note_on;
+    e.kind = midi_queue[midi_queue_tail].kind;
     midi_queue_tail = (midi_queue_tail + 1) & (MIDI_QUEUE_SIZE - 1);
     if (sent) delayMicroseconds(midi_buffer_delay); // pacing for slower hardware synths
-    if (e.note_on) {
+    if (e.kind == MIDI_EVT_NOTE_ON) {
       usbMIDI.sendNoteOn(e.note, e.velocity, e.channel, e.cable);
-    } else {
+    } else if (e.kind == MIDI_EVT_NOTE_OFF) {
       usbMIDI.sendNoteOff(e.note, e.velocity, e.channel, e.cable);
+    } else {
+      usbMIDI.sendControlChange(e.note, e.velocity, e.channel, e.cable);
     }
     sent = true;
   }
@@ -445,16 +536,23 @@ void drain_midi_queue() {
 //-->>FUNCTION THAT NEED ANNOUNCING
 void save_config(int bank_number, bool default_save);
 void load_config(int bank_number);
-void recalculate_timer();
 uint8_t calculate_note_harp(uint8_t string, bool slashed, bool sharp);
 uint8_t calculate_note_chord(uint8_t voice, bool slashed, bool sharp);
-void set_chord_voice_frequency(uint8_t i, uint16_t current_note);
+void set_chord_voice_frequency(uint8_t i, int16_t current_note);
 void refresh_chord_filter();
 // the note frequency each chord voice is currently sounding, kept so the filter
 // corner can be recomputed for a voice without touching anything else about it
 float chord_voice_note_freq[4] = {0, 0, 0, 0};
 void calculate_ws_array();
-void rythm_tick_function();
+void acc_settings_changed();
+void acc_tap();
+void acc_tap_reset();
+void apply_acc_voice_gain(uint8_t i, float gain);
+void acc_midi_start();
+void acc_midi_stop();
+void acc_midi_clock();
+uint8_t acc_held_mask();
+void stop_chord_voices(uint8_t mask);
 
 //-->>LED HSV CALCULATION
 // function to calculate led RGB value, thank you SO
@@ -520,17 +618,38 @@ void set_led_color(float h, float s, float v) {
 }
 
 //-->>UTILITIES FOR SYSEX HANDLING
+// A setting's factory default in a bank: page 0's from the bank's factory preset, page 1's generated
+static inline int16_t parameter_default(int bank_number, uint16_t i) {
+  return i < page_size ? default_bank_sysex_parameters[bank_number][i] : parameter_page1_defaults[i - page_size];
+}
+
+// A page of settings to an editor. Page 0 is the dump every editor has always read, recognised by
+// its length alone, so it stays exactly that; the others carry a header (7D, the id for
+// non-commercial use, then 6D and the page) and are a few bytes longer, which an editor that
+// knows only page 0 drops.
+void send_parameter_page(uint8_t page) {
+  if (page >= parameter_size / page_size) return;
+  const uint8_t header = page == 0 ? 0 : 3;
+  uint8_t midi_data_array[3 + page_size * 2];
+  midi_data_array[0] = 0x7D;
+  midi_data_array[1] = 0x6D;
+  midi_data_array[2] = page;
+  for (uint16_t i = 0; i < page_size; i++) {
+    int16_t parameter_value = constrain(current_sysex_parameters[page * page_size + i], 0, 16383); // a sysex byte only carries 7 bits
+    midi_data_array[header + 2 * i] = parameter_value % 128;
+    midi_data_array[header + 2 * i + 1] = parameter_value / 128;
+  }
+  usbMIDI.sendSysEx(header + page_size * 2, midi_data_array, 0);
+}
+
 void control_command(uint8_t command, uint8_t parameter) {
   switch (command) {
-  case 0: // SIGNAL TO SEND BACK ALL DATA
+  case 0: // SIGNAL TO SEND BACK ALL DATA: page 0, as it always was, two bytes a setting and no header
     Serial.println("Reporting all data");
-    uint8_t midi_data_array[parameter_size * 2];
-    for (int i = 0; i < parameter_size; i++) {
-      int16_t parameter_value = constrain(current_sysex_parameters[i], 0, 16383); // a sysex byte only carries 7 bits
-      midi_data_array[2 * i] = parameter_value % 128;
-      midi_data_array[2 * i + 1] = parameter_value / 128;
-    }
-    usbMIDI.sendSysEx(parameter_size * 2, midi_data_array,0);
+    send_parameter_page(0);
+    break;
+  case 7: // page 1 and on, for an editor that knows them: 7D 6D <page>, then two bytes a setting
+    send_parameter_page(parameter);
     break;
   case 1: // SIGNAL TO WIPE MEMORY
     Serial.println("Wiping memory");
@@ -592,6 +711,16 @@ bool is_universal_sysex(const byte *data) {
 void processMIDI(void) {
   byte type;
   type = usbMIDI.getType();
+  // The looper, from a foot controller or a computer: control change 85 record, 86 play, 87 stop,
+  // 88 clear, 89 overdub, 90 the next step, on any channel, acting as the value rises past 63
+  if (type == usbMIDI.ControlChange && usbMIDI.getData1() >= 85 && usbMIDI.getData1() <= 90) {
+    if (usbMIDI.getData2() >= 64) looper_action(usbMIDI.getData1() - 84);
+    return;
+  }
+  if (midi_in_plays && (type == usbMIDI.NoteOn || type == usbMIDI.NoteOff || type == usbMIDI.ControlChange)) {
+    midi_in_message(type, usbMIDI.getCable(), usbMIDI.getChannel(), usbMIDI.getData1(), usbMIDI.getData2());
+    return;
+  }
   if (type == usbMIDI.SystemExclusive && usbMIDI.getSysExArrayLength() == 6) {
     const byte *data = usbMIDI.getSysExArray();
     if (!is_universal_sysex(data)) {
@@ -612,46 +741,44 @@ void processMIDI(void) {
       }
     }
   }
+  // Following a MIDI clock (24 a beat), see ACCOMPANIMENT: Start begins the pattern on the next
+  // clock, as MIDI has it; Stop, or the clock going quiet for half a second (rythm_clock_watch),
+  // hands the rhythm back to the minichord's own tempo.
   if(type==usbMIDI.Start && rythm_mode){
-    rythm_current_step=0;
-    midi_clock_current_step=0;
-    rythm_tick_function();
+    acc_midi_start();
+    last_midi_clock_in = 0;
     Serial.println("Start received");
-    rythm_timer.end();
   }
   if(type==usbMIDI.Stop && rythm_mode){
-    rythm_timer.begin(rythm_tick_function, short_timer_period);
+    acc_midi_stop();
   }
-
-
   if(type==usbMIDI.Clock && rythm_mode){
-    //here we want half of the cycle to be synced with the midi clock, and half with the calculated internal clock, so we can still have shuffle
-    //recalculate the BPM
-    rythm_bpm=(rythm_bpm*10+(1000*1000*60/last_midi_clock_in)/24)/11.0;
-    last_midi_clock_in=0;
-    midi_clock_current_step+=1;
-    recalculate_timer();   
-    //once every two beat, we sync
-    if(midi_clock_current_step==24){
-      rythm_timer.begin(rythm_tick_function, short_timer_period);
-      rythm_tick_function();
-      midi_clock_current_step=0;
+    uint32_t us = last_midi_clock_in;
+    last_midi_clock_in = 0;
+    // the tempo from the clock's spacing; only a real interval counts (25 to 1250 BPM), not the
+    // first clock after a gap
+    if (us > 2000 && us < 100000) {
+      rythm_bpm = constrain((rythm_bpm * 10 + 60e6f / (24.0f * us)) / 11.0f, 30.0f, 300.0f);
     }
-    //We disable the timer to avoid having it trigger the tick too early when we arrive at the sync beat 
-    if(midi_clock_current_step>18){
-      rythm_timer.end();
-    }
-
-   
-  
-   
+    acc_midi_clock();
   }
 }
 
 //-->>TIMER FUNCTIONS
+// The chords start a note on voice i, taking it back from an incoming note if it had it.
+void chords_take_voice(int i) {
+  if (!midi_in_chord[i].owned) return;
+  looper_voice_taken(false, i);
+  midi_in_chord[i].owned = false;
+  chord_voice_level[i] = 1;
+  apply_chord_voice_level(i);
+}
+
 // function to handle the delayed chord activation
 void play_single_note(int i, IntervalTimer *timer) {
   timer->end();
+  chords_take_voice(i);
+  apply_acc_voice_gain(i, 1);   // a voice the rhythm played softer, now holding the chord
   set_chord_voice_frequency(i, current_applied_chord_notes[i]);
   chord_vibrato_envelope_array[i]->noteOn();
   chord_vibrato_dc_envelope_array[i]->noteOn();
@@ -664,26 +791,94 @@ void play_single_note(int i, IntervalTimer *timer) {
     chord_started_notes[i]=0;}
   queue_midi(true, midi_base_note_transposed+ current_applied_chord_notes[i],chord_attack_velocity,chord_channel, chord_port);
   chord_started_notes[i]=midi_base_note_transposed+ current_applied_chord_notes[i];
+  looper_capture(LOOP_START, 12 + i, chord_voice_note_freq[i], 1, chord_started_notes[i], chord_attack_velocity);
 }
 
-void play_note_selected_duration(int i,int current_note){
+// The MIDI note a chord voice's note goes out as. A bass line under the chord can go below note 0
+// (see ACCOMPANIMENT); anything else is worked out exactly as it always was.
+uint8_t chord_midi_note(int16_t note) {
+  if (note >= 0) return midi_base_note_transposed + note;
+  return (uint8_t)constrain(midi_base_note_transposed + note, 0, 127);
+}
+
+// How much of its note level (131-134) each chord voice plays at: a style's accents (see
+// ACCOMPANIMENT), 1 for everything else
+float acc_voice_gain[4] = {1, 1, 1, 1};
+void apply_acc_voice_gain(uint8_t i, float gain) {
+  if (acc_voice_gain[i] == gain) return;
+  acc_voice_gain[i] = gain;
+  chord_voice_mixer.gain(i, current_sysex_parameters[131 + i] / 100.0 * gain);
+}
+
+// A note of the rhythm on chord voice i, from its timer's interrupt: firmness 0-1 sets how loud it
+// plays here, down to 24 dB, and goes out as its MIDI velocity (on chord velocity's scale)
+void acc_play(uint8_t i, int16_t note, float firmness) {
+  chords_take_voice(i);
+  apply_acc_voice_gain(i, powf(10.0f, -1.2f * (1 - firmness) * (1 - firmness)));
+  // ISR context: queue only, never touch usbMIDI here. The old note goes first, so moving the
+  // voice to its new one doesn't also send the move (set_chord_voice_frequency) just before the
+  // strike sends it again.
+  if(chord_started_notes[i]!=0){
+    queue_midi(false, chord_started_notes[i],chord_release_velocity,chord_channel, chord_port);
+    chord_started_notes[i]=0;}
+  set_chord_voice_frequency(i, note);
   chord_vibrato_envelope_array[i]->noteOn();
   chord_vibrato_dc_envelope_array[i]->noteOn();
   chord_envelope_array[i]->noteOn();
   chord_envelope_filter_array[i]->noteOn();
   chord_voice_released[i] = false;
-  note_off_timing[i]=0;
-  // ISR context: queue only, never touch usbMIDI here.
-  if(chord_started_notes[i]!=0){
-    queue_midi(false, chord_started_notes[i],chord_release_velocity,chord_channel, chord_port);
-    chord_started_notes[i]=0;}
-  queue_midi(true, midi_base_note_transposed+current_note,chord_attack_velocity,chord_channel, chord_port);
-  chord_started_notes[i]=midi_base_note_transposed+current_note;
+  uint8_t velocity = constrain((int)lroundf(chord_attack_velocity * firmness), 1, 127);
+  chord_started_notes[i] = chord_midi_note(note);
+  queue_midi(true, chord_started_notes[i], velocity, chord_channel, chord_port);
+  looper_capture(LOOP_START, 12 + i, chord_voice_note_freq[i], firmness, chord_started_notes[i], velocity);
 }
 
-void turn_off_led(IntervalTimer *timer) {
-  timer->end();
-  analogWrite(RYTHM_LED_PIN, 0);
+// Stepped from the loop: see the note on timer channels above.
+void step_led_animation() {
+  if (looper_state == LOOPER_COUNTIN) {
+    // counting in: red, bright on each beat
+    if (led_anim_timer < 20) return;
+    led_anim_timer = 0;
+    set_led_color(0, 1.0, (millis() - looper_click_flash_ms < 120 ? 1.0 : 0.12) * (1 - led_attenuation));
+    return;
+  }
+  if (led_anim_timer < 60) return;
+  if (looper_state == LOOPER_RECORDING || looper_state == LOOPER_PLAYING) {
+    // the looper: red pulsing while recording, amber pulsing while overdubbing, green while playing
+    led_anim_timer = 0;
+    static uint8_t looper_led_step = 0;
+    looper_led_step = (looper_led_step + 1) % 16;
+    float pulse = looper_led_step < 8 ? 1.0 : 0.3;
+    if (looper_state == LOOPER_RECORDING) set_led_color(0, 1.0, pulse * (1 - led_attenuation));
+    else if (looper_overdub) set_led_color(40, 1.0, pulse * (1 - led_attenuation));
+    else set_led_color(120, 1.0, 1 - led_attenuation);
+  } else if (double_tap_engaged) {
+    led_anim_timer = 0;
+    double_tap_led_step = (double_tap_led_step + 1) % 20;
+    set_led_color(bank_led_hue, 1.0, (double_tap_led_step < 10 ? 1.0 : 0.45) * (1 - led_attenuation));
+  }
+}
+
+// A note of the rhythm let go, from its timer's interrupt or the loop. As in stop_chord_notes(): the
+// check and the flag are one step, so a note starting in between isn't marked released without
+// ever being.
+void acc_release(uint8_t i) {
+  if (midi_in_chord[i].owned) return;   // an incoming note's, not the rhythm's
+  noInterrupts();
+  if (chord_envelope_array[i]->isSustain() || (chord_envelope_array[i]->isActive() && !chord_voice_released[i])) {
+    chord_vibrato_envelope_array[i]->noteOff();
+    chord_vibrato_dc_envelope_array[i]->noteOff();
+    chord_envelope_array[i]->noteOff();
+    chord_envelope_filter_array[i]->noteOff();
+    chord_voice_released[i] = true;
+    looper_capture(LOOP_RELEASE, 12 + i, 0, 0, 0, 0);
+  }
+  interrupts();
+  // See stop_chord_notes().
+  if (chord_started_notes[i] != 0) {
+    queue_midi(false, chord_started_notes[i], chord_release_velocity, chord_channel, chord_port);
+    chord_started_notes[i] = 0;
+  }
 }
 
 //-->>AUDIO HELPER FUNCTIONS
@@ -716,7 +911,8 @@ void refresh_chord_filter() {
   AudioInterrupts();
 }
 
-void set_chord_voice_frequency(uint8_t i, uint16_t current_note) {
+void set_chord_voice_frequency(uint8_t i, int16_t current_note) {
+  if (midi_in_chord[i].owned) return;   // sounding an incoming note, until the chords start one on it
   float note_freq = pow(2,chord_octave_change)*c_frequency/8 * pow(2, (current_note+transpose_semitones) / 12.0); //down one octave to let more possibilities with the shuffling array
   if(glide_length>0){
         //ok so first we need to set the "middle note". Keep in mind that the signal will be +/-1 and will go +/- 2 octaves (frequencyModulation(2), hence the /24.0 below)
@@ -758,19 +954,24 @@ void set_chord_voice_frequency(uint8_t i, uint16_t current_note) {
   }
 
   // Reached from BOTH the main loop (update_chord_notes) and PIT ISR context
-  // (play_single_note, rythm_tick_function), so it must queue rather than send.
-  if(chord_started_notes[i]!=0 && chord_started_notes[i]!=midi_base_note_transposed+current_note){
+  // (play_single_note, acc_tick), so it must queue rather than send.
+  if(chord_started_notes[i]!=0 && chord_started_notes[i]!=chord_midi_note(current_note)){
     //we need to change the note without triggering the change, ie a pitch bend
     queue_midi(false, chord_started_notes[i],chord_release_velocity,chord_channel, chord_port);
     chord_started_notes[i]=0;
-    queue_midi(true, midi_base_note_transposed+current_note,chord_attack_velocity,chord_channel, chord_port);
-    chord_started_notes[i]=midi_base_note_transposed+ current_note;
+    queue_midi(true, chord_midi_note(current_note),chord_attack_velocity,chord_channel, chord_port);
+    chord_started_notes[i]=chord_midi_note(current_note);
+  }
+  if (chord_envelope_array[i]->isActive() && !chord_voice_released[i]) {   // a chord change under a held chord
+    looper_capture(LOOP_RETUNE, 12 + i, chord_voice_note_freq[i], 1, chord_started_notes[i], chord_attack_velocity);
   }
 }
 // setting the harp
 void set_harp_voice_frequency(uint8_t i, uint16_t current_note) {
+  if (midi_in_harp[i].owned) return;    // sounding an incoming note, until the harp plays it
   float note_freq =  pow(2,harp_octave_change)*c_frequency/4 * pow(2, (current_note+transpose_semitones) / 12.0);
   float transient_freq =  64.0*c_frequency/4 *pow(2, ((current_note+transpose_semitones)%12+transient_note_level) / 12.0);
+  string_note_freq[i] = note_freq;
   AudioNoInterrupts();
   string_waveform_array[i]->frequency(note_freq);
   string_transient_waveform_array[i]->frequency(transient_freq);
@@ -778,6 +979,664 @@ void set_harp_voice_frequency(uint8_t i, uint16_t current_note) {
   // string_vibrato_1.offset(0);
   AudioInterrupts();
 }
+//>>MIDI IN<<
+// With MIDI in plays on, notes sent to the minichord play its voices, as a sound module: on the
+// harp's port and channel the harp strings (twelve voices), on the chords' port and channel the
+// chord voices (four), the same ones it sends its own notes on (by default the chords on port 1 and
+// the harp on port 2, both on channel 1). A note sounds at its true pitch, middle C as middle C
+// whatever the preset's octaves and transpose. Velocity sets its loudness, and a string's
+// brightness; the sustain pedal (64) holds notes let go of. Nothing goes back out.
+//
+// An incoming note takes a voice nothing is playing, else one ringing out, else the oldest
+// incoming one; a harp string under a finger is never taken. The voice is then the note's: the
+// minichord's own playing leaves it alone (set_chord_voice_frequency, set_harp_voice_frequency,
+// stop_chord_notes, acc_release) until it starts a note on it itself, which takes it back
+// (harp_take_voice, chords_take_voice).
+
+// the frequency an incoming note sounds at
+float midi_in_frequency(uint8_t note) {
+  return c_frequency * powf(2.0f, ((int)note - midi_base_note) / 12.0f);   // from C3
+}
+
+// A string's own level, after its filter, on the mixers the strings are summed on
+void set_string_level(uint8_t i, float level) {
+  AudioNoInterrupts();
+  string_mixer_array[i / 4]->gain(i % 4, level);
+  transient_mixer_array[i / 4]->gain(i % 4, level);
+  AudioInterrupts();
+}
+
+void apply_chord_voice_level(uint8_t i) {
+  float g = chord_voice_level[i];
+  chord_voice_mixer_array[i]->gain(0, g);
+  chord_voice_mixer_array[i]->gain(1, g);
+  chord_voice_mixer_array[i]->gain(2, g);
+  chord_voice_mixer_array[i]->gain(3, chord_noise_level * g);
+}
+
+// The harp plays string i, taking it back from an incoming note if it had it.
+void harp_take_voice(uint8_t i) {
+  if (!midi_in_harp[i].owned) return;
+  looper_voice_taken(true, i);
+  midi_in_harp[i].owned = false;
+  set_string_level(i, 1);
+}
+
+// The voice for a note among count: the one already sounding it, else the best free one; -1 if all
+// are under fingers.
+int8_t midi_in_pick(midi_in_voice *voices, uint8_t count, uint8_t note, bool harp) {
+  for (uint8_t i = 0; i < count; i++) if (voices[i].owned && voices[i].note == note) return i;
+  int8_t best = -1;
+  int8_t best_rank = -1;
+  uint32_t best_since = 0;
+  for (uint8_t i = 0; i < count; i++) {
+    if (harp && harp_array[i].read_value()) continue;
+    bool active = harp ? string_enveloppe_array[i]->isActive() : chord_envelope_array[i]->isActive();
+    int8_t rank = !active ? 3 : (voices[i].owned && !voices[i].key_down && !voices[i].sustained) ? 2 : !voices[i].owned ? 1 : 0;
+    uint32_t since = voices[i].owned ? voices[i].since : 0;
+    if (rank > best_rank || (rank == best_rank && since < best_since)) { best = i; best_rank = rank; best_since = since; }
+  }
+  return best;
+}
+
+// Sounds harp string i, which the voice record midi_in_harp[i] now owns, at its frequency, as
+// firmly as given (0 to 1; an incoming note's velocity / 127)
+void owned_harp_on(uint8_t i, float firmness) {
+  float f = midi_in_harp[i].freq;
+  int16_t step = (int16_t)lroundf(12 * log2f(f / c_frequency));   // the transient follows the note it's nearest
+  float transient_freq = 64.0 * c_frequency / 4 * pow(2, ((step % 12 + 12) % 12 + transient_note_level) / 12.0);
+  float softness = (1 - firmness) * (1 - firmness);
+  set_string_level(i, powf(10.0f, -1.2f * softness));   // down to 24 dB
+  AudioNoInterrupts();
+  string_waveform_array[i]->frequency(f);
+  string_transient_waveform_array[i]->frequency(transient_freq);
+  // and darker, by up to two octaves of the string's filter
+  string_filter_array[i]->frequency((string_filter_base_freq + f * string_filter_keytrack) * powf(2.0f, -2.0f * softness));
+  envelope_string_vibrato_lfo.noteOn();
+  envelope_string_vibrato_dc.noteOn();
+  string_enveloppe_filter_array[i]->noteOn();
+  string_enveloppe_array[i]->noteOn();
+  string_transient_envelope_array[i]->noteOn();
+  AudioInterrupts();
+}
+
+void midi_in_harp_on(uint8_t note, uint8_t velocity) {
+  int8_t i = midi_in_pick(midi_in_harp, 12, note, true);
+  if (i < 0) return;
+  looper_voice_taken(true, i);
+  midi_in_harp[i] = midi_in_voice{true, true, false, note, millis(), false, midi_in_frequency(note)};
+  owned_harp_on(i, velocity / 127.0f);
+}
+
+// Takes chord voice i from the chords for a note of its own: a chord note waiting to start on it is
+// called off, and the chords' midi note on it ends with its sound
+void chords_give_voice(uint8_t i) {
+  note_timer[i].end();
+  if (chord_started_notes[i] != 0) {
+    queue_midi(false, chord_started_notes[i], chord_release_velocity, chord_channel, chord_port);
+    chord_started_notes[i] = 0;
+  }
+}
+
+// Tunes chord voice i, which midi_in_chord[i] owns, straight to its frequency, without the chords' glide
+void owned_chord_tune(uint8_t i) {
+  float f = midi_in_chord[i].freq;
+  AudioNoInterrupts();
+  chord_voice_note_freq[i] = f;
+  chord_voice_filter_array[i]->frequency(f * chord_filter_keytrack + chord_filter_base_freq);
+  chord_osc_1_array[i]->frequency(osc_1_freq_multiplier * f);
+  chord_osc_2_array[i]->frequency(osc_2_freq_multiplier * f);
+  chord_osc_3_array[i]->frequency(osc_3_freq_multiplier * f);
+  chord_freq_dc_array[i]->amplitude(0, 0);
+  AudioInterrupts();
+}
+
+// Sounds chord voice i, which the voice record midi_in_chord[i] now owns, at its frequency, as
+// firmly as given (0 to 1; an incoming note's velocity / 127)
+void owned_chord_on(uint8_t i, float firmness) {
+  chord_voice_level[i] = powf(10.0f, -1.2f * (1 - firmness) * (1 - firmness));   // down to 24 dB, as a string
+  apply_chord_voice_level(i);
+  owned_chord_tune(i);
+  noInterrupts();
+  chord_vibrato_envelope_array[i]->noteOn();
+  chord_vibrato_dc_envelope_array[i]->noteOn();
+  chord_envelope_array[i]->noteOn();
+  chord_envelope_filter_array[i]->noteOn();
+  chord_voice_released[i] = false;
+  interrupts();
+}
+
+void midi_in_chord_on(uint8_t note, uint8_t velocity) {
+  int8_t i = midi_in_pick(midi_in_chord, 4, note, false);
+  if (i < 0) return;
+  chords_give_voice(i);
+  looper_voice_taken(false, i);
+  midi_in_chord[i] = midi_in_voice{true, true, false, note, millis(), false, midi_in_frequency(note)};
+  owned_chord_on(i, velocity / 127.0f);
+}
+
+void midi_in_release(midi_in_voice *voices, uint8_t i, bool harp) {
+  voices[i].key_down = false;
+  voices[i].sustained = false;
+  noInterrupts();
+  if (harp) {
+    string_enveloppe_array[i]->noteOff();
+    string_transient_envelope_array[i]->noteOff();
+    string_enveloppe_filter_array[i]->noteOff();
+  } else {
+    chord_vibrato_envelope_array[i]->noteOff();
+    chord_vibrato_dc_envelope_array[i]->noteOff();
+    chord_envelope_array[i]->noteOff();
+    chord_envelope_filter_array[i]->noteOff();
+    chord_voice_released[i] = true;
+  }
+  interrupts();
+}
+
+void midi_in_message(uint8_t type, uint8_t cable, uint8_t channel, uint8_t data1, uint8_t data2) {
+  static bool pedal_harp = false, pedal_chord = false;
+  bool harp = cable == harp_port && channel == harp_channel;
+  bool chord = !harp && cable == chord_port && channel == chord_channel;
+  if (!harp && !chord) return;
+  midi_in_voice *voices = harp ? midi_in_harp : midi_in_chord;
+  uint8_t count = harp ? 12 : 4;
+  bool &pedal = harp ? pedal_harp : pedal_chord;
+  if (type == usbMIDI.NoteOn && data2 > 0) {
+    if (harp) midi_in_harp_on(data1, data2);
+    else midi_in_chord_on(data1, data2);
+  } else if (type == usbMIDI.NoteOn || type == usbMIDI.NoteOff) {
+    for (uint8_t i = 0; i < count; i++) {
+      if (!voices[i].owned || voices[i].looped || !voices[i].key_down || voices[i].note != data1) continue;
+      if (pedal) { voices[i].key_down = false; voices[i].sustained = true; }
+      else midi_in_release(voices, i, harp);
+    }
+  } else if (type == usbMIDI.ControlChange && data1 == 64) {
+    pedal = data2 >= 64;
+    if (!pedal) for (uint8_t i = 0; i < count; i++) if (voices[i].owned && !voices[i].looped && voices[i].sustained) midi_in_release(voices, i, harp);
+  }
+}
+
+// Switched off, whatever incoming notes are sounding ring out (the looper's play on)
+void midi_in_set(bool on) {
+  if (!on) {
+    for (uint8_t i = 0; i < 12; i++) if (midi_in_harp[i].owned && !midi_in_harp[i].looped && (midi_in_harp[i].key_down || midi_in_harp[i].sustained)) midi_in_release(midi_in_harp, i, true);
+    for (uint8_t i = 0; i < 4; i++) if (midi_in_chord[i].owned && !midi_in_chord[i].looped && (midi_in_chord[i].key_down || midi_in_chord[i].sustained)) midi_in_release(midi_in_chord, i, false);
+  }
+  midi_in_plays = on;
+}
+
+// A note off that lands in an envelope's retrigger ramp (a note on to a voice still sounding starts
+// one) is ignored by the Teensy envelope, and the voice would then hold at its sustain for good: a
+// note repeated quickly, or sent on and off at once, stuck that way. So a voice that has been let go
+// of and has settled at sustain is released again, as the chords' own are in stop_chord_notes.
+void midi_in_settle() {
+  for (uint8_t i = 0; i < 12; i++) {
+    if (midi_in_harp[i].owned && !midi_in_harp[i].key_down && !midi_in_harp[i].sustained && string_enveloppe_array[i]->isSustain()) midi_in_release(midi_in_harp, i, true);
+  }
+  for (uint8_t i = 0; i < 4; i++) {
+    if (midi_in_chord[i].owned && !midi_in_chord[i].key_down && !midi_in_chord[i].sustained && chord_envelope_array[i]->isSustain()) midi_in_release(midi_in_chord, i, false);
+  }
+}
+
+//>>LOOPER<<
+// Records what the minichord plays, chords and harp, as it plays it, and loops it. What it keeps
+// is the notes, not the sound: each start, let-go and chord retune, with the voice, its frequency,
+// how firmly it was played and the midi note that went out (looper_capture, from handle_harp, the
+// chords' note-ons and note-offs and set_chord_voice_frequency). It plays them back through the
+// voices MIDI in uses (midi_in_harp, midi_in_chord, marked looped), so the minichord's own playing
+// takes a voice back as it does from an incoming note, and the looped notes go out over midi as
+// they did when played.
+//
+// It is driven through setting 256, which is never saved as anything but 0: writing it does one
+// thing (looper_action: 1 record, 2 play, 3 stop, 4 clear, 5 overdub on or off, 6 the next step,
+// 7 the next step sent to a looper on the computer instead), so minicontrol's looper buttons write
+// it, and control changes 85-90 do the same on any channel.
+// Assigned to the double tap, each double tap takes the next step (looper_step): record, play,
+// stop, then record a new loop. A loop closes where the second tap landed, not where the gesture
+// was recognised, a moment later. In rhythm mode, or with midi clock coming in, a loop starts on
+// the nearest beat and its length rounds to whole beats; otherwise it is as long as it was played.
+// Overdub (minicontrol or midi only) adds to a playing loop, and a note captured on a pass isn't
+// played back over itself on that pass.
+//
+// In time (283-286). The looper keeps a beat whenever rhythm mode runs, or any of these is on: the
+// rhythm's, or without it its own at the rhythm's tempo (the default bpm),
+// counted from the loop's start. Then a loop starts on a beat and its length rounds to whole beats.
+// Looper count-in plays one or two bars first: the recording starts on the bar line after them
+// (in rhythm mode the first bar line at least that far off), and a note played up to 100 ms before
+// it, reaching for the downbeat, starts the loop. Looper click ticks the beats, higher on a bar's
+// first, on the speaker and headphones only (after the USB recording tap): through the count-in,
+// and the recording, and the playing, as it says. Looper quantize moves each note's start to the
+// nearest quarter, eighth (where the shuffle puts the off one), sixteenth or eighth triplet of the
+// loop, and its let-go and retunes with it, so it keeps its length: the first pass's notes as the
+// loop closes, when its length is known (one reaching for the downbeat at the end starts the
+// loop), an overdub's as they come.
+// A pass plays as it was played; the next one plays it in time. Voices still sounding when a loop closes are let go at its
+// end, so none hangs across the join, and a chord ringing when recording starts begins the loop.
+//
+// A looper on the computer is worked the same way from here: double tap value 7 (with double tap
+// control 256) sends each double tap out as control change 90, the next step, on the chords' port
+// and channel, and leaves the minichord's own looper alone. The double tap is only known once the
+// second tap lifts, so the value carries how long ago it landed, 4 ms a step down from 127 (127:
+// just now; never under 64, so it still reads as a press anywhere a press is 64 or more): the
+// computer can place the step where the tap was, not where it was recognised.
+const int16_t looper_adress = 256;
+struct loop_event {
+  uint32_t t;            // ms from the loop's start
+  uint16_t cycle;        // the pass it was captured on
+  uint8_t kind;          // LOOP_START, LOOP_RELEASE or LOOP_RETUNE
+  uint8_t voice;         // as recorded: 0-11 a harp string, 12-15 a chord voice
+  uint8_t midi_note;
+  uint8_t midi_velocity;
+  float freq;
+  float firmness;        // 0 to 1, as an incoming note's velocity / 127: full for the minichord's own notes
+};
+const uint16_t loop_event_max = 2048;
+loop_event loop_events[loop_event_max];          // 40 kB
+volatile uint16_t loop_event_count = 0;
+volatile uint32_t loop_start_ms = 0;    // when pass 0 began: the recording
+volatile uint32_t loop_length_ms = 0;
+uint16_t loop_cycle = 0;                // the pass being played
+int32_t loop_played_to = -1;            // played up to here in it, in the loop's ms (-1: from its start)
+volatile bool loop_open[16];            // recorded voices started and not yet let go
+int32_t loop_quantize_shift[16];        // an overdub's notes: how far each recorded voice's latest start moved
+int8_t loop_voice[16];                  // recorded voice -> the voice playing it back, -1 none
+uint8_t loop_sent_note[16];             // per playback voice (0-11 harp, 12-15 chord): the midi note sent, 0 none
+uint8_t loop_sent_channel[16];
+
+// Puts an event in its place, in time order; from the main loop or a chord timer's interrupt
+static void loop_insert(const loop_event &e) {
+  uint32_t primask;
+  __asm__ volatile("mrs %0, primask" : "=r"(primask));
+  __disable_irq();
+  if (loop_event_count < loop_event_max) {
+    uint16_t j = loop_event_count;
+    while (j > 0 && loop_events[j - 1].t > e.t) { loop_events[j] = loop_events[j - 1]; j--; }
+    loop_events[j] = e;
+    loop_event_count = loop_event_count + 1;
+  }
+  if (!primask) __enable_irq();
+}
+
+// The rhythm's beats, from its own timer or following midi clock
+static bool looper_on_beat() {
+  return rythm_mode && rythm_timer_running && rythm_beat_ms != 0;
+}
+// whether the looper keeps a beat: the rhythm's, or its own from the loop's start
+static bool looper_timed() {
+  return looper_on_beat() || looper_quantize || looper_count_in || looper_click;
+}
+static float looper_beat_ms() { return 60000.0f / rythm_bpm; }
+
+// the nearest point of looper quantize's grid to t, ms from the loop's start (on a beat)
+static int32_t looper_grid_snap(int32_t t) {
+  float beat = looper_beat_ms();
+  if (looper_quantize == 2) {   // eighths: the off one where the shuffle puts it
+    float b = floorf(t / beat) * beat;
+    float options[3] = {b, b + beat / 2 * shuffle, b + beat};
+    float best = options[0];
+    for (uint8_t i = 1; i < 3; i++) if (fabsf(t - options[i]) < fabsf(t - best)) best = options[i];
+    return lroundf(best);
+  }
+  float unit = looper_quantize == 1 ? beat : looper_quantize == 3 ? beat / 4 : beat / 3;
+  return lroundf(lroundf(t / unit) * unit);
+}
+
+void looper_capture(uint8_t kind, uint8_t voice, float freq, float firmness, uint8_t midi_note, uint8_t midi_velocity) {
+  uint8_t state = looper_state;
+  // the last 100 ms of a count-in: a note reaching for the downbeat starts the loop
+  if (state == LOOPER_COUNTIN && (int32_t)(millis() - loop_start_ms) > -100) state = LOOPER_RECORDING;
+  if (state != LOOPER_RECORDING && !(state == LOOPER_PLAYING && looper_overdub)) return;
+  if (kind == LOOP_START) loop_open[voice] = true;
+  else if (!loop_open[voice]) return;                  // let go of or retuned, but started before the recording
+  else if (kind == LOOP_RELEASE) loop_open[voice] = false;
+  uint32_t elapsed = millis() - loop_start_ms;
+  if ((int32_t)elapsed < 0) elapsed = 0;               // a recording starting on a beat still to come
+  loop_event e;
+  if (state == LOOPER_RECORDING) { e.t = elapsed; e.cycle = 0; }
+  else {
+    e.t = elapsed % loop_length_ms; e.cycle = elapsed / loop_length_ms;
+    if (looper_quantize && looper_timed()) {   // an overdub's note in time as it comes; its let-go with it
+      int32_t t = e.t;
+      if (kind == LOOP_START) {
+        int32_t snapped = looper_grid_snap(t);
+        if (snapped >= (int32_t)loop_length_ms) snapped -= loop_length_ms;   // the next pass's downbeat
+        loop_quantize_shift[voice] = snapped - t;
+      }
+      t += loop_quantize_shift[voice];
+      while (t < 0) t += loop_length_ms;
+      while (t >= (int32_t)loop_length_ms) t -= loop_length_ms;
+      e.t = t;
+    }
+  }
+  e.kind = kind; e.voice = voice; e.midi_note = midi_note; e.midi_velocity = midi_velocity; e.freq = freq; e.firmness = firmness;
+  loop_insert(e);
+}
+
+// The first pass's notes in time, as the loop closes at length: each start to the nearest point of
+// the grid (one reaching for the end goes to the downbeat), its let-go and retunes with it
+FLASHMEM static void loop_quantize_pass(int32_t length) {
+  int32_t shift[16] = {0};
+  noInterrupts();
+  for (uint16_t i = 0; i < loop_event_count; i++) {
+    loop_event &e = loop_events[i];
+    int32_t t = e.t;
+    if (e.kind == LOOP_START) {
+      int32_t snapped = looper_grid_snap(t);
+      if (snapped >= length) snapped -= length;
+      shift[e.voice] = snapped - t;
+    }
+    t += shift[e.voice];
+    if (t < 0) t = 0;
+    if (t >= length) t = length - 1;
+    e.t = t;
+  }
+  for (uint16_t i = 1; i < loop_event_count; i++) {   // back in time order: nearly so already
+    loop_event e = loop_events[i];
+    uint16_t j = i;
+    while (j > 0 && loop_events[j - 1].t > e.t) { loop_events[j] = loop_events[j - 1]; j--; }
+    loop_events[j] = e;
+  }
+  interrupts();
+}
+
+
+
+// The nearest beat to ms, in rhythm mode; ms itself otherwise
+static uint32_t looper_snap(uint32_t ms) {
+  if (!looper_on_beat()) return ms;
+  float beat = looper_beat_ms();
+  int32_t from_beat = (int32_t)(ms - rythm_beat_ms);
+  return rythm_beat_ms + (int32_t)(lroundf(from_beat / beat) * beat);
+}
+
+static void loop_midi_off(uint8_t slot, uint8_t port) {
+  if (loop_sent_note[slot] == 0) return;
+  queue_midi(false, loop_sent_note[slot], slot < 12 ? harp_release_velocity : chord_release_velocity, loop_sent_channel[slot], port);
+  loop_sent_note[slot] = 0;
+}
+
+// The minichord's own playing, or an incoming note, takes voice v: the loop's midi note on it ends
+void looper_voice_taken(bool harp, uint8_t v) {
+  midi_in_voice &voice = harp ? midi_in_harp[v] : midi_in_chord[v];
+  if (!voice.owned || !voice.looped) return;
+  loop_midi_off(harp ? v : 12 + v, harp ? harp_port : chord_port);
+  for (uint8_t r = 0; r < 16; r++) if (loop_voice[r] == v && (r < 12) == harp) loop_voice[r] = -1;
+}
+
+// Lets go of playback voice v (a harp string, or chord voice v)
+static void loop_voice_release(bool harp, uint8_t v) {
+  midi_in_release(harp ? midi_in_harp : midi_in_chord, v, harp);
+  loop_midi_off(harp ? v : 12 + v, harp ? harp_port : chord_port);
+}
+
+static void loop_play_event(const loop_event &e) {
+  bool harp = e.voice < 12;
+  midi_in_voice *voices = harp ? midi_in_harp : midi_in_chord;
+  int8_t v = loop_voice[e.voice];
+  bool ours = v >= 0 && voices[v].owned && voices[v].looped;   // the live playing may have taken it back
+  uint8_t slot = harp ? v : 12 + v;
+  uint8_t port = harp ? harp_port : chord_port;
+  uint8_t channel = harp ? harp_channel : chord_channel;
+  if (e.kind == LOOP_START) {
+    if (ours) loop_voice_release(harp, v);
+    v = midi_in_pick(voices, harp ? 12 : 4, e.midi_note, harp);
+    loop_voice[e.voice] = v;
+    if (v < 0) return;                                 // every string under a finger
+    for (uint8_t r = 0; r < 16; r++) {                 // a recorded voice that had it lets it go to this one
+      if (r != e.voice && loop_voice[r] == v && (r < 12) == harp) loop_voice[r] = -1;
+    }
+    slot = harp ? v : 12 + v;
+    if (!harp) chords_give_voice(v);
+    loop_midi_off(slot, port);
+    voices[v] = midi_in_voice{true, true, false, e.midi_note, millis(), true, e.freq};
+    if (harp) owned_harp_on(v, e.firmness);
+    else owned_chord_on(v, e.firmness);
+    if (e.midi_note) {
+      loop_sent_channel[slot] = channel;
+      queue_midi(true, e.midi_note, e.midi_velocity, channel, port);
+      loop_sent_note[slot] = e.midi_note;
+    }
+  } else if (!ours) {
+    loop_voice[e.voice] = -1;
+  } else if (e.kind == LOOP_RELEASE) {
+    loop_voice_release(harp, v);
+    loop_voice[e.voice] = -1;
+  } else if (!harp) {                                  // a chord retuned under a held chord
+    voices[v].freq = e.freq;
+    owned_chord_tune(v);
+    if (e.midi_note && e.midi_note != loop_sent_note[slot]) {
+      loop_midi_off(slot, port);
+      loop_sent_channel[slot] = channel;
+      queue_midi(true, e.midi_note, e.midi_velocity, channel, port);
+      loop_sent_note[slot] = e.midi_note;
+    }
+  }
+}
+
+// Plays pass's events after from and up to to (loop ms). The ones that fall due are copied out
+// with interrupts off, since a chord timer can insert one meanwhile, and played with them on.
+static void loop_play_range(int32_t from, int32_t to, uint16_t pass) {
+  loop_event due[48];
+  uint8_t n = 0;
+  noInterrupts();
+  for (uint16_t i = 0; i < loop_event_count && n < 48; i++) {
+    const loop_event &e = loop_events[i];
+    if ((int32_t)e.t <= from) continue;
+    if ((int32_t)e.t > to) break;
+    if (e.cycle == pass && pass != 0) continue;       // captured on this pass: it played live
+    due[n++] = e;
+  }
+  interrupts();
+  for (uint8_t k = 0; k < n; k++) loop_play_event(due[k]);
+}
+
+// Lets go of everything the looper is playing, and of whatever an overdub left open
+static void loop_release_all() {
+  for (uint8_t i = 0; i < 12; i++) if (midi_in_harp[i].owned && midi_in_harp[i].looped && midi_in_harp[i].key_down) loop_voice_release(true, i);
+  for (uint8_t i = 0; i < 4; i++) if (midi_in_chord[i].owned && midi_in_chord[i].looped && midi_in_chord[i].key_down) loop_voice_release(false, i);
+  for (uint8_t v = 0; v < 16; v++) loop_voice[v] = -1;
+}
+
+// Voices still open are let go at t, so none hangs across the join
+static void loop_close_open(uint32_t t, uint16_t cycle) {
+  for (uint8_t v = 0; v < 16; v++) {
+    if (!loop_open[v]) continue;
+    loop_open[v] = false;
+    loop_event e = {t, cycle, LOOP_RELEASE, v, 0, 0, 0, 0};
+    loop_insert(e);
+  }
+}
+
+// Back to the bank's colour once the looper is neither recording nor playing
+static void looper_show() {
+  if (looper_state != LOOPER_RECORDING && looper_state != LOOPER_PLAYING) set_led_color(bank_led_hue, 1.0, 1 - led_attenuation);
+}
+
+FLASHMEM void looper_stop() {
+  if (looper_state == LOOPER_RECORDING) return;        // looper_close first
+  if (looper_state == LOOPER_COUNTIN) {                // called off before it began: nothing recorded
+    looper_state = LOOPER_EMPTY;
+    looper_show();
+    return;
+  }
+  if (looper_state == LOOPER_PLAYING) {
+    if (looper_overdub) loop_close_open(loop_length_ms - 1, 0);
+    looper_overdub = false;
+    loop_release_all();
+    looper_state = LOOPER_STOPPED;
+  }
+  looper_show();
+}
+
+FLASHMEM void looper_clear() {
+  if (looper_state == LOOPER_RECORDING || looper_state == LOOPER_COUNTIN) looper_state = LOOPER_STOPPED;
+  looper_stop();
+  loop_event_count = 0;
+  loop_length_ms = 0;
+  looper_state = LOOPER_EMPTY;
+  looper_show();
+}
+
+// a chord ringing as the recording starts begins the loop
+FLASHMEM static void looper_begin_recording() {
+  looper_state = LOOPER_RECORDING;
+  for (uint8_t i = 0; i < 4; i++) {
+    if (chord_envelope_array[i]->isActive() && !chord_voice_released[i] && !midi_in_chord[i].owned && !loop_open[12 + i]) {
+      looper_capture(LOOP_START, 12 + i, chord_voice_note_freq[i], 1, chord_started_notes[i], chord_attack_velocity);
+    }
+  }
+}
+
+FLASHMEM void looper_record(uint32_t at) {
+  looper_clear();
+  for (uint8_t v = 0; v < 16; v++) { loop_open[v] = false; loop_voice[v] = -1; loop_quantize_shift[v] = 0; }
+  if (looper_count_in && looper_timed()) {   // the count-in's bars first: the recording starts on the bar line after
+    uint32_t bars = (uint32_t)lroundf(looper_count_in * acc_beats_per_bar() * looper_beat_ms());
+    loop_start_ms = looper_on_beat() ? acc_bar_ms_after(bars - (uint32_t)(looper_beat_ms() / 2)) : at + bars;
+    looper_state = LOOPER_COUNTIN;
+    return;
+  }
+  loop_start_ms = looper_snap(at);
+  looper_begin_recording();
+}
+
+// Recording to playing: the loop closes at at
+FLASHMEM void looper_close(uint32_t at) {
+  if (looper_state != LOOPER_RECORDING) return;
+  int32_t length = (int32_t)(at - loop_start_ms);
+  if (looper_timed()) {
+    float beat = looper_beat_ms();
+    length = (int32_t)(max(1L, lroundf(length / beat)) * beat);
+  }
+  if (length < 50) {                                   // a slip of the finger, not a loop
+    looper_state = LOOPER_STOPPED;
+    looper_clear();
+    return;
+  }
+  loop_length_ms = length;
+  noInterrupts();
+  while (loop_event_count > 0 && loop_events[loop_event_count - 1].t >= (uint32_t)length) loop_event_count = loop_event_count - 1;   // past a beat-rounded end
+  interrupts();
+  loop_close_open(length - 1, 0);
+  if (looper_quantize) loop_quantize_pass(length);
+  uint32_t elapsed = millis() - loop_start_ms;
+  loop_cycle = elapsed / length;
+  loop_played_to = loop_cycle == 0 ? (int32_t)(elapsed % length) : -1;   // pass 0 played live; later passes from the top
+  looper_state = LOOPER_PLAYING;
+}
+
+// From stopped: from the top, every note in it now an old one
+FLASHMEM void looper_play() {
+  if (looper_state == LOOPER_RECORDING) { looper_close(millis()); return; }
+  if (looper_state != LOOPER_STOPPED || loop_length_ms == 0) return;
+  noInterrupts();
+  for (uint16_t i = 0; i < loop_event_count; i++) loop_events[i].cycle = 0;
+  interrupts();
+  uint32_t now = millis();
+  loop_start_ms = looper_snap(now) - loop_length_ms;   // pass 1, at its start
+  loop_cycle = 1;
+  loop_played_to = -1;
+  looper_state = LOOPER_PLAYING;
+}
+
+FLASHMEM void looper_overdub_toggle() {
+  if (looper_state != LOOPER_PLAYING) return;
+  if (looper_overdub) {
+    uint32_t elapsed = millis() - loop_start_ms;
+    loop_close_open(elapsed % loop_length_ms, elapsed / loop_length_ms);
+    looper_overdub = false;
+  } else {
+    for (uint8_t v = 0; v < 16; v++) loop_open[v] = false;
+    looper_overdub = true;
+  }
+}
+
+// The double tap's step: record, play, stop, record a new loop
+FLASHMEM void looper_step(uint32_t at) {
+  switch (looper_state) {
+    case LOOPER_EMPTY: looper_record(at); break;
+    case LOOPER_COUNTIN: looper_clear(); break;          // called off before it began
+    case LOOPER_RECORDING: looper_close(at); break;
+    case LOOPER_PLAYING: looper_stop(); break;
+    default: looper_record(at); break;
+  }
+}
+
+// The next step, for a looper on the computer: control change 90, its value 127 less the tap's
+// delay in 4 ms steps (a tap is at most modifier_tap_max, 250 ms, so it stays 64 or more)
+void looper_send_step(uint32_t delay_ms) {
+  uint8_t late = min((delay_ms + 2) / 4, 63UL);
+  queue_midi_cc(90, 127 - late, chord_channel, chord_port);
+}
+
+FLASHMEM void looper_action(int16_t action) {
+  current_sysex_parameters[looper_adress] = 0;         // an action, never a value to keep
+  switch (action) {
+    case 1: if (looper_state == LOOPER_RECORDING) looper_close(millis()); else if (looper_state == LOOPER_COUNTIN) looper_clear(); else looper_record(millis()); break;
+    case 2: looper_play(); break;
+    case 3: if (looper_state == LOOPER_RECORDING) looper_close(millis()); looper_stop(); break;
+    case 4: looper_clear(); break;
+    case 5: looper_overdub_toggle(); break;
+    case 6: looper_step(millis()); break;
+    case 7: looper_send_step(0); break;
+  }
+}
+
+// The click (looper click, 285): each beat, higher on a bar's first, while the looper is in a state
+// it ticks for. The rhythm's beats when it runs, the looper's own from the loop's start otherwise.
+FLASHMEM static void looper_click_update() {
+  static uint32_t heard = 0;    // the rhythm's beats ticked, or the looper's own
+  static int32_t own = INT32_MIN;
+  uint8_t state = looper_state;
+  bool ticking = looper_click >= 1 && (state == LOOPER_COUNTIN
+                 || (looper_click >= 2 && state == LOOPER_RECORDING)
+                 || (looper_click >= 3 && state == LOOPER_PLAYING));
+  bool bar = false, beat = false;
+  if (looper_on_beat()) {
+    uint32_t count = rythm_beat_count;
+    if (count != heard) { heard = count; beat = true; bar = rythm_beat_bar; }
+    own = INT32_MIN;
+  } else if (state == LOOPER_COUNTIN || state == LOOPER_RECORDING || state == LOOPER_PLAYING) {
+    float beat_ms = looper_beat_ms();
+    int32_t from_start = (int32_t)(millis() - loop_start_ms);
+    int32_t n = (int32_t)floorf(from_start / beat_ms);
+    if (own == INT32_MIN || n < own - 1) own = n - 1;   // came in partway: from the next
+    if (n != own) {
+      own = n;
+      beat = true;
+      int32_t per_bar = acc_beats_per_bar();
+      bar = ((n % per_bar) + per_bar) % per_bar == 0;
+    }
+  } else {
+    own = INT32_MIN;
+  }
+  if (beat && ticking) {
+    looper_click_tick.tick(bar ? 2093.0f : 1568.0f, looper_click_level / 100.0f);   // C7 on a bar's first, G6 the rest
+    looper_click_flash_ms = millis();
+  }
+}
+
+// Called from loop(): plays what has fallen due
+void looper_update() {
+  looper_click_update();
+  if (looper_state == LOOPER_COUNTIN && (int32_t)(millis() - loop_start_ms) >= 0) looper_begin_recording();
+  if (looper_state != LOOPER_PLAYING || loop_length_ms == 0) return;
+  uint32_t now = millis();
+  if ((int32_t)(now - loop_start_ms) < 0) return;
+  uint32_t elapsed = now - loop_start_ms;
+  uint16_t cycle = elapsed / loop_length_ms;
+  int32_t position = elapsed % loop_length_ms;
+  if (cycle != loop_cycle) {                            // came round: the rest of the last pass first
+    loop_play_range(loop_played_to, loop_length_ms, loop_cycle);
+    loop_cycle = cycle;
+    loop_played_to = -1;
+  }
+  if (position > loop_played_to) {
+    loop_play_range(loop_played_to, position, loop_cycle);
+    loop_played_to = position;
+  }
+}
+
 // Function to compute MIDI note offset dynamically with circular frame shift
 int8_t get_root_button(uint8_t key, uint8_t shift, uint8_t button) { 
   int8_t note = base_notes[button]; // Start with base note in C (e.g., B = 11, E = 4, ..., F = 5)
@@ -1030,9 +1889,212 @@ uint8_t calculate_note_harp(uint8_t string, bool slashed, bool sharp) {
   return note;
 }
 //-->>RYTHM MODE UTILITIES
-void rythm_tick_function() {
-  //this function seems a bit long for a timed one. Maybe try to offload some logic somewhere else? 
-  if (rythm_current_step % rythm_limit_change_to_every == 0) {
+/* ---- ACCOMPANIMENT -----------------------------------------------------------
+ *
+ * Rhythm mode plays the chord voices in time. It used to be one thing: sixteen
+ * steps, each a set of the chord's seven notes, all the same length and
+ * loudness. It still is, as rhythm style 0, and it plays as it always did. The
+ * other styles are written parts (accompaniment_styles.h): an Alberti bass, a
+ * waltz, a walking bass, a strummed guitar, and so on, each a few bars of notes
+ * that know what they are -- the root, the fifth below it, the top of the
+ * chord, a step into the next chord -- so they follow whatever chord is held,
+ * in any key, with their own lengths, accents and strums.
+ *
+ * One clock runs it all: the rhythm timer, every millisecond, moving a position
+ * counted in 24ths of a beat (MIDI clock's unit) at the tempo, and playing each
+ * note whose time it passes. The old timer fired once a step and worked out the
+ * next step's length; this one has a time for everything, so a tempo change or
+ * a tap moves on smoothly, a shuffle is just where the off eighth (or sixteenth)
+ * falls, and following a MIDI clock is keeping the position from running past
+ * the clock's latest tick. The timer only plays notes and lets them go; MIDI
+ * is queued, as everywhere (see MIDI OUTPUT QUEUE). It is the only timer the
+ * rhythm uses: the LED's flash is let go by it too.
+ *
+ * The chord: acc_snapshot() records the chord as the player has just made it
+ * (its voicing, root, bass and tones) whenever it is built; the rhythm plays
+ * from its own copy, taken on the next note, the next beat or the next bar
+ * (rhythm chord change). A chord pressed a moment after notes fell due -- the
+ * player meant it for the beat and was late -- moves those notes to it
+ * (acc_catch_late), as it would on an instrument a player strikes.
+ *
+ * Voice 0 is the bass part and voices 1-3 the chord part; either can play the
+ * style, hold the chord as rhythm mode never could (a bass line walking under a
+ * sustained pad), or rest. With rhythm follows hands, the parts sound only
+ * while a chord is held, the clock running on underneath so they come back in
+ * time, or with the bar starting from the press.
+ */
+#include "accompaniment_styles.h"
+
+#define ACC_NO_NOTE -32768
+
+// The chord as the rhythm sees it, in semitones
+struct acc_chord_t {
+  bool valid;
+  int16_t v[4];        // the four chord voices' notes, lowest first
+  int16_t root, bass;  // pitch classes
+  int16_t third, fifth, seventh, second, fourth, sixth;   // above the root
+};
+acc_chord_t acc_latest = {};    // as the player last made it (from the loop, acc_snapshot)
+acc_chord_t acc_now = {};       // as the rhythm plays it (taken from acc_latest as rhythm chord change says)
+volatile uint16_t acc_latest_serial = 0;
+
+double acc_pos = 0;                     // where the rhythm has got to, in 24ths of a beat since it began: every note before it has played
+volatile double acc_clock_pos = 0;      // under a MIDI clock, where its latest tick fell
+volatile bool acc_clock_waiting = false;   // under a MIDI clock, waiting for the tick it starts on
+volatile bool acc_clock_restart = false;   // ... which begins the pattern (Start), rather than the next beat
+volatile bool acc_restart = false;      // the next millisecond begins the pattern over (rhythm follows hands 2)
+volatile bool acc_hands = false;        // a chord is held (from the loop)
+volatile uint32_t acc_latch_ms = 0;     // when the rhythm last took a new chord on the beat or the bar
+
+// each voice's latest note of the part
+struct acc_voice_t {
+  bool off_pending;   // to let go at off_at
+  uint32_t off_at;
+  bool due;           // a note of the part fell due, at `at`: struck, or not while the hands were off
+  bool struck;
+  uint32_t at;
+  uint8_t role, length, velocity;
+  int8_t octave;
+  int16_t note, before;   // the note it played and the one before, for approaches
+};
+acc_voice_t acc_voice[4];
+
+// notes of a strum waiting their string's turn
+struct acc_rolled_t {
+  bool used;
+  uint32_t at;
+  uint8_t voice, role, length, velocity;
+  int8_t octave;
+};
+#define ACC_ROLL_MAX 8
+acc_rolled_t acc_rolled[ACC_ROLL_MAX];
+
+static inline uint8_t acc_style_index() { return acc_style < acc_style_count ? acc_style : 0; }
+static inline int16_t acc_pc(int16_t n) { return ((n % 12) + 12) % 12; }
+// the highest note of pitch class pc at or below ceiling
+static inline int16_t acc_at_or_below(int16_t pc, int16_t ceiling) { return ceiling - acc_pc(ceiling - pc); }
+static inline float acc_ms_per_tick() { return 60000.0f / (rythm_bpm * ACC_BEAT); }
+
+// The voices the rhythm leaves to hold the chord as it is played outside rhythm mode
+FLASHMEM uint8_t acc_held_mask() {
+  if (acc_style_index() == 0) return 0;
+  return (acc_bass_part == 1 ? 0x1 : 0) | (acc_chord_part == 1 ? 0xE : 0);
+}
+
+// From the loop, whenever a chord is built (update_chord_notes)
+FLASHMEM void acc_snapshot() {
+  acc_chord_t c;
+  c.valid = true;
+  for (uint8_t i = 0; i < 4; i++) c.v[i] = current_chord_notes[i];
+  for (uint8_t i = 1; i < 4; i++) {   // lowest first: inversion and spacing can reorder the voices
+    for (uint8_t j = i; j > 0 && c.v[j] < c.v[j - 1]; j--) {
+      int16_t t = c.v[j]; c.v[j] = c.v[j - 1]; c.v[j - 1] = t;
+    }
+  }
+  // as calculate_note_chord() builds it
+  int16_t sharp = sharp_active ? (flat_button_modifier ? -1 : 1) : 0;
+  const uint8_t *tones = *current_chord;
+  c.root = acc_pc(get_root_button(key_signature_selection, chord_frame_shift, fundamental) + sharp + tones[0]);
+  c.bass = slash_chord ? acc_pc(get_root_button(key_signature_selection, chord_frame_shift, slash_value) + sharp) : c.root;
+  // The chord's tones in its first four slots are not in order (a seventh chord keeps its fifth in
+  // the fourth), so the fifth is whichever is nearest a perfect fifth and the seventh whichever is
+  // above a major sixth; the second, fourth and sixth are the slots after them.
+  const int16_t fifth = 7, sixth_and_more = 9;
+  c.third = acc_pc(tones[1] - tones[0]);
+  c.fifth = fifth;
+  c.seventh = 12;   // none: the octave
+  int16_t nearest = 32767;
+  for (uint8_t s = 1; s < 4; s++) {
+    int16_t a = acc_pc(tones[s] - tones[0]);
+    if (abs(a - fifth) < nearest) { nearest = abs(a - fifth); c.fifth = a; }
+    if (a >= sixth_and_more) c.seventh = a;
+  }
+  c.second = acc_pc(tones[4] - tones[0]);
+  c.fourth = acc_pc(tones[5] - tones[0]);
+  c.sixth = acc_pc(tones[6] - tones[0]);
+  noInterrupts();
+  acc_latest = c;
+  acc_latest_serial++;
+  interrupts();
+}
+
+static inline void acc_take_chord() {
+  if (acc_latest.valid) acc_now = acc_latest;
+}
+
+// The note a role plays in the chord the rhythm is playing; previous is the voice's last note
+int16_t acc_note(uint8_t role, int8_t octave, int16_t previous) {
+  const acc_chord_t &c = acc_now;
+  int16_t root = acc_at_or_below(c.root, c.v[0]);
+  int16_t n;
+  switch (role) {
+    case ACC_V1: case ACC_V2: case ACC_V3: case ACC_V4: n = c.v[role - ACC_V1]; break;
+    case ACC_BASS: n = acc_at_or_below(c.bass, c.v[0]); break;
+    case ACC_THIRD: n = root + c.third; break;
+    case ACC_FIFTH: n = root + c.fifth; break;
+    case ACC_SIXTH: n = root + c.sixth; break;
+    case ACC_SEVENTH: n = root + c.seventh; break;
+    case ACC_FLAT7: n = root + 10; break;
+    case ACC_SECOND: n = root + c.second; break;
+    case ACC_FOURTH: n = root + c.fourth; break;
+    case ACC_APPROACH: {
+      // a step from the next chord's bass (the one held, or waiting to come in) where that chord
+      // will put it, from the side the voice is coming from: G to D flat to C, E to B to C
+      const acc_chord_t &next = acc_latest.valid ? acc_latest : c;
+      int16_t target = acc_at_or_below(next.bass, next.v[0]) + octave * 12;
+      return previous != ACC_NO_NOTE && previous > target ? target + 1 : target - 1;
+    }
+    default: n = root; break;   // ACC_ROOT
+  }
+  return n + octave * 12;
+}
+
+// A note of a style's part on voice v, now
+void acc_strike(uint8_t v, uint8_t role, int8_t octave, uint8_t length, uint8_t velocity) {
+  acc_voice_t &a = acc_voice[v];
+  int16_t note = acc_note(role, octave, a.note);
+  float firmness = (127 - (127 - velocity) * acc_accents / 100.0f) / 127.0f;
+  acc_play(v, note, firmness);
+  a.before = a.note;
+  a.note = note;
+  a.struck = true;
+  a.off_pending = length != 0;   // 0 rings until the voice plays again
+  if (a.off_pending) a.off_at = millis() + (uint32_t)(length * acc_articulation / 100.0f * acc_ms_per_tick());
+}
+
+// A note of a style falls due
+void acc_event(const acc_event_t &ev) {
+  uint8_t v = ev.voice;
+  if ((v == 0 ? acc_bass_part : acc_chord_part) != 0) return;   // holding the chord, or resting
+  if (acc_change == 0) acc_take_chord();
+  if (!acc_now.valid) return;   // no chord played yet
+  acc_voice_t &a = acc_voice[v];
+  a.due = true;
+  a.struck = false;
+  a.at = millis();
+  a.role = ev.role; a.octave = ev.octave; a.length = ev.length; a.velocity = ev.velocity;
+  if (acc_follow && !acc_hands) return;
+  if (ev.roll == 0) {
+    acc_strike(v, ev.role, ev.octave, ev.length, ev.velocity);
+    return;
+  }
+  // a later string of a strum: inter-string delay a string, the whole strum within a quarter beat.
+  // It counts as played (acc_catch_late moves it, it doesn't play it again).
+  a.struck = true;
+  float string_ms = fminf(inter_string_delay / 1000.0f, 15000.0f / rythm_bpm / 3);
+  for (uint8_t r = 0; r < ACC_ROLL_MAX; r++) {
+    if (acc_rolled[r].used) continue;
+    acc_rolled[r] = acc_rolled_t{true, millis() + (uint32_t)lroundf(ev.roll * string_ms), v, ev.role, ev.length, ev.velocity, ev.octave};
+    return;
+  }
+  acc_strike(v, ev.role, ev.octave, ev.length, ev.velocity);   // no room to wait: with the rest
+}
+
+// A step of rhythm style 0, the sixteen steps as they always played: every chord note the step's
+// bits name, the fourth to seventh on voices 1 to 3, for note pushed duration
+void acc_step(uint8_t step) {
+  rythm_current_step = step;
+  if (step % rythm_limit_change_to_every == 0) {
     for (int i = 0; i < 7; i++) {
       rythm_freeze_current_chord_notes[i] = current_applied_chord_notes[i];
     }
@@ -1046,36 +2108,335 @@ void rythm_tick_function() {
       break;
     }
   }
-  analogWrite(RYTHM_LED_PIN, (220 * (rythm_current_step % rythm_limit_change_to_every == 0) + 15) * (rythm_current_step % active_modulus == 0));
-  led_timer.priority(255);
-  led_timer.begin([] { turn_off_led(&led_timer); }, 200000); 
-  if (current_long_period) {
-    rythm_timer.update(short_timer_period);
-    current_long_period = false;
-  } else {
-    rythm_timer.update(long_timer_period);
-    current_long_period = true;
-  }
-  u_int8_t result;
-  result = rythm_pattern[rythm_current_step];
+  analogWrite(RYTHM_LED_PIN, (220 * (step % rythm_limit_change_to_every == 0) + 15) * (step % active_modulus == 0));
+  rythm_led_lit_at = millis();   // off 200 ms on (rythm_led_settle)
+  rythm_led_lit = true;
+  if (acc_follow && !acc_hands) return;
+  u_int8_t result = rythm_pattern[step];
   for (int i = 6; i >= 0; i--) {
     if (result & (1 << i)) {
-      int current_voice=0;
-      if(i<4){
-        current_voice=i;
-      }else{
-        current_voice=i-3;
-      }
-      set_chord_voice_frequency(current_voice, rythm_freeze_current_chord_notes[i]);
-      play_note_selected_duration(current_voice, rythm_freeze_current_chord_notes[i]);
+      uint8_t v = i < 4 ? i : i - 3;
+      acc_play(v, rythm_freeze_current_chord_notes[i], 1);
+      acc_voice[v].off_pending = true;
+      acc_voice[v].off_at = millis() + note_pushed_duration;
     }
   }
-  rythm_current_step = (rythm_current_step + 1) % rythm_loop_length;
 }
 
-void recalculate_timer() {
-  long_timer_period = shuffle * (60 * 1000 * 1000) / (2 * rythm_bpm);
-  short_timer_period = 2 * (60 * 1000 * 1000) / (2 * rythm_bpm) - long_timer_period;
+// A beat begins
+void acc_beat(int64_t b) {
+  rythm_beat_ms = millis();   // for the looper
+  const acc_style_t &st = acc_styles[acc_style_index()];
+  bool bar = b % st.beats_per_bar == 0;
+  rythm_beat_bar = bar;
+  rythm_beat_count = rythm_beat_count + 1;
+  if (st.count == 0) return;   // the sixteen steps light the LED themselves
+  if (acc_change == 2 ? bar : acc_change == 1) {
+    acc_take_chord();
+    acc_latch_ms = millis();
+  }
+  analogWrite(RYTHM_LED_PIN, bar ? 235 : 15);
+  rythm_led_lit_at = millis();
+  rythm_led_lit = true;
+}
+
+// Where a note written at t (24ths of a beat from the start) plays: the second of each pair of
+// swing units moves by the shuffle, later above 1 and earlier below, as the old steps did
+static inline double acc_swung(int64_t t, uint8_t unit) {
+  if (t % unit == 0 && (t / unit) % 2 == 1) return t + (shuffle - 1) * unit;
+  return t;
+}
+
+// Everything that falls from t0 up to t1
+void acc_window(double t0, double t1) {
+  // beats first, so a chord coming in on the beat does before the beat's notes
+  for (int64_t b = (int64_t)ceil(t0 / ACC_BEAT); b * ACC_BEAT < t1; b++) acc_beat(b);
+  const acc_style_t &st = acc_styles[acc_style_index()];
+  if (st.count == 0) {
+    for (int64_t k = (int64_t)floor(t0 / 12) - 1; k <= (int64_t)floor(t1 / 12) + 1; k++) {
+      if (k < 0) continue;
+      double at = acc_swung(k * 12, 12);
+      if (at >= t0 && at < t1) acc_step(k % rythm_loop_length);
+    }
+    return;
+  }
+  for (uint8_t e = 0; e < st.count; e++) {
+    const acc_event_t &ev = st.events[e];
+    int64_t n = (int64_t)floor((t0 - ev.at) / st.length);
+    for (int64_t m = n; m <= n + 1; m++) {
+      int64_t t = ev.at + m * st.length;
+      if (t < 0) continue;
+      double at = acc_swung(t, st.swing_unit);
+      if (at >= t0 && at < t1) acc_event(ev);
+    }
+  }
+}
+
+// The rhythm timer, every millisecond
+void acc_tick() {
+  uint32_t now = millis();
+  if (rythm_led_lit && now - rythm_led_lit_at >= 200) {
+    rythm_led_lit = false;
+    analogWrite(RYTHM_LED_PIN, 0);
+  }
+  for (uint8_t v = 0; v < 4; v++) {
+    if (acc_voice[v].off_pending && (int32_t)(now - acc_voice[v].off_at) >= 0) {
+      acc_voice[v].off_pending = false;
+      acc_release(v);
+    }
+  }
+  for (uint8_t r = 0; r < ACC_ROLL_MAX; r++) {
+    acc_rolled_t &n = acc_rolled[r];
+    if (!n.used || (int32_t)(now - n.at) < 0) continue;
+    n.used = false;
+    if (!acc_follow || acc_hands) acc_strike(n.voice, n.role, n.octave, n.length, n.velocity);
+  }
+  if (acc_restart) {
+    acc_restart = false;
+    acc_pos = 0;
+    acc_phase_error = 0;
+  }
+  double step = rythm_bpm * ACC_BEAT / 60000.0;
+  if (acc_phase_error != 0) {   // toward a tap: up to 30% quicker or slower until there (acc_tap)
+    double c = acc_phase_error;
+    if (c > 0.3 * step) c = 0.3 * step;
+    if (c < -0.3 * step) c = -0.3 * step;
+    step += c;
+    acc_phase_error = acc_phase_error - c;
+  }
+  double t1 = acc_pos + step;
+  if (rythm_clock_synced) {
+    if (acc_clock_waiting) return;
+    // as far as the clock's next tick and no further, and at least to its latest
+    if (t1 > acc_clock_pos + 1) t1 = acc_clock_pos + 1;
+    if (t1 <= acc_clock_pos) t1 = acc_clock_pos + 1e-6;
+  }
+  if (t1 <= acc_pos) return;
+  acc_window(acc_pos, t1);
+  acc_pos = t1;
+}
+
+// Rhythm mode comes on
+FLASHMEM void acc_begin() {
+  noInterrupts();
+  rythm_clock_synced = false;
+  acc_clock_waiting = false;
+  acc_restart = false;
+  acc_pos = 0;
+  acc_phase_error = 0;
+  acc_tap_reset();
+  rythm_current_step = 0;
+  for (uint8_t v = 0; v < 4; v++) acc_voice[v] = acc_voice_t{false, 0, false, false, 0, 0, 0, 0, 0, ACC_NO_NOTE, ACC_NO_NOTE};
+  for (uint8_t r = 0; r < ACC_ROLL_MAX; r++) acc_rolled[r].used = false;
+  acc_now = acc_latest;
+  acc_hands = current_line >= 0;
+  interrupts();
+  stop_chord_voices(0xF & ~acc_held_mask());   // what was ringing gives way to the parts
+  Serial.print("Rhythm style: ");
+  Serial.println(acc_styles[acc_style_index()].name);
+  rythm_timer.priority(254);
+  rythm_timer.begin(acc_tick, 1000);
+  rythm_timer_running = true;
+}
+
+// and goes off
+FLASHMEM void acc_end() {
+  rythm_timer.end();
+  rythm_timer_running = false;
+  rythm_clock_synced = false;
+  for (uint8_t v = 0; v < 4; v++) acc_voice[v].off_pending = false;
+  for (uint8_t r = 0; r < ACC_ROLL_MAX; r++) acc_rolled[r].used = false;
+  // voices the rhythm played softer are back to full for the chords (play_single_note does the
+  // same for one still ringing out, when it next plays)
+  for (uint8_t v = 0; v < 4; v++) {
+    noInterrupts();
+    if (!chord_envelope_array[v]->isActive()) apply_acc_voice_gain(v, 1);
+    interrupts();
+  }
+  rythm_led_lit = false;
+}
+
+// A style, part or follow setting changed: the voices the rhythm now plays start from their part
+FLASHMEM void acc_settings_changed() {
+  if (!rythm_mode) return;
+  noInterrupts();
+  for (uint8_t v = 0; v < 4; v++) acc_voice[v].off_pending = false;
+  for (uint8_t r = 0; r < ACC_ROLL_MAX; r++) acc_rolled[r].used = false;
+  interrupts();
+  stop_chord_voices(0xF & ~acc_held_mask());
+}
+
+// MIDI Start: the pattern begins on the next clock, as MIDI has it
+FLASHMEM void acc_midi_start() {
+  noInterrupts();
+  rythm_clock_synced = true;
+  acc_clock_waiting = true;
+  acc_clock_restart = true;
+  interrupts();
+}
+
+// MIDI Stop: on from where it is, at the minichord's own tempo
+FLASHMEM void acc_midi_stop() {
+  rythm_clock_synced = false;
+}
+
+// A MIDI clock tick
+FLASHMEM void acc_midi_clock() {
+  noInterrupts();
+  if (!rythm_clock_synced) {   // a clock already running when rhythm mode came on: a beat starts on this tick
+    rythm_clock_synced = true;
+    acc_clock_waiting = true;
+    acc_clock_restart = false;
+  }
+  acc_phase_error = 0;
+  if (acc_clock_waiting) {
+    acc_clock_waiting = false;
+    acc_pos = acc_clock_restart ? 0 : ceil(acc_pos / ACC_BEAT) * ACC_BEAT;
+    acc_clock_pos = acc_pos;
+  } else {
+    acc_clock_pos = acc_clock_pos + 1;
+  }
+  interrupts();
+}
+
+// The looper's count-in, in rhythm mode: the time of the first bar line at least at_least ms off
+FLASHMEM uint32_t acc_bar_ms_after(uint32_t at_least) {
+  double ticks_per_ms = rythm_bpm * ACC_BEAT / 60000.0;
+  double bar = ACC_BEAT * acc_styles[acc_style_index()].beats_per_bar;
+  noInterrupts();
+  double now_pos = acc_pos;
+  uint32_t now = millis();
+  interrupts();
+  double target = ceil((now_pos + at_least * ticks_per_ms) / bar) * bar;
+  return now + (uint32_t)lround((target - now_pos) / ticks_per_ms);
+}
+
+uint8_t acc_beats_per_bar() { return acc_styles[acc_style_index()].beats_per_bar; }
+
+// from the loop: a clock gone quiet without a Stop (the computer's player closed, the cable out)
+FLASHMEM void rythm_clock_watch() {
+  if (rythm_mode && rythm_clock_synced && last_midi_clock_in > 500000) {
+    rythm_clock_synced = false;
+    acc_clock_waiting = false;
+  }
+}
+
+// Tap tempo: the hold button tapped in rhythm mode. Each tap was a sixth of the way from the tempo
+// to the one tapped, so it took ten taps to get near, and a run of taps at the pulse the pattern
+// moves in (eighths, as often as not) dragged the tempo up while the pattern ran away from the
+// hand. Now the second tap sets the tempo and the next few refine it: the time across the last few
+// taps (up to four intervals). With tap tempo counts (281) at eighths, two taps make a beat, and
+// the tempo is taken across pairs of taps, so a shuffle's long and short eighths still make an
+// even beat. A tap far off the run (40% from the beat it implies), or after more than two seconds,
+// begins a new run. And each tap from the second draws the beat (or the eighth, where the shuffle
+// puts it) halfway to where it fell: the rhythm hurries or holds back, up to 30%, until it is
+// there, so no note is skipped or played twice, and a slightly uneven hand settles in the middle
+// of its taps rather than being chased. Under a MIDI clock the clock has the tempo.
+#define TAP_RUN 5
+uint32_t tap_us[TAP_RUN];   // the run's taps, latest last
+uint8_t tap_count = 0;
+
+FLASHMEM void acc_tap_reset() { tap_count = 0; }
+
+// ms a beat from the first `taps` taps of the run: across whole beats when taps are eighths and
+// there are two or more intervals, so a shuffle's long and short eighths even out
+static float tap_beat(uint8_t taps) {
+  uint8_t intervals = taps - 1;
+  if (tap_counts && intervals >= 2) intervals &= ~1;
+  float per_beat = tap_counts ? 2 : 1;
+  return (tap_us[taps - 1] - tap_us[taps - 1 - intervals]) / 1000.0f * per_beat / intervals;
+}
+
+FLASHMEM void acc_tap() {
+  uint32_t now = micros();
+  if (rythm_clock_synced || (tap_count > 0 && now - tap_us[tap_count - 1] > 2000000)) tap_count = 0;
+  if (tap_count == TAP_RUN) {   // keep the latest
+    memmove(tap_us, tap_us + 1, sizeof(uint32_t) * (TAP_RUN - 1));
+    tap_count--;
+  }
+  tap_us[tap_count++] = now;
+  if (rythm_clock_synced || tap_count < 2) return;
+  // this tap's own beat (its interval, or with eighths the two taps to it) against the run's
+  // before it: far off, a new run from the tap before this one
+  if (tap_count >= 3) {
+    uint8_t own = (tap_counts && tap_count >= 3) ? 2 : 1;
+    float per_beat = tap_counts ? 2 : 1;
+    float this_beat = (now - tap_us[tap_count - 1 - own]) / 1000.0f * per_beat / own;
+    float before = tap_beat(tap_count - 1);
+    if (fabsf(this_beat - before) > 0.4f * before) {
+      tap_us[0] = tap_us[tap_count - 2];
+      tap_us[1] = now;
+      tap_count = 2;
+    }
+  }
+  float beat_ms = tap_beat(tap_count);
+  if (beat_ms < 200 || beat_ms > 2000) return;   // 30 to 300 bpm
+  rythm_bpm = 60000.0f / beat_ms;
+  noInterrupts();
+  // where the tap was: the button is believed after 10 ms of steady contact (the debouncer)
+  double at = acc_pos - 10 * rythm_bpm * ACC_BEAT / 60000.0;
+  // the nearest beat, or with eighths the nearest eighth as the shuffle places it
+  double beat = floor(at / ACC_BEAT) * ACC_BEAT;
+  double nearest = (at - beat < ACC_BEAT / 2) ? beat : beat + ACC_BEAT;
+  if (tap_counts) {
+    double off = beat + ACC_BEAT / 2 * shuffle;
+    if (fabs(at - off) < fabs(at - nearest)) nearest = off;
+  }
+  acc_phase_error = (nearest - at) / 2;
+  interrupts();
+  Serial.print("Updating the BPM to: ");
+  Serial.println(rythm_bpm);
+}
+
+// A chord that arrives just after notes of the part fell due -- meant for the beat, a moment late --
+// moves them to it, or plays them, if the hands were off when they fell due. With the chord coming
+// in on the beat or the bar, it takes that beat or bar if it is this late for it, not the next.
+FLASHMEM void acc_catch_late() {
+  float grace = fminf(100.0f, 15000.0f / rythm_bpm);   // a quarter of a beat, at most 100 ms
+  noInterrupts();
+  bool take = acc_change == 0 || millis() - acc_latch_ms <= grace;
+  if (take) acc_take_chord();
+  for (uint8_t v = 0; v < 4 && acc_now.valid; v++) {
+    acc_voice_t &a = acc_voice[v];
+    if (!a.due || millis() - a.at > grace) continue;
+    if (!a.struck) {
+      acc_strike(v, a.role, a.octave, a.length, a.velocity);
+    } else if (take && chord_envelope_array[v]->isActive() && !chord_voice_released[v]) {
+      int16_t note = acc_note(a.role, a.octave, a.before);
+      if (note != a.note) {
+        set_chord_voice_frequency(v, note);
+        a.note = note;
+      }
+    }
+  }
+  interrupts();
+}
+
+// From the loop, in rhythm mode, once the chord buttons have been read
+FLASHMEM void acc_update() {
+  static uint16_t seen = 0;
+  bool hands = current_line >= 0;
+  bool caught = false;
+  if (hands != acc_hands) {
+    acc_hands = hands;
+    if (acc_follow && !hands) {   // let go: the parts stop, and the chord held with them
+      noInterrupts();
+      for (uint8_t v = 0; v < 4; v++) acc_voice[v].off_pending = false;
+      for (uint8_t r = 0; r < ACC_ROLL_MAX; r++) acc_rolled[r].used = false;
+      interrupts();
+      stop_chord_voices(0xF);
+    } else if (acc_follow == 2 && hands && !rythm_clock_synced) {
+      acc_restart = true;   // the bar starts with the press
+      caught = true;
+    } else if (acc_follow && hands) {
+      acc_catch_late();
+      caught = true;
+    }
+  }
+  if (acc_latest_serial != seen) {
+    seen = acc_latest_serial;
+    if (!caught && acc_style_index() != 0) acc_catch_late();
+  }
 }
 
 //--->>FILE HANDLING UTILITIES
@@ -1120,14 +2481,28 @@ void save_config(int bank_number, bool default_save) {
     // if we need to put the default in memory
     Serial.println("Writing the default file");
     Serial.println(bank_name[bank_number]);
-    String return_data = serialize(default_bank_sysex_parameters[bank_number], parameter_size);
+    static int16_t factory[parameter_size];
+    for (uint16_t i = 0; i < parameter_size; i++) factory[i] = parameter_default(bank_number, i);
+    String return_data = serialize(factory, parameter_size);
     dataFile.println(return_data);
   } else {
     Serial.println("Saving current settings");
+    // A double tap toggle is a momentary override, not part of the preset. If
+    // its value were written here the preset would come back already holding it,
+    // and the gesture would then toggle between two identical values and appear
+    // to do nothing. So the underlying value is what gets saved.
+    int16_t held_adress = double_tap_engaged_adress;
+    int16_t held_value = 0;
+    bool restore_held = double_tap_engaged && is_target_adress(held_adress);
+    if (restore_held) {
+      held_value = current_sysex_parameters[held_adress];
+      current_sysex_parameters[held_adress] = double_tap_saved;
+    }
     for (u_int16_t i = 0; i < parameter_size; i++) {
           Serial.println(current_sysex_parameters[i]);
     }
     dataFile.println(serialize(current_sysex_parameters, parameter_size));
+    if (restore_held) current_sysex_parameters[held_adress] = held_value;
   }
   Serial.print("Saved preset: ");
   Serial.println(dataFile.name());
@@ -1162,6 +2537,9 @@ void load_config(int bank_number) {
     while (entry.available()) {
       data_string += char(entry.read());
     }
+    // every slot from its default first, so a slot the file doesn't hold (all of page 1, in a
+    // preset saved before the array grew) comes up at its default, not the last preset's
+    for (uint16_t i = 0; i < parameter_size; i++) current_sysex_parameters[i] = parameter_default(bank_number, i);
     deserialize(data_string, current_sysex_parameters);
     Serial.print("Loaded preset: ");
     Serial.println(entry.name());
@@ -1185,6 +2563,13 @@ void load_config(int bank_number) {
   chord_pot.force_update();
   harp_pot.force_update();
   mod_pot.force_update();
+  // A preset load replaces every parameter, including whatever a double tap had
+  // toggled, and the value it saved belongs to the preset being left. So the
+  // gesture ends here rather than claiming to still hold something it does not.
+  if (double_tap_engaged) {
+    double_tap_engaged = false;
+    set_led_color(bank_led_hue, 1.0, 1 - led_attenuation);
+  }
   flag_save_needed=false;
   //digitalWrite(_MUTE_PIN, HIGH); // unmuting the DAC
 }
@@ -1303,6 +2688,7 @@ void handle_harp() {
   for (int i = 0; i < 12; i++) {
     int value = harp_array[i].read_transition();
     if (value == 2) {
+      harp_take_voice(i);   // the harp takes the string back from an incoming note
       set_harp_voice_frequency(i, current_harp_notes[i]);
       AudioNoInterrupts();
       envelope_string_vibrato_lfo.noteOn();
@@ -1316,6 +2702,7 @@ void handle_harp() {
       }
       queue_midi(true, midi_base_note_transposed + current_harp_notes[i], harp_attack_velocity, harp_channel, harp_port);
       harp_started_notes[i] = midi_base_note_transposed + current_harp_notes[i];
+      looper_capture(LOOP_START, i, string_note_freq[i], 1, harp_started_notes[i], harp_attack_velocity);
     } else if (value == 1) {
       AudioNoInterrupts();
       string_enveloppe_array[i]->noteOff();
@@ -1326,6 +2713,7 @@ void handle_harp() {
         queue_midi(false, harp_started_notes[i], harp_release_velocity, harp_channel, harp_port);
         harp_started_notes[i] = 0;
       }
+      looper_capture(LOOP_RELEASE, i, 0, 0, 0, 0);
     }
   }
 }
@@ -1388,6 +2776,7 @@ void update_chord_notes() {
     for (int i = 0; i < 7; i++) {
       current_chord_notes[i] = calculate_note_chord(i, slash_chord, sharp_active);
     }
+    acc_snapshot();
     Serial.println("Updating frequencies");
     if (!rythm_mode && !trigger_chord && !retrigger_chord) {
       for (int i = 0; i < 4; i++) {
@@ -1396,6 +2785,13 @@ void update_chord_notes() {
     } else {
       for (int i = 0; i < 7; i++) {
         current_applied_chord_notes[i] = current_chord_notes[i];
+      }
+      // in rhythm mode, the voices holding the chord move to the new one as they would outside it
+      if (rythm_mode && !trigger_chord && !retrigger_chord) {
+        uint8_t held = acc_held_mask();
+        for (int i = 0; i < 4; i++) {
+          if (held & (1 << i)) set_chord_voice_frequency(i, current_chord_notes[i]);
+        }
       }
     }
   }
@@ -1418,22 +2814,30 @@ void update_harp_notes() {
 }
 
 void stop_chord_notes() {
+  stop_chord_voices(0xF);
+}
+
+// Lets go of the chord voices in mask (bit i, voice i)
+void stop_chord_voices(uint8_t mask) {
   // Cancel pending retrigger timers — prevents NoteOn firing after NoteOff already sent
-  for (int i = 0; i < 4; i++) note_timer[i].end();
+  for (int i = 0; i < 4; i++) if (mask & (1 << i)) note_timer[i].end();
   AudioNoInterrupts();
   for (int i = 0; i < 4; i++) {
+    if (!(mask & (1 << i))) continue;
     // Released in any stage, not only sustain: a chord let go during a long
     // attack, hold or decay used to play that stage out before it started to
     // release, so the release came seconds after the hand did. The sustain
     // test stays as the safety net it always was: a voice caught in its
     // retrigger ramp ignores a note off, and it is released once it settles.
     noInterrupts();
+    if (midi_in_chord[i].owned) { interrupts(); continue; }   // an incoming note's, not the chord's
     if (chord_envelope_array[i]->isSustain() || (chord_envelope_array[i]->isActive() && !chord_voice_released[i])) {
       chord_vibrato_envelope_array[i]->noteOff();
       chord_vibrato_dc_envelope_array[i]->noteOff();
       chord_envelope_array[i]->noteOff();
       chord_envelope_filter_array[i]->noteOff();
       chord_voice_released[i] = true;
+      looper_capture(LOOP_RELEASE, 12 + i, 0, 0, 0, 0);
     }
     interrupts();
     // Sent regardless of the internal envelope: an external synth holds the note
@@ -1444,30 +2848,6 @@ void stop_chord_notes() {
     }
   }
   AudioInterrupts();
-}
-
-void handle_rhythm_mode() {
-  for (int i = 0; i < 4; i++) {
-    if (note_off_timing[i] > note_pushed_duration) {
-      // As in stop_chord_notes(). The rhythm timer starts notes from an
-      // interrupt, so the check and the flag are one step: a note starting in
-      // between would otherwise be marked released without ever being.
-      noInterrupts();
-      if (chord_envelope_array[i]->isSustain() || (chord_envelope_array[i]->isActive() && !chord_voice_released[i])) {
-        chord_vibrato_envelope_array[i]->noteOff();
-        chord_vibrato_dc_envelope_array[i]->noteOff();
-        chord_envelope_array[i]->noteOff();
-        chord_envelope_filter_array[i]->noteOff();
-        chord_voice_released[i] = true;
-      }
-      interrupts();
-      // See stop_chord_notes().
-      if (chord_started_notes[i] != 0) {
-        queue_midi(false, chord_started_notes[i], chord_release_velocity, chord_channel, chord_port);
-        chord_started_notes[i] = 0;
-      }
-    }
-  }
 }
 
 void handle_continuous_mode() {
@@ -1501,13 +2881,7 @@ void handle_hold_button() {
         trigger_chord = true;
       }
     } else {
-      if (since_last_button_push > 100 && since_last_button_push < 2000) {
-        rythm_bpm = (rythm_bpm * 5.0 + 60 * 1000 / since_last_button_push) / 6.0;
-        Serial.print("Updating the BPM to: ");
-        Serial.println(rythm_bpm);
-        recalculate_timer();
-        rythm_timer.update(current_long_period ? long_timer_period : short_timer_period);
-      }
+      acc_tap();
     }
     since_last_button_push = 0;
   } else if (hold_transition == 1 && since_last_button_push > 800) {
@@ -1516,17 +2890,11 @@ void handle_hold_button() {
     continuous_chord = false;
     analogWrite(RYTHM_LED_PIN, 255 * continuous_chord);
     if (rythm_mode) {
-      rythm_current_step = 0;
       Serial.println("Starting rhythm timers");
-      rythm_timer.priority(254);
-      rythm_timer.begin(rythm_tick_function, short_timer_period);
-      rythm_timer_running = true;
-      rythm_timer.update(long_timer_period);
-      current_long_period = true;
+      acc_begin();
     } else {
       Serial.println("Stopping rhythm timers");
-      rythm_timer.end();
-      rythm_timer_running = false;
+      acc_end();
     }
   }
 }
@@ -1568,25 +2936,66 @@ void handle_low_battery() {
 }
 
 void trigger_chord_notes() {
-  if ((trigger_chord || (button_pushed && retrigger_chord)) && !rythm_mode) {
+  uint8_t voices = rythm_mode ? acc_held_mask() : 0xF;   // in rhythm mode, the voices it leaves to hold the chord
+  if ((trigger_chord || (button_pushed && retrigger_chord)) && voices) {
     Serial.println("Triggering chord notes");
     for (int i = 0; i < 4; i++) {
       note_timer[i].priority(253);
     }
-    note_timer[0].begin([] { play_single_note(0, &note_timer[0]); }, 10+chord_retrigger_release*1000);          // those allow for delayed triggering
-    note_timer[1].begin([] { play_single_note(1, &note_timer[1]); }, 10 +chord_retrigger_release*1000+ inter_string_delay + random(random_delay));
-    note_timer[2].begin([] { play_single_note(2, &note_timer[2]); }, 10 + chord_retrigger_release*1000+inter_string_delay * 2 + random(random_delay));
-    note_timer[3].begin([] { play_single_note(3, &note_timer[3]); }, 10 + chord_retrigger_release*1000+inter_string_delay * 3 + random(random_delay));
+    if (voices & 1) note_timer[0].begin([] { play_single_note(0, &note_timer[0]); }, 10+chord_retrigger_release*1000);          // those allow for delayed triggering
+    if (voices & 2) note_timer[1].begin([] { play_single_note(1, &note_timer[1]); }, 10 +chord_retrigger_release*1000+ inter_string_delay + random(random_delay));
+    if (voices & 4) note_timer[2].begin([] { play_single_note(2, &note_timer[2]); }, 10 + chord_retrigger_release*1000+inter_string_delay * 2 + random(random_delay));
+    if (voices & 8) note_timer[3].begin([] { play_single_note(3, &note_timer[3]); }, 10 + chord_retrigger_release*1000+inter_string_delay * 3 + random(random_delay));
     trigger_chord = false;
   }
   button_pushed = false;
 }
 
+// Applies the chosen value, or puts back what was there before.
+void toggle_double_tap_target() {
+  // The looper, assigned to the double tap, takes its next step, from where the second tap landed,
+  // instead of toggling; with the value at 7 the step goes to a looper on the computer (see LOOPER)
+  if (current_sysex_parameters[double_tap_control_adress] == looper_adress) {
+    if (current_sysex_parameters[double_tap_value_adress] == 7) looper_send_step(millis() - modifier_pressed_ms);
+    else looper_step(modifier_pressed_ms);
+    if (!double_tap_engaged) return;   // else what was toggled before the assignment changed goes back
+  }
+  if (double_tap_engaged) {
+    // Restore to the address latched at engage time: the assignment at address
+    // 200 can be rewritten while the toggle is held, and the restore belongs to
+    // the parameter that was actually toggled, not to the new target.
+    current_sysex_parameters[double_tap_engaged_adress] = double_tap_saved;
+    apply_audio_parameter(double_tap_engaged_adress, double_tap_saved);
+    double_tap_engaged = false;
+    set_led_color(bank_led_hue, 1.0, 1 - led_attenuation);
+  } else {
+    int16_t adress = current_sysex_parameters[double_tap_control_adress];
+    if (!is_target_adress(adress)) return;     // 0 means the gesture is unassigned
+    if (adress == double_tap_control_adress || adress == double_tap_value_adress) return;
+    double_tap_saved = current_sysex_parameters[adress];
+    double_tap_engaged_adress = adress;
+    int16_t value = current_sysex_parameters[double_tap_value_adress];
+    current_sysex_parameters[adress] = value;
+    apply_audio_parameter(adress, value);
+    double_tap_engaged = true;
+  }
+  // The gesture changes a parameter with nothing on the wire to show it, so a
+  // remote editor keeps displaying the value the player has just toggled away
+  // from. Report the new state, on the way in and on the way out, but only to a
+  // controller that has talked to the device: unsolicited, the full parameter
+  // dump lands on the performance port of whatever host is connected, twice per
+  // toggle. save_config still writes the value underneath the toggle, so a save
+  // while engaged is unaffected.
+  if (sysex_controler_connected) control_command(0, 0);
+}
+
 void loop() {
   // Process incoming MIDI messages
-  if (usbMIDI.read()) {
+  // A chord sent in arrives as several notes at once: take what has come, up to a handful a pass
+  for (uint8_t k = 0; k < 16 && usbMIDI.read(); k++) {
     processMIDI();
   }
+  midi_in_settle();
   // Check sysex controller connection
   if (sysex_controler_connected && bitRead(USB1_PORTSC1, 7)) {
     sysex_controler_connected = false;
@@ -1608,16 +3017,44 @@ void loop() {
   // Handle preset changes
   handle_preset_change();
 
-  // Handle rhythm mode note-off timing
-  if (rythm_mode) {
-    handle_rhythm_mode();
-  }
+  rythm_clock_watch();
 
   // Handle potentiometer updates
   bool alternate = chord_matrix_array[0].read_value();
   flag_save_needed |= chord_pot.update_parameter(alternate);
   flag_save_needed |= harp_pot.update_parameter(alternate);
   flag_save_needed |= mod_pot.update_parameter(alternate);
+
+  // Two quick taps of the modifier toggle whatever the player has assigned to
+  // the gesture. Only when no chord button is down, so it never competes with
+  // sharpening: a tap with a chord held is a sharpen, not a gesture.
+  {
+    static bool modifier_was_down = false;
+    static elapsedMillis press_length;
+    static elapsedMillis since_first_tap;
+    static uint8_t tap_count = 0;
+    bool modifier_down = chord_matrix_array[0].read_value();
+    if (modifier_down && !modifier_was_down) {
+      press_length = 0;
+      modifier_pressed_ms = millis();
+    } else if (!modifier_down && modifier_was_down) {
+      if (press_length < modifier_tap_max && current_line == -1) {
+        if (tap_count == 1 && since_first_tap < modifier_tap_gap) {
+          tap_count = 0;
+          toggle_double_tap_target();
+        } else {
+          tap_count = 1;
+          since_first_tap = 0;
+        }
+      } else {
+        tap_count = 0;   // a hold, or a chord was down: not part of a gesture
+      }
+    }
+    if (tap_count == 1 && since_first_tap > modifier_tap_gap) tap_count = 0;
+    modifier_was_down = modifier_down;
+  }
+
+  step_led_animation();
 
   // Handle continuous mode logic
   if (!continuous_chord && !rythm_mode) {
@@ -1636,12 +3073,14 @@ void loop() {
     update_harp_notes();  // Added call to update_harp_notes()
     trigger_chord_notes();
   }
+  if (rythm_mode) acc_update();   // after the chord is built, so a press is heard with its chord
 
   // Handle chord button transitions
   handle_chords_button();
 
   // Handle harp functions
   handle_harp();
+  looper_update();
 
   // The only point at which this firmware transmits MIDI. Must stay last, and must
   // stay in loop() -- see the MIDI OUTPUT QUEUE comment above.

@@ -27,6 +27,9 @@ void apply_audio_parameter(int adress, int value) {
       case 108:
         harp_port=1-value;
         break;
+      case 8:
+        midi_in_set(value);
+        break;
       case 31:
         flat_button_modifier=value;
         break;
@@ -114,6 +117,21 @@ void apply_audio_parameter(int adress, int value) {
       case 17:
         mod_pot.set_alternate_range(value);
         break;
+      case 256:
+        looper_action(value);
+        break;
+      case 283:
+        looper_quantize=value;
+        break;
+      case 284:
+        looper_count_in=value;
+        break;
+      case 285:
+        looper_click=value;
+        break;
+      case 286:
+        looper_click_level=value;
+        break;
       case 4:
         chord_pot.set_alternate_default(value);chord_pot.force_update();
         break;
@@ -125,6 +143,12 @@ void apply_audio_parameter(int adress, int value) {
         break;
       case 7:
         current_sysex_parameters[7]=version_ID;
+        break;
+      case 200:
+        
+        break;
+      case 201:
+        
         break;
       case 2:
         string_gain.amplitude(value/100.0,100);  harp_attack_velocity=value/100.0*127;
@@ -431,9 +455,7 @@ void apply_audio_parameter(int adress, int value) {
         osc_3_freq_multiplier=value/100.0;
         break;
       case 130:
-        for (int i=0;i<4;i++){
-          chord_voice_mixer_array[i]->gain(3,value/100.0);
-        }
+        chord_noise_level=value/100.0; for (int v=0;v<4;v++) apply_chord_voice_level(v);
         break;
       case 131:
         chord_voice_mixer.gain(0,value/100.0);
@@ -660,7 +682,7 @@ void apply_audio_parameter(int adress, int value) {
         ws_sin_param=value;calculate_ws_array(); chord_waveshape.shape(wave_shape,257);
         break;
       case 187:
-        rythm_bpm=constrain(value,30,300);recalculate_timer();
+        rythm_bpm=constrain(value,30,300);
         break;
       case 188:
         rythm_loop_length=constrain(value,1,16);
@@ -669,7 +691,7 @@ void apply_audio_parameter(int adress, int value) {
         rythm_limit_change_to_every=constrain(value,1,8);
         break;
       case 190:
-        shuffle=value/100.0;recalculate_timer();
+        shuffle=value/100.0;
         break;
       case 191:
         note_pushed_duration=value;
@@ -721,6 +743,30 @@ void apply_audio_parameter(int adress, int value) {
         break;
       case 235:
         rythm_pattern[15]=value;
+        break;
+      case 274:
+        acc_style=value; acc_settings_changed();
+        break;
+      case 275:
+        acc_bass_part=value; acc_settings_changed();
+        break;
+      case 276:
+        acc_chord_part=value; acc_settings_changed();
+        break;
+      case 277:
+        acc_follow=value; acc_settings_changed();
+        break;
+      case 278:
+        acc_change=value;
+        break;
+      case 279:
+        acc_articulation=value;
+        break;
+      case 280:
+        acc_accents=value;
+        break;
+      case 281:
+        tap_counts=value;
         break;
       case 192:
         chords_main_filter.frequency(value);
