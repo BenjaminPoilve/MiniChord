@@ -206,14 +206,16 @@ uint8_t ribbon_snap = 0;        // 0-100: how much of each string's width holds 
 uint8_t ribbon_glide_ms = 0;    // how slowly the pitch follows the finger, in ms; 0 for the stock 10
 // Harp plate: which plate is fitted, for the plates read between their zones
 // as well as on them. 0 is the stock strip and any plate of twelve separate
-// zones. 1 is zipper 24, whose neighbouring zones interlock so a finger between
-// two touches both, with one more band above the top zone where it meets an
-// island of the bottom zone: 24 positions. 2 is the arcade wheel, which plays
-// its twelve zones as they are and sends where a finger is round its ring.
-// The fretless plate is twelve zones in a line, so it is 0 too: it is made for
-// the harp ribbon and plays twelve strings without it. 3 is the fretless wrap,
-// which adds an island of the bottom zone above the top one: twelve strings as
-// the stock strip, and a thirteenth place for the ribbon.
+// zones; 1 to 7 are kept for plates of twelve separate zones that want their
+// own reading. 8 is zipper 24, whose neighbouring zones interlock so a finger
+// between two touches both, with one more band above the top zone where it
+// meets an island of the bottom zone: 24 positions. 9 is the arcade wheel,
+// which plays its twelve zones as they are and sends where a finger is round
+// its ring. The fretless plate is twelve zones in a line, so it is 0 too: it is
+// made for the harp ribbon and plays twelve strings without it. 10 is the
+// fretless wrap, which adds an island of the bottom zone above the top one:
+// twelve strings as the stock strip, and a thirteenth place for the ribbon.
+const uint8_t plate_zipper_24 = 8, plate_arcade_wheel = 9, plate_fretless_wrap = 10;
 uint8_t harp_plate = 0;
 uint8_t harp_touch_threshold = 0;     // 0 for the stock thresholds, see harp::set_thresholds()
 uint8_t harp_release_threshold = 0;
@@ -1397,14 +1399,14 @@ uint8_t harp_find_runs(const bool *line_down, uint8_t line_length, const bool *z
 
 // The ribbon reads any strip but the arcade wheel, which is not a line.
 bool harp_ribbon_active() {
-  return harp_ribbon && harp_plate != 2;
+  return harp_ribbon && harp_plate != plate_arcade_wheel;
 }
 
-// The fretless wrap plate (3), like zipper 24 (1), has an island of the bottom
+// The fretless wrap plate (10), like zipper 24 (8), has an island of the bottom
 // zone above the top one, so the ribbon has thirteen places: a whole octave in
 // chromatic mode.
 bool ribbon_wrapped() {
-  return harp_plate == 1 || harp_plate == 3;
+  return harp_plate == plate_zipper_24 || harp_plate == plate_fretless_wrap;
 }
 
 // How many strings the strip covers, bottom to top. Chord mode has only the
@@ -1670,7 +1672,7 @@ const float harp_position_follow = 3;         // how far a touch may move betwee
 const float harp_position_hysteresis = 0.2;   // positions past the halfway mark before a touch moves on, so it doesn't flicker
 
 bool harp_positions_active() {
-  return harp_plate == 1 && !harp_ribbon_active() && (chromatic_harp_mode || scalar_harp_selection != 0);
+  return harp_plate == plate_zipper_24 && !harp_ribbon_active() && (chromatic_harp_mode || scalar_harp_selection != 0);
 }
 
 // Tune voice p % 12 to position p, as it plays now.
@@ -1928,7 +1930,7 @@ void handle_harp() {
     handle_harp_positions();
     return;
   }
-  if (harp_plate == 2) handle_wheel();
+  if (harp_plate == plate_arcade_wheel) handle_wheel();
   for (int i = 0; i < 12; i++) {
     int value = harp_array[i].read_transition();
     if (value == 2) {
