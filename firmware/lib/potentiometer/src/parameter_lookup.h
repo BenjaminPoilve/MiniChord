@@ -15,6 +15,9 @@ struct ParameterInfo {
 static const ParameterInfo parameter_lookup[] = {
     { 20, 0, 0, 360 }, // bank color
     { 32, 0, 0, 1 }, // led attenuation
+    { 243, 1, 0, 10 }, // harp plate
+    { 241, 0, 0, 120 }, // harp touch threshold
+    { 242, 0, 0, 119 }, // harp release threshold
     { 21, 1, 0, 1 }, // retrigger chords
     { 22, 1, 0, 1 }, // change held strings
     { 23, 1, 0, 2 }, // slash level
@@ -48,6 +51,10 @@ static const ParameterInfo parameter_lookup[] = {
     { 99, 1, 0, 4 }, // octave change
     { 40, 1, 0, 6 }, // harp shuffling
     { 98, 1, 0, 1 }, // chromatic mode
+    { 245, 1, 0, 1 }, // harp ribbon
+    { 246, 1, 0, 24 }, // ribbon span
+    { 247, 0, 0, 100 }, // ribbon snap
+    { 248, 0, 0, 250 }, // ribbon glide
     { 41, 0, 0, 1 }, // amplitude
     { 42, 1, 0, 11 }, // waveform
     { 43, 0, 0, 5000 }, // attack
