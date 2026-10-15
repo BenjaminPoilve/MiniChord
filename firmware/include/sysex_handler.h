@@ -7,13 +7,16 @@ void apply_audio_parameter(int adress, int value) {
         led_attenuation=value/100.0; set_led_color(bank_led_hue, 1.0, 1-led_attenuation);
         break;
       case 243:
-        harp_plate=value;
+        harp_plate=value; apply_harp_thresholds();
+        break;
+      case 417:
+        strip_guard=value; apply_harp_thresholds();
         break;
       case 241:
-        harp_touch_threshold=value; harp_sensor.set_thresholds(harp_touch_threshold, harp_release_threshold);
+        harp_touch_threshold=value; apply_harp_thresholds();
         break;
       case 242:
-        harp_release_threshold=value; harp_sensor.set_thresholds(harp_touch_threshold, harp_release_threshold);
+        harp_release_threshold=value; apply_harp_thresholds();
         break;
       case 21:
         retrigger_chord=value;
@@ -152,7 +155,7 @@ void apply_audio_parameter(int adress, int value) {
         chromatic_harp_mode=value;
         break;
       case 245:
-        harp_ribbon=value;
+        harp_ribbon=value; apply_harp_thresholds();
         break;
       case 246:
         ribbon_span=value;

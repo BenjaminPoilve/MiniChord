@@ -12,7 +12,7 @@
 #include <potentiometer.h>
 
 //>>SOFWTARE VERSION 
-int version_ID=11; //to be read 00.03, stored at adress 7 in memory (10: harp ribbon, and the second page of settings; 11: harp plates and touch thresholds)
+int version_ID=12; //to be read 00.03, stored at adress 7 in memory (10: harp ribbon, and the second page of settings; 11: harp plates and touch thresholds; 12: the strip guard, 417, and the keymaster, harp plate 1)
 //>>BUTTON ARRAYS<<
 debouncer harp_array[12];
 debouncer chord_matrix_array[22];
@@ -206,8 +206,10 @@ uint8_t ribbon_snap = 0;        // 0-100: how much of each string's width holds 
 uint8_t ribbon_glide_ms = 0;    // how slowly the pitch follows the finger, in ms; 0 for the stock 10
 // Harp plate: which plate is fitted, for the plates read between their zones
 // as well as on them. 0 is the stock strip and any plate of twelve separate
-// zones; 1 to 7 are kept for plates of twelve separate zones that want their
-// own reading. 8 is zipper 24, whose neighbouring zones interlock so a finger
+// zones. 1 is the keymaster, twelve round pads well apart: it plays as the
+// stock strip does, at the stock thresholds and without the strip guard (see
+// apply_harp_thresholds()); 2 to 7 are kept for plates of twelve separate zones
+// that want their own reading. 8 is zipper 24, whose neighbouring zones interlock so a finger
 // between two touches both, with one more band above the top zone where it
 // meets an island of the bottom zone: 24 positions. 9 is the arcade wheel,
 // which plays its twelve zones as they are and sends where a finger is round
@@ -215,10 +217,12 @@ uint8_t ribbon_glide_ms = 0;    // how slowly the pitch follows the finger, in m
 // made for the harp ribbon and plays twelve strings without it. 10 is the
 // fretless wrap, which adds an island of the bottom zone above the top one:
 // twelve strings as the stock strip, and a thirteenth place for the ribbon.
+const uint8_t plate_stock = 0, plate_keymaster = 1;
 const uint8_t plate_zipper_24 = 8, plate_arcade_wheel = 9, plate_fretless_wrap = 10;
 uint8_t harp_plate = 0;
-uint8_t harp_touch_threshold = 0;     // 0 for the stock thresholds, see harp::set_thresholds()
+uint8_t harp_touch_threshold = 0;     // 0 for the plate's own thresholds, see apply_harp_thresholds()
 uint8_t harp_release_threshold = 0;
+uint8_t strip_guard = 9;              // the strip guard (address 417), in tenths, see strip_guard_pass(); 0 off
 // On zipper 24 each zone's core and each band between two zones is a position,
 // a string of its own: 2i is zone i's core (in harp order, 0 the lowest) and
 // 2i+1 the band above it. The scales carry on up through all of them. Position
@@ -511,6 +515,7 @@ uint8_t calculate_note_harp(uint8_t string, bool slashed, bool sharp);
 uint8_t calculate_note_chord(uint8_t voice, bool slashed, bool sharp);
 void set_chord_voice_frequency(uint8_t i, uint16_t current_note);
 void refresh_chord_filter();
+void apply_harp_thresholds();
 // the note frequency each chord voice is currently sounding, kept so the filter
 // corner can be recomputed for a voice without touching anything else about it
 float chord_voice_note_freq[4] = {0, 0, 0, 0};
@@ -1940,6 +1945,119 @@ void handle_wheel() {
   sent = value;
 }
 
+// The strip guard (address 417). The stock strip's teeth sit 5 mm apart, narrower than a fingertip, so a
+// finger plucking one string often lands on the next one too and both sound; and a light touch on the narrow
+// tips reads under the chip's touch threshold of 40 and plays nothing. Measured on a stock strip with a 2 ms
+// readout of the chip (2026-10-14, 132 taps each): on the wide part of the teeth 95 taps sounded a second
+// string, and on the tips 39 sounded nothing.
+// With the guard on, the strip's own thresholds are 15 and 7, so light touches play (apply_harp_thresholds()),
+// and a string that lands while the string beside it is held and stronger, under strip_guard tenths of it,
+// is the same finger's edge: it stays silent while held (a shadow), and plays only once it grows level with
+// a neighbour that sounds, the finger rolled over onto it. A strum drags a finger across the strings on
+// purpose, and each string it reaches lands beside the stronger one it is leaving; so a string plays at once
+// if the string beyond that neighbour was already held when the neighbour landed: the finger came along the
+// strip to it (came_from). A finger's edge lands with nothing held beyond the string meant, and nothing is
+// timed, so a tap soon after a strum is still guarded. A strum's second string has nothing before it and
+// lands as a shadow; the run reaching the third string carries it, and it plays then too, or as it catches up.
+// On the same strip at 9: one note for 127 of 132 taps on the teeth (36 without) and none silent; 427 of 432
+// strum strings sounded, the rest only brushed as a fast flick left the strip.
+// The guard is the stock strip's (plate 0) and only while it is read as strings, not with the ribbon.
+const uint8_t strip_touch_threshold = 15;
+const uint8_t strip_release_threshold = 7;
+bool pad_shadow[12] = {false};        // a string held silent as the edge of a finger on its neighbour
+uint16_t came_from[12];               // the strings already held as each one last landed, as bits
+
+bool strip_guard_active() {
+  return strip_guard && harp_plate == plate_stock && !harp_ribbon;
+}
+
+// The touch and release thresholds: 241 and 242 when set, otherwise the plate's own. The stock strip's own,
+// with the strip guard on, are 15 and 7; every other plate's, and the strip's with the guard off, are the
+// chip's stock 40 and 20. They reach the chip once no zone is touched (handle_harp()).
+void apply_harp_thresholds() {
+  bool strip = strip_guard_active();
+  harp_sensor.set_thresholds(harp_touch_threshold ? harp_touch_threshold : strip ? strip_touch_threshold : 0,
+                             harp_release_threshold ? harp_release_threshold : strip ? strip_release_threshold : 0);
+}
+
+// The strings either side of string i, as bits
+uint16_t strip_neighbours(uint8_t i) {
+  return ((1 << i >> 1) | (1 << i << 1)) & 0xfff;
+}
+
+// Pass one takes a string's transition (harp_array's read_transition: 2 landed, 1 lifted, 0 neither) and gives
+// what the harp does with it. held_before: the strings held before this pass's landings, as bits.
+int strip_guard_land(uint8_t i, int value, const int16_t (&strength)[12], uint16_t held_before, bool (&carried)[12]) {
+  uint16_t neighbours = strip_neighbours(i);
+  if (value == 2) {
+    int16_t strongest = 0;
+    int8_t k = -1;
+    for (uint8_t j = 0; j < 12; j++) {
+      if ((neighbours >> j & 1) && harp_array[j].read_value() && strength[j] > strongest) {
+        strongest = strength[j];
+        k = j;
+      }
+    }
+    pad_shadow[i] = strongest && strength[i] * 10 < strongest * strip_guard;
+    int8_t beyond = 2 * k - i;
+    if (k >= 0 && (held_before >> k & 1) && beyond >= 0 && beyond < 12 && (came_from[k] >> beyond & 1)) {   // a strum
+      pad_shadow[i] = false;
+      if (pad_shadow[k]) {
+        pad_shadow[k] = false;
+        carried[k] = true;
+      }
+    }
+    return pad_shadow[i] ? 0 : 2;
+  }
+  if (!pad_shadow[i]) return value;
+  if (value == 1 || !harp_array[i].read_value()) pad_shadow[i] = false;   // lifted unheard: nothing to let go
+  return 0;
+}
+
+// Pass two: whether shadow i, held since before this pass, plays now: level with a neighbour that sounds, and
+// past the touch threshold itself (as a finger lifts every reading falls, and a shadow measured against a
+// neighbour fading beside it would sound as the finger left)
+bool strip_guard_let_off(uint8_t i, const int16_t (&strength)[12]) {
+  uint16_t neighbours = strip_neighbours(i);
+  int16_t sounding = 0;
+  for (uint8_t j = 0; j < 12; j++) {
+    if ((neighbours >> j & 1) && harp_array[j].read_value() && !pad_shadow[j]) sounding = max(sounding, strength[j]);
+  }
+  uint8_t least = harp_touch_threshold ? harp_touch_threshold : strip_touch_threshold;
+  return sounding && strength[i] >= least && strength[i] >= sounding;
+}
+
+// Every string's transition this pass, as the guard has it, in two passes so that no string's decision hangs
+// on the order they are read in: first every landing and lift, then whether a shadow is let off.
+void strip_guard_pass(uint8_t (&pad_move)[12], const int16_t (&strength)[12]) {
+  bool held_shadow[12], carried[12] = {false};
+  uint8_t raw[12];
+  uint16_t held_before = 0;
+  for (uint8_t i = 0; i < 12; i++) {
+    raw[i] = harp_array[i].read_transition();
+    if (harp_array[i].read_value() && raw[i] != 2) held_before |= 1 << i;
+  }
+  for (uint8_t i = 0; i < 12; i++) {
+    held_shadow[i] = pad_shadow[i];
+    pad_move[i] = strip_guard_land(i, raw[i], strength, held_before, carried);
+    held_shadow[i] &= pad_shadow[i];
+  }
+  for (uint8_t i = 0; i < 12; i++) {
+    if (raw[i] == 2) came_from[i] = held_before;
+    if (carried[i]) {
+      held_shadow[i] = false;
+      pad_move[i] = 2;
+    }
+  }
+  bool let_off[12];
+  for (uint8_t i = 0; i < 12; i++) let_off[i] = held_shadow[i] && strip_guard_let_off(i, strength);
+  for (uint8_t i = 0; i < 12; i++) {
+    if (!let_off[i]) continue;
+    pad_shadow[i] = false;
+    pad_move[i] = 2;
+  }
+}
+
 void handle_harp() {
   harp_sensor.update(harp_array);
   // New thresholds wait until no pad is touched, see harp::apply_thresholds().
@@ -1971,8 +2089,23 @@ void handle_harp() {
     return;
   }
   if (harp_plate == plate_arcade_wheel) handle_wheel();
+  // The strip guard decides every landing first; with it off no string is held silent, and one held silent
+  // when it went off lifts unheard
+  bool guard = strip_guard_active();
+  uint8_t pad_move[12];
+  if (guard) {
+    int16_t strength[12] = {0};
+    bool any = false;
+    for (int i = 0; i < 12; i++) any |= harp_array[i].read_value();
+    if (any) harp_sensor.read_strength(strength);
+    strip_guard_pass(pad_move, strength);
+  }
   for (int i = 0; i < 12; i++) {
-    int value = harp_array[i].read_transition();
+    int value = guard ? pad_move[i] : harp_array[i].read_transition();
+    if (!guard && pad_shadow[i]) {
+      if (value == 1 || !harp_array[i].read_value()) pad_shadow[i] = false;
+      value = 0;
+    }
     if (value == 2) {
       set_harp_voice_frequency(i, current_harp_notes[i]);
       AudioNoInterrupts();
