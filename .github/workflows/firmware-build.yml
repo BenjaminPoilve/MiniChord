@@ -39,6 +39,10 @@ jobs:
         with:
           # The actual branch tip, not the ephemeral PR merge ref, so a
           # generated-files commit below can be pushed straight to it.
+          # A pull request from a fork has its branch in the fork, not here, so
+          # the branch name has to be resolved against the head repository or
+          # the checkout fails with "a branch or tag ... could not be found".
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
           ref: ${{ github.head_ref || github.ref }}
           # Full history so we can diff against the previous commit / PR base
           # to tell whether generator/parameters.json changed.
@@ -83,7 +87,10 @@ jobs:
       # locally, so nobody has to remember to run it before pushing. The job
       # `if:` above stops this specific commit from re-triggering this job.
       - name: Commit regenerated firmware sources
-        if: steps.params.outputs.changed == 'true'
+        # A pull request from a fork gets a read only token and its branch
+        # lives in the fork, so nothing can be pushed there. Skip the commit
+        # and let the build result stand on its own.
+        if: steps.params.outputs.changed == 'true' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Regenerate firmware sources from parameters.json"
@@ -120,7 +127,10 @@ jobs:
       # The job `if:` above stops this specific commit from re-triggering
       # this job.
       - name: Commit the built firmware
-        if: success()
+        # A pull request from a fork gets a read only token and its branch
+        # lives in the fork, so nothing can be pushed there. Skip the commit
+        # and let the build result stand on its own.
+        if: success() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Update built firmware.hex"

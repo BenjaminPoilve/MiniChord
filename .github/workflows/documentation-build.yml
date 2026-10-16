@@ -38,6 +38,10 @@ jobs:
         with:
           # The actual branch tip, not the ephemeral PR merge ref, so the
           # rebuilt-site commit below can be pushed straight to it.
+          # A pull request from a fork has its branch in the fork, not here, so
+          # the branch name has to be resolved against the head repository or
+          # the checkout fails with "a branch or tag ... could not be found".
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
           ref: ${{ github.head_ref || github.ref }}
 
       - name: Set up Python
@@ -64,7 +68,10 @@ jobs:
       # from re-triggering this job — but it still triggers static.yml,
       # which deploys documentation/site/ to GitHub Pages on every push.
       - name: Commit the rebuilt site
-        if: success()
+        # A pull request from a fork gets a read only token and its branch
+        # lives in the fork, so nothing can be pushed there. Skip the commit
+        # and let the build result stand on its own.
+        if: success() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Rebuild documentation site"
