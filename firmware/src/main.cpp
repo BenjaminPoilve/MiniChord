@@ -205,10 +205,11 @@ uint8_t ribbon_span = 0;        // strings from the bottom of the strip to the t
 uint8_t ribbon_snap = 0;        // 0-100: how much of each string's width holds its note, 0 fretless
 uint8_t ribbon_glide_ms = 0;    // how slowly the pitch follows the finger, in ms; 0 for the stock 10
 // Harp plate: which plate is fitted, for the plates read between their zones
-// as well as on them. 0 is the stock strip and any plate of twelve separate
-// zones. 1 is the keymaster, twelve round pads well apart: it plays as the
-// stock strip does, at the stock thresholds and without the strip guard (see
-// apply_harp_thresholds()); 2 to 7 are kept for plates of twelve separate zones
+// as well as on them. 0 is the stock strip and any plate of twelve zones in a
+// row like it, each beside the next, which the strip guard is for. 1 is the
+// keymaster, twelve round pads well apart: it plays as the stock strip does, at
+// the stock thresholds and without the strip guard (see apply_harp_thresholds()),
+// and so does any other plate of twelve separate zones set to 1; 2 to 7 are kept for plates of twelve separate zones
 // that want their own reading. 8 is zipper 24, whose neighbouring zones interlock so a finger
 // between two touches both, with one more band above the top zone where it
 // meets an island of the bottom zone: 24 positions. 9 is the arcade wheel,
@@ -1247,6 +1248,11 @@ void load_config(int bank_number) {
     // preset saved before the array grew) comes up at its default, not the last preset's
     for (uint16_t i = 0; i < parameter_size; i++) current_sysex_parameters[i] = parameter_default(bank_number, i);
     deserialize(data_string, current_sysex_parameters);
+    // A preset saved before the strip guard holds 0 at 417 if it was saved with page 1 (firmware 10 and 11,
+    // or written as a factory preset, whose slot 7 is 0), which would turn the guard off: it takes the guard's
+    // default instead, as a preset from before page 1 does. Slot 7 still holds the version that saved it
+    // (apply_audio_parameter(7) puts this one's there below).
+    if (current_sysex_parameters[7] < 12) current_sysex_parameters[417] = parameter_default(bank_number, 417);
     Serial.print("Loaded preset: ");
     Serial.println(entry.name());
     entry.close();
@@ -1960,12 +1966,20 @@ void handle_wheel() {
 // timed, so a tap soon after a strum is still guarded. A strum's second string has nothing before it and
 // lands as a shadow; the run reaching the third string carries it, and it plays then too, or as it catches up.
 // On the same strip at 9: one note for 127 of 132 taps on the teeth (36 without) and none silent; 427 of 432
-// strum strings sounded, the rest only brushed as a fast flick left the strip.
+// strum strings sounded, the rest only brushed as a fast flick left the strip (measured on a build whose harp
+// counts a string as held once its landing is reported, as landed_bits does here).
 // The guard is the stock strip's (plate 0) and only while it is read as strings, not with the ribbon.
 const uint8_t strip_touch_threshold = 15;
 const uint8_t strip_release_threshold = 7;
 bool pad_shadow[12] = {false};        // a string held silent as the edge of a finger on its neighbour
 uint16_t came_from[12];               // the strings already held as each one last landed, as bits
+// The strings the guard counts as held, as bits: set when a string's landing is reported (read_transition
+// gives 2), cleared when its lift is. read_value() won't do: it is the chip's touch status at once, while
+// the landing is reported 10 ms after the status last changed (lib/debouncer), so in a fast strum the
+// string ahead, touched and not yet landed, read as held and stronger, the string being played became a
+// shadow, and it lifted unheard as the finger moved on: the recorded strums replayed through this
+// debouncer lost 50 of 417 strings, 49 of them in fast strums; with landed_bits, 1.
+uint16_t landed_bits = 0;
 
 bool strip_guard_active() {
   return strip_guard && harp_plate == plate_stock && !harp_ribbon;
@@ -1993,7 +2007,7 @@ int strip_guard_land(uint8_t i, int value, const int16_t (&strength)[12], uint16
     int16_t strongest = 0;
     int8_t k = -1;
     for (uint8_t j = 0; j < 12; j++) {
-      if ((neighbours >> j & 1) && harp_array[j].read_value() && strength[j] > strongest) {
+      if ((neighbours >> j & 1) && (landed_bits >> j & 1) && strength[j] > strongest) {
         strongest = strength[j];
         k = j;
       }
@@ -2010,7 +2024,7 @@ int strip_guard_land(uint8_t i, int value, const int16_t (&strength)[12], uint16
     return pad_shadow[i] ? 0 : 2;
   }
   if (!pad_shadow[i]) return value;
-  if (value == 1 || !harp_array[i].read_value()) pad_shadow[i] = false;   // lifted unheard: nothing to let go
+  if (value == 1 || !(landed_bits >> i & 1)) pad_shadow[i] = false;   // lifted unheard: nothing to let go
   return 0;
 }
 
@@ -2021,7 +2035,7 @@ bool strip_guard_let_off(uint8_t i, const int16_t (&strength)[12]) {
   uint16_t neighbours = strip_neighbours(i);
   int16_t sounding = 0;
   for (uint8_t j = 0; j < 12; j++) {
-    if ((neighbours >> j & 1) && harp_array[j].read_value() && !pad_shadow[j]) sounding = max(sounding, strength[j]);
+    if ((neighbours >> j & 1) && (landed_bits >> j & 1) && !pad_shadow[j]) sounding = max(sounding, strength[j]);
   }
   uint8_t least = harp_touch_threshold ? harp_touch_threshold : strip_touch_threshold;
   return sounding && strength[i] >= least && strength[i] >= sounding;
@@ -2032,11 +2046,14 @@ bool strip_guard_let_off(uint8_t i, const int16_t (&strength)[12]) {
 void strip_guard_pass(uint8_t (&pad_move)[12], const int16_t (&strength)[12]) {
   bool held_shadow[12], carried[12] = {false};
   uint8_t raw[12];
-  uint16_t held_before = 0;
+  uint16_t held_before = 0, landed_now = landed_bits;
   for (uint8_t i = 0; i < 12; i++) {
     raw[i] = harp_array[i].read_transition();
-    if (harp_array[i].read_value() && raw[i] != 2) held_before |= 1 << i;
+    if (raw[i] == 2) landed_now |= 1 << i;
+    else if (raw[i] == 1) landed_now &= ~(1 << i);
+    if ((landed_bits >> i & 1) && raw[i] == 0) held_before |= 1 << i;
   }
+  landed_bits = landed_now;
   for (uint8_t i = 0; i < 12; i++) {
     held_shadow[i] = pad_shadow[i];
     pad_move[i] = strip_guard_land(i, raw[i], strength, held_before, carried);
@@ -2080,6 +2097,17 @@ void handle_harp() {
     positions_were = positions;
   }
   plate_was = harp_plate;
+  // The ribbon and zipper read the plate their own ways and take its transitions: no string is held silent
+  // meanwhile (one held when they came on would read as a shadow from before once they went off), and the
+  // guard starts its held strings again from the touch status when it comes back on.
+  static bool guard_was = false;
+  bool guard = strip_guard_active();
+  if (ribbon || positions) for (uint8_t i = 0; i < 12; i++) pad_shadow[i] = false;
+  if (guard && !guard_was) {
+    landed_bits = 0;
+    for (uint8_t i = 0; i < 12; i++) if (harp_array[i].read_value()) landed_bits |= 1 << i;
+  }
+  guard_was = guard;
   if (ribbon) {
     handle_harp_ribbon();
     return;
@@ -2091,7 +2119,6 @@ void handle_harp() {
   if (harp_plate == plate_arcade_wheel) handle_wheel();
   // The strip guard decides every landing first; with it off no string is held silent, and one held silent
   // when it went off lifts unheard
-  bool guard = strip_guard_active();
   uint8_t pad_move[12];
   if (guard) {
     int16_t strength[12] = {0};
