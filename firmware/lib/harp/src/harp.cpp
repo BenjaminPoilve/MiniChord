@@ -43,6 +43,18 @@ harp::harp(){}
   }
 
 
+  // This chip's readings aren't used for positions: a touched key reads as
+  // full strength and the rest as none.
+  void harp::read_strength(int16_t (&strength)[12]){
+      AT42QT2120::Status status = touch_sensor.getStatus();
+      for (uint8_t key=0; key < 12; ++key){
+          strength[remap_array[key]] = touch_sensor.touched(status,key) ? 100 : 0;
+      }
+  }
+
+  void harp::set_thresholds(uint8_t touch, uint8_t release){}
+  void harp::apply_thresholds(){}
+
   void harp::update(debouncer (&data_array)[12]){
       AT42QT2120::Status status = touch_sensor.getStatus();
       uint8_t key_count= touch_sensor.KEY_COUNT;
@@ -83,6 +95,34 @@ harp::harp(){}
 
   }
 
+
+  void harp::read_strength(int16_t (&strength)[12]){
+    uint16_t filtered[12];
+    uint16_t baseline[12];
+    touch_sensor.getDeviceAllChannelsData(MPR121::ADDRESS_5A, filtered, baseline);
+    for (uint8_t key=0; key < 12; key++){
+      int16_t delta = (int16_t)baseline[key] - (int16_t)filtered[key];
+      strength[remap_array[key]] = delta > 0 ? delta : 0;
+    }
+  }
+
+  void harp::set_thresholds(uint8_t touch, uint8_t release){
+    uint8_t new_touch = touch ? touch : stock_touch_threshold;
+    uint8_t new_release = release ? release : stock_release_threshold;
+    // a pad has to let go below where it touches, or it never would
+    if (new_release >= new_touch) new_release = new_touch > 1 ? new_touch - 1 : 1;
+    if (new_touch == touch_threshold && new_release == release_threshold) return;
+    touch_threshold = new_touch;
+    release_threshold = new_release;
+    thresholds_changed = true;
+  }
+
+  // Pausing the chip to write them restarts its baselines from the present
+  // readings, so this waits for the harp to be clear of fingers (see main).
+  void harp::apply_thresholds(){
+    thresholds_changed = false;
+    touch_sensor.setAllChannelsThresholds(touch_threshold, release_threshold);
+  }
 
   void harp::update(debouncer (&data_array)[12]){
       uint16_t touch_status = touch_sensor.getTouchStatus(MPR121::ADDRESS_5A);

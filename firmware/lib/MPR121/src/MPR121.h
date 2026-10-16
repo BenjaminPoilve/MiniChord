@@ -109,6 +109,11 @@ public:
     uint8_t device_channel);
   uint16_t getDeviceChannelBaselineData(DeviceAddress device_address,
     uint8_t device_channel);
+  // All twelve physical channels' filtered and baseline data, read in two
+  // bursts rather than twenty-four single reads.
+  void getDeviceAllChannelsData(DeviceAddress device_address,
+    uint16_t (&filtered_data)[PHYSICAL_CHANNELS_PER_DEVICE],
+    uint16_t (&baseline_data)[PHYSICAL_CHANNELS_PER_DEVICE]);
 
   enum BaselineTracking
     {

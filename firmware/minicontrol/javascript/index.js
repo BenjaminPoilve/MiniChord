@@ -153,6 +153,11 @@ miniChordController.onConnectionChange = function(connected, message) {
   minichord_device = miniChordController.isConnected();
 };
 
+// Page 1, which arrives after page 0 from firmware that has it
+miniChordController.onPageReceived = function(page, parameters) {
+  parameters.forEach((value, adress) => { if (value !== undefined) set_slider_to_value(adress, value); });
+};
+
 miniChordController.onDataReceived = function(data) {
   // Update sliders
   for (let i = 2; i < miniChordController.parameter_size; i++) {
@@ -338,15 +343,19 @@ function generate_settings() {
       }
       sysex_array[miniChordController.base_adress_rythm + i] = output_value
     }
+    // A code holds page 0 alone when page 1 is all at its defaults, as every code before the array
+    // grew did, so an editor that knows only page 0 still reads it; both pages otherwise.
+    const page1_at_defaults = Object.entries(miniChordController.page1_defaults).every(([adress, value]) => sysex_array[adress] == value);
+    const code_length = page1_at_defaults ? miniChordController.page_size : miniChordController.parameter_size;
     output_base64="";
     output_string="{";
-    for (let i = 0; i < (miniChordController.parameter_size - 1); i++) {
+    for (let i = 0; i < (code_length - 1); i++) {
       output_string += String(sysex_array[i])
       output_string += ","
       output_base64+=sysex_array[i];
       output_base64+=";"
     }
-    output_string += String(sysex_array[miniChordController.parameter_size - 1]);
+    output_string += String(sysex_array[code_length - 1]);
     output_string += "},"
     encoded=btoa(output_base64)
     console.log(encoded)
@@ -363,15 +372,12 @@ function load_settings() {
   }else{
     let preset_code = prompt('Paste preset code');
     if(preset_code!=null){
-      parameters=atob(preset_code).split(";");
-      if(parameters.length!=miniChordController.parameter_size){
+      parameters=atob(preset_code).split(";").map(Number);
+      // page 0 alone (every code from before the array grew) or both pages
+      if(parameters.length!=miniChordController.page_size && parameters.length!=miniChordController.parameter_size){
         alert("malformed preset code");
       }else{
-        adress_index=2; //skip the command and bank number
-        for (adress_index; adress_index<miniChordController.parameter_size;adress_index++) {
-          miniChordController.sendParameter(adress_index, parameters[adress_index]);
-        } 
-        miniChordController.sendParameter(0, 0);//we ask the minichord to update the interface
+        miniChordController.applyPreset(parameters);
       }
     }
   }
@@ -542,7 +548,7 @@ async function generateRandomPreset() {
   
   // Send the preset to the device
   for (let i = 2; i < miniChordController.parameter_size; i++) {
-    if (preset[i] !== undefined) {
+    if (preset[i] !== undefined && !miniChordController.reserved_adresses.includes(i)) {
       let valueToSend = preset[i];
       
       // Float values are already in the correct range (e.g., 0-100), 
