@@ -3,6 +3,10 @@ class MiniChordController {
     constructor() {
       this.device = false;
       this.parameter_size = 256;
+      // The knob memories and the volumes are put to the middle once a connection, on the first dump,
+      // so presets saved from here keep them there; not on every dump, or a preset change, a pop or a
+      // refresh would snap the knobs' alternate functions back to the middle while playing.
+      this.knobs_centred = false;
       this.color_hue_sysex_adress = 20;
       this.base_adress_rythm = 220;
       this.potentiometer_memory_adress = [4, 5, 6];
@@ -47,6 +51,7 @@ class MiniChordController {
             `>>>> minichord sysex control port [type:'${output.type}'] id: '${output.id}' manufacturer: '${output.manufacturer}' name: '${output.name}' version: '${output.version}'`
           );
           this.device = output;
+          this.knobs_centred = false;
           const sysex_message = [0xF0, 0, 0, 0, 0, 0xF7];
           this.device.send(sysex_message);
         } else {
@@ -130,15 +135,18 @@ class MiniChordController {
         
         this.active_bank_number = processedData.bankNumber;
         
-        // Override potentiometer and volume values
-        for (const i of this.potentiometer_memory_adress) {
-          this.sendParameter(i, 512);
-          processedData.parameters[i] = 512;
-        }
-        
-        for (const i of this.volume_memory_adress) {
-          this.sendParameter(i, 0.5 * 100);
-          processedData.parameters[i] = 0.5 * 100;
+        // Override potentiometer and volume values, once a connection
+        if (!this.knobs_centred) {
+          this.knobs_centred = true;
+          for (const i of this.potentiometer_memory_adress) {
+            this.sendParameter(i, 512);
+            processedData.parameters[i] = 512;
+          }
+
+          for (const i of this.volume_memory_adress) {
+            this.sendParameter(i, 0.5 * 100);
+            processedData.parameters[i] = 0.5 * 100;
+          }
         }
         
         if (this.onDataReceived) {
