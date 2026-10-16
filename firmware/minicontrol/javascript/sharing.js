@@ -197,13 +197,8 @@ class PresetManager {
             // Decode the preset data
             const presetData = this.decodePresetData(preset.value);
             
-            // Send all parameters to the device
-            for (let i = 2; i < presetData.length && i < miniChordController.parameter_size; i++) {
-                miniChordController.sendParameter(i, presetData[i]);
-            }
-
-            // Request device to update interface
-            miniChordController.sendParameter(0, 0);
+            // Send all parameters to the device, page 1 at its defaults if the code has only page 0
+            miniChordController.applyPreset(presetData);
             
             console.log(`Trying preset: ${preset.name}`);
             this.showNotification(`Applied preset: ${preset.name}`, 'success');

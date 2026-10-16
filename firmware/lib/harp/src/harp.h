@@ -18,8 +18,18 @@ class harp{
   void setup();
   void recalibrate();
   void update(debouncer (&data_array)[12]);
+  // How far each pad's reading is below its baseline, in harp order: how
+  // strongly it is touched, not only whether. Used to find a finger between pads.
+  void read_strength(int16_t (&strength)[12]);
+  // The touch and release thresholds, 0 for the stock ones. Higher touches
+  // need a firmer finger; the release is how far a finger rises before a pad
+  // lets go. They reach the chip at the next apply_thresholds().
+  void set_thresholds(uint8_t touch, uint8_t release);
+  bool thresholds_pending() { return thresholds_changed; }
+  void apply_thresholds();
 
   private:
+  bool thresholds_changed = false;
   #if CAP_CHIP==1
     AT42QT2120 touch_sensor;
     int remap_array[12]={3,4,5,6,7,8,9,10,11,2,1,0};
@@ -30,8 +40,10 @@ class harp{
     MPR121 touch_sensor;
     int remap_array[12]={11,9,7,6,8,10,0,2,4,5,3,1};
     //int remap_array[12]={1,3,5,4,2,0,10,8,7,11,9,6};
-    const uint8_t touch_threshold = 40;
-    const uint8_t release_threshold = 20;
+    const uint8_t stock_touch_threshold = 40;
+    const uint8_t stock_release_threshold = 20;
+    uint8_t touch_threshold = stock_touch_threshold;
+    uint8_t release_threshold = stock_release_threshold;
     const uint8_t touch_debounce = 1;
     const uint8_t release_debounce = 1;
     const MPR121::BaselineTracking baseline_tracking = MPR121::BASELINE_TRACKING_INIT_10BIT;

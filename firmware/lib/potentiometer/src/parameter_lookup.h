@@ -6,7 +6,7 @@
 #include <stdint.h>
 
 struct ParameterInfo {
-    uint8_t sysex_adress;
+    uint16_t sysex_adress;
     bool is_selector;   // mapped across min..max; everything else scales around its value
     int16_t min_value;
     int16_t max_value;
@@ -15,6 +15,11 @@ struct ParameterInfo {
 static const ParameterInfo parameter_lookup[] = {
     { 20, 0, 0, 360 }, // bank color
     { 32, 0, 0, 1 }, // led attenuation
+    { 243, 1, 0, 10 }, // harp plate
+    { 416, 1, 0, 7 }, // neighbour guard
+    { 417, 1, 0, 9 }, // strip guard
+    { 241, 0, 0, 120 }, // harp touch threshold
+    { 242, 0, 0, 119 }, // harp release threshold
     { 21, 1, 0, 1 }, // retrigger chords
     { 22, 1, 0, 1 }, // change held strings
     { 23, 1, 0, 2 }, // slash level
@@ -48,6 +53,10 @@ static const ParameterInfo parameter_lookup[] = {
     { 99, 1, 0, 4 }, // octave change
     { 40, 1, 0, 6 }, // harp shuffling
     { 98, 1, 0, 1 }, // chromatic mode
+    { 245, 1, 0, 1 }, // harp ribbon
+    { 246, 1, 0, 24 }, // ribbon span
+    { 247, 0, 0, 100 }, // ribbon snap
+    { 248, 0, 0, 250 }, // ribbon glide
     { 41, 0, 0, 1 }, // amplitude
     { 42, 1, 0, 11 }, // waveform
     { 43, 0, 0, 5000 }, // attack
@@ -208,6 +217,19 @@ static const ParameterInfo parameter_lookup[] = {
     { 195, 0, 0, 1 }, // bandpass
     { 196, 0, 0, 1 }, // highpass
     { 197, 0, 0, 2 }, // output amplifier
+};
+
+// Page 1's factory defaults, as stored (floats in hundredths), from each parameter's
+// default_value: the same in every bank. Page 0's are the factory presets in main.cpp.
+static const int16_t parameter_page1_defaults[256] = {
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    5, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 
 #endif // PARAMETER_LOOKUP_H
