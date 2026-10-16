@@ -390,6 +390,25 @@ AudioConnection          patchCord216(chords_main_filter, 2, chords_main_filter_
 //MANUAL OUTPUT SECTION
 #include "effect_platervbstereo.h"
 AudioSynthWaveformDc     string_gain; 
+// The strings' effects chain again for the right side, for string spread (257): each string is placed
+// between the left chain and this one by its mixer gains (apply_string_spread). Declared here, in signal
+// order and before the output stage, since the library updates objects in declaration order: declared
+// later, the right side would come out a block behind the left.
+AudioMixer4              string_mix_1_r;
+AudioMixer4              string_mix_2_r;
+AudioMixer4              string_mix_3_r;
+AudioMixer4              all_string_mix_r;
+AudioEffectWaveshaper    string_waveshape_r;
+AudioMixer4              string_waveshaper_mix_r;
+AudioFilterStateVariable filter_delay_strings_r; // ahead of the delay's mixer, as on the left, so the feedback loop's block falls in the same place
+AudioMixer4              string_delay_mix_r;
+AudioEffectDelay         delay_strings_r;
+AudioMixer4              strings_effect_mix_r;
+AudioEffectMultiply      string_multiply_r;
+AudioFilterStateVariable string_filter_r;
+AudioMixer4              string_filter_mixer_r;
+AudioEffectMultiply      string_multiplier_r;
+AudioAmplifier           string_amplifier_r;
 AudioEffectMultiply      string_multiplier;  
 AudioAmplifier           string_amplifier; 
 AudioSynthWaveformDc     string_l_stereo_gain;        
@@ -399,6 +418,11 @@ AudioEffectMultiply      string_r_stereo_multiply;
 AudioSynthWaveformDc     chords_gain;        
 AudioEffectMultiply      chords_multiplier;  
 AudioAmplifier           chords_amplifier; 
+// chord ensemble (259): a slow chorus a side, a ~10 ms delay swept by a sine (the flange object given a long delay)
+AudioEffectFlange        chord_ensemble_l;
+AudioEffectFlange        chord_ensemble_r;
+AudioMixer4              chord_ensemble_mix_l;
+AudioMixer4              chord_ensemble_mix_r;
 AudioSynthWaveformDc     chords_l_stereo_gain;        
 AudioSynthWaveformDc     chords_r_stereo_gain;        
 AudioEffectMultiply      chords_l_stereo_multiply;  
@@ -417,18 +441,25 @@ AudioConnection          patchCord2001(string_gain, 0, string_multiplier, 1);
 AudioConnection          patchCord2002(string_multiplier, 0, string_amplifier, 0);
 AudioConnection          patchCord2003(string_amplifier, 0, string_l_stereo_multiply, 0);
 AudioConnection          patchCord2004(string_l_stereo_gain, 0, string_l_stereo_multiply, 1);
-AudioConnection          patchCord2005(string_amplifier, 0, string_r_stereo_multiply, 0);
+AudioConnection          patchCord2005(string_amplifier_r, 0, string_r_stereo_multiply, 0);
 AudioConnection          patchCord2006(string_r_stereo_gain, 0, string_r_stereo_multiply, 1);
 AudioConnection          patchCord2007(string_r_stereo_multiply, 0, stereo_r_mixer, 0);
 AudioConnection          patchCord2008(string_l_stereo_multiply, 0, stereo_l_mixer, 0);
 AudioConnection          patchCord2009(string_amplifier, 0, reverb_mixer, 0);
+AudioConnection          patchCord2009r(string_amplifier_r, 0, reverb_mixer, 2); // the reverb hears both sides, each at half
 
 AudioConnection          patchCord2010(chords_main_filter_mixer, 0, chords_multiplier, 0);
 AudioConnection          patchCord2011(chords_gain, 0, chords_multiplier, 1);
 AudioConnection          patchCord2012(chords_multiplier, 0, chords_amplifier, 0);
-AudioConnection          patchCord2013(chords_amplifier, 0, chords_l_stereo_multiply, 0);
+AudioConnection          patchCord2013(chord_ensemble_mix_l, 0, chords_l_stereo_multiply, 0);
+AudioConnection          ensembleCord1(chords_amplifier, 0, chord_ensemble_mix_l, 0);
+AudioConnection          ensembleCord2(chords_amplifier, chord_ensemble_l);
+AudioConnection          ensembleCord3(chord_ensemble_l, 0, chord_ensemble_mix_l, 1);
 AudioConnection          patchCord2014(chords_l_stereo_gain, 0, chords_l_stereo_multiply, 1);
-AudioConnection          patchCord2015(chords_amplifier, 0, chords_r_stereo_multiply, 0);
+AudioConnection          patchCord2015(chord_ensemble_mix_r, 0, chords_r_stereo_multiply, 0);
+AudioConnection          ensembleCord4(chords_amplifier, 0, chord_ensemble_mix_r, 0);
+AudioConnection          ensembleCord5(chords_amplifier, chord_ensemble_r);
+AudioConnection          ensembleCord6(chord_ensemble_r, 0, chord_ensemble_mix_r, 1);
 AudioConnection          patchCord2016(chords_r_stereo_gain, 0, chords_r_stereo_multiply, 1);
 AudioConnection          patchCord2017(chords_r_stereo_multiply, 0, stereo_r_mixer, 1);
 AudioConnection          patchCord2018(chords_l_stereo_multiply, 0, stereo_l_mixer, 1);
@@ -447,3 +478,42 @@ AudioConnection          patchCord2024(stereo_r_mixer, 0, DAC_out, 0);
 AudioConnection          patchCord2025(stereo_l_mixer, 0, USB_out, 1);
 AudioConnection          patchCord2026(stereo_r_mixer, 0, USB_out, 0);
 #endif
+
+// the right side of the strings' chain, cord for cord the left's
+AudioConnection          patchCord141_r(filter_string_4, 0, string_mix_1_r, 3);
+AudioConnection          patchCord142_r(filter_string_5, 0, string_mix_2_r, 0);
+AudioConnection          patchCord143_r(filter_string_1, 0, string_mix_1_r, 0);
+AudioConnection          patchCord144_r(filter_string_7, 0, string_mix_2_r, 2);
+AudioConnection          patchCord145_r(filter_string_2, 0, string_mix_1_r, 1);
+AudioConnection          patchCord146_r(filter_string_8, 0, string_mix_2_r, 3);
+AudioConnection          patchCord147_r(filter_string_3, 0, string_mix_1_r, 2);
+AudioConnection          patchCord148_r(filter_string_6, 0, string_mix_2_r, 1);
+AudioConnection          patchCord149_r(filter_string_9, 0, string_mix_3_r, 0);
+AudioConnection          patchCord150_r(filter_string_11, 0, string_mix_3_r, 2);
+AudioConnection          patchCord151_r(filter_string_12, 0, string_mix_3_r, 3);
+AudioConnection          patchCord152_r(filter_string_10, 0, string_mix_3_r, 1);
+AudioConnection          patchCord164_r(transient_full_mix, 0, all_string_mix_r, 3);
+AudioConnection          patchCord165_r(string_mix_3_r, 0, all_string_mix_r, 2);
+AudioConnection          patchCord166_r(string_mix_1_r, 0, all_string_mix_r, 0);
+AudioConnection          patchCord167_r(string_mix_2_r, 0, all_string_mix_r, 1);
+AudioConnection          patchCord176_r(all_string_mix_r, string_waveshape_r);
+AudioConnection          patchCord177_r(all_string_mix_r, 0, string_waveshaper_mix_r, 0);
+AudioConnection          patchCord186_r(string_waveshape_r, 0, string_waveshaper_mix_r, 1);
+AudioConnection          patchCord187_r(string_waveshaper_mix_r, 0, strings_effect_mix_r, 0);
+AudioConnection          patchCord188_r(string_waveshaper_mix_r, 0, string_delay_mix_r, 0);
+AudioConnection          patchCord191_r(filter_delay_strings_r, 0, string_delay_mix_r, 1);
+AudioConnection          patchCord192_r(filter_delay_strings_r, 1, string_delay_mix_r, 2);
+AudioConnection          patchCord193_r(filter_delay_strings_r, 2, string_delay_mix_r, 3);
+AudioConnection          patchCord195_r(string_delay_mix_r, delay_strings_r);
+AudioConnection          patchCord196_r(string_delay_mix_r, 0, strings_effect_mix_r, 1);
+AudioConnection          patchCord199_r(string_tremolo_lfo, 0, string_multiply_r, 1);
+AudioConnection          patchCord200_r(strings_effect_mix_r, 0, string_multiply_r, 0);
+AudioConnection          patchCord204_r(delay_strings_r, 0, filter_delay_strings_r, 0);
+AudioConnection          patchCord205_r(string_filter_lfo, 0, string_filter_r, 1);
+AudioConnection          patchCord208_r(string_multiply_r, 0, string_filter_r, 0);
+AudioConnection          patchCord210_r(string_filter_r, 0, string_filter_mixer_r, 0);
+AudioConnection          patchCord211_r(string_filter_r, 1, string_filter_mixer_r, 1);
+AudioConnection          patchCord212_r(string_filter_r, 2, string_filter_mixer_r, 2);
+AudioConnection          patchCord2000_r(string_filter_mixer_r, 0, string_multiplier_r, 0);
+AudioConnection          patchCord2001_r(string_gain, 0, string_multiplier_r, 1);
+AudioConnection          patchCord2002_r(string_multiplier_r, 0, string_amplifier_r, 0);

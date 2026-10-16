@@ -87,6 +87,15 @@ void apply_audio_parameter(int adress, int value) {
       case 28:
         main_reverb.diffusion(value/100.0);
         break;
+      case 257:
+        string_spread=value; apply_string_spreads();
+        break;
+      case 258:
+        string_spread_pattern=value; apply_string_spreads();
+        break;
+      case 259:
+        set_chord_ensemble(value);
+        break;
       case 29:
         pan=value/100.0;apply_audio_parameter(85, current_sysex_parameters[85]);apply_audio_parameter(184, current_sysex_parameters[184]);
         break;
@@ -313,52 +322,52 @@ void apply_audio_parameter(int adress, int value) {
         }
         break;
       case 77:
-        delay_strings.delay(0,value);
+        delay_strings.delay(0,value);delay_strings_r.delay(0,value);
         break;
       case 78:
-        filter_delay_strings.frequency(value);
+        filter_delay_strings.frequency(value);filter_delay_strings_r.frequency(value);
         break;
       case 79:
-        filter_delay_strings.resonance(value/100.0);
+        filter_delay_strings.resonance(value/100.0);filter_delay_strings_r.resonance(value/100.0);
         break;
       case 80:
-        string_delay_mix.gain(1,value/100.0);
+        string_delay_mix.gain(1,value/100.0);string_delay_mix_r.gain(1,value/100.0);
         break;
       case 81:
-        string_delay_mix.gain(2,value/100.0);
+        string_delay_mix.gain(2,value/100.0);string_delay_mix_r.gain(2,value/100.0);
         break;
       case 82:
-        string_delay_mix.gain(3,value/100.0);
+        string_delay_mix.gain(3,value/100.0);string_delay_mix_r.gain(3,value/100.0);
         break;
       case 83:
-        strings_effect_mix.gain(0,value/100.0);
+        strings_effect_mix.gain(0,value/100.0);strings_effect_mix_r.gain(0,value/100.0);
         break;
       case 84:
-        strings_effect_mix.gain(1,value/100.0);
+        strings_effect_mix.gain(1,value/100.0);strings_effect_mix_r.gain(1,value/100.0);
         break;
       case 85:
-        reverb_mixer.gain(0,value/100.0);string_r_stereo_gain.amplitude((1-reverb_dry_proportion*value/100.0)*pan,100);string_l_stereo_gain.amplitude(1-reverb_dry_proportion*value/100.0,100);
+        reverb_mixer.gain(0,value/100.0/2);reverb_mixer.gain(2,value/100.0/2);string_r_stereo_gain.amplitude((1-reverb_dry_proportion*value/100.0)*pan,100);string_l_stereo_gain.amplitude(1-reverb_dry_proportion*value/100.0,100);
         break;
       case 86:
-        string_waveshaper_mix.gain(0,1-value/100.0);string_waveshaper_mix.gain(1,value/100.0);
+        string_waveshaper_mix.gain(0,1-value/100.0);string_waveshaper_mix_r.gain(0,1-value/100.0);string_waveshaper_mix.gain(1,value/100.0);string_waveshaper_mix_r.gain(1,value/100.0);
         break;
       case 87:
-        ws_sin_param=value;calculate_ws_array(); string_waveshape.shape(wave_shape,257);
+        ws_sin_param=value;calculate_ws_array(); string_waveshape.shape(wave_shape,257); string_waveshape_r.shape(wave_shape,257);
         break;
       case 88:
-        string_filter.frequency(value);
+        string_filter.frequency(value);string_filter_r.frequency(value);
         break;
       case 89:
-        string_filter.resonance(value/100.0);
+        string_filter.resonance(value/100.0);string_filter_r.resonance(value/100.0);
         break;
       case 90:
-        string_filter_mixer.gain(0,value/100.0);
+        string_filter_mixer.gain(0,value/100.0);string_filter_mixer_r.gain(0,value/100.0);
         break;
       case 91:
-        string_filter_mixer.gain(1,value/100.0);
+        string_filter_mixer.gain(1,value/100.0);string_filter_mixer_r.gain(1,value/100.0);
         break;
       case 92:
-        string_filter_mixer.gain(2,value/100.0);
+        string_filter_mixer.gain(2,value/100.0);string_filter_mixer_r.gain(2,value/100.0);
         break;
       case 93:
         string_filter_lfo.begin(waveform_array[constrain(value,0,11)]);
@@ -370,10 +379,10 @@ void apply_audio_parameter(int adress, int value) {
         string_filter_lfo.amplitude(value/100.0);
         break;
       case 96:
-        string_filter.octaveControl(value/100.0);
+        string_filter.octaveControl(value/100.0);string_filter_r.octaveControl(value/100.0);
         break;
       case 97:
-        string_amplifier.gain(value/100.0);
+        string_amplifier.gain(value/100.0);string_amplifier_r.gain(value/100.0);
         break;
       case 3:
         chords_gain.amplitude(value/100.0,100); chord_attack_velocity=value/100.0*127;
