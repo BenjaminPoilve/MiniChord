@@ -144,8 +144,11 @@ void apply_audio_parameter(int adress, int value) {
         break;
       case 41:
         for (int i=0;i<12;i++){
-          string_waveform_array[i]->amplitude(value/100.0);
+          string_waveform_array[i]->amplitude(value/100.0); harp_sample_array[i]->amplitude(value/100.0*harp_sample_level); harp_amplitude=value/100.0;
         }
+        break;
+      case 264:
+        set_harp_source(value);
         break;
       case 42:
         for (int i=0;i<12;i++){
@@ -390,6 +393,21 @@ void apply_audio_parameter(int adress, int value) {
         break;
       case 199:
         glide_length=value;
+        break;
+      case 265:
+        set_chord_source(value);
+        break;
+      case 270:
+        set_chord_note_source(0,value);
+        break;
+      case 271:
+        set_chord_note_source(1,value);
+        break;
+      case 272:
+        set_chord_note_source(2,value);
+        break;
+      case 273:
+        set_chord_note_source(3,value);
         break;
       case 121:
         for (int i=0;i<4;i++){

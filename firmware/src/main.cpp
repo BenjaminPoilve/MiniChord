@@ -10,9 +10,10 @@
 #include <debouncer.h>
 #include <harp.h>
 #include <potentiometer.h>
+#include "minichord_samples.h"
 
 //>>SOFWTARE VERSION 
-int version_ID=9; //to be read 00.03, stored at adress 7 in memory
+int version_ID=11; //to be read 00.03, stored at adress 7 in memory
 //>>BUTTON ARRAYS<<
 debouncer harp_array[12];
 debouncer chord_matrix_array[22];
@@ -193,10 +194,24 @@ bool retrigger_chord = true;      // wether or not to retrigger the enveloppe wh
 bool change_held_strings = false; // to control wether hold strings change with chord:
 bool chromatic_harp_mode = false; // to switch the harp to chromatic mode
 //>>SYSEX PARAMETERS<<
-// SYSEX midi message are used to control up to 256 synthesis parameters.
-const uint16_t parameter_size = 256;
+// SYSEX midi message are used to control up to 512 synthesis parameters, in two pages of 256.
+//
+// Page 0 (0-255) is every setting there was before the array grew, and stays exactly as it was
+// everywhere, so no existing preset changes: the preset files, the factory presets below, the
+// dump an editor reads on command 0, and preset codes. Page 1 (256-511) is for new settings. A
+// preset file holds all 512 now, but one saved before holds 256, and loading starts every slot at
+// its default (parameter_default) before the file is read over it, so page 1 comes up at its
+// defaults; firmware from before the growth reads the first 256 of a longer file and keeps page 0.
+// Page 1 goes to an editor only when asked (command 7), with a header, so no tool that knows only
+// page 0 can take it for a dump. 382, 383, 510 and 511 stay unused: their low byte is a universal
+// SysEx id (0x7E, 0x7F), as the first byte of a write.
+const uint16_t parameter_size = 512;
+const uint16_t page_size = 256;
 const uint8_t preset_number = 12;
-int16_t default_bank_sysex_parameters[preset_number][parameter_size] = {
+static_assert(sizeof(parameter_page1_defaults) / sizeof(parameter_page1_defaults[0]) == parameter_size - page_size, "parameter_lookup.h is for another array size: run the generator");
+// The factory presets' page 0; page 1's defaults are generated, the same for every bank
+// (parameter_page1_defaults in parameter_lookup.h, from parameters.json)
+int16_t default_bank_sysex_parameters[preset_number][page_size] = {
   {0,0,50,50,512,512,512,0,0,0,192,100,49,100,184,100,157,100,0,0,0,0,0,0,43,0,50,37,38,67,0,0,0,0,0,0,0,0,0,0,0,16,0,8,8,12,42,1171,1,423,20,70,3,35,83,59,2658,1,0,0,0,0,0,0,0,1,1,1,100,1,1,0,1,1,1,1,14,0,0,70,0,0,0,100,0,6,0,0,755,195,23,61,29,0,0,0,0,162,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,13,8,100,16,0,200,0,0,50,0,50,18,32,50,0,0,10,66,353,65,995,1,569,16,141,32,83,28,48,54,1,0,0,0,56,0,389,0,20,0,0,0,0,1,1,1,0,1,1,0,1,1,1,1,0,0,0,70,0,0,0,100,0,64,0,0,80,16,4,94,753,474,70,5,100,100,100,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,0,6,6,32,0,6,0,16,0,6,6,32,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
   {0,0,50,50,512,512,512,0,0,0,194,100,85,100,60,100,61,100,0,0,10,1,0,0,0,0,0,0,0,100,0,0,0,0,0,0,0,0,0,0,4,25,8,3,29,18,65,488,3,159,25,70,5,18,4,26,6,1,77,0,587,32,0,390,0,76,1,1,100,1,1,68,17,14,22,20,0,340,1682,70,48,0,0,100,18,54,0,0,800,70,57,100,100,0,0,0,0,199,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,7,0,100,0,0,100,6,8,200,2,50,36,75,50,28,0,3,1,1,80,1218,2,1659,38,114,19,8,32,80,1,1,0,30,0,0,0,0,0,0,0,24,0,3,1,1,1,100,1,1,100,1,1,1,1,31,0,0,70,0,0,0,100,0,33,2,1,162,16,4,100,100,1436,118,100,50,32,107,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,13,0,4,0,7,0,0,2,13,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
   {0,0,50,50,512,512,512,0,0,0,192,100,49,100,184,100,157,100,0,0,30,0,1,1,87,33,62,12,80,67,0,0,0,0,0,0,0,0,0,0,0,6,3,8,8,12,42,1855,1,42,20,217,3,35,83,59,2658,1,185,0,282,14,0,247,11,1,1,1,100,1,1,0,1,1,1,1,14,0,0,70,0,0,0,100,0,23,0,0,755,195,82,61,29,0,0,0,0,162,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,13,0,100,23,8,200,0,0,50,0,50,18,32,50,0,0,10,66,353,44,1452,1,569,16,141,32,83,28,48,54,1,0,698,82,56,0,579,0,28,0,0,0,0,1,1,1,0,1,1,100,1,1,1,1,0,0,0,70,0,0,0,100,0,100,0,0,80,16,4,94,753,474,70,5,100,100,100,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,0,6,6,32,0,6,0,16,0,6,6,32,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -249,6 +264,8 @@ AudioFilterStateVariable *string_filter_array[12] = {&filter_string_1, &filter_s
 AudioSynthWaveform *string_transient_waveform_array[12] = {&waveform_transient_1, &waveform_transient_2, &waveform_transient_3, &waveform_transient_4, &waveform_transient_5, &waveform_transient_6, &waveform_transient_7, &waveform_transient_8, &waveform_transient_9, &waveform_transient_10, &waveform_transient_11, &waveform_transient_12};
 AudioEffectEnvelope *string_transient_envelope_array[12] = {&envelope_transient_1, &envelope_transient_2, &envelope_transient_3, &envelope_transient_4, &envelope_transient_5, &envelope_transient_6, &envelope_transient_7, &envelope_transient_8, &envelope_transient_9, &envelope_transient_10, &envelope_transient_11, &envelope_transient_12};
 AudioMixer4 *transient_mixer_array[3] = {&transient_mix_1, &transient_mix_2, &transient_mix_3};
+AudioSynthWavetable *harp_sample_array[12] = {&harp_sample_1, &harp_sample_2, &harp_sample_3, &harp_sample_4, &harp_sample_5, &harp_sample_6, &harp_sample_7, &harp_sample_8, &harp_sample_9, &harp_sample_10, &harp_sample_11, &harp_sample_12};
+AudioMixer4 *harp_source_mix_array[12] = {&harp_source_mix_1, &harp_source_mix_2, &harp_source_mix_3, &harp_source_mix_4, &harp_source_mix_5, &harp_source_mix_6, &harp_source_mix_7, &harp_source_mix_8, &harp_source_mix_9, &harp_source_mix_10, &harp_source_mix_11, &harp_source_mix_12};
 // for the chord
 AudioEffectEnvelope *chord_vibrato_envelope_array[4] = {&voice1_vibrato_envelope, &voice2_vibrato_envelope, &voice3_vibrato_envelope, &voice4_vibrato_envelope};
 AudioEffectEnvelope *chord_vibrato_dc_envelope_array[4] = {&voice1_vibrato_dc_envelope, &voice2_vibrato_dc_envelope, &voice3_vibrato_dc_envelope, &voice4_vibrato_dc_envelope};
@@ -263,6 +280,8 @@ AudioFilterStateVariable *chord_voice_filter_array[4] = {&voice1_filter, &voice2
 AudioEffectEnvelope *chord_envelope_filter_array[4] = {&voice1_envelope_filter, &voice2_envelope_filter, &voice3_envelope_filter, &voice4_envelope_filter};
 AudioEffectMultiply *chord_tremolo_mult_array[4] = {&voice1_tremolo_mult, &voice2_tremolo_mult, &voice3_tremolo_mult, &voice4_tremolo_mult};
 AudioEffectEnvelope *chord_envelope_array[4] = {&voice1_envelope, &voice2_envelope, &voice3_envelope, &voice4_envelope};
+AudioSynthWavetable *chord_sample_array[4] = {&chord_sample_1, &chord_sample_2, &chord_sample_3, &chord_sample_4};
+AudioMixer4 *chord_source_mix_array[4] = {&chord_source_mix_1, &chord_source_mix_2, &chord_source_mix_3, &chord_source_mix_4};
 
 //>>SYNTHESIS VARIABLE<<
 // waveshaper shape
@@ -453,7 +472,21 @@ void refresh_chord_filter();
 // the note frequency each chord voice is currently sounding, kept so the filter
 // corner can be recomputed for a voice without touching anything else about it
 float chord_voice_note_freq[4] = {0, 0, 0, 0};
+// the same for each harp string, for its sample (see SAMPLED INSTRUMENTS)
+float harp_note_freq[12] = {};
 void calculate_ws_array();
+// sampled instruments (adresses 264, 265): 0 the voice's own oscillators, 1 piano, 2 pizzicato, 3 choir, 4 strings
+uint8_t harp_voice_source = 0;
+uint8_t chord_voice_source = 0;                // the chords as a whole (chord voice, 265)
+uint8_t chord_note_source[4] = {0, 0, 0, 0};   // each note's own (270-273): 0 as the chord voice, else 1 + a source
+uint8_t chord_source_of[4] = {0, 0, 0, 0};     // what each chord voice sounds now, as chord_voice_source counts
+float harp_amplitude = 0;                // the strings' amplitude (41), which a harp sample follows
+const float harp_sample_level = 3.0f;    // a sample's loudness (0.2 RMS) against the strings' oscillators
+const float chord_sample_level = 1.0f;   // and against the chords'
+void set_harp_source(uint8_t source);
+void set_chord_source(uint8_t source);
+void set_chord_note_source(uint8_t i, uint8_t value);
+void chord_sample_start(uint8_t i);
 void rythm_tick_function();
 
 //-->>LED HSV CALCULATION
@@ -520,17 +553,38 @@ void set_led_color(float h, float s, float v) {
 }
 
 //-->>UTILITIES FOR SYSEX HANDLING
+// A setting's factory default in a bank: page 0's from the bank's factory preset, page 1's generated
+static inline int16_t parameter_default(int bank_number, uint16_t i) {
+  return i < page_size ? default_bank_sysex_parameters[bank_number][i] : parameter_page1_defaults[i - page_size];
+}
+
+// A page of settings to an editor. Page 0 is the dump every editor has always read, recognised by
+// its length alone, so it stays exactly that; the others carry a header (7D, the id for
+// non-commercial use, then 6D and the page) and are a few bytes longer, which an editor that
+// knows only page 0 drops.
+void send_parameter_page(uint8_t page) {
+  if (page >= parameter_size / page_size) return;
+  const uint8_t header = page == 0 ? 0 : 3;
+  uint8_t midi_data_array[3 + page_size * 2];
+  midi_data_array[0] = 0x7D;
+  midi_data_array[1] = 0x6D;
+  midi_data_array[2] = page;
+  for (uint16_t i = 0; i < page_size; i++) {
+    int16_t parameter_value = constrain(current_sysex_parameters[page * page_size + i], 0, 16383); // a sysex byte only carries 7 bits
+    midi_data_array[header + 2 * i] = parameter_value % 128;
+    midi_data_array[header + 2 * i + 1] = parameter_value / 128;
+  }
+  usbMIDI.sendSysEx(header + page_size * 2, midi_data_array, 0);
+}
+
 void control_command(uint8_t command, uint8_t parameter) {
   switch (command) {
-  case 0: // SIGNAL TO SEND BACK ALL DATA
+  case 0: // SIGNAL TO SEND BACK ALL DATA: page 0, as it always was, two bytes a setting and no header
     Serial.println("Reporting all data");
-    uint8_t midi_data_array[parameter_size * 2];
-    for (int i = 0; i < parameter_size; i++) {
-      int16_t parameter_value = constrain(current_sysex_parameters[i], 0, 16383); // a sysex byte only carries 7 bits
-      midi_data_array[2 * i] = parameter_value % 128;
-      midi_data_array[2 * i + 1] = parameter_value / 128;
-    }
-    usbMIDI.sendSysEx(parameter_size * 2, midi_data_array,0);
+    send_parameter_page(0);
+    break;
+  case 7: // page 1 and on, for an editor that knows them: 7D 6D <page>, then two bytes a setting
+    send_parameter_page(parameter);
     break;
   case 1: // SIGNAL TO WIPE MEMORY
     Serial.println("Wiping memory");
@@ -658,6 +712,7 @@ void play_single_note(int i, IntervalTimer *timer) {
   chord_envelope_array[i]->noteOn();
   chord_envelope_filter_array[i]->noteOn();
   chord_voice_released[i] = false;
+  chord_sample_start(i);
   // ISR context: queue only, never touch usbMIDI here.
   if(chord_started_notes[i]!=0){
     queue_midi(false, chord_started_notes[i],chord_release_velocity,chord_channel, chord_port);
@@ -672,6 +727,7 @@ void play_note_selected_duration(int i,int current_note){
   chord_envelope_array[i]->noteOn();
   chord_envelope_filter_array[i]->noteOn();
   chord_voice_released[i] = false;
+  chord_sample_start(i);
   note_off_timing[i]=0;
   // ISR context: queue only, never touch usbMIDI here.
   if(chord_started_notes[i]!=0){
@@ -756,6 +812,7 @@ void set_chord_voice_frequency(uint8_t i, uint16_t current_note) {
     // chord_voice_filter_array[i]->frequency(1*freq);
     AudioInterrupts();
   }
+  if (chord_source_of[i] && chord_sample_array[i]->isPlaying()) chord_sample_array[i]->setFrequency(chord_voice_note_freq[i]);
 
   // Reached from BOTH the main loop (update_chord_notes) and PIT ISR context
   // (play_single_note, rythm_tick_function), so it must queue rather than send.
@@ -772,12 +829,92 @@ void set_harp_voice_frequency(uint8_t i, uint16_t current_note) {
   float note_freq =  pow(2,harp_octave_change)*c_frequency/4 * pow(2, (current_note+transpose_semitones) / 12.0);
   float transient_freq =  64.0*c_frequency/4 *pow(2, ((current_note+transpose_semitones)%12+transient_note_level) / 12.0);
   AudioNoInterrupts();
+  harp_note_freq[i] = note_freq;
   string_waveform_array[i]->frequency(note_freq);
+  if (harp_voice_source && harp_sample_array[i]->isPlaying()) harp_sample_array[i]->setFrequency(note_freq);
   string_transient_waveform_array[i]->frequency(transient_freq);
   string_filter_array[i]->frequency(string_filter_base_freq + note_freq * string_filter_keytrack);
   // string_vibrato_1.offset(0);
   AudioInterrupts();
 }
+//-->>SAMPLED INSTRUMENTS
+// A section's voices can play a sampled instrument instead of their oscillators (harp voice,
+// chord voice): piano, pizzicato strings, choir or a string quartet (lib/minichord_samples, made by
+// generator/samples.py). The sample goes through the voice's own envelope and filter, so the preset
+// shapes it as it does the oscillators, and follows the voice's note. The player's own envelope
+// only passes it on; samples_update stops it once the voice's envelope is done.
+const AudioSynthWavetable::instrument_data *sampled_instrument(uint8_t source) {
+  switch (source) {
+    case 1: return &piano_instrument;
+    case 2: return &pizzicato_instrument;
+    case 3: return &choir_instrument;
+    case 4: return &strings_instrument;
+  }
+  return nullptr;
+}
+
+void set_harp_source(uint8_t source) {
+  const AudioSynthWavetable::instrument_data *instrument = sampled_instrument(source);
+  harp_voice_source = instrument ? source : 0;
+  for (int i = 0; i < 12; i++) {
+    harp_sample_array[i]->stop();
+    if (instrument) harp_sample_array[i]->setInstrument(*instrument);
+    harp_source_mix_array[i]->gain(0, instrument ? 0 : 1);
+    harp_source_mix_array[i]->gain(1, instrument ? 1 : 0);
+  }
+}
+
+// Each chord voice has its own sample player, so each note can sound its own instrument: the chord
+// voice (265) for all four, or a note's own (270-273, counted from the first note as the note levels
+// 131-134 are) in its place, say pizzicato in the bass under a choir. Nothing more runs for it: a
+// voice plays one source either way.
+static void apply_chord_source(uint8_t i) {
+  uint8_t source = chord_note_source[i] ? chord_note_source[i] - 1 : chord_voice_source;
+  const AudioSynthWavetable::instrument_data *instrument = sampled_instrument(source);
+  chord_source_of[i] = instrument ? source : 0;
+  chord_sample_array[i]->stop();
+  if (instrument) chord_sample_array[i]->setInstrument(*instrument);
+  chord_source_mix_array[i]->gain(0, instrument ? 0 : 1);
+  chord_source_mix_array[i]->gain(1, instrument ? 1 : 0);
+}
+
+void set_chord_source(uint8_t source) {
+  chord_voice_source = sampled_instrument(source) ? source : 0;
+  for (uint8_t i = 0; i < 4; i++) apply_chord_source(i);
+}
+
+// value as stored: 0 the chord voice, 1 the oscillators, 2 piano, 3 pizzicato, 4 choir, 5 string quartet
+void set_chord_note_source(uint8_t i, uint8_t value) {
+  if (i > 3) return;
+  chord_note_source[i] = value <= 5 ? value : 0;
+  apply_chord_source(i);
+}
+
+// starts a voice's sample at the note it is set to (playing resets the player's amplitude)
+void harp_sample_start(uint8_t i) {
+  if (!harp_voice_source) return;
+  harp_sample_array[i]->playFrequency(harp_note_freq[i], 127);
+  harp_sample_array[i]->amplitude(harp_amplitude * harp_sample_level);
+}
+
+void chord_sample_start(uint8_t i) {
+  if (!chord_source_of[i]) return;
+  chord_sample_array[i]->playFrequency(chord_voice_note_freq[i], 127);
+  chord_sample_array[i]->amplitude(chord_sample_level);
+}
+
+// called from loop(): a sample whose voice's envelope is done stops, so a silent voice costs nothing
+void samples_update() {
+  if (harp_voice_source) {
+    for (int i = 0; i < 12; i++) {
+      if (harp_sample_array[i]->isPlaying() && !string_enveloppe_array[i]->isActive()) harp_sample_array[i]->stop();
+    }
+  }
+  for (int i = 0; i < 4; i++) {
+    if (chord_source_of[i] && chord_sample_array[i]->isPlaying() && !chord_envelope_array[i]->isActive()) chord_sample_array[i]->stop();
+  }
+}
+
 // Function to compute MIDI note offset dynamically with circular frame shift
 int8_t get_root_button(uint8_t key, uint8_t shift, uint8_t button) { 
   int8_t note = base_notes[button]; // Start with base note in C (e.g., B = 11, E = 4, ..., F = 5)
@@ -1120,7 +1257,9 @@ void save_config(int bank_number, bool default_save) {
     // if we need to put the default in memory
     Serial.println("Writing the default file");
     Serial.println(bank_name[bank_number]);
-    String return_data = serialize(default_bank_sysex_parameters[bank_number], parameter_size);
+    static int16_t factory[parameter_size];
+    for (uint16_t i = 0; i < parameter_size; i++) factory[i] = parameter_default(bank_number, i);
+    String return_data = serialize(factory, parameter_size);
     dataFile.println(return_data);
   } else {
     Serial.println("Saving current settings");
@@ -1162,6 +1301,9 @@ void load_config(int bank_number) {
     while (entry.available()) {
       data_string += char(entry.read());
     }
+    // every slot from its default first, so a slot the file doesn't hold (all of page 1, in a
+    // preset saved before the array grew) comes up at its default, not the last preset's
+    for (uint16_t i = 0; i < parameter_size; i++) current_sysex_parameters[i] = parameter_default(bank_number, i);
     deserialize(data_string, current_sysex_parameters);
     Serial.print("Loaded preset: ");
     Serial.println(entry.name());
@@ -1304,6 +1446,7 @@ void handle_harp() {
     int value = harp_array[i].read_transition();
     if (value == 2) {
       set_harp_voice_frequency(i, current_harp_notes[i]);
+      harp_sample_start(i);
       AudioNoInterrupts();
       envelope_string_vibrato_lfo.noteOn();
       envelope_string_vibrato_dc.noteOn();
@@ -1642,6 +1785,9 @@ void loop() {
 
   // Handle harp functions
   handle_harp();
+
+  // Stop the samples of voices that have gone quiet
+  samples_update();
 
   // The only point at which this firmware transmits MIDI. Must stay last, and must
   // stay in loop() -- see the MIDI OUTPUT QUEUE comment above.

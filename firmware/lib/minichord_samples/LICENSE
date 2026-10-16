@@ -1,0 +1,17 @@
+The sample data in this folder (src/minichord_samples.cpp) is derived from General MIDI
+instruments as rendered one note per file by the midi-js-soundfonts project
+(https://github.com/gleitz/midi-js-soundfonts), trimmed, mixed to mono, resampled, levelled
+and looped by generator/samples.py. It is not covered by the firmware's own license.
+
+piano (Acoustic Grand Piano), and the pizzicato strings' middle two recordings (50 and 60), from
+the FluidR3_GM soundfont by Frank Wen:
+  Creative Commons Attribution 3.0
+  https://creativecommons.org/licenses/by/3.0/us/
+
+pizzicato strings (recordings 40, 70 and 82), choir (Choir Aahs), and the string quartet (violin,
+viola, cello), from the Musyng Kite soundfont:
+  Creative Commons Attribution Share-Alike 3.0
+  https://creativecommons.org/licenses/by-sa/3.0/
+  These samples, and anything made from them, stay under that license.
+
+The licenses are as stated by the midi-js-soundfonts project.
