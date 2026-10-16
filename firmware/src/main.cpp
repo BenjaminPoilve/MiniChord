@@ -725,6 +725,9 @@ void set_chord_voice_frequency(uint8_t i, uint16_t current_note) {
     int base_octave =chord_octave_change-2+(chord_shuffling_array[chord_shuffling_selection][i])/10;
     int middle_note=base_octave*12+transpose_semitones; 
     int note_delta=note_level-middle_note;
+    // the offset reaches two octaves either way; a voice that inversion or spacing has taken further moves the centre instead
+    while (note_delta > 24) { middle_note += 12; note_delta -= 12; }
+    while (note_delta < -24) { middle_note -= 12; note_delta += 12; }
     float middle_freq=c_frequency*pow(2,middle_note/12.0);
 
     AudioNoInterrupts();
