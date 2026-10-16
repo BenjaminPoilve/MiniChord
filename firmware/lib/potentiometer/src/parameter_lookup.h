@@ -6,7 +6,7 @@
 #include <stdint.h>
 
 struct ParameterInfo {
-    uint8_t sysex_adress;
+    uint16_t sysex_adress;
     bool is_selector;   // mapped across min..max; everything else scales around its value
     int16_t min_value;
     int16_t max_value;
@@ -22,10 +22,22 @@ static const ParameterInfo parameter_lookup[] = {
     { 106, 1, 1, 16 }, // chord channel
     { 107, 1, 1, 16 }, // harp channel
     { 108, 1, 0, 1 }, // single port mode
+    { 8, 1, 0, 1 }, // MIDI in plays
     { 31, 1, 0, 1 }, // sharp function
     { 33, 1, 0, 1 }, // barry harris mode
     { 34, 1, 0, 6 }, // chord frame shift
     { 35, 1, 0, 11 }, // chord key signature
+    { 36, 1, 0, 9 }, // scalar harp mode
+    { 37, 1, 0, 3 }, // chord inversion
+    { 38, 1, 0, 4 }, // chord spacing
+    { 39, 1, 0, 1 }, // chord layout
+    { 202, 1, 0, 18 }, // alt layout major
+    { 203, 1, 0, 18 }, // alt layout minor
+    { 204, 1, 0, 18 }, // alt layout seventh
+    { 205, 1, 0, 18 }, // alt layout maj+7th
+    { 206, 1, 0, 18 }, // alt layout min+7th
+    { 207, 1, 0, 18 }, // alt layout maj+min
+    { 208, 1, 0, 18 }, // alt layout all three
     { 24, 0, 0, 1 }, // reverb size
     { 25, 0, 0, 1 }, // reverb high damping
     { 26, 0, 0, 1 }, // reverb low damping
@@ -40,10 +52,13 @@ static const ParameterInfo parameter_lookup[] = {
     { 15, 0, 0, 100 }, // mod main percent range
     { 16, 0, 21, 219 }, // mod alternate control
     { 17, 0, 0, 100 }, // mod alternate percent range 
+    { 256, 1, 0, 7 }, // looper
     { 4, 0, 0, 1024 }, // chord alternate value
     { 5, 0, 0, 1024 }, // harp alternate value
     { 6, 0, 0, 1024 }, // mod alternate value
     { 7, 0, 0, 10 }, // firmware revision
+    { 200, 0, 0, 511 }, // double tap control
+    { 201, 0, 0, 4095 }, // double tap value
     { 2, 0, 0, 1 }, // global gain
     { 99, 1, 0, 4 }, // octave change
     { 40, 1, 0, 6 }, // harp shuffling
@@ -208,6 +223,19 @@ static const ParameterInfo parameter_lookup[] = {
     { 195, 0, 0, 1 }, // bandpass
     { 196, 0, 0, 1 }, // highpass
     { 197, 0, 0, 2 }, // output amplifier
+};
+
+// Page 1's factory defaults, as stored (floats in hundredths), from each parameter's
+// default_value: the same in every bank. Page 0's are the factory presets in main.cpp.
+static const int16_t parameter_page1_defaults[256] = {
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 
 #endif // PARAMETER_LOOKUP_H
