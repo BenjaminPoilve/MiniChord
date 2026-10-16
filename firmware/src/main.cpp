@@ -167,6 +167,79 @@ uint8_t current_chord_notes[7];                  // the array for the note calcu
 uint8_t current_applied_chord_notes[7];          // the array for the note calculation within the chord
 uint8_t current_harp_notes[12];                  // the array for the note calculation within the string
 
+// array of predefined frequencies to minimize heavy computaions in runtime
+const note_frequencies = [
+  // C2 - B2
+  65.41,
+  69.30,
+  73.42,
+  77.78,
+  82.41,
+  87.31,
+  92.50,
+  98.00,
+  103.83,
+  110.00,
+  116.54,
+  123.47,
+
+  // C3 - B3
+  130.81,
+  138.59,
+  146.83,
+  155.56,
+  164.81,
+  174.61,
+  185.00,
+  196.00,
+  207.65,
+  220.00,
+  233.08,
+  246.94,
+
+  // C4 - B4
+  261.63,
+  277.18,
+  293.66,
+  311.13,
+  329.63,
+  349.23,
+  369.99,
+  392.00,
+  415.30,
+  440.00,
+  466.16,
+  493.88,
+
+  // C5 - B5
+  523.25,
+  554.37,
+  587.33,
+  622.25,
+  659.26,
+  698.46,
+  739.99,
+  783.99,
+  830.61,
+  880.00,
+  932.33,
+  987.77,
+
+  // C6 - B6
+  1046.50,
+  1108.73,
+  1174.66,
+  1244.51,
+  1318.51,
+  1396.91,
+  1479.98,
+  1567.98,
+  1661.22,
+  1760.00,
+  1864.66,
+  1975.53
+]
+
 //>>SWITCHING LOGIC GLOBAL VARIABLES<<
 int8_t current_line = -1;      // holds the current selected line of button, -1 if nothing is on
 int8_t fundamental = 0;        // holds the value of the last selected line, hence the fundamental
@@ -697,6 +770,11 @@ void calculate_ws_array() {
     }
   }
 }
+// getting note frequency from the frequencies array
+float get_note_frequency(uint16_t current_note) {
+  int note_index = current_note + transpose_semitones + (chord_octave_change - 2) * 12;
+  return frequencies[note_index];
+}
 // setting the pad_frequency
 /* Recompute only the filter corner for voices that are sounding.
  *
@@ -717,7 +795,7 @@ void refresh_chord_filter() {
 }
 
 void set_chord_voice_frequency(uint8_t i, uint16_t current_note) {
-  float note_freq = pow(2,chord_octave_change)*c_frequency/8 * pow(2, (current_note+transpose_semitones) / 12.0); //down one octave to let more possibilities with the shuffling array
+  float note_freq = get_note_frequency(current_note);
   if(glide_length>0){
         //ok so first we need to set the "middle note". Keep in mind that the signal will be +/-1 and will go +/- 2 octaves (frequencyModulation(2), hence the /24.0 below)
     //let's do a trick to select a middle note: get the level (relative to the C) and the note and do a modulo 
@@ -741,7 +819,7 @@ void set_chord_voice_frequency(uint8_t i, uint16_t current_note) {
     // chord_voice_filter_array[i]->frequency(1*freq);
     AudioInterrupts();
   }else{
-    float note_freq = pow(2,chord_octave_change)*c_frequency/8 * pow(2, (current_note+transpose_semitones) / 12.0); //down one octave to let more possibilities with the shuffling array
+    float note_freq = get_note_frequency(current_note);
     AudioNoInterrupts();
     chord_voice_note_freq[i] = note_freq;
     chords_vibrato_lfo.frequency(chord_vibrato_base_freq + chord_vibrato_keytrack * current_chord_notes[0]);
@@ -769,7 +847,7 @@ void set_chord_voice_frequency(uint8_t i, uint16_t current_note) {
 }
 // setting the harp
 void set_harp_voice_frequency(uint8_t i, uint16_t current_note) {
-  float note_freq =  pow(2,harp_octave_change)*c_frequency/4 * pow(2, (current_note+transpose_semitones) / 12.0);
+  float note_freq = get_note_frequency(current_note);
   float transient_freq =  64.0*c_frequency/4 *pow(2, ((current_note+transpose_semitones)%12+transient_note_level) / 12.0);
   AudioNoInterrupts();
   string_waveform_array[i]->frequency(note_freq);
