@@ -1337,49 +1337,223 @@ uint8_t (*alt_chord_for(uint8_t slot))[7] {
   return chord_catalogue[index];
 }
 
+bool rollover_pending = false;      // a chord change by overlap: the new line is set, the chord follows next pass
+bool chord_release_pending = false; // the chord hand lifted while slashing; waiting to see if the bass follows
+const uint16_t slash_release_grace = 80; // ms to tell a full slash release from a deliberate exit
+// ms a change to the set of chord type buttons held on the sounding line must
+// stand before it is believed, when the chord is already established. See the
+// comment after the rollover in handle_chord_type().
+const uint16_t chord_type_grace = 60;
 void handle_chord_type(bool button_maj, bool button_min, bool button_seventh) {
-  if (!(button_maj || button_min || button_seventh)) {
+  static uint8_t previous_button_count = 0;   // the set of type buttons currently believed
+  static elapsedMillis shrink_timer;
+  static elapsedMillis believed_for;     // how long the believed set has stood
+  static bool growth_pending = false;    // a button added to an established set, not yet believed
+  static elapsedMillis growth_timer;
+  static bool press_held_back = false;   // a press's rebuild swallowed while waiting
+  uint8_t count = (uint8_t)button_maj + (uint8_t)button_min + (uint8_t)button_seventh;
+
+  if (count == 0) {
+    previous_button_count = 0;
+    growth_pending = false;
+    press_held_back = false;
+    // Releasing one chord while already pressing the next is a chord change,
+    // not a release. The new line's press transition fired while this line
+    // still owned the chord and was consumed doing nothing, so without this
+    // the old chord kept ringing and the new one could not be selected short
+    // of releasing everything and pressing again.
+    if (!inhibit_button) {
+      for (int i = 1; i < 22; i++) {
+        if (chord_matrix_array[i].read_value()) {
+          // While a slash is engaged, the chord hand lifting is only half a
+          // gesture: if the bass follows within the release grace this was the
+          // slash being let go, and it should end as itself, not become the
+          // bass line's chord on the way out. The slash keeps sounding while
+          // we wait, so the wait is inaudible.
+          if (slash_chord) {
+            static elapsedMillis chord_release_timer;
+            if (!chord_release_pending) {
+              chord_release_pending = true;
+              chord_release_timer = 0;
+              return;
+            }
+            if (chord_release_timer < slash_release_grace) return;
+            chord_release_pending = false;
+          }
+          // the gesture that ends here is over: the new line is a chord, not a bass
+          slash_chord = false;
+          current_line = (i - 1) / 3;
+          rollover_pending = true; // pick the chord up next pass, once this line's type buttons are read
+          return;
+        }
+      }
+    }
+    rollover_pending = false;
+    chord_release_pending = false;
+    // Whatever slash state the gesture ended in is over with it; a stale flag
+    // here would slash the next chord played from silence.
+    slash_chord = false;
     current_line = -1;
     return;
   }
-  if (alt_chord_layout) {
-    if (button_maj && !button_min && !button_seventh)            current_chord = alt_chord_for(0);
-    else if (!button_maj && button_min && !button_seventh)       current_chord = alt_chord_for(1);
-    else if (!button_maj && !button_min && button_seventh)       current_chord = alt_chord_for(2);
-    else if (button_maj && !button_min && button_seventh)        current_chord = alt_chord_for(3);
-    else if (!button_maj && button_min && button_seventh)        current_chord = alt_chord_for(4);
-    else if (button_maj && button_min && !button_seventh)        current_chord = alt_chord_for(5);
-    else if (button_maj && button_min && button_seventh)         current_chord = alt_chord_for(6);
-    return;
+  if (rollover_pending) {
+    rollover_pending = false;
+    button_pushed = true;
+    if (!continuous_chord) {
+      trigger_chord = true;
+    }
   }
 
-  if (button_maj && !button_min && !button_seventh) {
-    current_chord = barry_harris_mode ? &maj_sixth : &major;
-  } else if (!button_maj && button_min && !button_seventh) {
-    current_chord = barry_harris_mode ? &min_sixth : &minor;
-  } else if (!button_maj && !button_min && button_seventh) {
-    current_chord = &seventh;
-  } else if (button_maj && !button_min && button_seventh) {
-    current_chord = &maj_seventh;
-  } else if (!button_maj && button_min && button_seventh) {
-    current_chord = &min_seventh;
-  } else if (button_maj && button_min && !button_seventh) {
-    current_chord = barry_harris_mode ? &full_dim : &dim;
-  } else if (button_maj && button_min && button_seventh) {
-    current_chord = &aug;
+  // Moving between chords on the same line overlaps the way moving between
+  // lines does: going from C to C7, the seventh goes down a moment before the
+  // major comes up. For those tens of milliseconds both are held, which is the
+  // combination for a major seventh. Believed at once, every C to C7 played
+  // legato sounded Cmaj7 for the overlap, and since nothing rebuilt the chord
+  // when the major then lifted, it stayed Cmaj7.
+  //
+  // So once a chord is established, a change to its set of type buttons has to
+  // stand for chord_type_grace before it is believed, the same way a slash has
+  // to (slash_grace, in detect_slash()):
+  //
+  // - A button added to an established set waits. If one of the held buttons
+  //   lets go within the grace, it was a change of chord (C to C7), and the new
+  //   set is taken as soon as the count is back where it was. If nothing lets
+  //   go, it was an addition (C, then add the seventh for Cmaj7), taken after
+  //   the grace.
+  // - A button taken away waits too. Letting go of a combination, the buttons
+  //   lift a few milliseconds apart, and the chord must not become the smaller
+  //   one on the way out; if the rest follow within the grace, it was a release.
+  //
+  // A chord pressed from silence is not established, so its buttons are taken
+  // as they land, the way they always were: a Cmaj7 played as one gesture
+  // sounds at once. And whenever the believed chord changes while a line is
+  // sounding, the sounding chord is rebuilt, which is what makes C to C7 arrive
+  // at C7 rather than stopping at whatever the overlap left behind.
+  bool resolved = false;
+
+  if (count < previous_button_count) {
+    if (growth_pending) { growth_pending = false; resolved = true; }
+    if (shrink_timer < chord_type_grace) return;
+  } else {
+    shrink_timer = 0;
+    if (count > previous_button_count) {
+      if (!growth_pending && previous_button_count > 0 && believed_for >= chord_type_grace) {
+        growth_pending = true;
+        growth_timer = 0;
+      }
+      if (growth_pending) {
+        if (growth_timer < chord_type_grace) {
+          // The press that started this already asked for a rebuild. Hold it
+          // back: rebuilding now would sound the old chord again (a retrigger,
+          // with retrigger on), and the rebuild comes when this resolves.
+          if (button_pushed) { press_held_back = true; button_pushed = false; }
+          return;
+        }
+        growth_pending = false;
+        resolved = true;
+      }
+    } else if (growth_pending) {
+      // back to the believed count with a different button: a change of chord
+      growth_pending = false;
+      resolved = true;
+    }
   }
+  if (count != previous_button_count) believed_for = 0;
+  previous_button_count = count;
+
+  uint8_t (*chosen)[7] = current_chord;
+  if (alt_chord_layout) {
+    if (button_maj && !button_min && !button_seventh)            chosen = alt_chord_for(0);
+    else if (!button_maj && button_min && !button_seventh)       chosen = alt_chord_for(1);
+    else if (!button_maj && !button_min && button_seventh)       chosen = alt_chord_for(2);
+    else if (button_maj && !button_min && button_seventh)        chosen = alt_chord_for(3);
+    else if (!button_maj && button_min && button_seventh)        chosen = alt_chord_for(4);
+    else if (button_maj && button_min && !button_seventh)        chosen = alt_chord_for(5);
+    else if (button_maj && button_min && button_seventh)         chosen = alt_chord_for(6);
+  } else if (button_maj && !button_min && !button_seventh) {
+    chosen = barry_harris_mode ? &maj_sixth : &major;
+  } else if (!button_maj && button_min && !button_seventh) {
+    chosen = barry_harris_mode ? &min_sixth : &minor;
+  } else if (!button_maj && !button_min && button_seventh) {
+    chosen = &seventh;
+  } else if (button_maj && !button_min && button_seventh) {
+    chosen = &maj_seventh;
+  } else if (!button_maj && button_min && button_seventh) {
+    chosen = &min_seventh;
+  } else if (button_maj && button_min && !button_seventh) {
+    chosen = barry_harris_mode ? &full_dim : &dim;
+  } else if (button_maj && button_min && button_seventh) {
+    chosen = &aug;
+  }
+  bool changed = chosen != current_chord;
+  current_chord = chosen;
+  if (changed || (resolved && press_held_back)) button_pushed = true;
+  if (resolved || !growth_pending) press_held_back = false;
 }
 
+// A second line held together with the chord selects a slash bass. Raw overlap
+// alone is not intent, though: releasing one chord while pressing the next
+// overlaps for a few tens of milliseconds in ordinary legato playing, and
+// believing it immediately swapped the bass on every crossover. So the overlap
+// has to persist for slash_grace before a slash engages. A crossover never gets
+// that far, because handle_chord_type() rolls the line over as soon as the old
+// line lets go.
+const uint16_t slash_grace = 60;         // ms of overlap before a slash engages
+// Letting a slash chord go entirely means two lines release a few tens of
+// milliseconds apart, in whichever order the fingers land. Neither release may
+// be believed on its own while a slash is engaged, or the chord is forced to
+// become something on the way out: the bass line promoted to a chord, or the
+// plain chord rebuilt, for the length of the release tail. So while slashing,
+// both exits wait out slash_release_grace; if the other line lets go within
+// it, the slash simply ends as itself. Legato is unaffected, since a crossover
+// never engages the slash in the first place. The constant lives with the
+// rollover state above handle_chord_type(), which also needs it.
 void detect_slash() {
-  slash_chord = false;
+  static elapsedMillis overlap_timer;
+  static int8_t overlap_line = -1;
+  int8_t held_line = -1;
   for (int i = 1; i < 22; i++) {
     if (chord_matrix_array[i].read_value()) {
-      int slash_line = (i - 1) / 3;
-      if (slash_line != current_line) {
-        slash_chord = true;
-        slash_value = slash_line;
+      int8_t line = (i - 1) / 3;
+      if (line != current_line) held_line = line;
+    }
+  }
+  static elapsedMillis bass_release_timer;
+  static bool bass_release_pending = false;
+  if (held_line < 0) {
+    overlap_line = -1;
+    if (slash_chord) {
+      // The bass was let go while the chord is still held. If the chord hand
+      // follows within the release grace, this was a full release of the slash
+      // and nothing should be rebuilt; if the chord stays held, the player
+      // dropped the bass on purpose and the plain chord comes back.
+      if (!bass_release_pending) {
+        bass_release_pending = true;
+        bass_release_timer = 0;
+      } else if (bass_release_timer >= slash_release_grace) {
+        bass_release_pending = false;
+        slash_chord = false;
+        button_pushed = true;
       }
     }
+    return;
+  }
+  bass_release_pending = false;
+  if (held_line != overlap_line) {
+    overlap_line = held_line;
+    overlap_timer = 0;
+    if (!slash_chord) return; // a new overlap starts its grace period
+  }
+  if (!slash_chord) {
+    if (overlap_timer >= slash_grace) {
+      slash_chord = true;
+      slash_value = held_line;
+      button_pushed = true;
+    }
+  } else if (slash_value != held_line) {
+    // already slashing and the bass moved to another line: deliberate, follow it
+    slash_value = held_line;
+    button_pushed = true;
   }
 }
 
