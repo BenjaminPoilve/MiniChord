@@ -118,6 +118,13 @@ public:
     void tgl_bypass(void) {bypass ^=1;}
 private:
     bool bypass = false;
+    // Asleep: nothing has come in and nothing louder than 1 LSB has gone out for sleep_after blocks
+    // (a second, longer than a trip round the tank, so no echo is still on its way). While it sleeps
+    // an update with no input does nothing and sends nothing, so what follows it can go idle too.
+    bool asleep = false;
+    uint16_t quiet_blocks = 0;
+    static const uint16_t sleep_after = 345;
+    void clear_buffers(void);
     audio_block_t *inputQueueArray[2];
 #ifndef REVERB_USE_DMAMEM
     float32_t input_blockL[AUDIO_BLOCK_SAMPLES];

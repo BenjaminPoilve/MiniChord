@@ -1090,12 +1090,8 @@ String serialize(int16_t data_array[], u_int16_t array_size) {
   return dataString;
 }
 
-void deserialize(String input, int16_t data_array[]) {
-  int len = input.length() + 1;
-  char string[len];
-  char *p;
-  input.toCharArray(string, len);
-  p = strtok(string, ",");
+void deserialize(char *text, int16_t data_array[]) {   // takes the text apart as it goes
+  char *p = strtok(text, ",");
   int i = 0;
   while (p && i < parameter_size) {
     data_array[i] = atoi(p);
@@ -1158,11 +1154,15 @@ void load_config(int bank_number) {
 
   File entry = myfs.open(bank_name[bank_number]);
   if (entry) {
-    String data_string = "";
-    while (entry.available()) {
-      data_string += char(entry.read());
+    // The file in one read. It used to come a character at a time into a String, which
+    // reallocated itself with each one.
+    size_t size = entry.size();
+    char *text = (char *)malloc(size + 1);
+    if (text) {
+      text[entry.read(text, size)] = 0;
+      deserialize(text, current_sysex_parameters);
+      free(text);
     }
-    deserialize(data_string, current_sysex_parameters);
     Serial.print("Loaded preset: ");
     Serial.println(entry.name());
     entry.close();
@@ -1177,7 +1177,13 @@ void load_config(int bank_number) {
   mod_pot.setup(current_sysex_parameters[mod_pot_main_control], current_sysex_parameters[mod_pot_main_range], current_sysex_parameters[mod_pot_alternate_control], current_sysex_parameters[mod_pot_alternate_range], current_sysex_parameters,current_sysex_parameters[mod_pot_alternate_storage],apply_audio_parameter,mod_pot_alternate_storage);
   Serial.println("pot setup done");
   for (int i = 1; i < parameter_size; i++) {
-    apply_audio_parameter(i, current_sysex_parameters[i]);
+    // The knobs' alternate defaults (4-6) are set without the force_update() their setting
+    // runs: it brought each knob's target up to date mid-load, only for the force_updates
+    // below to do it again.
+    if (i == 4) chord_pot.set_alternate_default(current_sysex_parameters[i]);
+    else if (i == 5) harp_pot.set_alternate_default(current_sysex_parameters[i]);
+    else if (i == 6) mod_pot.set_alternate_default(current_sysex_parameters[i]);
+    else apply_audio_parameter(i, current_sysex_parameters[i]);
   }
   if (sysex_controler_connected) {
     control_command(0, 0); // push state to a connected remote controller
@@ -1296,6 +1302,17 @@ void handle_chords_button() {
       }
     }
   }
+}
+
+// The harp's vibrato and bend envelopes are the twelve strings' together, started by each pluck,
+// and nothing ended them: held at sustain after the first pluck, they kept every harp oscillator
+// taking frequency modulation, which costs it twice the work. Once no string is sounding they are
+// let go, and the next pluck starts them afresh.
+void harp_vibrato_settle() {
+  if (!envelope_string_vibrato_lfo.isSustain() && !envelope_string_vibrato_dc.isSustain()) return;
+  for (uint8_t i = 0; i < 12; i++) if (string_enveloppe_array[i]->isActive()) return;
+  envelope_string_vibrato_lfo.noteOff();
+  envelope_string_vibrato_dc.noteOff();
 }
 
 void handle_harp() {
@@ -1587,6 +1604,7 @@ void loop() {
   if (usbMIDI.read()) {
     processMIDI();
   }
+  harp_vibrato_settle();
   // Check sysex controller connection
   if (sysex_controler_connected && bitRead(USB1_PORTSC1, 7)) {
     sysex_controler_connected = false;

@@ -371,7 +371,6 @@ AudioConnection          patchCord200(strings_effect_mix, 0, string_multiply, 0)
 AudioConnection          patchCord201(filter_delay_chords, 0, chord_delay_mix, 1);
 AudioConnection          patchCord202(filter_delay_chords, 1, chord_delay_mix, 2);
 AudioConnection          patchCord203(filter_delay_chords, 2, chord_delay_mix, 3);
-AudioConnection          patchCord204(delay_strings, 0, filter_delay_strings, 0);
 AudioConnection          patchCord205(string_filter_lfo, 0, string_filter, 1);
 AudioConnection          patchCord206(chord_delay_mix, delay_chords);
 AudioConnection          patchCord207(chord_delay_mix, 0, chords_effect_mix, 1);
@@ -380,11 +379,25 @@ AudioConnection          patchCord209(chords_effect_mix, 0, chords_main_filter, 
 AudioConnection          patchCord210(string_filter, 0, string_filter_mixer, 0);
 AudioConnection          patchCord211(string_filter, 1, string_filter_mixer, 1);
 AudioConnection          patchCord212(string_filter, 2, string_filter_mixer, 2);
-AudioConnection          patchCord213(delay_chords, 0, filter_delay_chords, 0);
 AudioConnection          patchCord214(chords_main_filter, 0, chords_main_filter_mixer, 0);
 AudioConnection          patchCord215(chords_main_filter, 1, chords_main_filter_mixer, 1);
 AudioConnection          patchCord216(chords_main_filter, 2, chords_main_filter_mixer, 2);
 // GUItool: end automatically generated code
+
+//DELAY LOOP GATES
+// Each delay is a feedback loop (its mix, the delay, its filter, back into the mix), and once a
+// block has entered it the blocks went round for good, silent or not, keeping the delay's filter,
+// the section's filter and everything after them at work from the first note on, and the filters'
+// rounding left a few LSB of offset on the output. A gate between each delay and its filter
+// (silence_gate.h) lets the loop go quiet once its echoes have died away. The GUI tool's
+// delay-to-filter cords are these.
+#include "silence_gate.h"
+AudioEffectSilenceGate   delay_strings_gate;
+AudioEffectSilenceGate   delay_chords_gate;
+AudioConnection          gateCord1a(delay_strings, 0, delay_strings_gate, 0);
+AudioConnection          gateCord1b(delay_strings_gate, 0, filter_delay_strings, 0);
+AudioConnection          gateCord2a(delay_chords, 0, delay_chords_gate, 0);
+AudioConnection          gateCord2b(delay_chords_gate, 0, filter_delay_chords, 0);
 
 
 //MANUAL OUTPUT SECTION

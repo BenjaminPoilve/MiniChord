@@ -180,6 +180,26 @@ static const audio_block_t zeroblock = {
 #endif
 } };
 
+void AudioEffectPlateReverb::clear_buffers(void)
+{
+    memset(in_allp1_bufL, 0, sizeof(in_allp1_bufL));
+    memset(in_allp2_bufL, 0, sizeof(in_allp2_bufL));
+    memset(in_allp3_bufL, 0, sizeof(in_allp3_bufL));
+    memset(in_allp4_bufL, 0, sizeof(in_allp4_bufL));
+    memset(in_allp1_bufR, 0, sizeof(in_allp1_bufR));
+    memset(in_allp2_bufR, 0, sizeof(in_allp2_bufR));
+    memset(in_allp3_bufR, 0, sizeof(in_allp3_bufR));
+    memset(in_allp4_bufR, 0, sizeof(in_allp4_bufR));
+    memset(lp_allp1_buf, 0, sizeof(lp_allp1_buf));
+    memset(lp_allp2_buf, 0, sizeof(lp_allp2_buf));
+    memset(lp_allp3_buf, 0, sizeof(lp_allp3_buf));
+    memset(lp_allp4_buf, 0, sizeof(lp_allp4_buf));
+    memset(lp_dly1_buf, 0, sizeof(lp_dly1_buf));
+    memset(lp_dly2_buf, 0, sizeof(lp_dly2_buf));
+    memset(lp_dly3_buf, 0, sizeof(lp_dly3_buf));
+    memset(lp_dly4_buf, 0, sizeof(lp_dly4_buf));
+}
+
 void AudioEffectPlateReverb::update()
 {
     const audio_block_t *blockL, *blockR;
@@ -203,22 +223,7 @@ void AudioEffectPlateReverb::update()
     {
         if (!cleanup_done)
         {
-            memset(in_allp1_bufL, 0, sizeof(in_allp1_bufL));
-            memset(in_allp2_bufL, 0, sizeof(in_allp2_bufL));
-            memset(in_allp3_bufL, 0, sizeof(in_allp3_bufL));
-            memset(in_allp4_bufL, 0, sizeof(in_allp4_bufL));
-            memset(in_allp1_bufR, 0, sizeof(in_allp1_bufR));
-            memset(in_allp2_bufR, 0, sizeof(in_allp2_bufR));
-            memset(in_allp3_bufR, 0, sizeof(in_allp3_bufR));
-            memset(in_allp4_bufR, 0, sizeof(in_allp4_bufR));
-            memset(lp_allp1_buf, 0, sizeof(lp_allp1_buf));
-            memset(lp_allp2_buf, 0, sizeof(lp_allp2_buf));
-            memset(lp_allp3_buf, 0, sizeof(lp_allp3_buf));
-            memset(lp_allp4_buf, 0, sizeof(lp_allp4_buf));
-            memset(lp_dly1_buf, 0, sizeof(lp_dly1_buf));
-            memset(lp_dly2_buf, 0, sizeof(lp_dly2_buf));
-            memset(lp_dly3_buf, 0, sizeof(lp_dly3_buf));
-            memset(lp_dly4_buf, 0, sizeof(lp_dly4_buf));
+            clear_buffers();
 
             cleanup_done = true;
         }
@@ -238,6 +243,9 @@ void AudioEffectPlateReverb::update()
 
     blockL = receiveReadOnly(0);
     blockR = receiveReadOnly(1);
+    if (!blockL && !blockR && asleep) return;   // nothing in, the tail long gone: nothing to do
+    asleep = false;
+    bool had_input = blockL || blockR;
 	outblockL = allocate();
 	outblockR = allocate();
 	if (!outblockL || !outblockR) {
@@ -505,6 +513,18 @@ void AudioEffectPlateReverb::update()
         outblockR->data[i] =(int16_t)(master_lowpass_r * 32767.0f);
 		
 	}
+    int16_t loudest = 0;
+    for (i = 0; i < AUDIO_BLOCK_SAMPLES; i++)
+    {
+        loudest = max(loudest, (int16_t)max(abs(outblockL->data[i]), abs(outblockR->data[i])));
+    }
+    if (had_input || loudest > 1) quiet_blocks = 0;
+    else if (++quiet_blocks >= sleep_after)
+    {
+        asleep = true;
+        quiet_blocks = 0;
+        clear_buffers();   // a tail too quiet to hear, not carried into the next sound
+    }
     transmit(outblockL, 0);
 	transmit(outblockR, 1);
 	release(outblockL);
