@@ -12,7 +12,7 @@
 #include <potentiometer.h>
 
 //>>SOFWTARE VERSION 
-int version_ID=9; //to be read 00.03, stored at adress 7 in memory
+int version_ID=10; //to be read 00.03, stored at adress 7 in memory
 //>>BUTTON ARRAYS<<
 debouncer harp_array[12];
 debouncer chord_matrix_array[22];
@@ -382,11 +382,12 @@ uint midi_buffer_delay=300; //in microseconds, helps compatibility with some har
 #define MIDI_QUEUE_SIZE 256 // power of two, max 256 for uint8_t indices
 #define MIDI_DRAIN_MAX_PER_LOOP 16 // caps how long a drain can hold up loop()
 struct midi_event_t {
-  uint8_t note;
-  uint8_t velocity;
+  uint8_t note;       // for a control change, the controller number
+  uint8_t velocity;   // for a control change, its value
   uint8_t channel;
   uint8_t cable;
   bool note_on;
+  bool control;       // a control change rather than a note
 };
 volatile midi_event_t midi_queue[MIDI_QUEUE_SIZE];
 volatile uint8_t midi_queue_head = 0; // written by producers
@@ -395,7 +396,7 @@ volatile uint32_t midi_queue_dropped = 0; // diagnostic: events lost to a full q
 
 // Safe to call from any context, including an ISR. Drops the event if the queue is
 // full rather than blocking -- blocking is what caused the original fault.
-void queue_midi(bool note_on, uint8_t note, uint8_t velocity, uint8_t channel, uint8_t cable) {
+static void queue_midi_event(bool note_on, bool control, uint8_t note, uint8_t velocity, uint8_t channel, uint8_t cable) {
   uint32_t primask;
   __asm__ volatile("mrs %0, primask" : "=r"(primask));
   __disable_irq();
@@ -406,11 +407,19 @@ void queue_midi(bool note_on, uint8_t note, uint8_t velocity, uint8_t channel, u
     midi_queue[midi_queue_head].channel = channel;
     midi_queue[midi_queue_head].cable = cable;
     midi_queue[midi_queue_head].note_on = note_on;
+    midi_queue[midi_queue_head].control = control;
     midi_queue_head = next;
   } else {
     midi_queue_dropped++;
   }
   if (!primask) __enable_irq();
+}
+void queue_midi(bool note_on, uint8_t note, uint8_t velocity, uint8_t channel, uint8_t cable) {
+  queue_midi_event(note_on, false, note, velocity, channel, cable);
+}
+// A control change, through the same queue so it keeps its place among the notes.
+void queue_midi_cc(uint8_t controller, uint8_t value, uint8_t channel, uint8_t cable) {
+  queue_midi_event(false, true, controller, value, channel, cable);
 }
 
 // Called from loop() only. The single point at which this firmware talks to usbMIDI.
@@ -426,9 +435,12 @@ void drain_midi_queue() {
     e.channel = midi_queue[midi_queue_tail].channel;
     e.cable = midi_queue[midi_queue_tail].cable;
     e.note_on = midi_queue[midi_queue_tail].note_on;
+    e.control = midi_queue[midi_queue_tail].control;
     midi_queue_tail = (midi_queue_tail + 1) & (MIDI_QUEUE_SIZE - 1);
     if (sent) delayMicroseconds(midi_buffer_delay); // pacing for slower hardware synths
-    if (e.note_on) {
+    if (e.control) {
+      usbMIDI.sendControlChange(e.note, e.velocity, e.channel, e.cable);
+    } else if (e.note_on) {
       usbMIDI.sendNoteOn(e.note, e.velocity, e.channel, e.cable);
     } else {
       usbMIDI.sendNoteOff(e.note, e.velocity, e.channel, e.cable);
@@ -441,6 +453,19 @@ void drain_midi_queue() {
   // could land inside this one, and the descriptor the hardware had just taken was prepared again and
   // linked to itself.
 }
+
+//-->>KNOBS AS MIDI CONTROLLERS
+// With "knobs send MIDI" on (address 238), each knob's position goes out as a control change as it
+// turns: CC 20 the chord knob, 21 the harp knob, 22 the modulation knob, 0 to 127 across its travel,
+// on the chord channel and port. They can be MIDI-learnt in a DAW, or read by a program. The knobs
+// keep doing their usual jobs; this only reports where they are. Read on its own, smoothed, and sent
+// only once the reading has moved a whole value from the last one sent, so a knob resting between two
+// values doesn't chatter (with less, 0.7 of a value and lighter smoothing, a resting mod knob flickered
+// between 71 and 72); at most once every 8 ms. Switching the setting on sends every knob's position
+// straight away.
+bool knob_midi = false;
+bool knob_midi_resend = false;
+void send_knob_ccs();
 
 //-->>FUNCTION THAT NEED ANNOUNCING
 void save_config(int bank_number, bool default_save);
@@ -1618,6 +1643,7 @@ void loop() {
   flag_save_needed |= chord_pot.update_parameter(alternate);
   flag_save_needed |= harp_pot.update_parameter(alternate);
   flag_save_needed |= mod_pot.update_parameter(alternate);
+  if (knob_midi) send_knob_ccs();
 
   // Handle continuous mode logic
   if (!continuous_chord && !rythm_mode) {
@@ -1646,4 +1672,25 @@ void loop() {
   // The only point at which this firmware transmits MIDI. Must stay last, and must
   // stay in loop() -- see the MIDI OUTPUT QUEUE comment above.
   drain_midi_queue();
+}
+
+void send_knob_ccs() {
+  static const uint8_t pins[3] = {POT_CHORD_PIN, POT_HARP_PIN, POT_MOD_PIN};
+  static float smoothed[3] = {-1, -1, -1};
+  static int16_t sent[3] = {-1, -1, -1};
+  static elapsedMillis since;
+  if (since < 8) return;
+  since = 0;
+  for (uint8_t k = 0; k < 3; k++) {
+    float reading = 1024 - analogRead(pins[k]);
+    smoothed[k] = smoothed[k] < 0 ? reading : smoothed[k] * 0.875f + reading * 0.125f;
+    float scaled = constrain((smoothed[k] - 12.0f) * 127.0f / 1000.0f, 0.0f, 127.0f);
+    bool moved = sent[k] < 0 || fabsf(scaled - sent[k]) >= 1.0f;
+    if (moved || knob_midi_resend) {
+      int16_t value = (int16_t)(scaled + 0.5f);
+      if (value != sent[k] || knob_midi_resend) queue_midi_cc(20 + k, value, chord_channel, chord_port);
+      sent[k] = value;
+    }
+  }
+  knob_midi_resend = false;
 }
