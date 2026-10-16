@@ -176,6 +176,19 @@ bool button_pushed = false;    // flag for when any button has been pushed durin
 bool trigger_chord = false;    // flag to trigger the enveloppe of the chord
 bool sharp_active = false;     // flag for when the sharp is active
 bool flat_button_modifier= false; //flag to set the modifier to flat instead of sharp
+
+// Double-tapping the modifier toggles one parameter between its stored value
+// and a chosen one, and back. Which parameter and which value are up to the
+// player, so the gesture is not tied to any one feature.
+const uint16_t modifier_tap_max = 250;  // ms: a press longer than this is a hold, not a tap
+const uint16_t modifier_tap_gap = 400;  // ms: the second tap must land within this of the first
+bool double_tap_engaged = false;
+uint8_t double_tap_led_step = 0;
+elapsedMillis led_anim_timer;
+int16_t double_tap_saved = 0;
+int16_t double_tap_engaged_adress = -1; // the parameter the engaged toggle is holding, latched at engage time
+const uint8_t double_tap_control_adress = 200;
+const uint8_t double_tap_value_adress = 201;
 bool continuous_chord = false; // wether the chord is held continuously. Controlled by the "hold" button
 bool rythm_mode = false;
 bool barry_harris_mode = false;
@@ -237,6 +250,11 @@ int8_t mod_pot_alternate_range = 17;
 // 40-119 are harp parameters
 // 120-219 are chord parameters
 // 220-235 are rythm patterns
+// 236-255 are free, for the parameters still to come
+// What the double tap can be pointed at: any parameter from 21 on but the rythm patterns
+static inline bool is_target_adress(int16_t adress) {
+  return (adress >= 21 && adress <= 219) || (adress >= 236 && adress < (int16_t)parameter_size);
+}
 bool sysex_controler_connected=false; //bool to remember if there is a controller that is connected to avoid saving any change
 
 //>>AUDIO OBJECT ARRAYS<<
@@ -347,7 +365,6 @@ bool rythm_timer_running = false;
 IntervalTimer rythm_timer;       // that gives the general rythm
 IntervalTimer note_off_timer[4]; // timers for delayed chord enveloppe
 IntervalTimer led_timer;
-IntervalTimer color_led_blink_timer;
 elapsedMillis note_off_timing[4];
 elapsedMicros last_midi_clock_in;
 int midi_clock_current_step=0;
@@ -679,6 +696,14 @@ void play_note_selected_duration(int i,int current_note){
     chord_started_notes[i]=0;}
   queue_midi(true, midi_base_note_transposed+current_note,chord_attack_velocity,chord_channel, chord_port);
   chord_started_notes[i]=midi_base_note_transposed+current_note;
+}
+
+// Stepped from the loop: see the note on timer channels above.
+void step_led_animation() {
+  if (!double_tap_engaged || led_anim_timer < 60) return;
+  led_anim_timer = 0;
+  double_tap_led_step = (double_tap_led_step + 1) % 20;
+  set_led_color(bank_led_hue, 1.0, (double_tap_led_step < 10 ? 1.0 : 0.45) * (1 - led_attenuation));
 }
 
 void turn_off_led(IntervalTimer *timer) {
@@ -1124,10 +1149,22 @@ void save_config(int bank_number, bool default_save) {
     dataFile.println(return_data);
   } else {
     Serial.println("Saving current settings");
+    // A double tap toggle is a momentary override, not part of the preset. If
+    // its value were written here the preset would come back already holding it,
+    // and the gesture would then toggle between two identical values and appear
+    // to do nothing. So the underlying value is what gets saved.
+    int16_t held_adress = double_tap_engaged_adress;
+    int16_t held_value = 0;
+    bool restore_held = double_tap_engaged && is_target_adress(held_adress);
+    if (restore_held) {
+      held_value = current_sysex_parameters[held_adress];
+      current_sysex_parameters[held_adress] = double_tap_saved;
+    }
     for (u_int16_t i = 0; i < parameter_size; i++) {
           Serial.println(current_sysex_parameters[i]);
     }
     dataFile.println(serialize(current_sysex_parameters, parameter_size));
+    if (restore_held) current_sysex_parameters[held_adress] = held_value;
   }
   Serial.print("Saved preset: ");
   Serial.println(dataFile.name());
@@ -1185,6 +1222,13 @@ void load_config(int bank_number) {
   chord_pot.force_update();
   harp_pot.force_update();
   mod_pot.force_update();
+  // A preset load replaces every parameter, including whatever a double tap had
+  // toggled, and the value it saved belongs to the preset being left. So the
+  // gesture ends here rather than claiming to still hold something it does not.
+  if (double_tap_engaged) {
+    double_tap_engaged = false;
+    set_led_color(bank_led_hue, 1.0, 1 - led_attenuation);
+  }
   flag_save_needed=false;
   //digitalWrite(_MUTE_PIN, HIGH); // unmuting the DAC
 }
@@ -1582,6 +1626,37 @@ void trigger_chord_notes() {
   button_pushed = false;
 }
 
+// Applies the chosen value, or puts back what was there before.
+void toggle_double_tap_target() {
+  if (double_tap_engaged) {
+    // Restore to the address latched at engage time: the assignment at address
+    // 200 can be rewritten while the toggle is held, and the restore belongs to
+    // the parameter that was actually toggled, not to the new target.
+    current_sysex_parameters[double_tap_engaged_adress] = double_tap_saved;
+    apply_audio_parameter(double_tap_engaged_adress, double_tap_saved);
+    double_tap_engaged = false;
+    set_led_color(bank_led_hue, 1.0, 1 - led_attenuation);
+  } else {
+    int16_t adress = current_sysex_parameters[double_tap_control_adress];
+    if (!is_target_adress(adress)) return;     // 0 means the gesture is unassigned
+    if (adress == double_tap_control_adress || adress == double_tap_value_adress) return;
+    double_tap_saved = current_sysex_parameters[adress];
+    double_tap_engaged_adress = adress;
+    int16_t value = current_sysex_parameters[double_tap_value_adress];
+    current_sysex_parameters[adress] = value;
+    apply_audio_parameter(adress, value);
+    double_tap_engaged = true;
+  }
+  // The gesture changes a parameter with nothing on the wire to show it, so a
+  // remote editor keeps displaying the value the player has just toggled away
+  // from. Report the new state, on the way in and on the way out, but only to a
+  // controller that has talked to the device: unsolicited, the full parameter
+  // dump lands on the performance port of whatever host is connected, twice per
+  // toggle. save_config still writes the value underneath the toggle, so a save
+  // while engaged is unaffected.
+  if (sysex_controler_connected) control_command(0, 0);
+}
+
 void loop() {
   // Process incoming MIDI messages
   if (usbMIDI.read()) {
@@ -1618,6 +1693,36 @@ void loop() {
   flag_save_needed |= chord_pot.update_parameter(alternate);
   flag_save_needed |= harp_pot.update_parameter(alternate);
   flag_save_needed |= mod_pot.update_parameter(alternate);
+
+  // Two quick taps of the modifier toggle whatever the player has assigned to
+  // the gesture. Only when no chord button is down, so it never competes with
+  // sharpening: a tap with a chord held is a sharpen, not a gesture.
+  {
+    static bool modifier_was_down = false;
+    static elapsedMillis press_length;
+    static elapsedMillis since_first_tap;
+    static uint8_t tap_count = 0;
+    bool modifier_down = chord_matrix_array[0].read_value();
+    if (modifier_down && !modifier_was_down) {
+      press_length = 0;
+    } else if (!modifier_down && modifier_was_down) {
+      if (press_length < modifier_tap_max && current_line == -1) {
+        if (tap_count == 1 && since_first_tap < modifier_tap_gap) {
+          tap_count = 0;
+          toggle_double_tap_target();
+        } else {
+          tap_count = 1;
+          since_first_tap = 0;
+        }
+      } else {
+        tap_count = 0;   // a hold, or a chord was down: not part of a gesture
+      }
+    }
+    if (tap_count == 1 && since_first_tap > modifier_tap_gap) tap_count = 0;
+    modifier_was_down = modifier_down;
+  }
+
+  step_led_animation();
 
   // Handle continuous mode logic
   if (!continuous_chord && !rythm_mode) {
