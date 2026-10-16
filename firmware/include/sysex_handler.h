@@ -27,6 +27,9 @@ void apply_audio_parameter(int adress, int value) {
       case 108:
         harp_port=1-value;
         break;
+      case 8:
+        midi_in_set(value);
+        break;
       case 31:
         flat_button_modifier=value;
         break;
@@ -431,9 +434,7 @@ void apply_audio_parameter(int adress, int value) {
         osc_3_freq_multiplier=value/100.0;
         break;
       case 130:
-        for (int i=0;i<4;i++){
-          chord_voice_mixer_array[i]->gain(3,value/100.0);
-        }
+        chord_noise_level=value/100.0; for (int v=0;v<4;v++) apply_chord_voice_level(v);
         break;
       case 131:
         chord_voice_mixer.gain(0,value/100.0);
