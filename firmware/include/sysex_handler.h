@@ -27,6 +27,9 @@ void apply_audio_parameter(int adress, int value) {
       case 108:
         harp_port=1-value;
         break;
+      case 215:
+        harp_note_off_on_lift=value;
+        break;
       case 31:
         flat_button_modifier=value;
         break;
@@ -174,13 +177,22 @@ void apply_audio_parameter(int adress, int value) {
         break;
       case 47:
         for (int i=0;i<12;i++){
-          string_enveloppe_array[i]->release(value);
+          string_enveloppe_array[i]->release(value); string_release=value;
         }
         break;
       case 48:
         for (int i=0;i<12;i++){
           string_enveloppe_array[i]->releaseNoteOn(value);
         }
+        break;
+      case 213:
+        palm_mute_pads=value ? max(value,2) : 0;
+        break;
+      case 214:
+        palm_mute_release=value ? value : 15;
+        break;
+      case 216:
+        harp_pluck_on_lift=value;
         break;
       case 49:
         string_filter_base_freq=value;

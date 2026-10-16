@@ -22,6 +22,7 @@ static const ParameterInfo parameter_lookup[] = {
     { 106, 1, 1, 16 }, // chord channel
     { 107, 1, 1, 16 }, // harp channel
     { 108, 1, 0, 1 }, // single port mode
+    { 215, 1, 0, 1 }, // harp note-off on lift
     { 31, 1, 0, 1 }, // sharp function
     { 33, 1, 0, 1 }, // barry harris mode
     { 34, 1, 0, 6 }, // chord frame shift
@@ -56,6 +57,9 @@ static const ParameterInfo parameter_lookup[] = {
     { 46, 0, 0, 1 }, // sustain
     { 47, 0, 0, 5000 }, // release
     { 48, 1, 0, 10 }, // retrigger release
+    { 213, 1, 0, 12 }, // palm mute
+    { 214, 0, 1, 250 }, // palm mute release
+    { 216, 1, 0, 1 }, // pluck on lift
     { 49, 0, 0, 2000 }, // base frequency
     { 50, 0, 0, 3 }, // keytrack value
     { 51, 0, 1, 5 }, // resonance
