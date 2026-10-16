@@ -137,7 +137,7 @@ const uint8_t scale_intervals[7][8] = {
 const uint8_t scale_lengths[7] = {7, 5, 5, 8, 7, 7, 5};
 
 // Scales chosen per chord type for modes 8 and 9
-const uint8_t chord_scale_intervals[15][8] = {
+const uint8_t chord_scale_intervals[19][8] = {
   {0, 2, 4, 7, 9, 0, 0, 0},  //  0: Major Pentatonic, major chord
   {0, 2, 4, 6, 9, 0, 0, 0},  //  1: Lydian Pentatonic, major seventh
   {0, 3, 5, 7, 10, 0, 0, 0}, //  2: Minor Pentatonic, minor
@@ -152,9 +152,17 @@ const uint8_t chord_scale_intervals[15][8] = {
   {0, 2, 3, 5, 7, 9, 10, 0}, // 11: Dorian, minor seventh
   {0, 2, 4, 6, 7, 9, 11, 0}, // 12: Lydian, major seventh
   {0, 2, 4, 5, 7, 9, 10, 0}, // 13: Mixolydian, dominant seventh
-  {0, 2, 3, 5, 7, 8, 10, 0}  // 14: Aeolian, minor
+  {0, 2, 3, 5, 7, 8, 10, 0}, // 14: Aeolian, minor
+  // For the alternate layout's chords
+  {0, 1, 3, 5, 6, 8, 10, 0}, // 15: Locrian, half diminished (m7b5)
+  // The suspended pentatonics leave the third out altogether rather than pick
+  // one, since that ambiguity is the whole point of a sus chord and a harp
+  // landing on a third resolves it for you.
+  {0, 2, 5, 7, 9, 0, 0, 0},  // 16: Suspended Pentatonic (1 2 4 5 6), sus2 and sus4
+  {0, 2, 5, 7, 10, 0, 0, 0}, // 17: Suspended b7 Pentatonic (1 2 4 5 b7), 7sus4
+  {0, 3, 5, 6, 10, 0, 0, 0}  // 18: Half-diminished Pentatonic (1 b3 4 b5 b7), m7b5
 };
-const uint8_t chord_scale_lengths[15] = {5, 5, 5, 5, 5, 8, 6, 8, 8, 8, 7, 7, 7, 7, 7};
+const uint8_t chord_scale_lengths[19] = {5, 5, 5, 5, 5, 8, 6, 8, 8, 8, 7, 7, 7, 7, 7, 7, 5, 5, 5};
 
 
 
@@ -926,7 +934,10 @@ uint8_t calculate_note_chord(uint8_t voice, bool slashed, bool sharp) {
 
 enum ChordType {
   CHORD_MAJOR, CHORD_MINOR, CHORD_SEVENTH, CHORD_MAJ_SEVENTH, CHORD_MIN_SEVENTH,
-  CHORD_DIM, CHORD_AUG, CHORD_MAJ_SIXTH, CHORD_MIN_SIXTH, CHORD_FULL_DIM, CHORD_UNKNOWN
+  CHORD_DIM, CHORD_AUG, CHORD_MAJ_SIXTH, CHORD_MIN_SIXTH, CHORD_FULL_DIM,
+  CHORD_HALF_DIM, CHORD_SUS_FOURTH, CHORD_SUS_SECOND, CHORD_SEVENTH_SUS,
+  CHORD_MAJ_NINTH, CHORD_MIN_NINTH, CHORD_ADD_NINTH, CHORD_SIX_NINE,
+  CHORD_UNKNOWN
 };
 
 ChordType get_chord_type(uint8_t (*chord)[7]) {
@@ -940,6 +951,14 @@ ChordType get_chord_type(uint8_t (*chord)[7]) {
   if (chord == &maj_sixth)   return CHORD_MAJ_SIXTH;
   if (chord == &min_sixth)   return CHORD_MIN_SIXTH;
   if (chord == &full_dim)    return CHORD_FULL_DIM;
+  if (chord == &half_dim)    return CHORD_HALF_DIM;
+  if (chord == &sus_fourth)  return CHORD_SUS_FOURTH;
+  if (chord == &sus_second)  return CHORD_SUS_SECOND;
+  if (chord == &seventh_sus) return CHORD_SEVENTH_SUS;
+  if (chord == &major_ninth) return CHORD_MAJ_NINTH;
+  if (chord == &minor_ninth) return CHORD_MIN_NINTH;
+  if (chord == &added_ninth) return CHORD_ADD_NINTH;
+  if (chord == &six_nine)    return CHORD_SIX_NINE;
   return CHORD_UNKNOWN;
 }
 
@@ -963,6 +982,19 @@ uint8_t get_chord_scale_index(ChordType chord_type, bool use_pentatonic) {
     case CHORD_MAJ_SIXTH:    return 7;
     case CHORD_MIN_SIXTH:    return 8;
     case CHORD_FULL_DIM:     return 9;
+    // The alternate layout's chords. A ninth chord takes the same scale as the
+    // seventh it is built on, since the ninth is already in the scale; what
+    // matters is that the third stays minor when the chord's is.
+    case CHORD_MAJ_NINTH:    return use_pentatonic ? 1 : 12;  // as major seventh: lydian
+    case CHORD_MIN_NINTH:    return use_pentatonic ? 2 : 11;  // as minor seventh: dorian, and the minor pentatonic keeps its b7
+    case CHORD_ADD_NINTH:    return use_pentatonic ? 0 : 10;  // a major triad with a 9th
+    case CHORD_SIX_NINE:     return use_pentatonic ? 0 : 12;  // major, and lydian suits the 6/9 colour
+    case CHORD_HALF_DIM:     return use_pentatonic ? 18 : 15; // half-diminished, locrian
+    // Suspended chords deliberately withhold the third, so the pentatonic harp
+    // does too; the full scales keep it.
+    case CHORD_SUS_FOURTH:   return use_pentatonic ? 16 : 13; // no third; mixolydian full
+    case CHORD_SUS_SECOND:   return use_pentatonic ? 16 : 10;
+    case CHORD_SEVENTH_SUS:  return use_pentatonic ? 17 : 13;
     default:                 return use_pentatonic ? 0 : 10;
   }
 }
