@@ -180,6 +180,34 @@ static const audio_block_t zeroblock = {
 #endif
 } };
 
+void AudioEffectPlateReverb::clear_buffers(void)
+{
+    memset(in_allp1_bufL, 0, sizeof(in_allp1_bufL));
+    memset(in_allp2_bufL, 0, sizeof(in_allp2_bufL));
+    memset(in_allp3_bufL, 0, sizeof(in_allp3_bufL));
+    memset(in_allp4_bufL, 0, sizeof(in_allp4_bufL));
+    memset(in_allp1_bufR, 0, sizeof(in_allp1_bufR));
+    memset(in_allp2_bufR, 0, sizeof(in_allp2_bufR));
+    memset(in_allp3_bufR, 0, sizeof(in_allp3_bufR));
+    memset(in_allp4_bufR, 0, sizeof(in_allp4_bufR));
+    memset(lp_allp1_buf, 0, sizeof(lp_allp1_buf));
+    memset(lp_allp2_buf, 0, sizeof(lp_allp2_buf));
+    memset(lp_allp3_buf, 0, sizeof(lp_allp3_buf));
+    memset(lp_allp4_buf, 0, sizeof(lp_allp4_buf));
+    memset(lp_dly1_buf, 0, sizeof(lp_dly1_buf));
+    memset(lp_dly2_buf, 0, sizeof(lp_dly2_buf));
+    memset(lp_dly3_buf, 0, sizeof(lp_dly3_buf));
+    memset(lp_dly4_buf, 0, sizeof(lp_dly4_buf));
+}
+
+void AudioEffectPlateReverb::clear_right_input(void)
+{
+    memset(in_allp1_bufR, 0, sizeof(in_allp1_bufR));
+    memset(in_allp2_bufR, 0, sizeof(in_allp2_bufR));
+    memset(in_allp3_bufR, 0, sizeof(in_allp3_bufR));
+    memset(in_allp4_bufR, 0, sizeof(in_allp4_bufR));
+}
+
 void AudioEffectPlateReverb::update()
 {
     const audio_block_t *blockL, *blockR;
@@ -203,22 +231,7 @@ void AudioEffectPlateReverb::update()
     {
         if (!cleanup_done)
         {
-            memset(in_allp1_bufL, 0, sizeof(in_allp1_bufL));
-            memset(in_allp2_bufL, 0, sizeof(in_allp2_bufL));
-            memset(in_allp3_bufL, 0, sizeof(in_allp3_bufL));
-            memset(in_allp4_bufL, 0, sizeof(in_allp4_bufL));
-            memset(in_allp1_bufR, 0, sizeof(in_allp1_bufR));
-            memset(in_allp2_bufR, 0, sizeof(in_allp2_bufR));
-            memset(in_allp3_bufR, 0, sizeof(in_allp3_bufR));
-            memset(in_allp4_bufR, 0, sizeof(in_allp4_bufR));
-            memset(lp_allp1_buf, 0, sizeof(lp_allp1_buf));
-            memset(lp_allp2_buf, 0, sizeof(lp_allp2_buf));
-            memset(lp_allp3_buf, 0, sizeof(lp_allp3_buf));
-            memset(lp_allp4_buf, 0, sizeof(lp_allp4_buf));
-            memset(lp_dly1_buf, 0, sizeof(lp_dly1_buf));
-            memset(lp_dly2_buf, 0, sizeof(lp_dly2_buf));
-            memset(lp_dly3_buf, 0, sizeof(lp_dly3_buf));
-            memset(lp_dly4_buf, 0, sizeof(lp_dly4_buf));
+            clear_buffers();
 
             cleanup_done = true;
         }
@@ -238,6 +251,9 @@ void AudioEffectPlateReverb::update()
 
     blockL = receiveReadOnly(0);
     blockR = receiveReadOnly(1);
+    if (!blockL && !blockR && asleep) return;   // nothing in, the tail long gone: nothing to do
+    asleep = false;
+    bool had_input = blockL || blockR;
 	outblockL = allocate();
 	outblockR = allocate();
 	if (!outblockL || !outblockR) {
@@ -249,14 +265,66 @@ void AudioEffectPlateReverb::update()
 	}
 
 	if (!blockL) blockL = &zeroblock;
+    // Only the left input is wired (reverb_mixer is mono), so the right's four allpasses ran on
+    // zeros and passed on exactly 0. With no right input they keep going 2 s (their tail), then
+    // clear and rest; a right input wakes them.
+    if (blockR) right_quiet_blocks = 0;
+    else if (right_quiet_blocks < right_tail_blocks && ++right_quiet_blocks == right_tail_blocks) clear_right_input();
+    const bool right_running = right_quiet_blocks < right_tail_blocks;
     if (!blockR) blockR = &zeroblock;
 
     // convert data to float32
     arm_q15_to_float((q15_t *)blockL->data, input_blockL, AUDIO_BLOCK_SAMPLES);
-    arm_q15_to_float((q15_t *)blockR->data, input_blockR, AUDIO_BLOCK_SAMPLES);
+    if (right_running) arm_q15_to_float((q15_t *)blockR->data, input_blockR, AUDIO_BLOCK_SAMPLES);
 
     rv_time = rv_time_k;
 
+    // The state in locals for the loop, written back after it. As members, every float stored into a
+    // delay line might, for all the compiler knows, have changed them, so each was read back from
+    // memory after every store and written out after every change: the same sums, a good deal more
+    // traffic. Same names, so the loop below reads as it always did.
+    float32_t hpf1 = this->hpf1;
+    float32_t hpf2 = this->hpf2;
+    float32_t hpf3 = this->hpf3;
+    float32_t hpf4 = this->hpf4;
+    uint16_t in_allp1_idxL = this->in_allp1_idxL;
+    uint16_t in_allp1_idxR = this->in_allp1_idxR;
+    uint16_t in_allp2_idxL = this->in_allp2_idxL;
+    uint16_t in_allp2_idxR = this->in_allp2_idxR;
+    uint16_t in_allp3_idxL = this->in_allp3_idxL;
+    uint16_t in_allp3_idxR = this->in_allp3_idxR;
+    uint16_t in_allp4_idxL = this->in_allp4_idxL;
+    uint16_t in_allp4_idxR = this->in_allp4_idxR;
+    float32_t in_allp_out_L = this->in_allp_out_L;
+    float32_t in_allp_out_R = this->in_allp_out_R;
+    uint32_t lfo1_phase_acc = this->lfo1_phase_acc;
+    uint32_t lfo2_phase_acc = this->lfo2_phase_acc;
+    uint16_t lp_allp1_idx = this->lp_allp1_idx;
+    uint16_t lp_allp2_idx = this->lp_allp2_idx;
+    uint16_t lp_allp3_idx = this->lp_allp3_idx;
+    uint16_t lp_allp4_idx = this->lp_allp4_idx;
+    float32_t lp_allp_out = this->lp_allp_out;
+    uint16_t lp_dly1_idx = this->lp_dly1_idx;
+    uint16_t lp_dly2_idx = this->lp_dly2_idx;
+    uint16_t lp_dly3_idx = this->lp_dly3_idx;
+    uint16_t lp_dly4_idx = this->lp_dly4_idx;
+    float32_t lpf1 = this->lpf1;
+    float32_t lpf2 = this->lpf2;
+    float32_t lpf3 = this->lpf3;
+    float32_t lpf4 = this->lpf4;
+    float32_t master_lowpass_l = this->master_lowpass_l;
+    float32_t master_lowpass_r = this->master_lowpass_r;
+    const float32_t in_allp_k = this->in_allp_k;
+    const float32_t input_attn = this->input_attn;
+    const uint32_t lfo1_adder = this->lfo1_adder;
+    const uint32_t lfo2_adder = this->lfo2_adder;
+    const float32_t loop_allp_k = this->loop_allp_k;
+    const float32_t lp_hidamp_k = this->lp_hidamp_k;
+    const float32_t lp_hipass_f = this->lp_hipass_f;
+    const float32_t lp_lodamp_k = this->lp_lodamp_k;
+    const float32_t lp_lowpass_f = this->lp_lowpass_f;
+    const float32_t master_lowpass_f = this->master_lowpass_f;
+    const float32_t rv_time_scaler = this->rv_time_scaler;
 	for (i=0; i < AUDIO_BLOCK_SAMPLES; i++) 
     {
         // do the LFOs
@@ -312,28 +380,32 @@ void AudioEffectPlateReverb::update()
         in_allp_out_L = acc;
         if (++in_allp4_idxL >= sizeof(in_allp4_bufL)/sizeof(float32_t)) in_allp4_idxL = 0;
 
-        input = input_blockR[i] * input_attn;
-
-        // chained input allpasses, channel R
-        acc = in_allp1_bufR[in_allp1_idxR]  + input * in_allp_k;  
-        in_allp1_bufR[in_allp1_idxR] = input - in_allp_k * acc;
-        input = acc;
-        if (++in_allp1_idxR >= sizeof(in_allp1_bufR)/sizeof(float32_t)) in_allp1_idxR = 0;
-
-        acc = in_allp2_bufR[in_allp2_idxR]  + input * in_allp_k;  
-        in_allp2_bufR[in_allp2_idxR] = input - in_allp_k * acc;
-        input = acc;
-        if (++in_allp2_idxR >= sizeof(in_allp2_bufR)/sizeof(float32_t)) in_allp2_idxR = 0;
-
-        acc = in_allp3_bufR[in_allp3_idxR]  + input * in_allp_k;  
-        in_allp3_bufR[in_allp3_idxR] = input - in_allp_k * acc;
-        input = acc;
-        if (++in_allp3_idxR >= sizeof(in_allp3_bufR)/sizeof(float32_t)) in_allp3_idxR = 0;
-
-        acc = in_allp4_bufR[in_allp4_idxR]  + input * in_allp_k;  
-        in_allp4_bufR[in_allp4_idxR] = input - in_allp_k * acc;
-        in_allp_out_R = acc;
-        if (++in_allp4_idxR >= sizeof(in_allp4_bufR)/sizeof(float32_t)) in_allp4_idxR = 0;
+        if (right_running)
+        {
+            input = input_blockR[i] * input_attn;
+    
+            // chained input allpasses, channel R
+            acc = in_allp1_bufR[in_allp1_idxR]  + input * in_allp_k;  
+            in_allp1_bufR[in_allp1_idxR] = input - in_allp_k * acc;
+            input = acc;
+            if (++in_allp1_idxR >= sizeof(in_allp1_bufR)/sizeof(float32_t)) in_allp1_idxR = 0;
+    
+            acc = in_allp2_bufR[in_allp2_idxR]  + input * in_allp_k;  
+            in_allp2_bufR[in_allp2_idxR] = input - in_allp_k * acc;
+            input = acc;
+            if (++in_allp2_idxR >= sizeof(in_allp2_bufR)/sizeof(float32_t)) in_allp2_idxR = 0;
+    
+            acc = in_allp3_bufR[in_allp3_idxR]  + input * in_allp_k;  
+            in_allp3_bufR[in_allp3_idxR] = input - in_allp_k * acc;
+            input = acc;
+            if (++in_allp3_idxR >= sizeof(in_allp3_bufR)/sizeof(float32_t)) in_allp3_idxR = 0;
+    
+            acc = in_allp4_bufR[in_allp4_idxR]  + input * in_allp_k;  
+            in_allp4_bufR[in_allp4_idxR] = input - in_allp_k * acc;
+            in_allp_out_R = acc;
+            if (++in_allp4_idxR >= sizeof(in_allp4_bufR)/sizeof(float32_t)) in_allp4_idxR = 0;
+        }
+        else in_allp_out_R = 0;   // no right input: its allpasses would only pass on zeros
 
         // input allpases done, start loop allpases
         input = lp_allp_out + in_allp_out_R; 
@@ -505,6 +577,49 @@ void AudioEffectPlateReverb::update()
         outblockR->data[i] =(int16_t)(master_lowpass_r * 32767.0f);
 		
 	}
+    this->hpf1 = hpf1;
+    this->hpf2 = hpf2;
+    this->hpf3 = hpf3;
+    this->hpf4 = hpf4;
+    this->in_allp1_idxL = in_allp1_idxL;
+    this->in_allp1_idxR = in_allp1_idxR;
+    this->in_allp2_idxL = in_allp2_idxL;
+    this->in_allp2_idxR = in_allp2_idxR;
+    this->in_allp3_idxL = in_allp3_idxL;
+    this->in_allp3_idxR = in_allp3_idxR;
+    this->in_allp4_idxL = in_allp4_idxL;
+    this->in_allp4_idxR = in_allp4_idxR;
+    this->in_allp_out_L = in_allp_out_L;
+    this->in_allp_out_R = in_allp_out_R;
+    this->lfo1_phase_acc = lfo1_phase_acc;
+    this->lfo2_phase_acc = lfo2_phase_acc;
+    this->lp_allp1_idx = lp_allp1_idx;
+    this->lp_allp2_idx = lp_allp2_idx;
+    this->lp_allp3_idx = lp_allp3_idx;
+    this->lp_allp4_idx = lp_allp4_idx;
+    this->lp_allp_out = lp_allp_out;
+    this->lp_dly1_idx = lp_dly1_idx;
+    this->lp_dly2_idx = lp_dly2_idx;
+    this->lp_dly3_idx = lp_dly3_idx;
+    this->lp_dly4_idx = lp_dly4_idx;
+    this->lpf1 = lpf1;
+    this->lpf2 = lpf2;
+    this->lpf3 = lpf3;
+    this->lpf4 = lpf4;
+    this->master_lowpass_l = master_lowpass_l;
+    this->master_lowpass_r = master_lowpass_r;
+    int16_t loudest = 0;
+    for (i = 0; i < AUDIO_BLOCK_SAMPLES; i++)
+    {
+        loudest = max(loudest, (int16_t)max(abs(outblockL->data[i]), abs(outblockR->data[i])));
+    }
+    if (had_input || loudest > 1) quiet_blocks = 0;
+    else if (++quiet_blocks >= sleep_after)
+    {
+        asleep = true;
+        quiet_blocks = 0;
+        clear_buffers();   // a tail too quiet to hear, not carried into the next sound
+    }
     transmit(outblockL, 0);
 	transmit(outblockR, 1);
 	release(outblockL);

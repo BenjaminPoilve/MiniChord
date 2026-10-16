@@ -244,22 +244,22 @@ bool sysex_controler_connected=false; //bool to remember if there is a controlle
 AudioSynthWaveformModulated *string_waveform_array[12] = {&waveform_string_1, &waveform_string_2, &waveform_string_3, &waveform_string_4, &waveform_string_5, &waveform_string_6, &waveform_string_7, &waveform_string_8, &waveform_string_9, &waveform_string_10, &waveform_string_11, &waveform_string_12};
 AudioEffectEnvelope *string_enveloppe_array[12] = {&envelope_string_1, &envelope_string_2, &envelope_string_3, &envelope_string_4, &envelope_string_5, &envelope_string_6, &envelope_string_7, &envelope_string_8, &envelope_string_9, &envelope_string_10, &envelope_string_11, &envelope_string_12};
 AudioEffectEnvelope *string_enveloppe_filter_array[12] = {&envelope_filter_1, &envelope_filter_2, &envelope_filter_3, &envelope_filter_4, &envelope_filter_5, &envelope_filter_6, &envelope_filter_7, &envelope_filter_8, &envelope_filter_9, &envelope_filter_10, &envelope_filter_11, &envelope_filter_12};
-AudioMixer4 *string_mixer_array[3] = {&string_mix_1, &string_mix_2, &string_mix_3};
-AudioFilterStateVariable *string_filter_array[12] = {&filter_string_1, &filter_string_2, &filter_string_3, &filter_string_4, &filter_string_5, &filter_string_6, &filter_string_7, &filter_string_8, &filter_string_9, &filter_string_10, &filter_string_11, &filter_string_12};
+AudioMixer4Lean *string_mixer_array[3] = {&string_mix_1, &string_mix_2, &string_mix_3};
+AudioFilterStateVariableLean *string_filter_array[12] = {&filter_string_1, &filter_string_2, &filter_string_3, &filter_string_4, &filter_string_5, &filter_string_6, &filter_string_7, &filter_string_8, &filter_string_9, &filter_string_10, &filter_string_11, &filter_string_12};
 AudioSynthWaveform *string_transient_waveform_array[12] = {&waveform_transient_1, &waveform_transient_2, &waveform_transient_3, &waveform_transient_4, &waveform_transient_5, &waveform_transient_6, &waveform_transient_7, &waveform_transient_8, &waveform_transient_9, &waveform_transient_10, &waveform_transient_11, &waveform_transient_12};
 AudioEffectEnvelope *string_transient_envelope_array[12] = {&envelope_transient_1, &envelope_transient_2, &envelope_transient_3, &envelope_transient_4, &envelope_transient_5, &envelope_transient_6, &envelope_transient_7, &envelope_transient_8, &envelope_transient_9, &envelope_transient_10, &envelope_transient_11, &envelope_transient_12};
-AudioMixer4 *transient_mixer_array[3] = {&transient_mix_1, &transient_mix_2, &transient_mix_3};
+AudioMixer4Lean *transient_mixer_array[3] = {&transient_mix_1, &transient_mix_2, &transient_mix_3};
 // for the chord
 AudioEffectEnvelope *chord_vibrato_envelope_array[4] = {&voice1_vibrato_envelope, &voice2_vibrato_envelope, &voice3_vibrato_envelope, &voice4_vibrato_envelope};
 AudioEffectEnvelope *chord_vibrato_dc_envelope_array[4] = {&voice1_vibrato_dc_envelope, &voice2_vibrato_dc_envelope, &voice3_vibrato_dc_envelope, &voice4_vibrato_dc_envelope};
-AudioMixer4 *chord_vibrato_mixer_array[4] = {&voice1_vibrato_mixer, &voice2_vibrato_mixer, &voice3_vibrato_mixer, &voice4_vibrato_mixer};
+AudioMixer4Lean *chord_vibrato_mixer_array[4] = {&voice1_vibrato_mixer, &voice2_vibrato_mixer, &voice3_vibrato_mixer, &voice4_vibrato_mixer};
 AudioSynthWaveformModulated *chord_osc_1_array[4] = {&voice1_osc1, &voice2_osc1, &voice3_osc1, &voice4_osc1};
 AudioSynthWaveformModulated *chord_osc_2_array[4] = {&voice1_osc2, &voice2_osc2, &voice3_osc2, &voice4_osc2};
 AudioSynthWaveformModulated *chord_osc_3_array[4] = {&voice1_osc3, &voice2_osc3, &voice3_osc3, &voice4_osc3};
 AudioSynthWaveformDc *chord_freq_dc_array[4]= {&voice1_frequency_dc, &voice2_frequency_dc, &voice3_frequency_dc, &voice4_frequency_dc};
 AudioSynthNoiseWhite *chord_noise_array[4] = {&voice1_noise, &voice2_noise, &voice3_noise, &voice4_noise};
-AudioMixer4 *chord_voice_mixer_array[4] = {&voice1_mixer, &voice2_mixer, &voice3_mixer, &voice4_mixer};
-AudioFilterStateVariable *chord_voice_filter_array[4] = {&voice1_filter, &voice2_filter, &voice3_filter, &voice4_filter};
+AudioMixer4Lean *chord_voice_mixer_array[4] = {&voice1_mixer, &voice2_mixer, &voice3_mixer, &voice4_mixer};
+AudioFilterStateVariableLean *chord_voice_filter_array[4] = {&voice1_filter, &voice2_filter, &voice3_filter, &voice4_filter};
 AudioEffectEnvelope *chord_envelope_filter_array[4] = {&voice1_envelope_filter, &voice2_envelope_filter, &voice3_envelope_filter, &voice4_envelope_filter};
 AudioEffectMultiply *chord_tremolo_mult_array[4] = {&voice1_tremolo_mult, &voice2_tremolo_mult, &voice3_tremolo_mult, &voice4_tremolo_mult};
 AudioEffectEnvelope *chord_envelope_array[4] = {&voice1_envelope, &voice2_envelope, &voice3_envelope, &voice4_envelope};
@@ -344,9 +344,13 @@ u_int32_t long_timer_period = shuffle * (60 * 1000 * 1000) / (2 * rythm_bpm);
 u_int32_t short_timer_period = 2 * (60 * 1000 * 1000) / (2 * rythm_bpm) - long_timer_period;
 bool current_long_period = true;
 bool rythm_timer_running = false;
+volatile bool rythm_clock_synced = false;   // the steps following a MIDI clock (see the clock in processMIDI)
 IntervalTimer rythm_timer;       // that gives the general rythm
-IntervalTimer note_off_timer[4]; // timers for delayed chord enveloppe
-IntervalTimer led_timer;
+// The rhythm LED's flash: lit on the step (rythm_tick_function), let go by the loop 200 ms on
+// (rythm_led_settle), not by a timer of its own, so the rhythm holds one of the four timer channels
+// and not two, and nothing starts a timer from inside an interrupt
+volatile bool rythm_led_lit = false;
+volatile uint32_t rythm_led_lit_at = 0;
 IntervalTimer color_led_blink_timer;
 elapsedMillis note_off_timing[4];
 elapsedMicros last_midi_clock_in;
@@ -455,6 +459,8 @@ void refresh_chord_filter();
 float chord_voice_note_freq[4] = {0, 0, 0, 0};
 void calculate_ws_array();
 void rythm_tick_function();
+void rythm_free_run();
+void rythm_clock_downbeat();
 
 //-->>LED HSV CALCULATION
 // function to calculate led RGB value, thank you SO
@@ -612,46 +618,84 @@ void processMIDI(void) {
       }
     }
   }
+  // Following a MIDI clock (24 a beat): each beat's first step falls on the clock that starts the
+  // beat, and its second follows by the long half of the shuffle, on a one-shot timer
+  // (rythm_clock_downbeat). Start begins the pattern on the next clock, as MIDI has it; Stop, or the
+  // clock going quiet for half a second (rythm_clock_watch), hands the steps back to the minichord's
+  // own tempo.
   if(type==usbMIDI.Start && rythm_mode){
-    rythm_current_step=0;
-    midi_clock_current_step=0;
-    rythm_tick_function();
-    Serial.println("Start received");
     rythm_timer.end();
+    rythm_clock_synced = true;
+    rythm_current_step = 0;
+    midi_clock_current_step = 23;   // so the next clock starts a beat
+    last_midi_clock_in = 0;
+    Serial.println("Start received");
   }
   if(type==usbMIDI.Stop && rythm_mode){
-    rythm_timer.begin(rythm_tick_function, short_timer_period);
+    rythm_clock_synced = false;
+    rythm_free_run();
   }
-
-
   if(type==usbMIDI.Clock && rythm_mode){
-    //here we want half of the cycle to be synced with the midi clock, and half with the calculated internal clock, so we can still have shuffle
-    //recalculate the BPM
-    rythm_bpm=(rythm_bpm*10+(1000*1000*60/last_midi_clock_in)/24)/11.0;
-    last_midi_clock_in=0;
-    midi_clock_current_step+=1;
-    recalculate_timer();   
-    //once every two beat, we sync
-    if(midi_clock_current_step==24){
-      rythm_timer.begin(rythm_tick_function, short_timer_period);
-      rythm_tick_function();
-      midi_clock_current_step=0;
+    uint32_t us = last_midi_clock_in;
+    last_midi_clock_in = 0;
+    // the tempo from the clock's spacing, in float: it was floored to a whole BPM. Only a real
+    // interval counts (25 to 1250 BPM), not the first clock after a gap
+    if (us > 2000 && us < 100000) {
+      rythm_bpm = constrain((rythm_bpm * 10 + 60e6f / (24.0f * us)) / 11.0f, 30.0f, 300.0f);
+      recalculate_timer();
     }
-    //We disable the timer to avoid having it trigger the tick too early when we arrive at the sync beat 
-    if(midi_clock_current_step>18){
-      rythm_timer.end();
+    if (!rythm_clock_synced) {   // a clock already running when rhythm mode came on: from the next beat
+      rythm_clock_synced = true;
+      midi_clock_current_step = 23;
     }
-
-   
-  
-   
+    if (++midi_clock_current_step >= 24) {
+      midi_clock_current_step = 0;
+      rythm_clock_downbeat();
+    }
   }
 }
 
 //-->>TIMER FUNCTIONS
+// A chord voice whose envelope has ended rests: its oscillators and noise at amplitude 0 (keeping their
+// phase, sending nothing), so the chain after them goes idle; they ran on every block for the envelope
+// to mute. A note on wakes it first (play_single_note, play_note_selected_duration), from its own
+// settings (121, 124, 127), and every 100 ms the resting ones are put back to 0, in case one of those
+// settings was written meanwhile.
+bool chord_voice_resting[4] = {false, false, false, false};
+void chord_voice_sources(uint8_t i) {
+  bool on = !chord_voice_resting[i];
+  chord_osc_1_array[i]->amplitude(on ? current_sysex_parameters[121] / 100.0 : 0);
+  chord_osc_2_array[i]->amplitude(on ? current_sysex_parameters[124] / 100.0 : 0);
+  chord_osc_3_array[i]->amplitude(on ? current_sysex_parameters[127] / 100.0 : 0);
+  chord_noise_array[i]->amplitude(on ? 0.5 : 0);
+}
+// from the note on's own context, a timer's interrupt as often as not
+void wake_chord_voice(uint8_t i) {
+  if (!chord_voice_resting[i]) return;
+  chord_voice_resting[i] = false;
+  chord_voice_sources(i);
+}
+// from the loop: the check and the rest together, so a timer's note on can't fall between them
+void rest_chord_voices() {
+  static elapsedMillis since_reassert;
+  bool reassert = since_reassert >= 100;
+  if (reassert) since_reassert = 0;
+  for (uint8_t i = 0; i < 4; i++) {
+    noInterrupts();
+    if (chord_voice_resting[i]) {
+      if (reassert) chord_voice_sources(i);
+    } else if (!chord_envelope_array[i]->isActive()) {
+      chord_voice_resting[i] = true;
+      chord_voice_sources(i);
+    }
+    interrupts();
+  }
+}
+
 // function to handle the delayed chord activation
 void play_single_note(int i, IntervalTimer *timer) {
   timer->end();
+  wake_chord_voice(i);
   set_chord_voice_frequency(i, current_applied_chord_notes[i]);
   chord_vibrato_envelope_array[i]->noteOn();
   chord_vibrato_dc_envelope_array[i]->noteOn();
@@ -667,6 +711,7 @@ void play_single_note(int i, IntervalTimer *timer) {
 }
 
 void play_note_selected_duration(int i,int current_note){
+  wake_chord_voice(i);
   chord_vibrato_envelope_array[i]->noteOn();
   chord_vibrato_dc_envelope_array[i]->noteOn();
   chord_envelope_array[i]->noteOn();
@@ -681,9 +726,13 @@ void play_note_selected_duration(int i,int current_note){
   chord_started_notes[i]=midi_base_note_transposed+current_note;
 }
 
-void turn_off_led(IntervalTimer *timer) {
-  timer->end();
-  analogWrite(RYTHM_LED_PIN, 0);
+void rythm_led_settle() {
+  noInterrupts();   // so a step lighting it again can't fall between the check and the off
+  if (rythm_led_lit && millis() - rythm_led_lit_at >= 200) {
+    rythm_led_lit = false;
+    analogWrite(RYTHM_LED_PIN, 0);
+  }
+  interrupts();
 }
 
 //-->>AUDIO HELPER FUNCTIONS
@@ -1030,6 +1079,43 @@ uint8_t calculate_note_harp(uint8_t string, bool slashed, bool sharp) {
   return note;
 }
 //-->>RYTHM MODE UTILITIES
+// the rhythm on the minichord's own tempo: steps alternating long and short (the shuffle), from now
+void rythm_free_run() {
+  rythm_timer.priority(254);
+  rythm_timer.begin(rythm_tick_function, short_timer_period);
+  rythm_timer_running = true;
+  rythm_timer.update(long_timer_period);
+  current_long_period = true;
+}
+
+// a beat's second step, the long half of the shuffle after its first (rythm_clock_downbeat)
+void rythm_offbeat() {
+  rythm_timer.end();
+  rythm_tick_function();
+}
+
+// A beat's first step, on the clock that starts it. The timer was setting the second step with
+// the short half first, so a shuffle came out reversed under a clock; and Start played its first
+// step at once and the second only a beat later, so the pattern ran an eighth behind the clock.
+// The first step of a beat is always an even one: if a second step went missing, the count skips it.
+void rythm_clock_downbeat() {
+  noInterrupts();
+  rythm_timer.end();
+  if (rythm_loop_length % 2 == 0 && rythm_current_step % 2 == 1) rythm_current_step = (rythm_current_step + 1) % rythm_loop_length;
+  interrupts();
+  rythm_tick_function();
+  rythm_timer.begin(rythm_offbeat, long_timer_period);
+  rythm_timer_running = true;
+}
+
+// from the loop: a clock gone quiet without a Stop (the computer's player closed, the cable out)
+void rythm_clock_watch() {
+  if (rythm_mode && rythm_clock_synced && last_midi_clock_in > 500000) {
+    rythm_clock_synced = false;
+    rythm_free_run();
+  }
+}
+
 void rythm_tick_function() {
   //this function seems a bit long for a timed one. Maybe try to offload some logic somewhere else? 
   if (rythm_current_step % rythm_limit_change_to_every == 0) {
@@ -1047,14 +1133,16 @@ void rythm_tick_function() {
     }
   }
   analogWrite(RYTHM_LED_PIN, (220 * (rythm_current_step % rythm_limit_change_to_every == 0) + 15) * (rythm_current_step % active_modulus == 0));
-  led_timer.priority(255);
-  led_timer.begin([] { turn_off_led(&led_timer); }, 200000); 
-  if (current_long_period) {
-    rythm_timer.update(short_timer_period);
-    current_long_period = false;
-  } else {
-    rythm_timer.update(long_timer_period);
-    current_long_period = true;
+  rythm_led_lit_at = millis();   // off 200 ms on (rythm_led_settle)
+  rythm_led_lit = true;
+  if (!rythm_clock_synced) {   // under a clock the steps come from rythm_clock_downbeat and rythm_offbeat
+    if (current_long_period) {
+      rythm_timer.update(short_timer_period);
+      current_long_period = false;
+    } else {
+      rythm_timer.update(long_timer_period);
+      current_long_period = true;
+    }
   }
   u_int8_t result;
   result = rythm_pattern[rythm_current_step];
@@ -1090,12 +1178,8 @@ String serialize(int16_t data_array[], u_int16_t array_size) {
   return dataString;
 }
 
-void deserialize(String input, int16_t data_array[]) {
-  int len = input.length() + 1;
-  char string[len];
-  char *p;
-  input.toCharArray(string, len);
-  p = strtok(string, ",");
+void deserialize(char *text, int16_t data_array[]) {   // takes the text apart as it goes
+  char *p = strtok(text, ",");
   int i = 0;
   while (p && i < parameter_size) {
     data_array[i] = atoi(p);
@@ -1158,11 +1242,15 @@ void load_config(int bank_number) {
 
   File entry = myfs.open(bank_name[bank_number]);
   if (entry) {
-    String data_string = "";
-    while (entry.available()) {
-      data_string += char(entry.read());
+    // The file in one read. It used to come a character at a time into a String, which
+    // reallocated itself with each one.
+    size_t size = entry.size();
+    char *text = (char *)malloc(size + 1);
+    if (text) {
+      text[entry.read(text, size)] = 0;
+      deserialize(text, current_sysex_parameters);
+      free(text);
     }
-    deserialize(data_string, current_sysex_parameters);
     Serial.print("Loaded preset: ");
     Serial.println(entry.name());
     entry.close();
@@ -1177,7 +1265,13 @@ void load_config(int bank_number) {
   mod_pot.setup(current_sysex_parameters[mod_pot_main_control], current_sysex_parameters[mod_pot_main_range], current_sysex_parameters[mod_pot_alternate_control], current_sysex_parameters[mod_pot_alternate_range], current_sysex_parameters,current_sysex_parameters[mod_pot_alternate_storage],apply_audio_parameter,mod_pot_alternate_storage);
   Serial.println("pot setup done");
   for (int i = 1; i < parameter_size; i++) {
-    apply_audio_parameter(i, current_sysex_parameters[i]);
+    // The knobs' alternate defaults (4-6) are set without the force_update() their setting
+    // runs: it brought each knob's target up to date mid-load, only for the force_updates
+    // below to do it again.
+    if (i == 4) chord_pot.set_alternate_default(current_sysex_parameters[i]);
+    else if (i == 5) harp_pot.set_alternate_default(current_sysex_parameters[i]);
+    else if (i == 6) mod_pot.set_alternate_default(current_sysex_parameters[i]);
+    else apply_audio_parameter(i, current_sysex_parameters[i]);
   }
   if (sysex_controler_connected) {
     control_command(0, 0); // push state to a connected remote controller
@@ -1199,6 +1293,9 @@ void setup() {
   chord_waveshape.shape(wave_shape, 257);
   string_waveshape.shape(wave_shape, 257);
   //the base DC value for strings
+  // The string and chord voice filters' band and high passes go nowhere: only the low pass is worked out
+  for (uint8_t k = 0; k < 12; k++) string_filter_array[k]->lowpass_only(true);
+  for (uint8_t k = 0; k < 4; k++) chord_voice_filter_array[k]->lowpass_only(true);
   filter_dc.amplitude(1);
   // the delay passthrough
   string_delay_mix.gain(0, 1);
@@ -1298,6 +1395,38 @@ void handle_chords_button() {
   }
 }
 
+// The harp's vibrato and bend envelopes are the twelve strings' together, started by each pluck,
+// and nothing ended them: held at sustain after the first pluck, they kept every harp oscillator
+// taking frequency modulation, which costs it twice the work. Once no string is sounding they are
+// let go, and the next pluck starts them afresh.
+void harp_vibrato_settle() {
+  if (!envelope_string_vibrato_lfo.isSustain() && !envelope_string_vibrato_dc.isSustain()) return;
+  for (uint8_t i = 0; i < 12; i++) if (string_enveloppe_array[i]->isActive()) return;
+  envelope_string_vibrato_lfo.noteOff();
+  envelope_string_vibrato_dc.noteOff();
+}
+
+// A string whose envelopes are done rests: its oscillator and transient oscillator go to amplitude 0
+// (keeping their phase, sending nothing), so the chain after them goes idle; they ran on every block for
+// the envelopes to mute. A pluck wakes it (handle_harp). The string level (41) and transient level (101)
+// written while a string rests would wake its oscillators again, so every 100 ms the resting ones are
+// put back to 0.
+bool string_resting[12] = {false, false, false, false, false, false, false, false, false, false, false, false};
+void harp_strings_settle() {
+  static elapsedMillis since_reassert;
+  bool reassert = since_reassert >= 100;
+  if (reassert) since_reassert = 0;
+  for (uint8_t i = 0; i < 12; i++) {
+    if (string_resting[i]) {
+      if (reassert) { string_waveform_array[i]->amplitude(0); string_transient_waveform_array[i]->amplitude(0); }
+    } else if (!string_enveloppe_array[i]->isActive() && !string_transient_envelope_array[i]->isActive()) {
+      string_resting[i] = true;
+      string_waveform_array[i]->amplitude(0);
+      string_transient_waveform_array[i]->amplitude(0);
+    }
+  }
+}
+
 void handle_harp() {
   harp_sensor.update(harp_array);
   for (int i = 0; i < 12; i++) {
@@ -1305,6 +1434,11 @@ void handle_harp() {
     if (value == 2) {
       set_harp_voice_frequency(i, current_harp_notes[i]);
       AudioNoInterrupts();
+      if (string_resting[i]) {   // its oscillators back before the envelope opens (harp_strings_settle)
+        string_resting[i] = false;
+        string_waveform_array[i]->amplitude(current_sysex_parameters[41] / 100.0);
+        string_transient_waveform_array[i]->amplitude(current_sysex_parameters[101] / 100.0);
+      }
       envelope_string_vibrato_lfo.noteOn();
       envelope_string_vibrato_dc.noteOn();
       string_enveloppe_filter_array[i]->noteOn();
@@ -1501,7 +1635,7 @@ void handle_hold_button() {
         trigger_chord = true;
       }
     } else {
-      if (since_last_button_push > 100 && since_last_button_push < 2000) {
+      if (since_last_button_push > 100 && since_last_button_push < 2000 && !rythm_clock_synced) {   // under a clock, the clock's tempo
         rythm_bpm = (rythm_bpm * 5.0 + 60 * 1000 / since_last_button_push) / 6.0;
         Serial.print("Updating the BPM to: ");
         Serial.println(rythm_bpm);
@@ -1518,13 +1652,11 @@ void handle_hold_button() {
     if (rythm_mode) {
       rythm_current_step = 0;
       Serial.println("Starting rhythm timers");
-      rythm_timer.priority(254);
-      rythm_timer.begin(rythm_tick_function, short_timer_period);
-      rythm_timer_running = true;
-      rythm_timer.update(long_timer_period);
-      current_long_period = true;
+      rythm_clock_synced = false;
+      rythm_free_run();
     } else {
       Serial.println("Stopping rhythm timers");
+      rythm_clock_synced = false;
       rythm_timer.end();
       rythm_timer_running = false;
     }
@@ -1573,10 +1705,13 @@ void trigger_chord_notes() {
     for (int i = 0; i < 4; i++) {
       note_timer[i].priority(253);
     }
-    note_timer[0].begin([] { play_single_note(0, &note_timer[0]); }, 10+chord_retrigger_release*1000);          // those allow for delayed triggering
-    note_timer[1].begin([] { play_single_note(1, &note_timer[1]); }, 10 +chord_retrigger_release*1000+ inter_string_delay + random(random_delay));
-    note_timer[2].begin([] { play_single_note(2, &note_timer[2]); }, 10 + chord_retrigger_release*1000+inter_string_delay * 2 + random(random_delay));
-    note_timer[3].begin([] { play_single_note(3, &note_timer[3]); }, 10 + chord_retrigger_release*1000+inter_string_delay * 3 + random(random_delay));
+    // Each voice's start, delayed for the strum. There are four timer channels to share, and a
+    // timer that finds none begins nothing and says so: that voice then starts now, unstrummed,
+    // rather than not at all.
+    if (!note_timer[0].begin([] { play_single_note(0, &note_timer[0]); }, 10+chord_retrigger_release*1000)) play_single_note(0, &note_timer[0]);
+    if (!note_timer[1].begin([] { play_single_note(1, &note_timer[1]); }, 10 +chord_retrigger_release*1000+ inter_string_delay + random(random_delay))) play_single_note(1, &note_timer[1]);
+    if (!note_timer[2].begin([] { play_single_note(2, &note_timer[2]); }, 10 + chord_retrigger_release*1000+inter_string_delay * 2 + random(random_delay))) play_single_note(2, &note_timer[2]);
+    if (!note_timer[3].begin([] { play_single_note(3, &note_timer[3]); }, 10 + chord_retrigger_release*1000+inter_string_delay * 3 + random(random_delay))) play_single_note(3, &note_timer[3]);
     trigger_chord = false;
   }
   button_pushed = false;
@@ -1587,6 +1722,11 @@ void loop() {
   if (usbMIDI.read()) {
     processMIDI();
   }
+  harp_vibrato_settle();
+  harp_strings_settle();
+  rest_chord_voices();
+  rythm_led_settle();
+  rythm_clock_watch();
   // Check sysex controller connection
   if (sysex_controler_connected && bitRead(USB1_PORTSC1, 7)) {
     sysex_controler_connected = false;
