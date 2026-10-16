@@ -12,9 +12,10 @@
 #include <potentiometer.h>
 
 //>>SOFWTARE VERSION 
-int version_ID=9; //to be read 00.03, stored at adress 7 in memory
+int version_ID=11; //to be read 00.03, stored at adress 7 in memory
 //>>BUTTON ARRAYS<<
 debouncer harp_array[12];
+const uint16_t harp_debounce_us = 4000;   // the harp pads' settle, shorter than the buttons' (see setup)
 debouncer chord_matrix_array[22];
 
 //>>HARDWARE SETUP<<
@@ -193,10 +194,24 @@ bool retrigger_chord = true;      // wether or not to retrigger the enveloppe wh
 bool change_held_strings = false; // to control wether hold strings change with chord:
 bool chromatic_harp_mode = false; // to switch the harp to chromatic mode
 //>>SYSEX PARAMETERS<<
-// SYSEX midi message are used to control up to 256 synthesis parameters.
-const uint16_t parameter_size = 256;
+// SYSEX midi message are used to control up to 512 synthesis parameters, in two pages of 256.
+//
+// Page 0 (0-255) is every setting there was before the array grew, and stays exactly as it was
+// everywhere, so no existing preset changes: the preset files, the factory presets below, the
+// dump an editor reads on command 0, and preset codes. Page 1 (256-511) is for new settings. A
+// preset file holds all 512 now, but one saved before holds 256, and loading starts every slot at
+// its default (parameter_default) before the file is read over it, so page 1 comes up at its
+// defaults; firmware from before the growth reads the first 256 of a longer file and keeps page 0.
+// Page 1 goes to an editor only when asked (command 7), with a header, so no tool that knows only
+// page 0 can take it for a dump. 382, 383, 510 and 511 stay unused: their low byte is a universal
+// SysEx id (0x7E, 0x7F), as the first byte of a write.
+const uint16_t parameter_size = 512;
+const uint16_t page_size = 256;
 const uint8_t preset_number = 12;
-int16_t default_bank_sysex_parameters[preset_number][parameter_size] = {
+static_assert(sizeof(parameter_page1_defaults) / sizeof(parameter_page1_defaults[0]) == parameter_size - page_size, "parameter_lookup.h is for another array size: run the generator");
+// The factory presets' page 0; page 1's defaults are generated, the same for every bank
+// (parameter_page1_defaults in parameter_lookup.h, from parameters.json)
+int16_t default_bank_sysex_parameters[preset_number][page_size] = {
   {0,0,50,50,512,512,512,0,0,0,192,100,49,100,184,100,157,100,0,0,0,0,0,0,43,0,50,37,38,67,0,0,0,0,0,0,0,0,0,0,0,16,0,8,8,12,42,1171,1,423,20,70,3,35,83,59,2658,1,0,0,0,0,0,0,0,1,1,1,100,1,1,0,1,1,1,1,14,0,0,70,0,0,0,100,0,6,0,0,755,195,23,61,29,0,0,0,0,162,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,13,8,100,16,0,200,0,0,50,0,50,18,32,50,0,0,10,66,353,65,995,1,569,16,141,32,83,28,48,54,1,0,0,0,56,0,389,0,20,0,0,0,0,1,1,1,0,1,1,0,1,1,1,1,0,0,0,70,0,0,0,100,0,64,0,0,80,16,4,94,753,474,70,5,100,100,100,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,0,6,6,32,0,6,0,16,0,6,6,32,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
   {0,0,50,50,512,512,512,0,0,0,194,100,85,100,60,100,61,100,0,0,10,1,0,0,0,0,0,0,0,100,0,0,0,0,0,0,0,0,0,0,4,25,8,3,29,18,65,488,3,159,25,70,5,18,4,26,6,1,77,0,587,32,0,390,0,76,1,1,100,1,1,68,17,14,22,20,0,340,1682,70,48,0,0,100,18,54,0,0,800,70,57,100,100,0,0,0,0,199,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,7,0,100,0,0,100,6,8,200,2,50,36,75,50,28,0,3,1,1,80,1218,2,1659,38,114,19,8,32,80,1,1,0,30,0,0,0,0,0,0,0,24,0,3,1,1,1,100,1,1,100,1,1,1,1,31,0,0,70,0,0,0,100,0,33,2,1,162,16,4,100,100,1436,118,100,50,32,107,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,13,0,4,0,7,0,0,2,13,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
   {0,0,50,50,512,512,512,0,0,0,192,100,49,100,184,100,157,100,0,0,30,0,1,1,87,33,62,12,80,67,0,0,0,0,0,0,0,0,0,0,0,6,3,8,8,12,42,1855,1,42,20,217,3,35,83,59,2658,1,185,0,282,14,0,247,11,1,1,1,100,1,1,0,1,1,1,1,14,0,0,70,0,0,0,100,0,23,0,0,755,195,82,61,29,0,0,0,0,162,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,13,0,100,23,8,200,0,0,50,0,50,18,32,50,0,0,10,66,353,44,1452,1,569,16,141,32,83,28,48,54,1,0,698,82,56,0,579,0,28,0,0,0,0,1,1,1,0,1,1,100,1,1,1,1,0,0,0,70,0,0,0,100,0,100,0,0,80,16,4,94,753,474,70,5,100,100,100,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,0,6,6,32,0,6,0,16,0,6,6,32,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -369,6 +384,38 @@ uint8_t chord_started_notes[4]={0,0,0,0};
 uint8_t harp_port=1;
 uint8_t harp_channel=1;
 uint8_t harp_attack_velocity=127; 
+// Touch velocity and pressure (addresses 252, 253): how firmly a string is plucked, and how hard
+// it is pressed while held, read from its pad's strength (see touch_firmness)
+uint8_t touch_velocity = 0;      // 0-100: how much softer and darker a light touch plays than a firm one
+uint8_t touch_pressure = 0;      // a held string follows how hard it is pressed (1) or only swells (2), and sends it as MIDI pressure
+// Strum velocity (address 263), see strum_softness
+uint8_t strum_velocity = 0;      // 0-100: how much softer a slow strum plays than a fast one, 0 off
+float string_level = 0.15;       // the strings' amplitude (41), before each string's own firmness
+float transient_level = 0.1;     // the transient's amplitude (101), likewise
+float string_pluck_firmness[12] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};   // 0-1, how firmly each string was plucked
+float string_firmness[12] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};         // that, or firmer while pressed harder
+float string_strum_softness[12] = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};   // strum velocity's say, -1 none
+bool string_held[12] = {false, false, false, false, false, false, false, false, false, false, false, false};
+uint8_t string_pressure_sent[12] = {0};
+// A held string's pressure, kept as the firmest of each of the last four 5 ms stretches, so it
+// follows a finger up at once and down 20 ms late. Easing off, the lag doesn't show; lifting, the
+// reading falls away for a few milliseconds before the pad lets go, and the string would follow it
+// down and then release from there, which sounds like the note cut short.
+const uint8_t press_slots = 4;
+const uint8_t press_slot_ms = 5;
+float press_recent[12][press_slots] = {{0}};
+uint8_t press_slot = 0;
+float string_note_freq[12] = {0};   // the frequency each string sounds, for its filter
+void apply_string_firmness(uint8_t i);
+float touch_softness(float firmness);
+// How much softer than full string i plays, 0 to 1: touch velocity's say (from how firmly it is
+// held, if touch velocity is on) and strum velocity's (from the strum it was part of, if it is on
+// and the strum had a speed), the less soft of the two; full if neither has a say.
+static inline float string_softness(uint8_t i) {
+  float s = touch_velocity ? touch_softness(string_firmness[i]) : -1;
+  if (string_strum_softness[i] >= 0) s = s < 0 ? string_strum_softness[i] : fminf(s, string_strum_softness[i]);
+  return s < 0 ? 0 : s;
+}
 uint8_t harp_release_velocity=20;
 uint8_t harp_started_notes[12]={0,0,0,0,0,0,0,0,0,0,0,0};    
 uint8_t midi_base_note=48; // for C3
@@ -381,12 +428,15 @@ uint midi_buffer_delay=300; //in microseconds, helps compatibility with some har
 // usbMIDI. Everything else enqueues via queue_midi(), safe from ISR context.
 #define MIDI_QUEUE_SIZE 256 // power of two, max 256 for uint8_t indices
 #define MIDI_DRAIN_MAX_PER_LOOP 16 // caps how long a drain can hold up loop()
+#define MIDI_EVT_NOTE_OFF 0
+#define MIDI_EVT_NOTE_ON 1
+#define MIDI_EVT_POLY 2       // polyphonic aftertouch: note and pressure
 struct midi_event_t {
   uint8_t note;
-  uint8_t velocity;
+  uint8_t velocity;  // velocity, or pressure for aftertouch
   uint8_t channel;
   uint8_t cable;
-  bool note_on;
+  uint8_t type;
 };
 volatile midi_event_t midi_queue[MIDI_QUEUE_SIZE];
 volatile uint8_t midi_queue_head = 0; // written by producers
@@ -395,7 +445,7 @@ volatile uint32_t midi_queue_dropped = 0; // diagnostic: events lost to a full q
 
 // Safe to call from any context, including an ISR. Drops the event if the queue is
 // full rather than blocking -- blocking is what caused the original fault.
-void queue_midi(bool note_on, uint8_t note, uint8_t velocity, uint8_t channel, uint8_t cable) {
+void queue_midi_event(uint8_t type, uint8_t note, uint8_t velocity, uint8_t channel, uint8_t cable) {
   uint32_t primask;
   __asm__ volatile("mrs %0, primask" : "=r"(primask));
   __disable_irq();
@@ -405,12 +455,16 @@ void queue_midi(bool note_on, uint8_t note, uint8_t velocity, uint8_t channel, u
     midi_queue[midi_queue_head].velocity = velocity;
     midi_queue[midi_queue_head].channel = channel;
     midi_queue[midi_queue_head].cable = cable;
-    midi_queue[midi_queue_head].note_on = note_on;
+    midi_queue[midi_queue_head].type = type;
     midi_queue_head = next;
   } else {
     midi_queue_dropped++;
   }
   if (!primask) __enable_irq();
+}
+
+void queue_midi(bool note_on, uint8_t note, uint8_t velocity, uint8_t channel, uint8_t cable) {
+  queue_midi_event(note_on ? MIDI_EVT_NOTE_ON : MIDI_EVT_NOTE_OFF, note, velocity, channel, cable);
 }
 
 // Called from loop() only. The single point at which this firmware talks to usbMIDI.
@@ -425,13 +479,13 @@ void drain_midi_queue() {
     e.velocity = midi_queue[midi_queue_tail].velocity;
     e.channel = midi_queue[midi_queue_tail].channel;
     e.cable = midi_queue[midi_queue_tail].cable;
-    e.note_on = midi_queue[midi_queue_tail].note_on;
+    e.type = midi_queue[midi_queue_tail].type;
     midi_queue_tail = (midi_queue_tail + 1) & (MIDI_QUEUE_SIZE - 1);
     if (sent) delayMicroseconds(midi_buffer_delay); // pacing for slower hardware synths
-    if (e.note_on) {
-      usbMIDI.sendNoteOn(e.note, e.velocity, e.channel, e.cable);
-    } else {
-      usbMIDI.sendNoteOff(e.note, e.velocity, e.channel, e.cable);
+    switch (e.type) {
+      case MIDI_EVT_NOTE_ON:  usbMIDI.sendNoteOn(e.note, e.velocity, e.channel, e.cable); break;
+      case MIDI_EVT_NOTE_OFF: usbMIDI.sendNoteOff(e.note, e.velocity, e.channel, e.cable); break;
+      case MIDI_EVT_POLY:     usbMIDI.sendAfterTouchPoly(e.note, e.velocity, e.channel, e.cable); break;
     }
     sent = true;
   }
@@ -520,17 +574,38 @@ void set_led_color(float h, float s, float v) {
 }
 
 //-->>UTILITIES FOR SYSEX HANDLING
+// A setting's factory default in a bank: page 0's from the bank's factory preset, page 1's generated
+static inline int16_t parameter_default(int bank_number, uint16_t i) {
+  return i < page_size ? default_bank_sysex_parameters[bank_number][i] : parameter_page1_defaults[i - page_size];
+}
+
+// A page of settings to an editor. Page 0 is the dump every editor has always read, recognised by
+// its length alone, so it stays exactly that; the others carry a header (7D, the id for
+// non-commercial use, then 6D and the page) and are a few bytes longer, which an editor that
+// knows only page 0 drops.
+void send_parameter_page(uint8_t page) {
+  if (page >= parameter_size / page_size) return;
+  const uint8_t header = page == 0 ? 0 : 3;
+  uint8_t midi_data_array[3 + page_size * 2];
+  midi_data_array[0] = 0x7D;
+  midi_data_array[1] = 0x6D;
+  midi_data_array[2] = page;
+  for (uint16_t i = 0; i < page_size; i++) {
+    int16_t parameter_value = constrain(current_sysex_parameters[page * page_size + i], 0, 16383); // a sysex byte only carries 7 bits
+    midi_data_array[header + 2 * i] = parameter_value % 128;
+    midi_data_array[header + 2 * i + 1] = parameter_value / 128;
+  }
+  usbMIDI.sendSysEx(header + page_size * 2, midi_data_array, 0);
+}
+
 void control_command(uint8_t command, uint8_t parameter) {
   switch (command) {
-  case 0: // SIGNAL TO SEND BACK ALL DATA
+  case 0: // SIGNAL TO SEND BACK ALL DATA: page 0, as it always was, two bytes a setting and no header
     Serial.println("Reporting all data");
-    uint8_t midi_data_array[parameter_size * 2];
-    for (int i = 0; i < parameter_size; i++) {
-      int16_t parameter_value = constrain(current_sysex_parameters[i], 0, 16383); // a sysex byte only carries 7 bits
-      midi_data_array[2 * i] = parameter_value % 128;
-      midi_data_array[2 * i + 1] = parameter_value / 128;
-    }
-    usbMIDI.sendSysEx(parameter_size * 2, midi_data_array,0);
+    send_parameter_page(0);
+    break;
+  case 7: // page 1 and on, for an editor that knows them: 7D 6D <page>, then two bytes a setting
+    send_parameter_page(parameter);
     break;
   case 1: // SIGNAL TO WIPE MEMORY
     Serial.println("Wiping memory");
@@ -768,13 +843,30 @@ void set_chord_voice_frequency(uint8_t i, uint16_t current_note) {
   }
 }
 // setting the harp
+// A light touch plays darker, by up to two octaves of the string's filter at full touch velocity
+float string_filter_freq(uint8_t i) {
+  float darker = powf(2.0f, -2.0f * string_softness(i));
+  return (string_filter_base_freq + string_note_freq[i] * string_filter_keytrack) * darker;
+}
+
+// and quieter, by up to 24 dB
+void apply_string_firmness(uint8_t i) {
+  float gain = powf(10.0f, -1.2f * string_softness(i));
+  AudioNoInterrupts();
+  string_waveform_array[i]->amplitude(string_level * gain);
+  string_transient_waveform_array[i]->amplitude(transient_level * gain);
+  string_filter_array[i]->frequency(string_filter_freq(i));
+  AudioInterrupts();
+}
+
 void set_harp_voice_frequency(uint8_t i, uint16_t current_note) {
   float note_freq =  pow(2,harp_octave_change)*c_frequency/4 * pow(2, (current_note+transpose_semitones) / 12.0);
   float transient_freq =  64.0*c_frequency/4 *pow(2, ((current_note+transpose_semitones)%12+transient_note_level) / 12.0);
+  string_note_freq[i] = note_freq;
   AudioNoInterrupts();
   string_waveform_array[i]->frequency(note_freq);
   string_transient_waveform_array[i]->frequency(transient_freq);
-  string_filter_array[i]->frequency(string_filter_base_freq + note_freq * string_filter_keytrack);
+  string_filter_array[i]->frequency(string_filter_freq(i));
   // string_vibrato_1.offset(0);
   AudioInterrupts();
 }
@@ -1120,7 +1212,9 @@ void save_config(int bank_number, bool default_save) {
     // if we need to put the default in memory
     Serial.println("Writing the default file");
     Serial.println(bank_name[bank_number]);
-    String return_data = serialize(default_bank_sysex_parameters[bank_number], parameter_size);
+    static int16_t factory[parameter_size];
+    for (uint16_t i = 0; i < parameter_size; i++) factory[i] = parameter_default(bank_number, i);
+    String return_data = serialize(factory, parameter_size);
     dataFile.println(return_data);
   } else {
     Serial.println("Saving current settings");
@@ -1162,6 +1256,9 @@ void load_config(int bank_number) {
     while (entry.available()) {
       data_string += char(entry.read());
     }
+    // every slot from its default first, so a slot the file doesn't hold (all of page 1, in a
+    // preset saved before the array grew) comes up at its default, not the last preset's
+    for (uint16_t i = 0; i < parameter_size; i++) current_sysex_parameters[i] = parameter_default(bank_number, i);
     deserialize(data_string, current_sysex_parameters);
     Serial.print("Loaded preset: ");
     Serial.println(entry.name());
@@ -1242,6 +1339,11 @@ void setup() {
   chord_matrix.setup();
   harp_sensor.setup();
   harp_sensor.recalibrate();
+  // The harp pads don't bounce: the touch chip already wants two readings in a row before it calls a
+  // pad touched. The buttons' 10 ms was most of the harp's latency: from a pad's reading crossing
+  // the touch threshold to the pluck took 17 ms (median, measured), and with 4 ms it takes 11.
+  // 4 ms rather than none gives a landing finger's reading time to rise, for touch velocity.
+  for (int i = 0; i < 12; i++) harp_array[i].set_debounce(harp_debounce_us);
   pinMode(BATT_LBO_PIN, INPUT);
   pinMode(DOWN_PGM_PIN, INPUT);
   pinMode(UP_PGM_PIN, INPUT);
@@ -1298,12 +1400,105 @@ void handle_chords_button() {
   }
 }
 
+// How firm a touch a pad's strength is, 0 to 1. Measured on the stock plate: a soft tap peaks at
+// 35-120, a firm one at 300-350; strummed strings read 80-260 (the middle half), 154 typically; a
+// fingertip resting lightly reads 100-200 and pressed hard 450. The strength is read as the string
+// sounds, by when a firm tap has already reached its peak and a soft one is still creeping up, so
+// soft reads softer; a slow strum rolls onto each pad gently and reads soft, a quick one firm.
+float touch_firmness(float strength) {
+  return constrain((strength - 40) / 210, 0.0f, 1.0f);
+}
+
+// How much softer than full a firmness plays, 0 to 1: the square of how far short of full it is,
+// so an ordinary strum sounds nearly full and only a really light touch is quiet. At full touch
+// velocity a typical strum plays 5 dB down, a soft tap 20.
+float touch_softness(float firmness) {
+  return touch_velocity / 100.0f * (1 - firmness) * (1 - firmness);
+}
+
+// Strum velocity: a strum is plucks on neighbouring strings one after another in the same
+// direction, each under 200 ms after the last; two fingers on strings apart, or a turn back, start
+// over. Its speed, the time between neighbours, says how firmly it plays: measured, about 150 ms a
+// string for a slow strum and 15 for a fast one, so on a log scale from soft at 150 to full at 15,
+// at strum velocity's depth. The first string of a strum has nothing to measure and leaves it to
+// touch velocity (full if that's off). Called at each pluck, with its string.
+float strum_softness(int16_t string) {
+  static int16_t last_string = -1;
+  static uint32_t last_us = 0;
+  static int8_t direction = 0;
+  uint32_t now = micros();
+  float gap_ms = (now - last_us) / 1000.0f;
+  int16_t step = string - last_string;
+  float softness = -1;
+  if (strum_velocity && last_string >= 0 && abs(step) == 1 && gap_ms < 200 && (direction == 0 || step == direction)) {
+    direction = step;
+    float f = constrain(logf(150.0f / fmaxf(gap_ms, 1.0f)) / logf(10.0f), 0.0f, 1.0f);
+    softness = strum_velocity / 100.0f * (1 - f) * (1 - f);
+  } else {
+    direction = 0;
+  }
+  last_string = string;
+  last_us = now;
+  return softness;
+}
+
+// A plucked string's midi velocity: the harp's, softer for a light touch or a slow strum, down to a tenth
+uint8_t harp_note_velocity(uint8_t i) {
+  float softer = 0.9f * string_softness(i);
+  return max(1, (int)lroundf(harp_attack_velocity * (1 - softer)));
+}
+
+// A string's pressure goes out as polyphonic aftertouch on its note
+void send_string_pressure(uint8_t i, float firmness) {
+  if (harp_started_notes[i] == 0) return;
+  uint8_t value = (uint8_t)lroundf(firmness * 127);
+  queue_midi_event(MIDI_EVT_POLY, harp_started_notes[i], value, harp_channel, harp_port);
+  string_pressure_sent[i] = value;
+}
+
+// A held string pressed harder than it was plucked swells, as far as it would have sounded plucked
+// that firmly, and its pressure goes out.
+void press_string(uint8_t i, float strength) {
+  if (!touch_pressure) return;
+  static uint32_t slot_clock = 0;
+  uint32_t now_slot = millis() / press_slot_ms;
+  if (now_slot != slot_clock) {
+    slot_clock = now_slot;
+    press_slot = (press_slot + 1) % press_slots;
+    for (uint8_t k = 0; k < 12; k++) press_recent[k][press_slot] = 0;
+  }
+  press_recent[i][press_slot] = fmaxf(press_recent[i][press_slot], touch_firmness(strength));
+  float firmness = 0;
+  for (uint8_t k = 0; k < press_slots; k++) firmness = fmaxf(firmness, press_recent[i][k]);
+  // swelling only, it keeps the firmest it has been pressed until it is let go
+  float swelled = fmaxf(touch_pressure == 2 ? string_firmness[i] : string_pluck_firmness[i], firmness);
+  if (fabsf(swelled - string_firmness[i]) >= 0.02f) {
+    string_firmness[i] = swelled;
+    apply_string_firmness(i);
+  }
+  uint8_t value = (uint8_t)lroundf(firmness * 127);
+  if (abs(value - string_pressure_sent[i]) >= 2 || (value == 0 && string_pressure_sent[i] != 0)) send_string_pressure(i, firmness);
+}
+
 void handle_harp() {
   harp_sensor.update(harp_array);
+  // Touch velocity and pressure read the pads' strengths while any is touched
+  static int16_t pad_strength[12] = {0};
+  if (touch_velocity || touch_pressure) {
+    bool any = false;
+    for (int i = 0; i < 12; i++) any |= harp_array[i].read_value();
+    if (any) harp_sensor.read_strength(pad_strength);
+  }
   for (int i = 0; i < 12; i++) {
     int value = harp_array[i].read_transition();
     if (value == 2) {
+      string_strum_softness[i] = strum_softness(i);
+      string_pluck_firmness[i] = touch_firmness(pad_strength[i]);
+      string_firmness[i] = string_pluck_firmness[i];
+      for (uint8_t k = 0; k < press_slots; k++) press_recent[i][k] = string_pluck_firmness[i];
+      string_held[i] = true;
       set_harp_voice_frequency(i, current_harp_notes[i]);
+      apply_string_firmness(i);
       AudioNoInterrupts();
       envelope_string_vibrato_lfo.noteOn();
       envelope_string_vibrato_dc.noteOn();
@@ -1314,9 +1509,11 @@ void handle_harp() {
       if (harp_started_notes[i] != 0) {
         queue_midi(false, harp_started_notes[i], harp_release_velocity, harp_channel, harp_port);
       }
-      queue_midi(true, midi_base_note_transposed + current_harp_notes[i], harp_attack_velocity, harp_channel, harp_port);
+      queue_midi(true, midi_base_note_transposed + current_harp_notes[i], harp_note_velocity(i), harp_channel, harp_port);
       harp_started_notes[i] = midi_base_note_transposed + current_harp_notes[i];
+      if (touch_pressure) send_string_pressure(i, string_pluck_firmness[i]);   // the note starts from its own pressure, not the last one's
     } else if (value == 1) {
+      string_held[i] = false;
       AudioNoInterrupts();
       string_enveloppe_array[i]->noteOff();
       string_transient_envelope_array[i]->noteOff();
@@ -1327,6 +1524,7 @@ void handle_harp() {
         harp_started_notes[i] = 0;
       }
     }
+    if (string_held[i] && harp_array[i].read_value()) press_string(i, pad_strength[i]);
   }
 }
 
@@ -1407,7 +1605,7 @@ void update_harp_notes() {
       current_harp_notes[i] = calculate_note_harp(i, slash_chord, sharp_active);
       if (change_held_strings && harp_started_notes[i] != 0) {
         queue_midi(false, harp_started_notes[i], harp_release_velocity, harp_channel, harp_port);
-        queue_midi(true, midi_base_note_transposed + current_harp_notes[i], harp_attack_velocity, harp_channel, harp_port);
+        queue_midi(true, midi_base_note_transposed + current_harp_notes[i], harp_note_velocity(i), harp_channel, harp_port);
         harp_started_notes[i] = midi_base_note_transposed + current_harp_notes[i];
         if (string_enveloppe_array[i]->isSustain()) {
           set_harp_voice_frequency(i, current_harp_notes[i]);

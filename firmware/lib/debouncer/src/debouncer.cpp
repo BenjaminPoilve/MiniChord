@@ -40,6 +40,9 @@ uint8_t debouncer::read_transition(){
     }
     return 0;
 }
+void debouncer::set_debounce(uint16_t microseconds){
+    debounce_value=microseconds;
+}
 bool debouncer::read_value(){
     return value;
 }
