@@ -89,9 +89,32 @@ void potentiometer::force_update(){
     apply_audio_parameter(alternate_adress, output_value); //now apply the value that was saved for the alternate. That allows to memorize the settings of the user.
 }
 
+void potentiometer::pickup_on_next_switch(){
+    pickup_next=true;
+}
+
 bool potentiometer::update_parameter(bool alternate_flag){
     uint16_t current_reading = 1024-analogRead(pot_pin);
     potentiometer_smoothed_value=(10*potentiometer_smoothed_value+current_reading)/11;
+    // Switching between main and alternate: after a switch that asked for pickup, the newly active
+    // function keeps its value until the knob comes back to the position it was last set from.
+    if(alternate_flag!=last_alternate){
+        last_alternate=alternate_flag;
+        int held=alternate_flag ? alternate_value : main_position;
+        waiting = pickup_next && held>=0;
+        if(waiting) waiting_side = potentiometer_smoothed_value>held ? 1 : -1;
+        pickup_next=false;
+        potentiometer_old_value=potentiometer_smoothed_value;   // the switch itself isn't a turn of the knob
+    }
+    if(waiting){
+        int held=last_alternate ? alternate_value : main_position;
+        int8_t side = potentiometer_smoothed_value>held ? 1 : -1;
+        if(abs(potentiometer_smoothed_value-held)<=threshold || side!=waiting_side){
+            waiting=false;                                      // reached (or crossed) it: the knob takes over from here
+            potentiometer_old_value=potentiometer_smoothed_value;
+        }
+        return false;
+    }
     //let's see if one of the register was modified in the meantime, that would justify a change 
     //it's a bit verbose, but the issue is that we want to allow the interface to modify the parameter, while taking into account the pot position 
     bool trigger_change=false;
@@ -115,6 +138,7 @@ bool potentiometer::update_parameter(bool alternate_flag){
             if(discrete) output_value=quantise(output_value, min_value, max_value, main_adress);
             Serial.println(output_value);
             apply_audio_parameter(main_adress, output_value); //note: applied but not saved. So we can still read the initial value 
+            main_position=potentiometer_smoothed_value;     // where the main function was last set from, for pickup
             update_parameter(false); //loop again for the smoothing
         }else{
             int16_t d_min, d_max;

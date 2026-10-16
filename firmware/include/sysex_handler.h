@@ -1,10 +1,10 @@
 void apply_audio_parameter(int adress, int value) {
     switch(adress){
       case 20:
-        bank_led_hue=value; set_led_color(bank_led_hue, 1.0, 1-led_attenuation);
+        bank_led_hue=value; set_led_color(bank_led_hue, bank_led_saturation(), 1-led_attenuation);
         break;
       case 32:
-        led_attenuation=value/100.0; set_led_color(bank_led_hue, 1.0, 1-led_attenuation);
+        led_attenuation=value/100.0; set_led_color(bank_led_hue, bank_led_saturation(), 1-led_attenuation);
         break;
       case 21:
         retrigger_chord=value;
@@ -113,6 +113,9 @@ void apply_audio_parameter(int adress, int value) {
         break;
       case 17:
         mod_pot.set_alternate_range(value);
+        break;
+      case 117:
+        if (knob_layer != (bool)value) { chord_pot.pickup_on_next_switch(); harp_pot.pickup_on_next_switch(); mod_pot.pickup_on_next_switch(); } knob_layer=value; set_led_color(bank_led_hue, bank_led_saturation(), 1-led_attenuation);
         break;
       case 4:
         chord_pot.set_alternate_default(value);chord_pot.force_update();

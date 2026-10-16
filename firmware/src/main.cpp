@@ -12,7 +12,7 @@
 #include <potentiometer.h>
 
 //>>SOFWTARE VERSION 
-int version_ID=9; //to be read 00.03, stored at adress 7 in memory
+int version_ID=10; //to be read 00.03, stored at adress 7 in memory
 //>>BUTTON ARRAYS<<
 debouncer harp_array[12];
 debouncer chord_matrix_array[22];
@@ -233,6 +233,18 @@ int8_t mod_pot_main_control = 14;
 int8_t mod_pot_main_range = 15;
 int8_t mod_pot_alternate_control = 16;
 int8_t mod_pot_alternate_range = 17;
+
+// Knob layer (address 117). At 0 the potentiometers play their main functions, and holding the
+// modifier selects their alternates, as it always has, sharpening any chord played meanwhile. At 1
+// they play their alternates and the modifier only sharpens, so an alternate can be turned while
+// chords are sounding. It is a preset parameter like any other, set from an editor or saved in a
+// preset, so a gesture that sets parameters can switch layers while playing. While it is 1 the LED
+// shows the preset's colour pale, so the layer is never a hidden state.
+// Switching layers asks each knob for pickup: the function it moves to keeps its value until the
+// knob reaches the position that function was last set from, so nothing jumps to where the knob
+// happens to be. Holding the modifier doesn't ask, and behaves as it always has.
+bool knob_layer = false;
+static inline float bank_led_saturation() { return knob_layer ? 0.45 : 1.0; }
 // 21-39 are global parameters (switching logic, global reverb etc.)
 // 40-119 are harp parameters
 // 120-219 are chord parameters
@@ -557,7 +569,7 @@ void control_command(uint8_t command, uint8_t parameter) {
       Serial.println(parameter);
       current_bank_number = parameter;
       load_config(current_bank_number);
-      set_led_color(bank_led_hue, 1.0, 1 - led_attenuation);
+      set_led_color(bank_led_hue, bank_led_saturation(), 1 - led_attenuation);
     }
     break;
 
@@ -1559,10 +1571,10 @@ void handle_low_battery() {
     led_blinking_flag = true;
   } else if (LBO_transition == 2) {
     led_blinking_flag = false;
-    set_led_color(bank_led_hue, 1.0, 1 - led_attenuation);
+    set_led_color(bank_led_hue, bank_led_saturation(), 1 - led_attenuation);
   }
   if (led_blinking_flag) {
-    set_led_color(bank_led_hue, 1.0, 0.6 + 0.4 * sin(color_led_blink_val));
+    set_led_color(bank_led_hue, bank_led_saturation(), 0.6 + 0.4 * sin(color_led_blink_val));
     color_led_blink_val += 0.005;
   }
 }
@@ -1614,7 +1626,7 @@ void loop() {
   }
 
   // Handle potentiometer updates
-  bool alternate = chord_matrix_array[0].read_value();
+  bool alternate = knob_layer || chord_matrix_array[0].read_value();   // on knob layer 1 the alternates, whatever the modifier does
   flag_save_needed |= chord_pot.update_parameter(alternate);
   flag_save_needed |= harp_pot.update_parameter(alternate);
   flag_save_needed |= mod_pot.update_parameter(alternate);

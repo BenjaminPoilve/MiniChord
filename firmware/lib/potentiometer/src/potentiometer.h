@@ -19,11 +19,21 @@ class potentiometer{
   void set_alternate_default(int alternate_initial_value);
   void force_update();
   bool update_parameter(bool alternate_flag); //the flag tells us whether the modifier button was pushed
+  // Pickup: the next switch between main and alternate leaves the newly active function where it
+  // was until the knob reaches the position it was last set from (or crosses it), so the function
+  // doesn't jump to wherever the knob happens to be. Knob layer asks for it; holding the modifier
+  // doesn't, and behaves as it always has.
+  void pickup_on_next_switch();
   private:
   //Memory variable
   int potentiometer_smoothed_value=0; //smoothing of the analog reading
   int potentiometer_old_value=0; //old value to detect if we meet threshold
   int alternate_value=0;
+  int main_position=-1;       // the reading the main function was last set from (-1: not yet)
+  bool last_alternate=false;  // which function was active on the last update
+  bool pickup_next=false;     // the next switch waits for pickup
+  bool waiting=false;         // the active function is waiting for the knob to reach it
+  int8_t waiting_side=0;      // which side of that position the knob was on when it started waiting
   
   uint16_t old_main_output=0;
   uint16_t old_alternate_output=0;
