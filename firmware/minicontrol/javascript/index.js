@@ -51,6 +51,7 @@ function handlechange(event) {
       value_zone.innerHTML = displayed_value;
     }
     miniChordController.sendParameter(address, Math.round(range_value));
+    if (control_leads[address] != null) retarget_value_slider(control_leads[address]);
     if (address == miniChordController.color_hue_sysex_adress) { //handling the color scheme
       var hue = Math.round(range_value);
       var elements = document.getElementsByClassName('slider');
@@ -234,6 +235,42 @@ async function initializeMidiController() {
 // Start initialization
 initializeMidiController();
 
+//-->>DOUBLE TAP VALUES FOLLOW THEIR TARGETS
+// A double tap value is a raw number whatever its target, so on its own it is a 0-4095 slider.
+// Once its control names a target, the value's slider takes on that target's own range, type and
+// curve, so the value is set the way the setting itself is.
+// parameters.json says which control each value follows ("follows_target").
+let parameter_meta = {};         // address -> the parameter's entry in parameters.json
+let value_follows = {};          // value address -> its control's address
+let control_leads = {};          // control address -> the value address that follows it
+fetch('./json/parameters.json').then(r => r.json()).then(d => {
+  ['global_parameter', 'harp_parameter', 'chord_parameter'].forEach(section => (d[section] || []).forEach(p => {
+    parameter_meta[p.sysex_adress] = p;
+    if (p.follows_target != null) { value_follows[p.sysex_adress] = p.follows_target; control_leads[p.follows_target] = p.sysex_adress; }
+  }));
+  Object.keys(value_follows).forEach(v => retarget_value_slider(v));
+}).catch(e => console.log("parameters.json not loaded; double tap values stay plain sliders", e));
+
+function retarget_value_slider(value_address) {
+  const slider = document.querySelector('input[adress_field="' + value_address + '"]');
+  const control = document.querySelector('input[adress_field="' + value_follows[value_address] + '"]');
+  if (!slider || !control) return;
+  if (!slider.hasAttribute("plain_max")) {       // remember the plain slider, to go back to with no target
+    ["min", "max", "step", "target_min", "target_max", "data_type", "curve"].forEach(a => slider.setAttribute("plain_" + a, slider.getAttribute(a)));
+  }
+  const target = parameter_meta[parseInt(control.value)];
+  const plain = !target || target.follows_target != null || target.sysex_adress == value_address;
+  const attr = a => plain ? slider.getAttribute("plain_" + a) : null;
+  const float = !plain && target.data_type == "float";
+  slider.min = plain ? attr("min") : target.min_value;
+  slider.max = plain ? attr("max") : target.max_value;
+  slider.step = plain ? attr("step") : (float ? "0.01" : "1");
+  slider.setAttribute("target_min", plain ? attr("target_min") : target.min_value);
+  slider.setAttribute("target_max", plain ? attr("target_max") : target.max_value);
+  slider.setAttribute("data_type", plain ? attr("data_type") : target.data_type);
+  slider.setAttribute("curve", plain ? attr("curve") : target.curve);
+}
+
 function set_slider_to_value(slider_num, sysex_value) {
   var result = document.querySelectorAll('[adress_field="' + slider_num + '"]');
   if (result.length > 0) {
@@ -268,6 +305,8 @@ function set_slider_to_value(slider_num, sysex_value) {
         value_zone.innerHTML = sysex_value;
       }
     }
+    if (control_leads[slider_num] != null) retarget_value_slider(control_leads[slider_num]);
+    if (value_follows[slider_num] != null) retarget_value_slider(slider_num);
   }
 }
 
