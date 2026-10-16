@@ -36,6 +36,22 @@ AudioSynthWaveformModulated waveform_string_8; //xy=782.1000061035156,1245.99999
 AudioSynthWaveformModulated waveform_string_1; //xy=783.1000061035156,998.9999923706055
 AudioSynthWaveformModulated waveform_string_9; //xy=783.1000061035156,1281.9999923706055
 AudioSynthWaveformModulated waveform_string_11; //xy=783.1000061035156,1351.9999923706055
+// The plucked strings (see PLUCKED STRINGS below), declared between the oscillators they follow and
+// the envelopes they feed: the library updates objects in the order they are declared, and one
+// declared after the envelope it feeds would make every harp note a block (2.9 ms) late.
+#include "plucked_string.h"
+AudioSynthPluckedString  pluck_string_1;
+AudioSynthPluckedString  pluck_string_2;
+AudioSynthPluckedString  pluck_string_3;
+AudioSynthPluckedString  pluck_string_4;
+AudioSynthPluckedString  pluck_string_5;
+AudioSynthPluckedString  pluck_string_6;
+AudioSynthPluckedString  pluck_string_7;
+AudioSynthPluckedString  pluck_string_8;
+AudioSynthPluckedString  pluck_string_9;
+AudioSynthPluckedString  pluck_string_10;
+AudioSynthPluckedString  pluck_string_11;
+AudioSynthPluckedString  pluck_string_12;
 AudioSynthWaveformDc     filter_dc;      //xy=806.1000061035156,567.9999923706055
 AudioSynthWaveform       waveform_transient_9; //xy=822.1000061035156,410.99999237060547
 AudioSynthWaveform       waveform_transient_5; //xy=823.1000061035156,282.99999237060547
@@ -204,18 +220,6 @@ AudioConnection          patchCord33(voice2_frequency_dc, 0, voice2_vibrato_mixe
 AudioConnection          patchCord34(voice1_vibrato_envelope, 0, voice1_vibrato_mixer, 0);
 AudioConnection          patchCord35(voice1_vibrato_dc_envelope, 0, voice1_vibrato_mixer, 1);
 AudioConnection          patchCord36(voice1_frequency_dc, 0, voice1_vibrato_mixer, 2);
-AudioConnection          patchCord37(waveform_string_4, envelope_string_4);
-AudioConnection          patchCord38(waveform_string_2, envelope_string_2);
-AudioConnection          patchCord39(waveform_string_5, envelope_string_5);
-AudioConnection          patchCord40(waveform_string_7, envelope_string_7);
-AudioConnection          patchCord41(waveform_string_10, envelope_string_10);
-AudioConnection          patchCord42(waveform_string_3, envelope_string_3);
-AudioConnection          patchCord43(waveform_string_12, envelope_string_12);
-AudioConnection          patchCord44(waveform_string_6, envelope_string_6);
-AudioConnection          patchCord45(waveform_string_8, envelope_string_8);
-AudioConnection          patchCord46(waveform_string_1, envelope_string_1);
-AudioConnection          patchCord47(waveform_string_9, envelope_string_9);
-AudioConnection          patchCord48(waveform_string_11, envelope_string_11);
 AudioConnection          patchCord49(filter_dc, envelope_filter_1);
 AudioConnection          patchCord50(filter_dc, envelope_filter_2);
 AudioConnection          patchCord51(filter_dc, envelope_filter_3);
@@ -386,6 +390,47 @@ AudioConnection          patchCord215(chords_main_filter, 1, chords_main_filter_
 AudioConnection          patchCord216(chords_main_filter, 2, chords_main_filter_mixer, 2);
 // GUItool: end automatically generated code
 
+
+//PLUCKED STRINGS
+// Each harp string's oscillator passes through a plucked string model on its way to its envelope;
+// string model (217) crossfades from the oscillator alone to the string (plucked_string.h). They take
+// the same vibrato as the oscillators.
+AudioConnection          pluckCord1a(string_vibrato_mixer, 0, pluck_string_1, 0);
+AudioConnection          pluckCord1b(waveform_string_1, 0, pluck_string_1, 1);
+AudioConnection          pluckCord1c(pluck_string_1, 0, envelope_string_1, 0);
+AudioConnection          pluckCord2a(string_vibrato_mixer, 0, pluck_string_2, 0);
+AudioConnection          pluckCord2b(waveform_string_2, 0, pluck_string_2, 1);
+AudioConnection          pluckCord2c(pluck_string_2, 0, envelope_string_2, 0);
+AudioConnection          pluckCord3a(string_vibrato_mixer, 0, pluck_string_3, 0);
+AudioConnection          pluckCord3b(waveform_string_3, 0, pluck_string_3, 1);
+AudioConnection          pluckCord3c(pluck_string_3, 0, envelope_string_3, 0);
+AudioConnection          pluckCord4a(string_vibrato_mixer, 0, pluck_string_4, 0);
+AudioConnection          pluckCord4b(waveform_string_4, 0, pluck_string_4, 1);
+AudioConnection          pluckCord4c(pluck_string_4, 0, envelope_string_4, 0);
+AudioConnection          pluckCord5a(string_vibrato_mixer, 0, pluck_string_5, 0);
+AudioConnection          pluckCord5b(waveform_string_5, 0, pluck_string_5, 1);
+AudioConnection          pluckCord5c(pluck_string_5, 0, envelope_string_5, 0);
+AudioConnection          pluckCord6a(string_vibrato_mixer, 0, pluck_string_6, 0);
+AudioConnection          pluckCord6b(waveform_string_6, 0, pluck_string_6, 1);
+AudioConnection          pluckCord6c(pluck_string_6, 0, envelope_string_6, 0);
+AudioConnection          pluckCord7a(string_vibrato_mixer, 0, pluck_string_7, 0);
+AudioConnection          pluckCord7b(waveform_string_7, 0, pluck_string_7, 1);
+AudioConnection          pluckCord7c(pluck_string_7, 0, envelope_string_7, 0);
+AudioConnection          pluckCord8a(string_vibrato_mixer, 0, pluck_string_8, 0);
+AudioConnection          pluckCord8b(waveform_string_8, 0, pluck_string_8, 1);
+AudioConnection          pluckCord8c(pluck_string_8, 0, envelope_string_8, 0);
+AudioConnection          pluckCord9a(string_vibrato_mixer, 0, pluck_string_9, 0);
+AudioConnection          pluckCord9b(waveform_string_9, 0, pluck_string_9, 1);
+AudioConnection          pluckCord9c(pluck_string_9, 0, envelope_string_9, 0);
+AudioConnection          pluckCord10a(string_vibrato_mixer, 0, pluck_string_10, 0);
+AudioConnection          pluckCord10b(waveform_string_10, 0, pluck_string_10, 1);
+AudioConnection          pluckCord10c(pluck_string_10, 0, envelope_string_10, 0);
+AudioConnection          pluckCord11a(string_vibrato_mixer, 0, pluck_string_11, 0);
+AudioConnection          pluckCord11b(waveform_string_11, 0, pluck_string_11, 1);
+AudioConnection          pluckCord11c(pluck_string_11, 0, envelope_string_11, 0);
+AudioConnection          pluckCord12a(string_vibrato_mixer, 0, pluck_string_12, 0);
+AudioConnection          pluckCord12b(waveform_string_12, 0, pluck_string_12, 1);
+AudioConnection          pluckCord12c(pluck_string_12, 0, envelope_string_12, 0);
 
 //MANUAL OUTPUT SECTION
 #include "effect_platervbstereo.h"

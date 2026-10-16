@@ -144,8 +144,17 @@ void apply_audio_parameter(int adress, int value) {
         break;
       case 41:
         for (int i=0;i<12;i++){
-          string_waveform_array[i]->amplitude(value/100.0);
+          string_waveform_array[i]->amplitude(value/100.0); string_pluck_array[i]->amplitude(value/100.0);
         }
+        break;
+      case 217:
+        for (int s=0;s<12;s++) string_pluck_array[s]->blend(value/100.0);
+        break;
+      case 218:
+        for (int s=0;s<12;s++) string_pluck_array[s]->decay(value/100.0 > 0 ? value/100.0 : 3.0);
+        break;
+      case 219:
+        for (int s=0;s<12;s++) string_pluck_array[s]->damping(value/100.0);
         break;
       case 42:
         for (int i=0;i<12;i++){
@@ -309,7 +318,7 @@ void apply_audio_parameter(int adress, int value) {
         break;
       case 76:
         for (int i=0;i<12;i++){
-          string_waveform_array[i]->frequencyModulation(value/100.0);
+          string_waveform_array[i]->frequencyModulation(value/100.0); string_pluck_array[i]->frequencyModulation(value/100.0);
         }
         break;
       case 77:

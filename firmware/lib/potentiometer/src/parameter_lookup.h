@@ -49,6 +49,9 @@ static const ParameterInfo parameter_lookup[] = {
     { 40, 1, 0, 6 }, // harp shuffling
     { 98, 1, 0, 1 }, // chromatic mode
     { 41, 0, 0, 1 }, // amplitude
+    { 217, 0, 0, 100 }, // string model
+    { 218, 0, 0, 20 }, // string decay
+    { 219, 0, 0, 100 }, // string damping
     { 42, 1, 0, 11 }, // waveform
     { 43, 0, 0, 5000 }, // attack
     { 44, 0, 0, 5000 }, // hold
