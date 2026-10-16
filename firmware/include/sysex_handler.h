@@ -9,6 +9,9 @@ void apply_audio_parameter(int adress, int value) {
       case 243:
         harp_plate=value; apply_harp_thresholds();
         break;
+      case 416:
+        neighbour_guard=value;
+        break;
       case 417:
         strip_guard=value; apply_harp_thresholds();
         break;

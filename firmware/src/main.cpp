@@ -12,7 +12,7 @@
 #include <potentiometer.h>
 
 //>>SOFWTARE VERSION 
-int version_ID=12; //to be read 00.03, stored at adress 7 in memory (10: harp ribbon, and the second page of settings; 11: harp plates and touch thresholds; 12: the strip guard, 417, and the keymaster, harp plate 1)
+int version_ID=13; //to be read 00.03, stored at adress 7 in memory (10: harp ribbon, and the second page of settings; 11: harp plates and touch thresholds; 12: the strip guard, 417, and the keymaster, harp plate 1; 13: the piano plate, twin rows and framed strings, harp plates 2-4, and the neighbour guard, 416)
 //>>BUTTON ARRAYS<<
 debouncer harp_array[12];
 debouncer chord_matrix_array[22];
@@ -209,8 +209,14 @@ uint8_t ribbon_glide_ms = 0;    // how slowly the pitch follows the finger, in m
 // row like it, each beside the next, which the strip guard is for. 1 is the
 // keymaster, twelve round pads well apart: it plays as the stock strip does, at
 // the stock thresholds and without the strip guard (see apply_harp_thresholds()),
-// and so does any other plate of twelve separate zones set to 1; 2 to 7 are kept for plates of twelve separate zones
-// that want their own reading. 8 is zipper 24, whose neighbouring zones interlock so a finger
+// and so does any other plate of twelve separate zones set to 1. 2 is the piano
+// plate, twelve keys, C at the bottom, whose neighbouring keys a fingertip covers
+// together: the neighbour guard keeps a finger's edge silent (see guard_land()).
+// 3 is twin rows, twelve large pads in two offset columns: it plays as the
+// keymaster does, at the stock thresholds and without a guard. 4 is framed
+// strings, twelve strings in a row, a pad at one end of each: the strip guard is
+// its too, at the stock thresholds. 5 to 7 are kept for plates of twelve separate
+// zones that want their own reading. 8 is zipper 24, whose neighbouring zones interlock so a finger
 // between two touches both, with one more band above the top zone where it
 // meets an island of the bottom zone: 24 positions. 9 is the arcade wheel,
 // which plays its twelve zones as they are and sends where a finger is round
@@ -218,12 +224,13 @@ uint8_t ribbon_glide_ms = 0;    // how slowly the pitch follows the finger, in m
 // made for the harp ribbon and plays twelve strings without it. 10 is the
 // fretless wrap, which adds an island of the bottom zone above the top one:
 // twelve strings as the stock strip, and a thirteenth place for the ribbon.
-const uint8_t plate_stock = 0, plate_keymaster = 1;
+const uint8_t plate_stock = 0, plate_keymaster = 1, plate_piano = 2, plate_twin_rows = 3, plate_framed_strings = 4;
 const uint8_t plate_zipper_24 = 8, plate_arcade_wheel = 9, plate_fretless_wrap = 10;
 uint8_t harp_plate = 0;
 uint8_t harp_touch_threshold = 0;     // 0 for the plate's own thresholds, see apply_harp_thresholds()
 uint8_t harp_release_threshold = 0;
-uint8_t strip_guard = 9;              // the strip guard (address 417), in tenths, see strip_guard_pass(); 0 off
+uint8_t strip_guard = 9;              // the strip guard (address 417), in tenths, see guard_land(); 0 off
+uint8_t neighbour_guard = 5;          // the neighbour guard (address 416), the piano plate's, in tenths; 0 off
 // On zipper 24 each zone's core and each band between two zones is a position,
 // a string of its own: 2i is zone i's core (in harp order, 0 the lowest) and
 // 2i+1 the band above it. The scales carry on up through all of them. Position
@@ -1253,6 +1260,7 @@ void load_config(int bank_number) {
     // default instead, as a preset from before page 1 does. Slot 7 still holds the version that saved it
     // (apply_audio_parameter(7) puts this one's there below).
     if (current_sysex_parameters[7] < 12) current_sysex_parameters[417] = parameter_default(bank_number, 417);
+    if (current_sysex_parameters[7] < 13) current_sysex_parameters[416] = parameter_default(bank_number, 416);   // the neighbour guard, likewise
     Serial.print("Loaded preset: ");
     Serial.println(entry.name());
     entry.close();
@@ -1951,58 +1959,111 @@ void handle_wheel() {
   sent = value;
 }
 
-// The strip guard (address 417). The stock strip's teeth sit 5 mm apart, narrower than a fingertip, so a
-// finger plucking one string often lands on the next one too and both sound; and a light touch on the narrow
-// tips reads under the chip's touch threshold of 40 and plays nothing. Measured on a stock strip with a 2 ms
-// readout of the chip (2026-10-14, 132 taps each): on the wide part of the teeth 95 taps sounded a second
-// string, and on the tips 39 sounded nothing.
+// The guards: a fingertip covers more than one zone on the plates whose zones sit close together, and the
+// zone it only grazes sounded with the one it was meant for. A zone that lands while a zone beside it is held
+// and stronger, under the guard's tenths of it, is the same finger's edge: it stays silent while held (a
+// shadow), and plays (lands then) only if it turns out to be a finger of its own. The two guards differ in
+// what lets a shadow off, after what each plate's fingers do.
+//
+// The strip guard (address 417), on the stock strip and framed strings. The stock strip's teeth sit 5 mm
+// apart, narrower than a fingertip, so a finger plucking one string often lands on the next one too and both
+// sound; and a light touch on the narrow tips reads under the chip's touch threshold of 40 and plays nothing.
+// Measured on a stock strip with a 2 ms readout of the chip (2026-10-14, 132 taps each): on the wide part of
+// the teeth 95 taps sounded a second string, and on the tips 39 sounded nothing.
 // With the guard on, the strip's own thresholds are 15 and 7, so light touches play (apply_harp_thresholds()),
-// and a string that lands while the string beside it is held and stronger, under strip_guard tenths of it,
-// is the same finger's edge: it stays silent while held (a shadow), and plays only once it grows level with
-// a neighbour that sounds, the finger rolled over onto it. A strum drags a finger across the strings on
-// purpose, and each string it reaches lands beside the stronger one it is leaving; so a string plays at once
-// if the string beyond that neighbour was already held when the neighbour landed: the finger came along the
-// strip to it (came_from). A finger's edge lands with nothing held beyond the string meant, and nothing is
-// timed, so a tap soon after a strum is still guarded. A strum's second string has nothing before it and
-// lands as a shadow; the run reaching the third string carries it, and it plays then too, or as it catches up.
+// and a shadow plays only once it grows level with a neighbour that sounds, the finger rolled over onto it:
+// two fingertips don't fit on teeth 5 mm apart. A strum drags a finger across the strings on purpose, and
+// each string it reaches lands beside the stronger one it is leaving; so a string plays at once if the string
+// beyond that neighbour was already held when the neighbour landed: the finger came along the strip to it
+// (came_from). A finger's edge lands with nothing held beyond the string meant, and nothing is timed, so a
+// tap soon after a strum is still guarded. A strum's second string has nothing before it and lands as a
+// shadow; the run reaching the third string carries it, and it plays then too, or as it catches up.
 // On the same strip at 9: one note for 127 of 132 taps on the teeth (36 without) and none silent; 427 of 432
-// strum strings sounded, the rest only brushed as a fast flick left the strip (measured on a build whose harp
-// counts a string as held once its landing is reported, as landed_bits does here).
-// The guard is the stock strip's (plate 0) and only while it is read as strings, not with the ribbon.
+// strum strings sounded, the rest only brushed as a fast flick left the strip (measured, as everything here,
+// on a build whose harp counts a zone as held once its landing is reported, as landed_bits does here).
+// Framed strings' zones are a row of strings as the strip's are, and the guard is the same there, at the
+// chip's stock thresholds (it gains next to nothing at 15: 2 of 168 more taps play); on framed strings it
+// played one note for 163 taps of 168 where it played 126 without.
+//
+// The neighbour guard (address 416), on the piano plate. Where its black keys are played every key is a band
+// 5.4 mm tall at a 6 mm pitch, narrower than a fingertip, so a finger reaching for one key lands on its
+// neighbours' copper too: unguarded, one tap in three on a black key sounded the white key beside it. The key
+// meant always crosses the threshold first, so by the time its neighbour lands it is well ahead: a stray lands
+// at under half of it, where a second finger lands near level with the first, or has an attack of its own.
+// Two fingers do fit on its keys, so a shadow plays if within guard_attack_ms it reads half its strongest held
+// neighbour and has grown guard_attack counts more than all its held neighbours together since it landed (a
+// second finger's own attack; an edge only grows as its finger does), or, any time, once it reads eight
+// tenths of a neighbour that sounds (a finger sliding over). Keys meet as chromatic neighbours and as the two
+// white keys either side of a black one, whose fronts touch beside it (B and C are at opposite ends).
+// Measured on the first plate (2026-10-14, the same readout, every key and every neighbouring pair with two
+// fingers, slides and trills): taps 71 of 72 clean, slides 48 of 48 keys, 41 of 42 two-finger pairs clean,
+// and every tap beside a held key that the chip reported played.
+//
+// For either, a zone counts as held once its landing is reported (landed_bits, set as read_transition gives 2
+// and cleared as it gives 1), not by read_value(), which is the chip's touch status at once while the landing
+// is reported 10 ms after the status last changed (lib/debouncer): read so, in a fast strum the string ahead,
+// touched and not yet landed, counted as held and stronger, and the string being played lifted unheard (the
+// recorded strums replayed through this debouncer lost 50 of 417 strings; with landed_bits, 1), and on the
+// piano a key still settling could hold silent the key that landed before it.
+// Only a zone that sounds can let a shadow off by catching up, and only while the shadow reads past
+// the touch threshold itself: as a finger lifts every reading falls, and a shadow measured against a neighbour
+// fading beside it would sound as the finger left. Neither runs with the harp ribbon. The guard decides in two
+// passes so that no zone's decision hangs on the order they are read in: every landing and lift first, then
+// whether a shadow held from before is let off, against the shadows as they stand after the landings.
 const uint8_t strip_touch_threshold = 15;
 const uint8_t strip_release_threshold = 7;
-bool pad_shadow[12] = {false};        // a string held silent as the edge of a finger on its neighbour
+const uint8_t strip_guard_promote = 10;      // tenths: on the strip a shadow plays once level with its neighbour
+const uint8_t neighbour_guard_promote = 8;   // tenths: on the piano, at eight tenths
+const uint16_t guard_attack_ms = 30;         // how long after landing a piano key's own attack can let it off
+const int16_t guard_attack = 8;              // counts it must grow by beyond its neighbours' growth together
+bool pad_shadow[12] = {false};        // a zone held silent as the edge of a finger on its neighbour
 uint16_t came_from[12];               // the strings already held as each one last landed, as bits
-// The strings the guard counts as held, as bits: set when a string's landing is reported (read_transition
-// gives 2), cleared when its lift is. read_value() won't do: it is the chip's touch status at once, while
-// the landing is reported 10 ms after the status last changed (lib/debouncer), so in a fast strum the
-// string ahead, touched and not yet landed, read as held and stronger, the string being played became a
-// shadow, and it lifted unheard as the finger moved on: the recorded strums replayed through this
-// debouncer lost 50 of 417 strings, 49 of them in fast strums; with landed_bits, 1.
-uint16_t landed_bits = 0;
+uint32_t shadow_since[12];            // when each shadow landed
+int16_t shadow_from[12][12];          // every zone's strength as it landed
+uint16_t landed_bits = 0;             // the zones the guard counts as held, as bits (see above)
 
-bool strip_guard_active() {
-  return strip_guard && harp_plate == plate_stock && !harp_ribbon;
+// The piano plate's keys whose copper meets, as bits from C
+static const uint16_t piano_neighbours[12] = {0x006, 0x005, 0x01b, 0x014, 0x02c, 0x0d0, 0x0a0, 0x360, 0x280, 0xd80, 0xa00, 0x600};
+
+// The plates whose strings are twelve zones in a row, each beside the next: the stock strip and framed strings
+// (on twin rows the harp's order zig-zags between two columns, and the keymaster's pads never come near each
+// other, so neither has a guard)
+bool strip_family() {
+  return harp_plate == plate_stock || harp_plate == plate_framed_strings;
+}
+
+// The guard's share in tenths for the plate fitted, 0 where there is none or it is off
+uint8_t guard_level() {
+  return harp_plate == plate_piano ? neighbour_guard : strip_family() ? strip_guard : 0;
+}
+
+bool guard_active() {
+  return guard_level() && !harp_ribbon;
+}
+
+// Whether the stock strip's own thresholds (15 and 7) are in force: with its guard on, read as strings
+bool strip_own_thresholds() {
+  return harp_plate == plate_stock && strip_guard && !harp_ribbon;
 }
 
 // The touch and release thresholds: 241 and 242 when set, otherwise the plate's own. The stock strip's own,
 // with the strip guard on, are 15 and 7; every other plate's, and the strip's with the guard off, are the
 // chip's stock 40 and 20. They reach the chip once no zone is touched (handle_harp()).
 void apply_harp_thresholds() {
-  bool strip = strip_guard_active();
+  bool strip = strip_own_thresholds();
   harp_sensor.set_thresholds(harp_touch_threshold ? harp_touch_threshold : strip ? strip_touch_threshold : 0,
                              harp_release_threshold ? harp_release_threshold : strip ? strip_release_threshold : 0);
 }
 
-// The strings either side of string i, as bits
-uint16_t strip_neighbours(uint8_t i) {
-  return ((1 << i >> 1) | (1 << i << 1)) & 0xfff;
+// The zones whose copper meets zone i's, as bits: on a strip the string either side
+uint16_t guard_neighbours(uint8_t i) {
+  return strip_family() ? ((1 << i >> 1) | (1 << i << 1)) & 0xfff : piano_neighbours[i];
 }
 
-// Pass one takes a string's transition (harp_array's read_transition: 2 landed, 1 lifted, 0 neither) and gives
-// what the harp does with it. held_before: the strings held before this pass's landings, as bits.
-int strip_guard_land(uint8_t i, int value, const int16_t (&strength)[12], uint16_t held_before, bool (&carried)[12]) {
-  uint16_t neighbours = strip_neighbours(i);
+// Pass one takes a zone's transition (harp_array's read_transition: 2 landed, 1 lifted, 0 neither) and gives
+// what the harp does with it. held_before: the zones held before this pass's landings, as bits.
+int guard_land(uint8_t i, int value, const int16_t (&strength)[12], uint32_t now, uint16_t held_before, bool (&carried)[12]) {
+  uint16_t neighbours = guard_neighbours(i);
   if (value == 2) {
     int16_t strongest = 0;
     int8_t k = -1;
@@ -2012,14 +2073,18 @@ int strip_guard_land(uint8_t i, int value, const int16_t (&strength)[12], uint16
         k = j;
       }
     }
-    pad_shadow[i] = strongest && strength[i] * 10 < strongest * strip_guard;
+    pad_shadow[i] = strongest && strength[i] * 10 < strongest * guard_level();
     int8_t beyond = 2 * k - i;
-    if (k >= 0 && (held_before >> k & 1) && beyond >= 0 && beyond < 12 && (came_from[k] >> beyond & 1)) {   // a strum
+    if (strip_family() && k >= 0 && (held_before >> k & 1) && beyond >= 0 && beyond < 12 && (came_from[k] >> beyond & 1)) {   // a strum
       pad_shadow[i] = false;
       if (pad_shadow[k]) {
         pad_shadow[k] = false;
         carried[k] = true;
       }
+    }
+    if (pad_shadow[i]) {
+      shadow_since[i] = now;
+      for (uint8_t j = 0; j < 12; j++) shadow_from[i][j] = strength[j];
     }
     return pad_shadow[i] ? 0 : 2;
   }
@@ -2028,22 +2093,28 @@ int strip_guard_land(uint8_t i, int value, const int16_t (&strength)[12], uint16
   return 0;
 }
 
-// Pass two: whether shadow i, held since before this pass, plays now: level with a neighbour that sounds, and
-// past the touch threshold itself (as a finger lifts every reading falls, and a shadow measured against a
-// neighbour fading beside it would sound as the finger left)
-bool strip_guard_let_off(uint8_t i, const int16_t (&strength)[12]) {
-  uint16_t neighbours = strip_neighbours(i);
-  int16_t sounding = 0;
+// Pass two: whether shadow i, held since before this pass, plays now
+bool guard_let_off(uint8_t i, const int16_t (&strength)[12], uint32_t now) {
+  uint16_t neighbours = guard_neighbours(i);
+  int16_t strongest = 0, sounding = 0, grown = strength[i] - shadow_from[i][i];
   for (uint8_t j = 0; j < 12; j++) {
-    if ((neighbours >> j & 1) && (landed_bits >> j & 1) && !pad_shadow[j]) sounding = max(sounding, strength[j]);
+    if (!(neighbours >> j & 1) || !(landed_bits >> j & 1)) continue;
+    strongest = max(strongest, strength[j]);
+    if (!pad_shadow[j]) sounding = max(sounding, strength[j]);
+    grown -= max(0, strength[j] - shadow_from[i][j]);
   }
-  uint8_t least = harp_touch_threshold ? harp_touch_threshold : strip_touch_threshold;
-  return sounding && strength[i] >= least && strength[i] >= sounding;
+  bool strip = strip_family();
+  uint8_t least = harp_touch_threshold ? harp_touch_threshold : strip_own_thresholds() ? strip_touch_threshold : 40;
+  bool attack = !strip && now - shadow_since[i] <= guard_attack_ms && strongest && strength[i] * 2 >= strongest && grown > guard_attack;
+  bool caught_up = sounding && strength[i] >= least &&
+    strength[i] * 10 >= sounding * (strip ? strip_guard_promote : neighbour_guard_promote);
+  return attack || caught_up;
 }
 
-// Every string's transition this pass, as the guard has it, in two passes so that no string's decision hangs
-// on the order they are read in: first every landing and lift, then whether a shadow is let off.
-void strip_guard_pass(uint8_t (&pad_move)[12], const int16_t (&strength)[12]) {
+// Every zone's transition this pass, as the guard has it: pad_move[i] is what the harp does (2 lands, 1
+// lifts, 0 neither)
+void guard_pass(uint8_t (&pad_move)[12], const int16_t (&strength)[12]) {
+  uint32_t now = millis();
   bool held_shadow[12], carried[12] = {false};
   uint8_t raw[12];
   uint16_t held_before = 0, landed_now = landed_bits;
@@ -2056,7 +2127,7 @@ void strip_guard_pass(uint8_t (&pad_move)[12], const int16_t (&strength)[12]) {
   landed_bits = landed_now;
   for (uint8_t i = 0; i < 12; i++) {
     held_shadow[i] = pad_shadow[i];
-    pad_move[i] = strip_guard_land(i, raw[i], strength, held_before, carried);
+    pad_move[i] = guard_land(i, raw[i], strength, now, held_before, carried);
     held_shadow[i] &= pad_shadow[i];
   }
   for (uint8_t i = 0; i < 12; i++) {
@@ -2067,7 +2138,7 @@ void strip_guard_pass(uint8_t (&pad_move)[12], const int16_t (&strength)[12]) {
     }
   }
   bool let_off[12];
-  for (uint8_t i = 0; i < 12; i++) let_off[i] = held_shadow[i] && strip_guard_let_off(i, strength);
+  for (uint8_t i = 0; i < 12; i++) let_off[i] = held_shadow[i] && guard_let_off(i, strength, now);
   for (uint8_t i = 0; i < 12; i++) {
     if (!let_off[i]) continue;
     pad_shadow[i] = false;
@@ -2101,7 +2172,7 @@ void handle_harp() {
   // meanwhile (one held when they came on would read as a shadow from before once they went off), and the
   // guard starts its held strings again from the touch status when it comes back on.
   static bool guard_was = false;
-  bool guard = strip_guard_active();
+  bool guard = guard_active();
   if (ribbon || positions) for (uint8_t i = 0; i < 12; i++) pad_shadow[i] = false;
   if (guard && !guard_was) {
     landed_bits = 0;
@@ -2117,15 +2188,15 @@ void handle_harp() {
     return;
   }
   if (harp_plate == plate_arcade_wheel) handle_wheel();
-  // The strip guard decides every landing first; with it off no string is held silent, and one held silent
-  // when it went off lifts unheard
+  // The guard (the strip's or the piano's) decides every landing first; with it off no zone is held silent,
+  // and one held silent when it went off lifts unheard
   uint8_t pad_move[12];
   if (guard) {
     int16_t strength[12] = {0};
     bool any = false;
     for (int i = 0; i < 12; i++) any |= harp_array[i].read_value();
     if (any) harp_sensor.read_strength(strength);
-    strip_guard_pass(pad_move, strength);
+    guard_pass(pad_move, strength);
   }
   for (int i = 0; i < 12; i++) {
     int value = guard ? pad_move[i] : harp_array[i].read_transition();
