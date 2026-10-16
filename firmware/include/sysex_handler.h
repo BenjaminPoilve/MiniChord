@@ -6,14 +6,11 @@ void apply_audio_parameter(int adress, int value) {
       case 32:
         led_attenuation=value/100.0; set_led_color(bank_led_hue, 1.0, 1-led_attenuation);
         break;
-      case 21:
-        retrigger_chord=value;
+      case 35:
+        key_signature_selection=constrain(value,0,11);
         break;
-      case 22:
-        change_held_strings=value;
-        break;
-      case 23:
-        note_slash_level=value;
+      case 31:
+        flat_button_modifier=value;
         break;
       case 30:
         transpose_semitones=value;midi_base_note_transposed=midi_base_note+transpose_semitones;
@@ -26,51 +23,6 @@ void apply_audio_parameter(int adress, int value) {
         break;
       case 108:
         harp_port=1-value;
-        break;
-      case 31:
-        flat_button_modifier=value;
-        break;
-      case 33:
-        barry_harris_mode=value;
-        break;
-      case 34:
-        chord_frame_shift=value;
-        break;
-      case 35:
-        key_signature_selection=constrain(value,0,11);
-        break;
-      case 36:
-        scalar_harp_selection=value; for (int i=0;i<12;i++){ current_harp_notes[i]=calculate_note_harp(i,slash_chord,sharp_active); }
-        break;
-      case 37:
-        chord_inversion=value; for (int i = 0; i < 7; i++) { current_chord_notes[i]=calculate_note_chord(i,slash_chord,sharp_active); } for (int i = 0; i < 4; i++) { if (chord_envelope_array[i]->isActive()) { set_chord_voice_frequency(i, current_chord_notes[i]); } }
-        break;
-      case 38:
-        chord_spacing=value; for (int i = 0; i < 7; i++) { current_chord_notes[i]=calculate_note_chord(i,slash_chord,sharp_active); } for (int i = 0; i < 4; i++) { if (chord_envelope_array[i]->isActive()) { set_chord_voice_frequency(i, current_chord_notes[i]); } }
-        break;
-      case 39:
-        alt_chord_layout=value;
-        break;
-      case 202:
-        
-        break;
-      case 203:
-        
-        break;
-      case 204:
-        
-        break;
-      case 205:
-        
-        break;
-      case 206:
-        
-        break;
-      case 207:
-        
-        break;
-      case 208:
-        
         break;
       case 24:
         main_reverb.size(value/100.0);
@@ -129,18 +81,24 @@ void apply_audio_parameter(int adress, int value) {
       case 2:
         string_gain.amplitude(value/100.0,100);  harp_attack_velocity=value/100.0*127;
         break;
-      case 99:
-        for (int i=0;i<12;i++){
-          harp_octave_change=value; current_harp_notes[i]=calculate_note_harp(i,slash_chord,sharp_active);
-        }
+      case 36:
+        scalar_harp_selection=value; for (int i=0;i<12;i++){ current_harp_notes[i]=calculate_note_harp(i,slash_chord,sharp_active); }
+        break;
+      case 98:
+        chromatic_harp_mode=value;
         break;
       case 40:
         for (int i=0;i<12;i++){
           harp_shuffling_selection=constrain(value,0,6); current_harp_notes[i]=calculate_note_harp(i,slash_chord,sharp_active);
         }
         break;
-      case 98:
-        chromatic_harp_mode=value;
+      case 99:
+        for (int i=0;i<12;i++){
+          harp_octave_change=value; current_harp_notes[i]=calculate_note_harp(i,slash_chord,sharp_active);
+        }
+        break;
+      case 22:
+        change_held_strings=value;
         break;
       case 41:
         for (int i=0;i<12;i++){
@@ -378,6 +336,39 @@ void apply_audio_parameter(int adress, int value) {
       case 3:
         chords_gain.amplitude(value/100.0,100); chord_attack_velocity=value/100.0*127;
         break;
+      case 33:
+        barry_harris_mode=value;
+        break;
+      case 39:
+        alt_chord_layout=value;
+        break;
+      case 34:
+        chord_frame_shift=value;
+        break;
+      case 21:
+        retrigger_chord=value;
+        break;
+      case 202:
+        
+        break;
+      case 203:
+        
+        break;
+      case 204:
+        
+        break;
+      case 205:
+        
+        break;
+      case 206:
+        
+        break;
+      case 207:
+        
+        break;
+      case 208:
+        
+        break;
       case 120:
         for (int i=0;i<7;i++){
           chord_shuffling_selection=constrain(value,0,5); current_chord_notes[i]=calculate_note_chord(i,slash_chord,sharp_active);
@@ -390,6 +381,15 @@ void apply_audio_parameter(int adress, int value) {
         break;
       case 199:
         glide_length=value;
+        break;
+      case 37:
+        chord_inversion=value; for (int i = 0; i < 7; i++) { current_chord_notes[i]=calculate_note_chord(i,slash_chord,sharp_active); } for (int i = 0; i < 4; i++) { if (chord_envelope_array[i]->isActive()) { set_chord_voice_frequency(i, current_chord_notes[i]); } }
+        break;
+      case 38:
+        chord_spacing=value; for (int i = 0; i < 7; i++) { current_chord_notes[i]=calculate_note_chord(i,slash_chord,sharp_active); } for (int i = 0; i < 4; i++) { if (chord_envelope_array[i]->isActive()) { set_chord_voice_frequency(i, current_chord_notes[i]); } }
+        break;
+      case 23:
+        note_slash_level=value;
         break;
       case 121:
         for (int i=0;i<4;i++){
