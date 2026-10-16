@@ -150,6 +150,10 @@ AudioEffectMultiply      voice1_tremolo_mult; //xy=1856.1000061035156,1537.99999
 AudioEffectWaveshaper    string_waveshape; //xy=1948.1000061035156,961.9999923706055
 AudioMixer4              string_waveshaper_mix; //xy=2000.1000061035156,1139.9999923706055
 AudioMixer4              chord_voice_mixer; //xy=2157.1000061035156,1558.9999923706055
+AudioFilterBiquad        formant_1;      //xy=2250,1480
+AudioFilterBiquad        formant_2;      //xy=2250,1520
+AudioFilterBiquad        formant_3;      //xy=2250,1560
+AudioMixer4              formant_mix;    //xy=2380,1540
 AudioFilterStateVariable filter_delay_strings; //xy=2184.1000061035156,927.9999923706055
 AudioEffectWaveshaper    chord_waveshape; //xy=2335.1000061035156,1454.9999923706055
 AudioMixer4              string_delay_mix; //xy=2366.1000061035156,1015.9999923706055
@@ -356,8 +360,16 @@ AudioConnection          patchCord185(voice1_tremolo_mult, 0, chord_voice_mixer,
 AudioConnection          patchCord186(string_waveshape, 0, string_waveshaper_mix, 1);
 AudioConnection          patchCord187(string_waveshaper_mix, 0, strings_effect_mix, 0);
 AudioConnection          patchCord188(string_waveshaper_mix, 0, string_delay_mix, 0);
-AudioConnection          patchCord189(chord_voice_mixer, chord_waveshape);
-AudioConnection          patchCord190(chord_voice_mixer, 0, chord_waveshaper_mix, 0);
+AudioConnection          patchCord189(formant_mix, chord_waveshape);
+AudioConnection          patchCord190(formant_mix, 0, chord_waveshaper_mix, 0);
+// the formants: the chord voices' mix through three band-passes, blended with it dry
+AudioConnection          patchCordFormant1(chord_voice_mixer, formant_1);
+AudioConnection          patchCordFormant2(chord_voice_mixer, formant_2);
+AudioConnection          patchCordFormant3(chord_voice_mixer, formant_3);
+AudioConnection          patchCordFormant4(chord_voice_mixer, 0, formant_mix, 0);
+AudioConnection          patchCordFormant5(formant_1, 0, formant_mix, 1);
+AudioConnection          patchCordFormant6(formant_2, 0, formant_mix, 2);
+AudioConnection          patchCordFormant7(formant_3, 0, formant_mix, 3);
 AudioConnection          patchCord191(filter_delay_strings, 0, string_delay_mix, 1);
 AudioConnection          patchCord192(filter_delay_strings, 1, string_delay_mix, 2);
 AudioConnection          patchCord193(filter_delay_strings, 2, string_delay_mix, 3);

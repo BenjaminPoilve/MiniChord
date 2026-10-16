@@ -538,6 +538,18 @@ void apply_audio_parameter(int adress, int value) {
           chord_voice_filter_array[i]->octaveControl(value/100.0);
         }
         break;
+      case 118:
+        formant_vowel=value; update_formants();
+        break;
+      case 119:
+        formant_amount=value; update_formants();
+        break;
+      case 239:
+        formant_size=value; update_formants();
+        break;
+      case 240:
+        formant_resonance=value; update_formants();
+        break;
       case 156:
         for (int i=0;i<4;i++){
           chords_tremolo_lfo.begin(waveform_array[constrain(value,0,11)]);
