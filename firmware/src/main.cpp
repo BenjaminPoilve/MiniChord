@@ -12,7 +12,7 @@
 #include <potentiometer.h>
 
 //>>SOFWTARE VERSION 
-int version_ID=9; //to be read 00.03, stored at adress 7 in memory
+int version_ID=10; //to be read 00.03, stored at adress 7 in memory
 //>>BUTTON ARRAYS<<
 debouncer harp_array[12];
 debouncer chord_matrix_array[22];
@@ -520,6 +520,26 @@ void set_led_color(float h, float s, float v) {
 }
 
 //-->>UTILITIES FOR SYSEX HANDLING
+// Push and pop: one saved copy of the live parameters, so a remote can change whatever it likes and
+// have everything put back exactly, including anything it forgot or couldn't reach. It is the live
+// parameters only: nothing is written to a preset, so a saved bank is never touched. A second push
+// while one is held is ignored, so a remote that pushes twice can't lose the original, unless it
+// asks to replace it: a remote that has lost track (a page reloaded) can't know one is held.
+// What was pushed belongs to its bank, so loading any other bank drops it.
+int16_t pushed_sysex_parameters[parameter_size];
+bool sysex_pushed = false;
+int8_t pushed_bank = -1;
+void apply_audio_parameter(int adress, int value);      // defined in the generated sysex_handler.h, included below
+void pop_sysex_parameters() {
+  if (!sysex_pushed) return;
+  sysex_pushed = false;
+  for (int i = 0; i < parameter_size; i++) {
+    if (i == 7) continue;                                  // the firmware version isn't a parameter
+    if (current_sysex_parameters[i] == pushed_sysex_parameters[i]) continue;
+    current_sysex_parameters[i] = pushed_sysex_parameters[i];
+    apply_audio_parameter(i, pushed_sysex_parameters[i]);
+  }
+}
 void control_command(uint8_t command, uint8_t parameter) {
   switch (command) {
   case 0: // SIGNAL TO SEND BACK ALL DATA
@@ -551,11 +571,27 @@ void control_command(uint8_t command, uint8_t parameter) {
     current_bank_number = parameter;
     save_config(parameter, true);
     break;
+  case 5: // push: remember the live parameters as they are now; parameter 1 replaces one already held
+    if (!sysex_pushed || parameter == 1) {
+      for (int i = 0; i < parameter_size; i++) pushed_sysex_parameters[i] = current_sysex_parameters[i];
+      sysex_pushed = true;
+      pushed_bank = current_bank_number;
+      Serial.println("Parameters pushed");
+    } else Serial.println("Parameters already pushed: keeping the first");
+    break;
+  case 6: // pop: put the pushed parameters back, and report
+    if (sysex_pushed) {
+      pop_sysex_parameters();
+      Serial.println("Parameters popped");
+      control_command(0, 0);
+    } else Serial.println("Nothing pushed");
+    break;
   case 4: // loading a bank, so a remote can read every preset in turn
     if (parameter < preset_number) {
       Serial.print("Loading bank: ");
       Serial.println(parameter);
       current_bank_number = parameter;
+      sysex_pushed = false;                                // a new preset: what was pushed belonged to the last one
       load_config(current_bank_number);
       set_led_color(bank_led_hue, 1.0, 1 - led_attenuation);
     }
@@ -1145,6 +1181,8 @@ void load_config(int bank_number) {
     Serial.printf("Error: Invalid bank_number %d in save_config\n", bank_number);
     return;
   }
+  // another preset, by the preset buttons or a remote: what was pushed belonged to the last one
+  if (bank_number != pushed_bank) sysex_pushed = false;
   //digitalWrite(_MUTE_PIN, LOW); // muting the DAC
   //Turn off chords notes
   for (int i = 0; i < 4; i++) {
