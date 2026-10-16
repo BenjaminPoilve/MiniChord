@@ -15,6 +15,12 @@ void apply_audio_parameter(int adress, int value) {
       case 23:
         note_slash_level=value;
         break;
+      case 113:
+        slash_voice=value;
+        break;
+      case 114:
+        slash_revoice=value;
+        break;
       case 30:
         transpose_semitones=value;midi_base_note_transposed=midi_base_note+transpose_semitones;
         break;
