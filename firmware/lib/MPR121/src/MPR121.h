@@ -94,6 +94,9 @@ public:
 
   uint16_t getTouchStatus(DeviceAddress device_address);
   bool overCurrentDetected(uint16_t touch_status);
+  // The chip stops measuring while the over current flag (OVCF, bit 7 of
+  // register 0x01) is set: writing 1 to it clears it.
+  void clearOverCurrentFlag(DeviceAddress device_address);
   bool anyTouched(uint16_t touch_status);
   uint8_t getTouchCount(uint16_t touch_status);
   bool deviceChannelTouched(uint16_t touch_status,
@@ -109,6 +112,11 @@ public:
     uint8_t device_channel);
   uint16_t getDeviceChannelBaselineData(DeviceAddress device_address,
     uint8_t device_channel);
+  // All twelve physical channels' filtered and baseline data, read in two
+  // bursts rather than twenty-four single reads.
+  void getDeviceAllChannelsData(DeviceAddress device_address,
+    uint16_t (&filtered_data)[PHYSICAL_CHANNELS_PER_DEVICE],
+    uint16_t (&baseline_data)[PHYSICAL_CHANNELS_PER_DEVICE]);
 
   enum BaselineTracking
     {
@@ -456,8 +464,6 @@ private:
   // Settings variable useful if you want to do a bulk setup of the device
   void applySettings(DeviceAddress device_address,
     const Settings & settings);
-
-  void clearOverCurrentFlag(DeviceAddress device_address);
 };
 
 #include "MPR121/MPR121Definitions.h"
